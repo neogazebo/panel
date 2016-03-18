@@ -1,0 +1,55 @@
+# yii console comman
+/yii
+
+# sublime project files
+*.sublime-project
+*.sublime-workspace
+*.phpintel
+
+# phpstorm project files
+.idea
+
+# netbeans project files
+nbproject
+
+# windows thumbnail cache
+Thumbs.db
+
+# Mac DS_Store Files
+.DS_Store
+.settings/
+.project
+
+# Eclipse editor
+.buildpath
+.project
+.settings/
+
+# phpunit itself is not needed
+phpunit.phar
+
+# Eclipse Project
+.buildpath
+
+# local phpunit config
+/phpunit.xml
+
+# ignore config
+config/console.php
+config/db.php
+config/params.php
+config/web.php
+
+# ignore runtime
+runtime
+
+*.psd
+# ebextension files
+.ebextensions/00-increase-timeout.config
+.ebextensions/05-vhost-ebn-developer.config
+.elasticbeanstalk/saved_configs/
+
+# cofig test file
+tests/codeception/config/config.php
+tests/codeception/config/runtime/logs
+tests/codeception/config/runtime
