@@ -10,6 +10,14 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
     public $authKey;
     public $accessToken;
 
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'tbl_admin_user';
+    }
+
     private static $users = [
         '100' => [
             'id' => '100',

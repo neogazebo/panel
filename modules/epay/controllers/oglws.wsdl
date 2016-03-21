@@ -1,0 +1,1555 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:EPAYIBWS" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="urn:EPAYIBWS" xmlns:intf="urn:EPAYIBWS" xmlns:tns1="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns2="http://axis.apache.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <wsdl:types>
+
+    <schema elementFormDefault="qualified" targetNamespace="urn:EPAYIBWS" xmlns="http://www.w3.org/2001/XMLSchema">
+
+    
+      <complexType name="RequestMsg">
+
+        <sequence>
+
+          <element name="amount" nillable="true" type="tns1:string"/>
+
+          <element name="merchantId" nillable="true" type="tns1:string"/>
+
+          <element name="operatorId" nillable="true" type="tns1:string"/>
+
+          <element name="orgTransRef" nillable="true" type="tns1:string"/>
+
+          <element name="retTransRef" nillable="true" type="tns1:string"/>
+
+          <element name="terminalId" nillable="true" type="tns1:string"/>
+
+          <element name="productCode" nillable="true" type="tns1:string"/>
+
+          <element name="msisdn" nillable="true" type="tns1:string"/>
+
+          <element name="transDateTime" nillable="true" type="tns1:string"/>
+
+          <element name="transTraceId" type="xsd:int"/>
+
+          <element name="customField1" nillable="true" type="tns1:string"/>
+
+          <element name="customField2" nillable="true" type="tns1:string"/>
+
+          <element name="customField3" nillable="true" type="tns1:string"/>
+
+          <element name="customField4" nillable="true" type="tns1:string"/>
+
+          <element name="customField5" nillable="true" type="tns1:string"/>
+
+          <element name="macing" nillable="true" type="tns1:string"/>
+
+        </sequence>
+
+      </complexType>
+
+      <complexType name="ResponseMsg">
+
+        <sequence>
+
+          <element name="amount" nillable="true" type="tns1:string"/>
+
+          <element name="pin" nillable="true" type="tns1:string"/>
+
+          <element name="pinExpiryDate" nillable="true" type="tns1:string"/>
+
+          <element name="productCode" nillable="true" type="tns1:string"/>
+
+          <element name="responseCode" nillable="true" type="tns1:string"/>
+
+          <element name="responseMsg" nillable="true" type="tns1:string"/>
+
+          <element name="retTransRef" nillable="true" type="tns1:string"/>
+
+          <element name="terminalId" nillable="true" type="tns1:string"/>
+
+          <element name="transRef" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField1" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField2" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField3" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField4" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField5" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="macing" nillable="true" type="tns1:string"/>
+
+        </sequence>
+
+      </complexType>
+
+      <element name="fault" type="xsd:anyType"/>
+
+      <element name="onlinePIN">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="onlinePINResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="onlinePINReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="onlinePINReversal">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="onlinePINReversalResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="onlinePINReversalReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="onlinePINVoid">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="onlinePINVoidResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="onlinePINVoidReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="etopup">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="etopupResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="etopupReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="etopupReversal">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="etopupReversalResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="etopupReversalReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="etopupVoid">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="etopupVoidResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="etopupVoidReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="payment">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="paymentResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="paymentReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="paymentReversal">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="paymentReversalResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="paymentReversalReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="paymentVoid">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="paymentVoidResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="paymentVoidReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="networkCheck">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="networkCheckResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="networkCheckReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="upload">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:RequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="uploadResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="uploadReturn" type="impl:ResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="deviceInit">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:DeviceRequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <complexType name="DeviceRequestMsg">
+
+        <sequence>
+
+          <element name="merchantId" type="tns1:string"/>
+
+          <element name="terminalId" type="tns1:string"/>
+
+          <element name="deviceInfo" nillable="true" type="tns1:string"/>
+
+          <element name="deviceType" nillable="true" type="tns1:string"/>
+
+          <element name="retTransRef" nillable="true" type="tns1:string"/>
+
+          <element name="transDateTime" nillable="true" type="tns1:string"/>
+
+          <element name="customField1" nillable="true" type="tns1:string"/>
+
+          <element name="customField2" nillable="true" type="tns1:string"/>
+
+          <element name="customField3" nillable="true" type="tns1:string"/>
+
+          <element name="customField4" nillable="true" type="tns1:string"/>
+
+          <element name="customField5" nillable="true" type="tns1:string"/>
+
+          <element name="macing" nillable="true" type="tns1:string"/>
+
+        </sequence>
+
+      </complexType>
+
+      <element name="deviceInitResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="deviceInitReturn" type="impl:DeviceResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <complexType name="DeviceResponseMsg">
+
+        <sequence>
+
+          <element name="terminalId" type="tns1:string"/>
+
+          <element name="responseCode" type="tns1:string"/>
+
+          <element name="responseMsg" nillable="true" type="tns1:string"/>
+
+          <element name="deviceData" nillable="true" type="tns1:string"/>
+
+          <element name="retTransRef" nillable="true" type="tns1:string"/>
+
+          <element name="transRef" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField1" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField2" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField3" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField4" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="customField5" nillable="true" type="tns1:string"/>
+
+          <element maxOccurs="1" minOccurs="0" name="macing" nillable="true" type="tns1:string"/>
+
+        </sequence>
+
+      </complexType>
+
+      <element name="deviceLogin">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:DeviceRequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="deviceLoginResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="deviceLoginReturn" type="impl:DeviceResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="deviceUpdate">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="in0" type="impl:DeviceRequestMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+      <element name="deviceUpdateResponse">
+
+        <complexType>
+
+          <sequence>
+
+            <element name="deviceUpdateReturn" type="impl:DeviceResponseMsg"/>
+
+          </sequence>
+
+        </complexType>
+
+      </element>
+
+    </schema>
+
+  </wsdl:types>
+
+
+    <wsdl:message name="etopupVoidResponse">
+
+
+        <wsdl:part element="impl:etopupVoidResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="etopupResponse">
+
+
+        <wsdl:part element="impl:etopupResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="networkCheckRequest">
+
+
+        <wsdl:part element="impl:networkCheck" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="deviceUpdateResponse">
+
+
+        <wsdl:part element="impl:deviceUpdateResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="onlinePINReversalResponse">
+
+
+        <wsdl:part element="impl:onlinePINReversalResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="onlinePINReversalRequest">
+
+
+        <wsdl:part element="impl:onlinePINReversal" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="deviceInitResponse">
+
+
+        <wsdl:part element="impl:deviceInitResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="onlinePINResponse">
+
+
+        <wsdl:part element="impl:onlinePINResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="onlinePINRequest">
+
+
+        <wsdl:part element="impl:onlinePIN" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="deviceInitRequest">
+
+
+        <wsdl:part element="impl:deviceInit" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="paymentReversalRequest">
+
+
+        <wsdl:part element="impl:paymentReversal" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="etopupReversalResponse">
+
+
+        <wsdl:part element="impl:etopupReversalResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="uploadRequest">
+
+
+        <wsdl:part element="impl:upload" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="paymentVoidResponse">
+
+
+        <wsdl:part element="impl:paymentVoidResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="deviceUpdateRequest">
+
+
+        <wsdl:part element="impl:deviceUpdate" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="deviceLoginResponse">
+
+
+        <wsdl:part element="impl:deviceLoginResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="etopupRequest">
+
+
+        <wsdl:part element="impl:etopup" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="networkCheckResponse">
+
+
+        <wsdl:part element="impl:networkCheckResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="etopupReversalRequest">
+
+
+        <wsdl:part element="impl:etopupReversal" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="uploadResponse">
+
+
+        <wsdl:part element="impl:uploadResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="deviceLoginRequest">
+
+
+        <wsdl:part element="impl:deviceLogin" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="paymentVoidRequest">
+
+
+        <wsdl:part element="impl:paymentVoid" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="paymentResponse">
+
+
+        <wsdl:part element="impl:paymentResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="paymentRequest">
+
+
+        <wsdl:part element="impl:payment" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="etopupVoidRequest">
+
+
+        <wsdl:part element="impl:etopupVoid" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="ConfigurationException">
+
+
+        <wsdl:part element="impl:fault" name="fault"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="onlinePINVoidRequest">
+
+
+        <wsdl:part element="impl:onlinePINVoid" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="paymentReversalResponse">
+
+
+        <wsdl:part element="impl:paymentReversalResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:message name="onlinePINVoidResponse">
+
+
+        <wsdl:part element="impl:onlinePINVoidResponse" name="parameters"/>
+
+
+    </wsdl:message>
+
+
+    <wsdl:portType name="oglws">
+
+ 
+        <wsdl:operation name="onlinePIN">
+
+
+            <wsdl:input message="impl:onlinePINRequest" name="onlinePINRequest"/>
+
+
+            <wsdl:output message="impl:onlinePINResponse" name="onlinePINResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="onlinePINReversal">
+
+
+            <wsdl:input message="impl:onlinePINReversalRequest" name="onlinePINReversalRequest"/>
+
+
+            <wsdl:output message="impl:onlinePINReversalResponse" name="onlinePINReversalResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="onlinePINVoid">
+
+
+            <wsdl:input message="impl:onlinePINVoidRequest" name="onlinePINVoidRequest"/>
+
+
+            <wsdl:output message="impl:onlinePINVoidResponse" name="onlinePINVoidResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="etopup">
+
+
+            <wsdl:input message="impl:etopupRequest" name="etopupRequest"/>
+
+
+            <wsdl:output message="impl:etopupResponse" name="etopupResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="etopupReversal">
+
+
+            <wsdl:input message="impl:etopupReversalRequest" name="etopupReversalRequest"/>
+
+
+            <wsdl:output message="impl:etopupReversalResponse" name="etopupReversalResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="etopupVoid">
+
+
+            <wsdl:input message="impl:etopupVoidRequest" name="etopupVoidRequest"/>
+
+
+            <wsdl:output message="impl:etopupVoidResponse" name="etopupVoidResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="payment">
+
+
+            <wsdl:input message="impl:paymentRequest" name="paymentRequest"/>
+
+
+            <wsdl:output message="impl:paymentResponse" name="paymentResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="paymentReversal">
+
+
+            <wsdl:input message="impl:paymentReversalRequest" name="paymentReversalRequest"/>
+
+
+            <wsdl:output message="impl:paymentReversalResponse" name="paymentReversalResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="paymentVoid">
+
+
+            <wsdl:input message="impl:paymentVoidRequest" name="paymentVoidRequest"/>
+
+
+            <wsdl:output message="impl:paymentVoidResponse" name="paymentVoidResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="networkCheck">
+
+
+            <wsdl:input message="impl:networkCheckRequest" name="networkCheckRequest"/>
+
+
+            <wsdl:output message="impl:networkCheckResponse" name="networkCheckResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="upload">
+
+
+            <wsdl:input message="impl:uploadRequest" name="uploadRequest"/>
+
+
+            <wsdl:output message="impl:uploadResponse" name="uploadResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="deviceInit">
+
+
+            <wsdl:input message="impl:deviceInitRequest" name="deviceInitRequest"/>
+
+
+            <wsdl:output message="impl:deviceInitResponse" name="deviceInitResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="deviceLogin">
+
+
+            <wsdl:input message="impl:deviceLoginRequest" name="deviceLoginRequest"/>
+
+
+            <wsdl:output message="impl:deviceLoginResponse" name="deviceLoginResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="deviceUpdate">
+
+
+            <wsdl:input message="impl:deviceUpdateRequest" name="deviceUpdateRequest"/>
+
+
+            <wsdl:output message="impl:deviceUpdateResponse" name="deviceUpdateResponse"/>
+
+
+            <wsdl:fault message="impl:ConfigurationException" name="ConfigurationException"/>
+
+
+        </wsdl:operation>
+
+
+    </wsdl:portType>
+
+
+    <wsdl:binding name="oglwsSoapBinding" type="impl:oglws">
+
+
+        <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+
+        <wsdl:operation name="onlinePIN">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="onlinePINRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="onlinePINResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="onlinePINReversal">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="onlinePINReversalRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="onlinePINReversalResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="onlinePINVoid">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="onlinePINVoidRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="onlinePINVoidResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="etopup">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="etopupRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="etopupResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="etopupReversal">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="etopupReversalRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="etopupReversalResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="etopupVoid">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="etopupVoidRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="etopupVoidResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="payment">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="paymentRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="paymentResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="paymentReversal">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="paymentReversalRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="paymentReversalResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="paymentVoid">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="paymentVoidRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="paymentVoidResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="networkCheck">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="networkCheckRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="networkCheckResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="upload">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="uploadRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="uploadResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="deviceInit">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="deviceInitRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="deviceInitResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="deviceLogin">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="deviceLoginRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="deviceLoginResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+        <wsdl:operation name="deviceUpdate">
+
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="deviceUpdateRequest">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:input>
+
+
+            <wsdl:output name="deviceUpdateResponse">
+
+
+                <wsdlsoap:body use="literal"/>
+
+
+            </wsdl:output>
+
+
+            <wsdl:fault name="ConfigurationException">
+
+
+                <wsdlsoap:fault name="ConfigurationException" use="literal"/>
+
+
+            </wsdl:fault>
+
+
+        </wsdl:operation>
+
+
+    </wsdl:binding>
+
+
+    <wsdl:service name="OglWsService">
+
+
+        <wsdl:port binding="impl:oglwsSoapBinding" name="oglws">
+
+
+            <wsdlsoap:address location="https://ws1.oriongateway.com:33831/averni/services/oglws"/>
+
+
+        </wsdl:port>
+
+
+    </wsdl:service>
+
+
+</wsdl:definitions>
