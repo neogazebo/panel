@@ -19,7 +19,7 @@ class BaseController extends Controller
         $this->user = Yii::$app->user->identity;
         return true;
     }
-    
+
     public function behaviors()
     {
         return [

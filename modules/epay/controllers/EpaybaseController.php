@@ -3,8 +3,8 @@
 namespace app\modules\epay\controllers;
 
 use Yii;
+use yii\web\Controller;
 use SoapClient;
-use app\controllers\BaseController;
 use app\models\EpayPrelogTrx;
 use app\models\Epay;
 use app\models\EpayDetail;
@@ -15,7 +15,7 @@ use app\models\EpayDetail;
  * @author Tajhul Faijin <mrazoelcalm@gmail.com>
  * @author Ilham Fauzi <ilham@ebizu.com>
  */
-class EpaybaseController extends BaseController
+class EpaybaseController extends Controller
 {
     protected $EPAY_API_URL = 'https://api.ebizu.com/app/epay';
     protected $EPAY_TOKEN_API = '3f2d64f31ab572ecf322d06a2b961755'; //harcode merujuk ke=> red_key in tbl_redemption_partner => EBC data
@@ -72,7 +72,7 @@ class EpaybaseController extends BaseController
         $mSec = ((float) $usec / 1000) + (float) $sec;
         return $mSec;
     }
-    
+
     // wrap curl request
 //    protected function requestAPI($data) {
 //        $post = 'r=' . $data;
@@ -100,8 +100,8 @@ class EpaybaseController extends BaseController
             ////$exception->getMessage();
             return false;
         }
-    }    
-    
+    }
+
     public function setMessage($key, $type, $customText = null)
     {
         switch ($key) {
@@ -115,8 +115,8 @@ class EpaybaseController extends BaseController
                 Yii::$app->session->setFlash($type, $customText !== null ? Yii::t('app', $customText) : Yii::$app->params['flashmsg']['delete'][$type]);
                 break;
         }
-    }        
-    
+    }
+
     // method processing epay
     protected function processEpay($d)
     {
@@ -133,12 +133,12 @@ class EpaybaseController extends BaseController
             'transDateTime' => date('YmdHis'),
             'transTraceId' => substr(str_shuffle("01234567891011121314151617181920"), 0, 6), // 6 character number 1-999999
         );
-        
+
         // validation if params not array
         if (!is_array($params)) {
             return array('error' => null, 'response' => null);
         }
-        
+
         $data = array('error' => null);
 
         $request_type = 'NET-CHECK';
@@ -170,7 +170,7 @@ class EpaybaseController extends BaseController
         }
         $data['transDateTime'] = $params['transDateTime'];
         $data['transTraceId'] = $params['transTraceId'];
-        
+
         // save pre log trx
         $model->ept_datetime = time();
         $model->ept_red_id = NULL;
@@ -186,7 +186,7 @@ class EpaybaseController extends BaseController
         }
         return $data;
     }
-    
+
     protected function epayJar($service, $params)
     {
         $array = [];

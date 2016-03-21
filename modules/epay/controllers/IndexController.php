@@ -53,5 +53,5 @@ class IndexController extends EpaybaseController
                 'execution_time' => round(($this->msec() - $tStart), 2),
             ]);
         }
-    }    
+    }
 }

@@ -43,6 +43,9 @@ config/web.php
 # ignore runtime
 runtime
 
+# composer vendor dir
+/vendor
+
 *.psd
 # ebextension files
 .ebextensions/00-increase-timeout.config
