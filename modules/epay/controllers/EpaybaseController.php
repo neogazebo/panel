@@ -37,6 +37,7 @@ class EpaybaseController extends Controller
     public function init()
     {
         parent::init();
+        date_default_timezone_set('Etc/UTC');
         $this->enableCsrfValidation = false;
     }
 
