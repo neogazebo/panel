@@ -1,7 +1,7 @@
-EBDB migration tools
+EBIZU BACKEND SERVICE
 ============================
 
-This application is used by ebizu developers who use **ebdb/ebdb-staging** as their database application. The purpose is to integrate the migration functionality from all apps that use **ebdb/ebdb-staging**.
+This application is used for all ebizu services 
 
 
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/yii2-app-basic/v/stable.png)](https://packagist.org/packages/yiisoft/yii2-app-basic)
