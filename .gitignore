@@ -56,3 +56,11 @@ runtime
 tests/codeception/config/config.php
 tests/codeception/config/runtime/logs
 tests/codeception/config/runtime
+
+#config local
+config/web-local.php
+config/console-local.php
+config/params-local.php
+config/db.php
+web/index-test.php
+web/index.php
