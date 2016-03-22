@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ],
                 ],
-                'tableOptions' => ['class' => 'table table-striped']
+                'tableOptions' => ['class' => 'table table-hover']
             ]);
             ?>
 
