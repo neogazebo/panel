@@ -2,82 +2,84 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 $this->title = 'Epay Transaction';
 $dataProvider->sort->defaultOrder = ['epa_datetime' => SORT_DESC];
 ?>
-
-<div id="wrap">
-    <div class="container">
-        <div id="page-heading">
-            <h1><i class="fa fa-credit-card"></i> <?= $this->title ?></h1>
-            <div class="options" style="margin-top: 15px">
-                <i class="fa fa-search"></i>
-                <input value="<?= (!empty($_GET['search']) ? $_GET['search'] : '') ?>" type="text" name="search" class="" id="filtersearch" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="You can search by Admin Name, Reward, Quantity, Success Qty & Failed Qty"> 
+<section class="content-header">
+    <h1><?= $this->title ?></h1>
+</section>
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title"><?= $this->title ?> List</h3>
+             <?= Html::a('<i class="fa fa-plus-square"></i> <span>' . Yii::t('app', 'Create') . '</span>', ['create'], ['class' => 'btn btn-sm btn-primary','style'=>'margin-left: 20px;']) ?>
+          <div class="box-tools">
+            <div class="input-group">
+                <input value="<?= (!empty($_GET['search']) ? $_GET['search'] : '') ?>" type="text" name="search" class="form-control input-sm pull-right" id="filtersearch" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="You can search by Admin Name, Reward, Quantity, Success Qty & Failed Qty">
+              <div class="input-group-btn">
+                <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+              </div>
             </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-indigo">
-                    <div class="panel-heading">
-                        <h4><?= $this->title ?> List</h4>
-                    </div>
-                    <div class="panel-body collapse in table-responsive">
-                        <?= Html::a('<i class="fa fa-plus-square"></i> <span>' . Yii::t('app', 'New Epay Voucher') . '</span>', ['create'], ['class' => 'pull-right btn btn-primary']) ?>
-                        <?= GridView::widget([
-                            'id' => 'epay',
-                            'dataProvider' => $dataProvider,
-                            'columns' => [
-                                'epa_admin_name',
-                                'reward.vou_reward_name',
-                                [
-                                    'attribute' => 'epa_datetime',
-                                    'format' => 'html',
-                                    'value' => function($data) {
-                                        return Yii::$app->formatter->asDatetime($data->epa_datetime, "php:d M Y H:i:s");
-                                    }
-                                ],                                        
-                                [
-                                    'attribute' => 'epa_qty',
-                                    'format' => 'html',
-                                    'value' => function($data) {
-                                        return $data->epa_qty;
-                                    }
-                                ],                                                                                
-                                [
-                                    'attribute' => 'epa_success_qty',
-                                    'format' => 'html',
-                                    'value' => function($data) {
-                                        return $data->epa_success_qty;
-                                    }
-                                ],                                                                                
-                                [
-                                    'attribute' => 'epa_failed_qty',
-                                    'format' => 'html',
-                                    'value' => function($data) {
-                                        return $data->epa_failed_qty;
-                                    }
-                                ],   
-                                [
-                                    'class' => 'yii\grid\DataColumn',
-                                    'header' => '',
-                                    'format' => 'raw',
-                                    'options' => ['style'=>'width:5%'],
-                                    'value' => function($data) {
-                                        return Html::a('<i class="fa fa-caret-square-o-down"></i> Detail',['buy/view/?id='.$data->epa_id],['class'=>'btn btn-info btn-xs']);
-                                    },
-                                ],                                        
-                            ],
-                            'tableOptions' => ['class' => 'table table-striped']
-                        ]);
-                        ?>
-                    </div>
-                </div>
-            </div>
-        </div>
+          </div>
+        </div><!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+            <?= GridView::widget([
+                'id' => 'epay',
+                'dataProvider' => $dataProvider,
+                'summary'=>'',
+                'columns' => [
+                    'epa_admin_name',
+                    'reward.vou_reward_name',
+                    [
+                        'attribute' => 'epa_datetime',
+                        'format' => 'html',
+                        'value' => function($data) {
+                            return Yii::$app->formatter->asDatetime($data->epa_datetime, "php:d M Y H:i:s");
+                        }
+                    ],                                        
+                    [
+                        'attribute' => 'epa_qty',
+                        'format' => 'html',
+                        'value' => function($data) {
+                            return $data->epa_qty;
+                        }
+                    ],                                                                                
+                    [
+                        'attribute' => 'epa_success_qty',
+                        'format' => 'html',
+                        'value' => function($data) {
+                            return $data->epa_success_qty;
+                        }
+                    ],                                                                                
+                    [
+                        'attribute' => 'epa_failed_qty',
+                        'format' => 'html',
+                        'value' => function($data) {
+                            return $data->epa_failed_qty;
+                        }
+                    ],   
+                    [
+                        'class' => 'yii\grid\DataColumn',
+                        'header' => '',
+                        'format' => 'raw',
+                        'options' => ['style'=>'width:5%'],
+                        'value' => function($data) {
+                            return Html::a('<i class="fa fa-caret-square-o-down"></i> Detail',['buy/view/?id='.$data->epa_id],['class'=>'btn btn-info btn-xs']);
+                        },
+                    ],                                        
+                ],
+                'tableOptions' => ['class' => 'table table-hover']
+            ]);
+            ?>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
     </div>
-</div>
+  </div>
+</section>
 
 <?php
 $this->registerJs("
