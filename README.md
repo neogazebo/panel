@@ -3,6 +3,8 @@ EBIZU BACKEND SERVICE
 
 This application is used for all ebizu services 
 
+YII VERSION
+------------
 
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/yii2-app-basic/v/stable.png)](https://packagist.org/packages/yiisoft/yii2-app-basic)
 
@@ -41,7 +43,3 @@ return [
     'charset' => 'utf8',
 ];
 ```
-USING THE APPLICATION
----------------------
-
-[Visit the Yii-2 Migration Documentation](http://www.yiiframework.com/doc-2.0/guide-db-migrations.html)
