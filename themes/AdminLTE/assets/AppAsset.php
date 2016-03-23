@@ -30,6 +30,7 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/plugins/datepicker/datepicker3.css',
         'themes/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css',
         'themes/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
+        'themes/AdminLTE/plugins/sweet-alert/sweetalert.css',
     ];
     public $js = [
         'themes/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js',
@@ -48,6 +49,7 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js',
         'themes/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js',
         'themes/AdminLTE/plugins/fastclick/fastclick.min.js',
+        'themes/AdminLTE/plugins/sweet-alert/sweetalert.min.js',
         'themes/AdminLTE/dist/js/app.min.js',
         'themes/AdminLTE/dist/js/pages/dashboard.js',
         'themes/AdminLTE/dist/js/demo.js',

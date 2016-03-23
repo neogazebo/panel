@@ -17,7 +17,8 @@ use app\models\EpayDetail;
  */
 class EpaybaseController extends Controller
 {
-    protected $EPAY_API_URL = 'https://api.ebizu.com/app/epay';
+    // protected $EPAY_API_URL = 'https://api.ebizu.com/app/epay';
+    protected $EPAY_API_URL = 'https://admin.ebizu.com/app/epay';
     protected $EPAY_TOKEN_API = '3f2d64f31ab572ecf322d06a2b961755'; //harcode merujuk ke=> red_key in tbl_redemption_partner => EBC data
     protected $EPAYSVC_NETWORKCHECK = 'networkCheck';
     protected $EPAYSVC_ONLINEPIN = 'onlinePIN';

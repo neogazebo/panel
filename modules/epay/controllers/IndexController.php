@@ -2,12 +2,16 @@
 
 namespace app\modules\epay\controllers;
 
+/*
+ */
+
 /**
  * Description of IndexController
+ *
  * @author Tajhul Faijin <mrazoelcalm@gmail.com>
  */
-class IndexController extends EpaybaseController
-{
+class IndexController extends EpaybaseController {
+
     public function actionIndex()
     {
         return $this->render('index', []);
@@ -16,42 +20,36 @@ class IndexController extends EpaybaseController
     /*
      * Check connection
      */
+
     public function actionCheckConnection()
     {
         $tStart = $this->msec();
         try {
-            $post = json_encode([
+            $postParams = json_encode(array(
                 't' => $this->EPAY_TOKEN_API,
                 'd' => array(
                     'service' => $this->EPAYSVC_NETWORKCHECK,
                     'amount' => 0,
-                    'product' => 'CELCOMAIRTIME',
-                    'msisdn' => '0136300813',
-                    'thirdapp' => 1, //
+                    'product' => '',
+                    'msisdn' => '0',
                 ),
-            ]);
-            $post2 = 'r=' . $post;
+            ));
+            $result = (object) $this->processEpay($postParams);
+            $result = (object) $result;
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $this->EPAY_API_URL);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post2); // make it json
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $data = curl_exec($ch);
-            $result = json_decode($data);
-            curl_close($ch);
-            echo json_encode([
-                'status' => $result->response->responseCode,
-                'message' => $result->response->responseMsg,
+
+            echo json_encode(array(
+                'status' => isset($result->response->responseCode) ? $result->response->responseCode : 500,
+                'message' => isset($result->response->responseMsg) ? $result->response->responseMsg : 'Internal server error',
                 'execution_time' => round(($this->msec() - $tStart), 2),
-            ]);
+            ));
         } catch (Exception $e) {
-            echo json_encode([
+            echo json_encode(array(
                 'status' => "212", // error
                 'message' => $e->getMessage(),
                 'execution_time' => round(($this->msec() - $tStart), 2),
-            ]);
+            ));
         }
     }
+
 }
