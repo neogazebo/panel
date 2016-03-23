@@ -1,0 +1,43 @@
+<?php
+namespace app\controllers;
+
+/**
+* 
+*/
+use Yii;
+use yii\web\UploadedFile;
+use yii\helpers\Json;
+use app\models\LoginForm;
+
+
+class AuthController extends GuestController
+{
+
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ]
+        ];
+    }
+
+    public function actionLogin()
+    {
+        $this->layout   = 'login';
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('epay/index'));
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+
+}

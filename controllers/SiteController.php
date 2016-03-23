@@ -34,6 +34,11 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionIndex()
+    {
+        return $this->redirect(['auth/login']);
+    }
+
     public function actions()
     {
         return [
@@ -45,11 +50,6 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
-    }
-
-    public function actionIndex()
-    {
-        return $this->render('index');
     }
 
     public function actionLogin()

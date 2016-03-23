@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 $this->beginPage();
+$this->title = 'Ebizu Backend Service | Login';
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,11 +15,11 @@ $this->beginPage();
         <meta property='og:title' content='<?php echo Html::encode($this->title); ?>' />
         <meta property='og:description' content='<?php echo Html::encode($this->title); ?>' />
         <?php
-        $this->registerCssFile(Yii::$app->homeUrl . "themes/AdminLTE/bootstrap/css/bootstrap.min.css");
+        $this->registerCssFile($this->theme->baseUrl . "/bootstrap/css/bootstrap.min.css");
         $this->registerCssFile("https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
         $this->registerCssFile("https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css");
-        $this->registerCssFile(Yii::$app->homeUrl . "themes/AdminLTE/dist/css/AdminLTE.min.css");
-        $this->registerCssFile(Yii::$app->homeUrl . "themes/AdminLTE/plugins/iCheck/square/blue.css");
+        $this->registerCssFile($this->theme->baseUrl . "/dist/css/AdminLTE.min.css");
+        $this->registerCssFile($this->theme->baseUrl . "/plugins/iCheck/square/blue.css");
         ?>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,9 +37,9 @@ $this->beginPage();
     </body>
 
     <?php
-    $this->registerJsFile(Yii::$app->homeUrl . "themes/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js");
-    $this->registerJsFile(Yii::$app->homeUrl . "themes/AdminLTE/bootstrap/js/bootstrap.min.js");
-    $this->registerJsFile(Yii::$app->homeUrl . "themes/AdminLTE/plugins/iCheck/icheck.min.js");
+    $this->registerJsFile($this->theme->baseUrl . "/plugins/jQuery/jQuery-2.1.4.min.js");
+    $this->registerJsFile($this->theme->baseUrl . "/bootstrap/js/bootstrap.min.js");
+    $this->registerJsFile($this->theme->baseUrl . "/plugins/iCheck/icheck.min.js");
     $this->registerJs("
         $(function () {
             $('input').iCheck({
