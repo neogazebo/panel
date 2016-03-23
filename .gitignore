@@ -34,12 +34,6 @@ phpunit.phar
 # local phpunit config
 /phpunit.xml
 
-# ignore config
-config/console.php
-config/db.php
-config/params.php
-config/web.php
-
 # ignore runtime
 runtime
 
