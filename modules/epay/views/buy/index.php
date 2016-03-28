@@ -68,19 +68,37 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
                                     'value' => function($data) {
                                         return $data->epa_failed_qty;
                                     }
-                                ],   
+                                ],
                                 [
-                                    'class' => 'yii\grid\DataColumn',
-                                    'header' => '',
-                                    'format' => 'raw',
-                                    'options' => ['style' => 'width:5%'],
+                                    'attribute' => 'voucherBought.vob_ready_to_sell',
+                                    'header' => 'Ready to Sell',
+                                    'format' => 'html',
                                     'value' => function($data) {
-                                        return Html::a('
-                                            <i class="fa fa-caret-square-o-down"></i> Detail
-                                        ', [
-                                            'buy/view/?id=' . $data->epa_id
-                                        ], ['class' => 'btn btn-info btn-xs']);
-                                    },
+                                        if(!empty($data->voucherBought))
+                                            return $data->voucherBought->vob_ready_to_sell == 1 ? '<i class="fa fa-check"></i>' : '<i class="fa fa-circle-o"></i>';
+                                    }
+                                ],
+                                [
+                                    'class' => 'yii\grid\ActionColumn',
+                                    'template' => '<span class="pull-right">{sell}</span>',
+                                    'buttons' => [
+                                        'sell' => function($url, $model) {
+                                            return Html::a('<i class="fa fa-check"></i> Ready', '#', ['data-id' => $model->epa_id, 'class' => 'sell']);
+                                        }
+                                    ]
+                                ],
+                                [
+                                    'class' => 'yii\grid\ActionColumn',
+                                    'template' => '<span class="pull-right">{detail}</span>',
+                                    'buttons' => [
+                                        'detail' => function($url, $model) {
+                                            return Html::a('
+                                                <i class="fa fa-caret-square-o-down"></i> Detail
+                                            ', [
+                                                'buy/view/?id=' . $model->epa_id
+                                            ], ['class' => 'btn btn-info btn-xs']);
+                                        }
+                                    ]
                                 ],
                             ],
                             'tableOptions' => ['class' => 'table table-striped table-hover']
@@ -100,6 +118,19 @@ $this->registerJs("
         if(ev.which == 13) {
             window.location = baseUrl + 'epay/buy?search=' + $(this).val();
         }
+    });
+
+    $(function() {
+        $('.sell').editable({
+            type: 'select',
+            pk: $(this).data('id'),
+            url: baseUrl + 'epay/buy/sell,
+            value: 0,
+            source: [
+                { value: 0, text: 'Ready' },
+                { value: 1, text: 'Not Ready' },
+            ]
+        });
     });
 
     $('.delete-confirm').on('click', function(){

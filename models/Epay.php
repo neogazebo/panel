@@ -77,9 +77,21 @@ class Epay extends \yii\db\ActiveRecord
         return $this->hasOne(Voucher::className(), ['vou_id' => 'epa_vou_id']);
     }
 
+    public function getVoucherBought()
+    {
+        $model = Voucher::find()->where('vou_id = :id', [':id' => $this->epa_vou_id])->one();
+        if(!empty($model))
+            return VoucherBought::find()->where('vob_vou_id = :id', [':id' => $model->vou_id])->one();
+    }
+
     public function getProduct()
     {
-        return EpayProduct::find()->where('epp_product_type=:type AND epp_gst=:gst', ['type' => EpayProduct::TYPE_ONLINE_PIN,'gst'=> EpayProduct::GST_INCLUDE])->all();
+        return EpayProduct::find()->where('
+            epp_product_type = :type AND epp_gst = :gst
+        ', [
+            'type' => EpayProduct::TYPE_ONLINE_PIN,
+            'gst'=> EpayProduct::GST_INCLUDE
+        ])->all();
     }
 
     public function getVoucher()
