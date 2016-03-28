@@ -130,7 +130,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        $identity = AdminUser::find()->where(['id' => $id, 'status' => self::STATUS_ACTIVE])->one();
+        $identity = User::find()->where(['id' => $id, 'status' => self::STATUS_ACTIVE])->one();
 
         if (isset($identity->type) && $identity->type == 3)
         {
@@ -174,13 +174,13 @@ class User extends ActiveRecord implements IdentityInterface
     {
             $user = static::find()->where('(username = :username OR email = :email) AND status = :status', [':username' => $email, ':email' => $email, ':status' => self::STATUS_ACTIVE]);
 
-            if ($type == AdminUser::TYPE_MALL)
+            if ($type == User::TYPE_MALL)
             {
                 $user->andWhere('type = :type', [':type' => $type]);
             }
             else
             {
-                $user->andWhere('type != :type', [':type' => AdminUser::TYPE_MALL]);
+                $user->andWhere('type != :type', [':type' => User::TYPE_MALL]);
             }
 
             return $user->one();

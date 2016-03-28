@@ -11,6 +11,7 @@
  *
  * @author ilham
  */
-class EpayPrelogTrxQuery {
+class EpayPrelogTrxQuery
+{
     //put your code here
 }

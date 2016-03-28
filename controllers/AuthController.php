@@ -9,10 +9,8 @@ use yii\web\UploadedFile;
 use yii\helpers\Json;
 use app\models\LoginForm;
 
-
 class AuthController extends GuestController
 {
-
     public function actions()
     {
         return [
@@ -30,14 +28,15 @@ class AuthController extends GuestController
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('epay/index'));
+        if ($model->load(Yii::$app->request->post())) {
+            // var_dump($model->attributes);
+            // exit;
+            if($model->login())
+                return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('epay/index'));
         } else {
             return $this->render('login', [
                 'model' => $model,
             ]);
         }
     }
-
-
 }

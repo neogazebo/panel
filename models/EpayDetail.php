@@ -139,7 +139,7 @@ class EpayDetail extends \yii\db\ActiveRecord
 
             $total_detail++;
             $total_amount = $total_amount + $amount_in_RM;
-            ////$last_client_trans = $row->epd_trans_datetime;
+            // $last_client_trans = $row->epd_trans_datetime;
         }
 
         $footer = array(
@@ -150,7 +150,6 @@ class EpayDetail extends \yii\db\ActiveRecord
         $header = array(
             array("H", self::CLIENT_SHORTNAME, $stringdate, 1, $last_client_trans), // enter row
         );
-
         return array_merge($header, $rows, $footer);
     }
     

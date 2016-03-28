@@ -11,15 +11,16 @@ use yii\web\Controller;
 /**
  * @author Ilham Fauzi ilham@ebizu.com
  */
-class GuestController extends Controller {
-
-    public function init() {
+class GuestController extends Controller
+{
+    public function init()
+    {
         parent::init();
         $this->enableCsrfValidation = false;
     }
 
-    protected function setMessage($key, $type, $customText = null) {
-
+    protected function setMessage($key, $type, $customText = null)
+    {
         switch ($key) {
             case 'save' :
                 Yii::$app->session->setFlash($type, $customText !== null ? Yii::t('app', $customText) : Yii::$app->params['flashmsg']['save'][$type]);
@@ -33,7 +34,8 @@ class GuestController extends Controller {
         }
     }
 
-    protected function changeDate($date) {
+    protected function changeDate($date)
+    {
         $datePart = explode('to', $date);
         if (sizeof($datePart) > 1) {
             $date1 = date('d-m-Y', strtotime($datePart[0]));
@@ -45,7 +47,8 @@ class GuestController extends Controller {
         }
     }
 
-    protected function getDate() {
+    protected function getDate()
+    {
         $date = \app\models\Setting::GETDate();
         if (isset($_GET['date'])) {
             $date = $_GET['date'];
@@ -53,5 +56,4 @@ class GuestController extends Controller {
         $date = $this->changeDate($date);
         return $date;
     }
-
 }
