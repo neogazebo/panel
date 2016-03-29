@@ -131,12 +131,11 @@ var timer = setInterval(function() {
     $('#bip').toggleClass('green');
 }, 500);
 
-$(document).ready(function() {
-    $( '.datepicker' ).datepicker({ 
+
+$( '.datepicker' ).datepicker({ 
     dateFormat: 'dd/mm/yy',
     beforeShow: function(i) { if ($(i).attr('readonly')) { return false; } }        
-    }).datepicker('setDate', new Date());
-});
+}).datepicker('setDate', new Date());
 
 var box_server_info = $('#box-server-info');
 $('#check-connection').on('click', function(){

@@ -30,7 +30,7 @@ class ReconController extends Controller
     {
         return [
             'https' => [
-                'class' => \common\components\filters\Https::className(),
+                'class' => \app\components\filters\Https::className(),
             ],
         ];
     }
