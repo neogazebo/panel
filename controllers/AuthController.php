@@ -8,6 +8,8 @@ use Yii;
 use yii\web\UploadedFile;
 use yii\helpers\Json;
 use app\models\LoginForm;
+// use app\components\helpers\General;
+use app\models\User;
 
 
 class AuthController extends GuestController
@@ -39,5 +41,10 @@ class AuthController extends GuestController
         }
     }
 
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+        return $this->goHome();
+    }
 
 }

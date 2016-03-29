@@ -168,50 +168,30 @@ $('#check-connection').on('click', function(){
       showCancelButton: true,
       closeOnConfirm: false,
       showLoaderOnConfirm: true,
-    },
-    function(){
+    },function(){
         $.ajax({
             url: baseUrl + 'epay/index/check-connection',
-            beforeSend: function( xhr ) {
-                box_server_info.removeClass('tiles-alizarin');
-                box_server_info.removeClass('tiles-success');
-                box_server_info.addClass('tiles-toyo');
-                box_server_info.find('.tiles-body-alt').html('<i class=\'fa fa-download\'></i><div class=\'text-center\'>Checking Connection ...</div>');
-                box_server_info.find('.tiles-footer').empty();
-                box_server_info.show();
-            },
             success : function(data) {
-                var data = JSON.parse(data);
-                if(data.status == '00') {
-                    swal('Connected!', 'Connection success.', 'success');
-                    clearInterval(timer);
-                    $('#bip').addClass('green');
-                    $('.fa-refresh').removeClass('fa-spin');
-                    $('.info-box-signal small').text('Connected!');
-
-                    box_server_info.removeClass('tiles-toyo');
-                    box_server_info.removeClass('tiles-alizarin');
-                    box_server_info.addClass('tiles-success');
-                    box_server_info.find('.tiles-body-alt').html('<i class=\'fa fa-check\'></i><div class=\'text-center\'>Connected!</div>');
-                    box_server_info.find('.tiles-footer').html('<span>Time : </span><span>'+ data.execution_time +' Msc</span>');
-                    box_server_info.show();
-                } else {
-                    swal('Failed!', 'Connection failed.', 'error');
-                    clearInterval(timer);
-                    $('#bip').removeClass('green');
-                    $('.fa-refresh').removeClass('fa-spin');
-                    $('.info-box-signal small').text('Connection Fail!');
-
-                    box_server_info.removeClass('tiles-toyo');
-                    box_server_info.removeClass('tiles-success');
-                    box_server_info.addClass('tiles-alizarin');
-                    box_server_info.find('.tiles-body-alt').html('<i class=\'fa fa-comments-o\'></i><div class=\'text-center\'>Connection Failed!</div><small>'+ data.message +'</small>');
-                    box_server_info.find('.tiles-footer').html('<span>Time : </span><span>'+ data.execution_time +' Msc</span>');
-                    box_server_info.show();
+            var data = JSON.parse(data);
+            if(data.status == '00') {
+                swal('Connected!', 'Connection success.', 'success');
+                clearInterval(timer);
+                $('#bip').addClass('green');
+                $('.fa-refresh').removeClass('fa-spin');
+                $('.info-box-signal small').text('Connected!');
+            } else {
+                swal('Failed!', 'Connection failed.', 'error');
+                clearInterval(timer);
+                $('#bip').removeClass('green');
+                $('.fa-refresh').removeClass('fa-spin');
+                $('.info-box-signal small').text('Connection Fail!');
                 }
             }
         });
     });
+    $('button.cancel').click(function(){
+    $('.fa-refresh').removeClass('fa-spin');
+});
 });
 ", yii\web\View::POS_END, 'epay-dashboard-' . time());
 ?>

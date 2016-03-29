@@ -19,7 +19,7 @@ $this->registerCss("
 
 <div class="login-box">
   <div class="login-logo">
-    <a href="../../index2.html"><b>Ebizu</b></a>
+    <a href="#"><b>Ebizu</b></a>
   </div><!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg"><?= $this->title ?></p>

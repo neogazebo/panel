@@ -37,7 +37,7 @@ $this->title = 'Ebizu Backend Service | Login';
     </body>
 
     <?php
-    $this->registerJsFile($this->theme->baseUrl . "/plugins/jQuery/jQuery-2.1.4.min.js");
+    // $this->registerJsFile($this->theme->baseUrl . "/plugins/jQuery/jQuery-2.1.4.min.js");
     $this->registerJsFile($this->theme->baseUrl . "/bootstrap/js/bootstrap.min.js");
     $this->registerJsFile($this->theme->baseUrl . "/plugins/iCheck/icheck.min.js");
     $this->registerJs("

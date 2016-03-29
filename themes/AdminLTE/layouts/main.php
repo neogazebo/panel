@@ -71,15 +71,15 @@ $this->beginPage();
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <img src="<?= $this->theme->baseUrl ?>/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                    <span class="hidden-xs">Elvis Sonatha</span>
+                                    <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header">
                                         <img src="<?= $this->theme->baseUrl ?>/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                                         <p>
-                                            Elvis Sonatha - Web Developer
-                                            <small>Admin User since Nov. 2012</small>
+                                            <?= Yii::$app->user->identity->username ?>
+                                            <small>Admin User since <?= Yii::$app->formater->asDate(Yii::$app->user->identity->create_time) ?></small>
                                         </p>
                                     </li>
                                     <!-- Menu Footer-->
@@ -88,7 +88,7 @@ $this->beginPage();
                                             <a href="<?= Yii::$app->urlManager->createUrl('site/profile') ?>" class="btn btn-default btn-flat">Profile</a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="<?= Yii::$app->urlManager->createAbsoluteUrl('site/logout') ?>" data-method="post" class="btn btn-default btn-flat">Sign out</a>
+                                            <a href="<?= Yii::$app->urlManager->createAbsoluteUrl('auth/logout') ?>" data-method="post" class="btn btn-default btn-flat">Sign out</a>
                                         </div>
                                     </li>
                                 </ul>

@@ -60,6 +60,10 @@ $config = [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
+        'formater' => [
+            'class' => 'yii\i18n\Formatter',
+            'dateFormat' => 'M . d Y',
+        ],
     ],
     'params' => $params,
 ];
