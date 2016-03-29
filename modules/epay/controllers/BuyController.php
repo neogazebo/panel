@@ -22,6 +22,7 @@ class BuyController extends EpaybaseController
 
     public function actionIndex()
     {
+        $this->setRememberUrl();
         $model = Epay::find()->with(['reward'])->voucher(true);
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
@@ -36,6 +37,26 @@ class BuyController extends EpaybaseController
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionSell()
+    {
+        if(isset($_POST)) {
+            $model = Epay::findOne($_POST['epa_id']);
+            if(!empty(Voucher::findOne($model->epa_vou_id)->bought)) {
+                $voucher = Voucher::findOne($model->epa_vou_id)->bought;
+                $voucher->scenario = 'ready_to_sell';
+                $voucher->vob_ready_to_sell = $_POST['vob_ready_to_sell'];
+                if($voucher->save()) {
+                    // audit report
+                    $this->setMessage('save', 'success', 'Voucher has been successfully ready for sell!');
+                    $result = [
+                        'url' => $this->getRememberUrl()
+                    ];
+                    return \yii\helpers\Json::encode($result);
+                }
+            }
+        }
     }
 
     public function actionView($id)

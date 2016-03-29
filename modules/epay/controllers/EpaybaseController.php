@@ -4,6 +4,7 @@ namespace app\modules\epay\controllers;
 
 use Yii;
 use yii\web\Controller;
+use app\controllers\BaseController;
 use SoapClient;
 use app\models\EpayPrelogTrx;
 use app\models\Epay;
@@ -15,7 +16,7 @@ use app\models\EpayDetail;
  * @author Tajhul Faijin <mrazoelcalm@gmail.com>
  * @author Ilham Fauzi <ilham@ebizu.com>
  */
-class EpaybaseController extends Controller
+class EpaybaseController extends BaseController
 {
     // protected $EPAY_API_URL = 'https://api.ebizu.com/app/epay';
     protected $EPAY_API_URL = 'https://admin.ebizu.com/app/epay';

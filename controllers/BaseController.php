@@ -20,17 +20,17 @@ class BaseController extends Controller
         return true;
     }
 
-    public function behaviors()
-    {
-        return [
-            'permission' => [
-                // 'class' => \common\components\filters\AdminPermissionFilter::className(),
-            ],
-            'https' => [
-                'class' => \app\components\filters\Https::className(),
-            ],
-        ];
-    }
+    // public function behaviors()
+    // {
+    //     return [
+    //         'permission' => [
+    //             // 'class' => \common\components\filters\AdminPermissionFilter::className(),
+    //         ],
+    //         'https' => [
+    //             'class' => \app\components\filters\Https::className(),
+    //         ],
+    //     ];
+    // }
 
     public function setRememberUrl()
     {

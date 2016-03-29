@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
+use yii\bootstrap\Modal;
 
 $this->title = 'Epay Transaction';
 $dataProvider->sort->defaultOrder = ['epa_datetime' => SORT_DESC];
@@ -80,17 +82,11 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right">{sell}</span>',
+                                    'template' => '<span class="pull-right">{sell} {detail}</span>',
                                     'buttons' => [
                                         'sell' => function($url, $model) {
-                                            return Html::a('<i class="fa fa-check"></i> Ready', '#', ['data-id' => $model->epa_id, 'class' => 'sell']);
-                                        }
-                                    ]
-                                ],
-                                [
-                                    'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right">{detail}</span>',
-                                    'buttons' => [
+                                            return Html::a('<i class="fa fa-check"></i>', 'javascript:;', ['data-id' => $model->epa_id, 'class' => 'sell btn btn-warning btn-xs']);
+                                        },
                                         'detail' => function($url, $model) {
                                             return Html::a('
                                                 <i class="fa fa-caret-square-o-down"></i> Detail
@@ -112,6 +108,26 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
 </section>
 
 <?php
+Modal::begin([
+    'header' => '<h4>Ready to Sell</h4>',
+    'toggleButton' => ['label' => 'click me'],
+    'id' => 'ready-view',
+    'footer' => Html::a('<i class="fa fa-check"></i> Save', 'javascript:;', ['id' => 'save-sell', 'class' => 'btn btn-primary btn-sm'])
+]);
+?>
+
+<div class="form-group">
+    <input type="hidden" name="epa_id" id="epa_id">
+    <label for="vob_ready_to_sell">
+        <input type="checkbox" id="vob_ready_to_sell"> Ready to Sell
+    </label>
+</div>
+
+<?php
+Modal::end();
+?>
+
+<?php
 $this->registerJs("
     $('#filtersearch').popover();
     $('#filtersearch').on('keypress', function(ev) {
@@ -120,16 +136,28 @@ $this->registerJs("
         }
     });
 
-    $(function() {
-        $('.sell').editable({
-            type: 'select',
-            pk: $(this).data('id'),
-            url: baseUrl + 'epay/buy/sell,
-            value: 0,
-            source: [
-                { value: 0, text: 'Ready' },
-                { value: 1, text: 'Not Ready' },
-            ]
+    $('.sell').click(function() {
+        var id = $(this).data('id');
+        $('#epa_id').val(id);
+        $('#ready-view').modal('show');
+    });
+
+    $('#save-sell').click(function() {
+        var epa_id = $('#epa_id').val(),
+            vob_ready_to_sell = $('#vob_ready_to_sell').is(':checked') ? 1 : 0;
+
+        $.ajax({
+            method: 'POST',
+            url: baseUrl + 'epay/buy/sell',
+            data: {
+                epa_id: epa_id,
+                vob_ready_to_sell: vob_ready_to_sell
+            },
+            cache: false,
+            dataType: 'json',
+            success: function(result) {
+                window.location = result.url
+            }
         });
     });
 
