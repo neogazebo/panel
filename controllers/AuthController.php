@@ -11,10 +11,8 @@ use app\models\LoginForm;
 // use app\components\helpers\General;
 use app\models\User;
 
-
 class AuthController extends GuestController
 {
-
     public function actions()
     {
         return [
@@ -32,19 +30,21 @@ class AuthController extends GuestController
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('epay/index'));
+        if ($model->load(Yii::$app->request->post())) {
+            // var_dump($model->attributes);
+            // exit;
+            if($model->login())
+                return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('epay/index'));
         } else {
             return $this->render('login', [
                 'model' => $model,
             ]);
         }
     }
-
+    
     public function actionLogout()
     {
         Yii::$app->user->logout();
         return $this->goHome();
     }
-
 }

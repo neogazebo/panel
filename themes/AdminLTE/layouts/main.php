@@ -6,6 +6,12 @@ use app\themes\AdminLTE\assets\AppAsset;
 
 AppAsset::register($this);
 $this->beginPage();
+$this->registerCss("
+    .table { margin-bottom: 0 }
+    .summary { float: left; padding: 12px 0; }
+    .pagination { margin: 5px; float: right }
+    .mailbox-controls { padding: 0; padding-bottom: 10px; border-bottom: 1px solid #f4f4f4 }
+");
 ?>
 <!DOCTYPE html>
 <html>
@@ -30,7 +36,7 @@ $this->beginPage();
                     <!-- mini logo for sidebar mini 50x50 pixels -->
                     <span class="logo-mini"><b>EBS</b></span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b>Ebizu</b> Back Service</span>
+                    <span class="logo-lg"><b>Ebizu</b>Backend<i>Service</i></span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top" role="navigation">
@@ -139,6 +145,7 @@ $this->beginPage();
     </body>
 
     <script>
+        var baseUrl = '<?= Yii::$app->homeUrl ?>';
         $.widget.bridge('uibutton', $.ui.button);
     </script>
 </html>

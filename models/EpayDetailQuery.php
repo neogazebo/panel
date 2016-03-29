@@ -24,10 +24,10 @@ class EpayDetailQuery extends ActiveQuery
         	$this->orWhere(['LIKE', 'epd_ret_trans_ref', $_GET['search']]);
         	$this->orWhere(['LIKE', 'epd_msisdn', $_GET['search']]);
         }
-        //$this->select('epa_id,vou_reward_name');
-//        $this->join('LEFT JOIN', 'tbl_voucher', 'vou_id=epa_vou_id');
-//        $this->join('LEFT JOIN', 'tbl_epay_product', 'epp_id = vou_epp_id');
-//        $this->where('epa_vou_id IS NOT NULL');
+        // $this->select('epa_id,vou_reward_name');
+        // $this->join('LEFT JOIN', 'tbl_voucher', 'vou_id=epa_vou_id');
+        // $this->join('LEFT JOIN', 'tbl_epay_product', 'epp_id = vou_epp_id');
+        // $this->where('epa_vou_id IS NOT NULL');
         $this->orderBy('epd_id DESC');
         return $this;
     }

@@ -22,14 +22,16 @@ class Epay extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'tbl_epay';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['epa_qty'], 'required', 'on' => 'default'],
             [['epa_admin_id', 'epa_datetime', 'epa_qty', 'epa_success_qty', 'epa_failed_qty', 'epa_vou_id'], 'integer'],
@@ -40,7 +42,8 @@ class Epay extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'epa_id' => 'ID',
             'epa_admin_id' => 'Admin',
@@ -57,7 +60,8 @@ class Epay extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
@@ -73,9 +77,21 @@ class Epay extends \yii\db\ActiveRecord
         return $this->hasOne(Voucher::className(), ['vou_id' => 'epa_vou_id']);
     }
 
+    public function getVoucherBought()
+    {
+        $model = Voucher::find()->where('vou_id = :id', [':id' => $this->epa_vou_id])->one();
+        if(!empty($model))
+            return VoucherBought::find()->where('vob_vou_id = :id', [':id' => $model->vou_id])->one();
+    }
+
     public function getProduct()
     {
-        return EpayProduct::find()->where('epp_product_type=:type AND epp_gst=:gst', ['type' => EpayProduct::TYPE_ONLINE_PIN,'gst'=> EpayProduct::GST_INCLUDE])->all();
+        return EpayProduct::find()->where('
+            epp_product_type = :type AND epp_gst = :gst
+        ', [
+            'type' => EpayProduct::TYPE_ONLINE_PIN,
+            'gst'=> EpayProduct::GST_INCLUDE
+        ])->all();
     }
 
     public function getVoucher()

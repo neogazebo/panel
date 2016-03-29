@@ -30,7 +30,6 @@ class EpayPrelogTrx extends ActiveRecord
         return new EpayPrelogTrxQuery(get_called_class());
     }
 
-
     public static function tableName()
     {
         return 'tbl_epay_prelog_trx';

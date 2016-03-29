@@ -22,12 +22,17 @@ class BuyController extends EpaybaseController
 
     public function actionIndex()
     {
+        $model = Epay::find()->with(['reward'])->voucher(true);
         $dataProvider = new ActiveDataProvider([
-            'query' => Epay::find()->voucher(true),
+            'query' => $model,
             'pagination' => [
                 'pageSize' => $this->_pageSize,
             ],
         ]);
+        $model->joinWith(['reward' => function($model) {
+            $model->from(['reward' => 'tbl_voucher']);
+        }]);
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
