@@ -109,9 +109,8 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
 
 <?php
 Modal::begin([
-    'header' => '<h4>Ready to Sell</h4>',
-    'toggleButton' => ['label' => 'click me'],
     'id' => 'ready-view',
+    'header' => '<h4>Ready to Sell</h4>',
     'footer' => Html::a('<i class="fa fa-check"></i> Save', 'javascript:;', ['id' => 'save-sell', 'class' => 'btn btn-primary btn-sm'])
 ]);
 ?>
