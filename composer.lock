@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2e62fb992439dff5580c06d18f375a8a",
-    "content-hash": "d5b3dd269f323a16d7d26a1973af28a8",
+    "hash": "b8a2bcbc55221759fc38fa1d6fa86e56",
+    "content-hash": "3794f4166bffed3b86f5a7065c7466c3",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -675,6 +675,99 @@
             "time": "2015-05-29 06:29:14"
         },
         {
+            "name": "hguenot/yii2-gftp",
+            "version": "V2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hguenot/yii2-gftp.git",
+                "reference": "4548a4a3e86dd8f9728ce86412d1379219a8db57"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hguenot/yii2-gftp/zipball/4548a4a3e86dd8f9728ce86412d1379219a8db57",
+                "reference": "4548a4a3e86dd8f9728ce86412d1379219a8db57",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "gftp\\": ""
+                },
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Hervé Guenot",
+                    "email": "herve@guenot.info"
+                }
+            ],
+            "description": "Ftp is a FTP extension for [YII 2 Framework](http://www.yiiframework.com).",
+            "keywords": [
+                "extension",
+                "gftp",
+                "yii2"
+            ],
+            "time": "2015-12-11 13:56:57"
+        },
+        {
+            "name": "hguenot/yii2-gsftp",
+            "version": "V1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hguenot/yii2-gsftp.git",
+                "reference": "1a2eca605584403cd9944b1830c54a8ee3bd0d78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hguenot/yii2-gsftp/zipball/1a2eca605584403cd9944b1830c54a8ee3bd0d78",
+                "reference": "1a2eca605584403cd9944b1830c54a8ee3bd0d78",
+                "shasum": ""
+            },
+            "require": {
+                "hguenot/yii2-gftp": "*",
+                "phpseclib/phpseclib": "*"
+            },
+            "require-dev": {
+                "hguenot/yii2-gftp": "*",
+                "phpseclib/phpseclib": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "gftp\\": ""
+                },
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Hervé Guenot",
+                    "email": "herve@guenot.info"
+                }
+            ],
+            "description": "Ftp is a FTP extension for [YII 2 Framework](http://www.yiiframework.com).",
+            "keywords": [
+                "extension",
+                "gftp",
+                "yii2"
+            ],
+            "time": "2015-10-22 12:32:12"
+        },
+        {
             "name": "kartik-v/bootstrap-fileinput",
             "version": "v4.3.1",
             "source": {
@@ -1061,16 +1154,16 @@
         },
         {
             "name": "kartik-v/yii2-widget-datepicker",
-            "version": "v1.3.8",
+            "version": "v1.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-                "reference": "af32eeee557fa12e1b362e24fd8d0bc14713e361"
+                "reference": "3f7b38886e334a2c8c4262f155d98812461efd36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/af32eeee557fa12e1b362e24fd8d0bc14713e361",
-                "reference": "af32eeee557fa12e1b362e24fd8d0bc14713e361",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/3f7b38886e334a2c8c4262f155d98812461efd36",
+                "reference": "3f7b38886e334a2c8c4262f155d98812461efd36",
                 "shasum": ""
             },
             "require": {
@@ -1111,7 +1204,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-03-25 08:49:17"
+            "time": "2016-03-29 09:44:50"
         },
         {
             "name": "kartik-v/yii2-widget-datetimepicker",
@@ -1823,6 +1916,95 @@
                 "yii2"
             ],
             "time": "2014-11-09 19:54:17"
+        },
+        {
+            "name": "phpseclib/phpseclib",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpseclib/phpseclib.git",
+                "reference": "ba6fb78f727cd09f2a649113b95468019e490585"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/ba6fb78f727cd09f2a649113b95468019e490585",
+                "reference": "ba6fb78f727cd09f2a649113b95468019e490585",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phing/phing": "~2.7",
+                "phpunit/phpunit": "~4.0",
+                "sami/sami": "~2.0",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "suggest": {
+                "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
+                "ext-libsodium": "SSH2/SFTP can make use of some algorithms provided by the libsodium-php extension.",
+                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
+                "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpseclib\\": "phpseclib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jim Wigginton",
+                    "email": "terrafrost@php.net",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Patrick Monnerat",
+                    "email": "pm@datasphere.ch",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Andreas Fischer",
+                    "email": "bantu@phpbb.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Hans-Jürgen Petrich",
+                    "email": "petrich@tronic-media.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
+            "homepage": "http://phpseclib.sourceforge.net",
+            "keywords": [
+                "BigInteger",
+                "aes",
+                "asn.1",
+                "asn1",
+                "blowfish",
+                "crypto",
+                "cryptography",
+                "encryption",
+                "rsa",
+                "security",
+                "sftp",
+                "signature",
+                "signing",
+                "ssh",
+                "twofish",
+                "x.509",
+                "x509"
+            ],
+            "time": "2016-01-18 17:07:21"
         },
         {
             "name": "phpspec/php-diff",

@@ -113,6 +113,32 @@ class ReconController extends Controller
         // echo json_encode($return);
         return $this->redirect(Yii::$app->urlManager->createUrl(['epay/index/']));
     }
+
+
+    public function actionTestCron()
+    {
+        // echo Yii::$app->basePath.'/runtime/sftp/';exit;
+        $model = new EpayDetail();
+        $recapType = 'today';
+        $date = null;
+        $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
+        if (isset($_POST['date'])) {
+            $postDate = explode('/', $_POST['date']);
+            $date = $postDate[2] . $postDate[1] . $postDate[0];
+            // format filename
+            $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', strtotime($date)) . '.csv';
+        }
+        $data = $model->getReconciliationData($recapType, $date);
+
+        $output = fopen(Yii::$app->basePath."/runtime/sftp/$filename", 'w');
+        foreach ($data as $row) {
+            fputcsv($output, $row);
+        }
+
+        $put = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sftp/$filename",Yii::$app->basePath."/runtime/remote/$filename");
+        echo $put;
+        // return $this->render('index');
+    }
     
     public function actionCronService()
     {
