@@ -67,6 +67,7 @@ $config = [
         'request' => [
             'enableCookieValidation' => false,
         ],
+        // ftp setup
         'ftp' => [
             'class' => '\gftp\FtpComponent',
             'driverOptions' => [
