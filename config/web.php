@@ -64,6 +64,9 @@ $config = [
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'M . d Y',
         ],
+        'request' => [
+            'enableCookieValidation' => false,
+        ],
     ],
     'params' => $params,
 ];
