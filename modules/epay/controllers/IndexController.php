@@ -14,7 +14,7 @@ class IndexController extends EpaybaseController {
 
     public function actionIndex()
     {
-        return $this->render('index', []);
+        return $this->redirect(['auth/login']);
     }
 
     /*

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "733d3085661a716348b743fe8c3431b8",
-    "content-hash": "48b68ff7faa6a233dfca31022eedbd5c",
+    "hash": "b8a2bcbc55221759fc38fa1d6fa86e56",
+    "content-hash": "3794f4166bffed3b86f5a7065c7466c3",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -772,6 +772,99 @@
                 "fixtures"
             ],
             "time": "2015-05-29 06:29:14"
+        },
+        {
+            "name": "hguenot/yii2-gftp",
+            "version": "V2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hguenot/yii2-gftp.git",
+                "reference": "4548a4a3e86dd8f9728ce86412d1379219a8db57"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hguenot/yii2-gftp/zipball/4548a4a3e86dd8f9728ce86412d1379219a8db57",
+                "reference": "4548a4a3e86dd8f9728ce86412d1379219a8db57",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "gftp\\": ""
+                },
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Hervé Guenot",
+                    "email": "herve@guenot.info"
+                }
+            ],
+            "description": "Ftp is a FTP extension for [YII 2 Framework](http://www.yiiframework.com).",
+            "keywords": [
+                "extension",
+                "gftp",
+                "yii2"
+            ],
+            "time": "2015-12-11 13:56:57"
+        },
+        {
+            "name": "hguenot/yii2-gsftp",
+            "version": "V1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hguenot/yii2-gsftp.git",
+                "reference": "1a2eca605584403cd9944b1830c54a8ee3bd0d78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hguenot/yii2-gsftp/zipball/1a2eca605584403cd9944b1830c54a8ee3bd0d78",
+                "reference": "1a2eca605584403cd9944b1830c54a8ee3bd0d78",
+                "shasum": ""
+            },
+            "require": {
+                "hguenot/yii2-gftp": "*",
+                "phpseclib/phpseclib": "*"
+            },
+            "require-dev": {
+                "hguenot/yii2-gftp": "*",
+                "phpseclib/phpseclib": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "gftp\\": ""
+                },
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Hervé Guenot",
+                    "email": "herve@guenot.info"
+                }
+            ],
+            "description": "Ftp is a FTP extension for [YII 2 Framework](http://www.yiiframework.com).",
+            "keywords": [
+                "extension",
+                "gftp",
+                "yii2"
+            ],
+            "time": "2015-10-22 12:32:12"
         },
         {
             "name": "kartik-v/bootstrap-fileinput",
@@ -1924,43 +2017,93 @@
             "time": "2014-11-09 19:54:17"
         },
         {
-            "name": "pdezwart/php-amqp",
-            "version": "v1.6.1",
+            "name": "phpseclib/phpseclib",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/pdezwart/php-amqp.git",
-                "reference": "8edb4184f755ae94223d684e2d9825044ab6091f"
+                "url": "https://github.com/phpseclib/phpseclib.git",
+                "reference": "ba6fb78f727cd09f2a649113b95468019e490585"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdezwart/php-amqp/zipball/8edb4184f755ae94223d684e2d9825044ab6091f",
-                "reference": "8edb4184f755ae94223d684e2d9825044ab6091f",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/ba6fb78f727cd09f2a649113b95468019e490585",
+                "reference": "ba6fb78f727cd09f2a649113b95468019e490585",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phing/phing": "~2.7",
+                "phpunit/phpunit": "~4.0",
+                "sami/sami": "~2.0",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "suggest": {
+                "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
+                "ext-libsodium": "SSH2/SFTP can make use of some algorithms provided by the libsodium-php extension.",
+                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
+                "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
             },
             "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phpseclib\\": "phpseclib/"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "PHP-3.01"
+                "MIT"
             ],
             "authors": [
                 {
-                    "name": "Pieter de Zwart",
-                    "email": "pdezwart@php.net",
-                    "role": "lead"
+                    "name": "Jim Wigginton",
+                    "email": "terrafrost@php.net",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Patrick Monnerat",
+                    "email": "pm@datasphere.ch",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Andreas Fischer",
+                    "email": "bantu@phpbb.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Hans-Jürgen Petrich",
+                    "email": "petrich@tronic-media.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com",
+                    "role": "Developer"
                 }
             ],
-            "description": "PHP AMQP Binding Library",
-            "homepage": "https://github.com/pdezwart/php-amqp",
+            "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
+            "homepage": "http://phpseclib.sourceforge.net",
             "keywords": [
-                "AMQP",
-                "message",
-                "queue",
-                "rabbitmq"
+                "BigInteger",
+                "aes",
+                "asn.1",
+                "asn1",
+                "blowfish",
+                "crypto",
+                "cryptography",
+                "encryption",
+                "rsa",
+                "security",
+                "sftp",
+                "signature",
+                "signing",
+                "ssh",
+                "twofish",
+                "x.509",
+                "x509"
             ],
-            "time": "2015-11-23 17:53:40"
+            "time": "2016-01-18 17:07:21"
         },
         {
             "name": "phpspec/php-diff",

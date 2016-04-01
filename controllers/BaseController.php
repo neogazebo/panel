@@ -14,23 +14,23 @@ class BaseController extends Controller
     public function init()
     {
         if (Yii::$app->user->isGuest) {
-            $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
+            return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
         }
         $this->user = Yii::$app->user->identity;
         return true;
     }
 
-    // public function behaviors()
-    // {
-    //     return [
-    //         'permission' => [
-    //             // 'class' => \common\components\filters\AdminPermissionFilter::className(),
-    //         ],
-    //         'https' => [
-    //             'class' => \app\components\filters\Https::className(),
-    //         ],
-    //     ];
-    // }
+    public function behaviors()
+    {
+        return [
+            'session' => [
+                'class' => \app\components\filters\SessionFilter::className(),
+            ],
+            'https' => [
+                'class' => \app\components\filters\Https::className(),
+            ],
+        ];
+    }
 
     public function setRememberUrl()
     {

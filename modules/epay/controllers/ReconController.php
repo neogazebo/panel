@@ -8,6 +8,7 @@ namespace app\modules\epay\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\EpayDetail;
+use yii\helpers\BaseFileHelper;
 
 /**
  * Description of ReconController
@@ -120,39 +121,46 @@ class ReconController extends Controller
         $recapType = 'today';
         $date = null;
         $return = array();
-        if (!function_exists('ssh2_connect')) {
-            $return['data'] = array('code' => 505, 'message' => 'ssh2 library not found.', 'attachment' => null);
+        $filename = null;
+
+        if (isset($_POST['date'])) {
+            $postDate = explode('/', $_POST['date']);
+            $date = $postDate[2] . $postDate[1] . $postDate[0];
+            $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', strtotime($date)) . '.csv';
+        }else{
+            $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
+        }
+
+        // get data from table EpayDetail
+        $data = $model->getReconciliationData($recapType, $date);
+
+        // create local directory
+        $dir = Yii::$app->basePath."/runtime/sFTp/";
+
+        if(!is_dir($dir)){
+            $create = BaseFileHelper::createDirectory ( Yii::$app->basePath."/runtime/sFTp", $mode = 509, $recursive = true );
+        }
+
+        // create filename on local directory
+        $output = fopen(Yii::$app->basePath."/runtime/sFTp/$filename", 'w');
+        if ($output === false) {
+            $return['data'] = array('code' => 505, 'message' => 'Unable to write file on remote server.', 'attachment' => null);
         } else {
-            $resConnection = ssh2_connect($this->ftpEpayServer, $this->ftpEpayServerPort);
 
-            if (ssh2_auth_password($resConnection, $this->ftpEpayServerUsername, $this->ftpEpayServerPassword)) {
-                $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
-                if (isset($_POST['date'])) {
-                    $postDate = explode('/', $_POST['date']);
-                    $date = $postDate[2] . $postDate[1] . $postDate[0];
-                    // format filename
-                    $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', strtotime($date)) . '.csv';
-                }
-                $data = $model->getReconciliationData($recapType, $date);
-
-                //Initialize SFTP subsystem
-                $resSFTP = ssh2_sftp($resConnection);
-
-                $output = fopen("ssh2.sftp://{$resSFTP}/recon/$filename", 'w');
-
-                if ($output === false) {
-                    $return['data'] = array('code' => 505, 'message' => 'Unable to write file on remote server.', 'attachment' => null);
-                } else {
-                    foreach ($data as $row) {
-                        fputcsv($output, $row);
-                    }
-                    fclose($output);
-                    $return['data'] = array('code' => 200, 'message' => 'Recon file successfully uploaded with name : ' . $filename, 'attachment' => $filename);
-                }
-            } else {
-                $return['data'] = array('code' => 500, 'message' => 'Unable to authenticate on server.', 'attachment' => null);
+            // write value of csv file
+            foreach ($data as $row) {
+                fputcsv($output, $row);
             }
-        }        
+
+            // upload to server epay
+            $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
+
+            $return['data'] = array('code' => 200, 'message' => 'Recon file successfully uploaded with name : ' . $filename, 'attachment' => $filename);
+        }
+
+        // delete local dir
+        $delete = BaseFileHelper::removeDirectory(Yii::$app->basePath."/runtime/sFTp",$options = false);
+
         echo json_encode($return);
     }
     

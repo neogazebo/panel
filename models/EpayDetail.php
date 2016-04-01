@@ -30,23 +30,20 @@ namespace app\models;
  * @property string $epd_response_msg
  * @property string $epd_trans_ref
  */
-class EpayDetail extends \yii\db\ActiveRecord
-{
+class EpayDetail extends \yii\db\ActiveRecord {
     const CLIENT_SHORTNAME = 'EBZ';
 
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'tbl_epay_detail';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['epd_epa_id', 'epd_amount', 'epd_trans_trace_id', 'epd_response_code'], 'integer'],
             [['epd_request', 'epd_response_msg'], 'string', 'max' => 100],
@@ -65,38 +62,37 @@ class EpayDetail extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
-            'epd_id' => 'ID',
-            'epd_epa_id' => 'Epay ID',
-            'epd_request' => 'Request',
+            'epd_id' => 'Epd ID',
+            'epd_epa_id' => 'Epd Epa ID',
+            'epd_request' => 'Epd Request',
             'epd_amount' => 'in cents',
             'epd_merchant_id' => 'provided by epay',
-            'epd_operator_id' => 'Operator ID',
-            'epd_org_trans_ref' => 'Org Trans Ref',
-            'epd_ret_trans_ref' => 'Ret Trans Ref',
-            'epd_terminal_id' => 'Terminal ID',
-            'epd_product_code' => 'Product Code',
-            'epd_msisdn' => 'Msisdn',
+            'epd_operator_id' => 'Epd Operator ID',
+            'epd_org_trans_ref' => 'Epd Org Trans Ref',
+            'epd_ret_trans_ref' => 'Epd Ret Trans Ref',
+            'epd_terminal_id' => 'Epd Terminal ID',
+            'epd_product_code' => 'Epd Product Code',
+            'epd_msisdn' => 'Epd Msisdn',
             'epd_trans_datetime' => 'yyyyMMddHHiiss',
-            'epd_trans_trace_id' => 'Trans Trace ID',
-            'epd_custom_field_1' => 'Custom Field 1',
-            'epd_custom_field_2' => 'Custom Field 2',
-            'epd_custom_field_3' => 'Custom Field 3',
-            'epd_custom_field_4' => 'Custom Field 4',
-            'epd_custom_field_5' => 'Custom Field 5',
-            'epd_macing' => 'Macing',
-            'epd_pin' => 'Pin',
+            'epd_trans_trace_id' => 'Epd Trans Trace ID',
+            'epd_custom_field_1' => 'Epd Custom Field 1',
+            'epd_custom_field_2' => 'Epd Custom Field 2',
+            'epd_custom_field_3' => 'Epd Custom Field 3',
+            'epd_custom_field_4' => 'Epd Custom Field 4',
+            'epd_custom_field_5' => 'Epd Custom Field 5',
+            'epd_macing' => 'Epd Macing',
+            'epd_pin' => 'Epd Pin',
             'epd_pin_expiry_date' => 'yyMMdd',
-            'epd_response_code' => 'Response Code',
-            'epd_response_msg' => 'Response Msg',
-            'epd_trans_ref' => 'Trans Ref',
+            'epd_response_code' => 'Epd Response Code',
+            'epd_response_msg' => 'Epd Response Msg',
+            'epd_trans_ref' => 'Epd Trans Ref',
         ];
     }
 
-    public function getReconciliationData($recap = 'today', $date=null)
-    {
+    public function getReconciliationData($recap = 'today', $date=null) {
+        
         $stringdate = date('Ymd', (strtotime('-1 day', strtotime(date('Ymd')))));
 
         $epay_detail = EpayDetail::find()->where('epd_response_code="00"');
@@ -139,7 +135,7 @@ class EpayDetail extends \yii\db\ActiveRecord
 
             $total_detail++;
             $total_amount = $total_amount + $amount_in_RM;
-            // $last_client_trans = $row->epd_trans_datetime;
+            ////$last_client_trans = $row->epd_trans_datetime;
         }
 
         $footer = array(
@@ -150,16 +146,16 @@ class EpayDetail extends \yii\db\ActiveRecord
         $header = array(
             array("H", self::CLIENT_SHORTNAME, $stringdate, 1, $last_client_trans), // enter row
         );
+
         return array_merge($header, $rows, $footer);
     }
     
-    public function getBoughtDetail()
-    {
+    public function getBoughtDetail() {
         return $this->hasOne(VoucherBoughtDetail::className(), ['vod_code' => 'epd_pin']);
     }
-
-    public static function find()
-    {
+    
+    public static function find() {
         return new EpayDetailQuery(get_called_class());;
-    }
+    }    
+
 }
