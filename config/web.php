@@ -67,6 +67,21 @@ $config = [
         'request' => [
             'enableCookieValidation' => false,
         ],
+        // ftp setup
+        'ftp' => [
+            'class' => '\gftp\FtpComponent',
+            'driverOptions' => [
+                'class' => \gftp\FtpProtocol::valueOf('sftp')->driver,
+                'user' => 'ebizu',
+                'pass' => 'Mbr6khXJ79kAY',
+                'host' => 'sftp.e-pay.com.my',
+                'port' => 22,
+                'timeout' => 120
+            ],
+        ],
+        'loggedin' => [
+            'class' => 'app\components\extensions\Loggedin',
+        ],
     ],
     'params' => $params,
 ];
