@@ -75,7 +75,8 @@ class VoucherBought extends \yii\db\ActiveRecord
             'vob_price' => 'Price',
             'vob_vou_id' => 'Voucher',
             'qty' => 'Qty',
-            'vob_ready_to_sell' => 'Ready to Sell'
+            'vob_ready_to_sell' => 'Ready to Sell',
+            'vob_status' => 'Status',
         ];
     }
 

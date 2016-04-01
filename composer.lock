@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2e62fb992439dff5580c06d18f375a8a",
-    "content-hash": "d5b3dd269f323a16d7d26a1973af28a8",
+    "hash": "733d3085661a716348b743fe8c3431b8",
+    "content-hash": "48b68ff7faa6a233dfca31022eedbd5c",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -596,6 +596,59 @@
     ],
     "packages-dev": [
         {
+            "name": "bazilio/yii2-async",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bazilio91/yii2-async.git",
+                "reference": "d12489dd64a62faf2e34a74795fafdecac7b2159"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bazilio91/yii2-async/zipball/d12489dd64a62faf2e34a74795fafdecac7b2159",
+                "reference": "d12489dd64a62faf2e34a74795fafdecac7b2159",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "codeception/codeception": "2.0.*",
+                "kriswallsmith/spork": "dev-master",
+                "pdezwart/php-amqp": "dev-master",
+                "phpunit/phpunit": "4.6.*",
+                "yiisoft/yii2-codeception": "*",
+                "yiisoft/yii2-redis": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "bazilio\\async\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vasily Ostanin",
+                    "email": "bazilio91@gmail.com"
+                }
+            ],
+            "description": "Provides translucent api for moving large tasks out of request context",
+            "keywords": [
+                "AMQP",
+                "Tasks",
+                "async",
+                "rabbitmq",
+                "redis",
+                "yii2"
+            ],
+            "time": "2016-01-28 10:30:47"
+        },
+        {
             "name": "bower-asset/typeahead.js",
             "version": "v0.11.1",
             "source": {
@@ -621,6 +674,52 @@
             "extra": {
                 "bower-asset-main": "dist/typeahead.bundle.js"
             }
+        },
+        {
+            "name": "fedemotta/yii2-cronjob",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fedemotta/yii2-cronjob.git",
+                "reference": "351b893f66e8758933183bfafb653d72a109e053"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fedemotta/yii2-cronjob/zipball/351b893f66e8758933183bfafb653d72a109e053",
+                "reference": "351b893f66e8758933183bfafb653d72a109e053",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "fedemotta\\cronjob\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Federico Nicolás Motta",
+                    "email": "fedemotta@gmail.com"
+                }
+            ],
+            "description": "Yii2 extension to help in the creation of automated console scripts",
+            "keywords": [
+                "console",
+                "cron",
+                "crontab",
+                "extension",
+                "job",
+                "schedule",
+                "script",
+                "yii2"
+            ],
+            "time": "2015-10-07 20:47:12"
         },
         {
             "name": "fzaninotto/faker",
@@ -1061,16 +1160,16 @@
         },
         {
             "name": "kartik-v/yii2-widget-datepicker",
-            "version": "v1.3.8",
+            "version": "v1.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-                "reference": "af32eeee557fa12e1b362e24fd8d0bc14713e361"
+                "reference": "3f7b38886e334a2c8c4262f155d98812461efd36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/af32eeee557fa12e1b362e24fd8d0bc14713e361",
-                "reference": "af32eeee557fa12e1b362e24fd8d0bc14713e361",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/3f7b38886e334a2c8c4262f155d98812461efd36",
+                "reference": "3f7b38886e334a2c8c4262f155d98812461efd36",
                 "shasum": ""
             },
             "require": {
@@ -1111,7 +1210,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-03-25 08:49:17"
+            "time": "2016-03-29 09:44:50"
         },
         {
             "name": "kartik-v/yii2-widget-datetimepicker",
@@ -1823,6 +1922,45 @@
                 "yii2"
             ],
             "time": "2014-11-09 19:54:17"
+        },
+        {
+            "name": "pdezwart/php-amqp",
+            "version": "v1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pdezwart/php-amqp.git",
+                "reference": "8edb4184f755ae94223d684e2d9825044ab6091f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pdezwart/php-amqp/zipball/8edb4184f755ae94223d684e2d9825044ab6091f",
+                "reference": "8edb4184f755ae94223d684e2d9825044ab6091f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "PHP-3.01"
+            ],
+            "authors": [
+                {
+                    "name": "Pieter de Zwart",
+                    "email": "pdezwart@php.net",
+                    "role": "lead"
+                }
+            ],
+            "description": "PHP AMQP Binding Library",
+            "homepage": "https://github.com/pdezwart/php-amqp",
+            "keywords": [
+                "AMQP",
+                "message",
+                "queue",
+                "rabbitmq"
+            ],
+            "time": "2015-11-23 17:53:40"
         },
         {
             "name": "phpspec/php-diff",

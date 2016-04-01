@@ -72,12 +72,12 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
                                     }
                                 ],
                                 [
-                                    'attribute' => 'voucherBought.vob_ready_to_sell',
-                                    'header' => 'Ready to Sell',
+                                    'attribute' => 'voucherBought.vob_status',
+                                    'header' => 'Status',
                                     'format' => 'html',
                                     'value' => function($data) {
                                         if(!empty($data->voucherBought))
-                                            return $data->voucherBought->vob_ready_to_sell == 1 ? '<i class="fa fa-check"></i>' : '<i class="fa fa-circle-o"></i>';
+                                            return $data->voucherBought->vob_status == 0 ? '<i class="btn btn-warning btn-xs">In Progress</i>' : '<i class="btn btn-success btn-xs">Done</i>';
                                     }
                                 ],
                                 [
@@ -85,7 +85,10 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
                                     'template' => '<span class="pull-right">{sell} {detail}</span>',
                                     'buttons' => [
                                         'sell' => function($url, $model) {
-                                            return Html::a('<i class="fa fa-check"></i>', 'javascript:;', ['data-id' => $model->epa_id, 'class' => 'sell btn btn-warning btn-xs']);
+                                            if(!empty($model->voucherBought)) {
+                                                if($model->voucherBought->vob_status == 1)
+                                                    return Html::a('<i class="fa fa-check"></i>', 'javascript:;', ['data-id' => $model->epa_id, 'class' => 'sell btn btn-warning btn-xs']);
+                                            }
                                         },
                                         'detail' => function($url, $model) {
                                             return Html::a('
@@ -114,17 +117,13 @@ Modal::begin([
     'footer' => Html::a('<i class="fa fa-check"></i> Save', 'javascript:;', ['id' => 'save-sell', 'class' => 'btn btn-primary btn-sm'])
 ]);
 ?>
-
 <div class="form-group">
     <input type="hidden" name="epa_id" id="epa_id">
     <label for="vob_ready_to_sell">
         <input type="checkbox" id="vob_ready_to_sell"> Ready to Sell
     </label>
 </div>
-
-<?php
-Modal::end();
-?>
+<?php Modal::end(); ?>
 
 <?php
 $this->registerJs("

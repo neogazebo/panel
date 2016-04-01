@@ -14,4 +14,32 @@ return [
     's3region' => 'ap-southeast-1',
     's3SESregion' => 'us-east-1',
     's3bucket' => 'ebizu-production',
+    'EPAY_API_URL' => 'https://admin.ebizu.com/app/epay',
+    'EPAY_TOKEN_API' => '3f2d64f31ab572ecf322d06a2b961755', //harcode merujuk ke=> red_key in tbl_redemption_partner => EBC dat,
+    'EPAYSVC_NETWORKCHECK' => 'networkCheck',
+    'EPAYSVC_ONLINEPIN' => 'onlinePIN',
+    'EPAYSVC_ONLINEPIN_REVERSAL' => 'onlinePINReversal',
+    'EPAYSVC_ETOPUP' => 'etopup',
+    'EPAYSVC_ETOPUP_REVERSAL' => 'etopupReversal',
+    'OPERATOR_ID' => 'IBS',
+    'MERCHANT_ID' => '202433',
+    'TERMINAL_ID' => '80017419',
+    'EPAY_OPERATOR_ID' => 'IBS',
+    'EPAY_TERMINAL_ID' => '80017419',
+    'EPAY_URL' => 'ws1.oriongateway.com:33831',
+    'EPAY_URL_PATH' => '/averni/services/oglws',
+    'flashmsg' => [
+        'save' => [
+            'success' => Yii::t('app', 'Data has been saved!'),
+            'error' => Yii::t('app', 'Something wrong while saving data, please try again!'),
+        ],
+        'update' => [
+            'success' => 'Data successfully updated!',
+            'error' => Yii::t('app', 'Something wrong while updataing data, please try again!'),
+        ],
+        'delete' => [
+            'success' => Yii::t('app', 'Data successfully deleted!'),
+            'error' => Yii::t('app', 'Something wrong while deleting data, please try again!'),
+        ],
+    ],
 ];
