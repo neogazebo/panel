@@ -26,7 +26,7 @@
         "yiisoft/yii2-faker": "*",
         "kartik-v/yii2-widgets": "*",
         "vova07/yii2-console-runner-extension": "*",
-        "fedemotta/yii2-cronjob": "*"
+        "fedemotta/yii2-cronjob": "*",
         "hguenot/yii2-gsftp": "*"
     },
     "config": {
