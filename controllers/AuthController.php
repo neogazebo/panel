@@ -31,10 +31,8 @@ class AuthController extends GuestController
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
-            // var_dump($model->attributes);
-            // exit;
             if($model->login())
-                return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('epay/index'));
+                return $this->redirect(['epay/index']);
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -46,8 +44,8 @@ class AuthController extends GuestController
     {
         $user = Yii::$app->loggedin->user;
         if (!empty($user)) {
-            $user->usr_last_logout = time();
-            $user->save();
+            // $user->usr_last_logout = time();
+            // $user->save();
         }
         Yii::$app->user->logout();
         return $this->goHome();

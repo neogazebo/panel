@@ -17,8 +17,6 @@ use yii\db\ActiveRecord;
 
 class Epay extends \yii\db\ActiveRecord
 {    
-    public $epa_epp_id;
-
     /**
      * @inheritdoc
      */
@@ -35,7 +33,8 @@ class Epay extends \yii\db\ActiveRecord
         return [
             [['epa_qty'], 'required', 'on' => 'default'],
             [['epa_admin_id', 'epa_datetime', 'epa_qty', 'epa_success_qty', 'epa_failed_qty', 'epa_vou_id'], 'integer'],
-            [['epa_admin_name'], 'string', 'max' => 200]
+            [['epa_admin_name'], 'string', 'max' => 200],
+            // [['epa_epp_id'], 'safe']
         ];
     }
 

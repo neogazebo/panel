@@ -7,7 +7,6 @@
 
 namespace app\commands;
 
-use Yii;
 use fedemotta\cronjob\models\CronJob;
 use app\commands\EpaybridgeController;
 use app\models\User;
@@ -57,22 +56,20 @@ class EpayController extends EpaybridgeController
         $model = Epay::findOne($id);
         $voucherBought = VoucherBought::find()->where('vob_vou_id = :vou_id', [':vou_id' => $model->epa_vou_id])->one();
         $product = $model->productInfo();
-        var_dump($product);
-        exit;
 
         $transaction = Yii::$app->db->beginTransaction();
         for ($i = 1; $i <= $model->epa_qty; $i++) {
             try {
-                $postParams = json_encode(array(
+                $postParams = json_encode([
                     't' => Yii::$app->params['EPAY_TOKEN_API'],
-                    'd' => array(
+                    'd' => [
                         'service' => Yii::$app->params['EPAYSVC_ONLINEPIN'],
                         'amount' => $product->epp_amount_incent,
                         'product' => $product->epp_product_code,
                         'msisdn' => '0',
                         'thirdapp' => 1,
-                    ),
-                ));
+                    ],
+                ]);
                 // using API script
                 // not used
                 // $curl_request = $this->requestAPI($postParams);

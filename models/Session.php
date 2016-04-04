@@ -4,22 +4,25 @@ namespace app\models;
 
 use Yii;
 
-class Session extends \yii\db\ActiveRecord {
-
+class Session extends \yii\db\ActiveRecord
+{
     CONST WEB = 0;
     CONST MOBILE = 1;
 
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'tbl_session';
     }
 
-    public function rules() {
+    public function rules()
+    {
         return [
             [['ses_usr_id', 'ses_activity', 'ses_valid', 'ses_create_datetime', 'ses_app_type', 'ses_key', 'ses_last_ip'], 'safe'],
         ];
     }
 
-    public function beforeSave($insert) {
+    public function beforeSave($insert)
+    {
         if (parent::beforeSave($insert)) {
             $this->ses_last_ip = $_SERVER['REMOTE_ADDR'];
             $this->ses_app_type = self::WEB;
@@ -33,7 +36,8 @@ class Session extends \yii\db\ActiveRecord {
         return false;
     }
 
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'ses_id' => 'Ses ID',
             'ses_usr_id' => 'Ses Usr ID',
@@ -46,7 +50,8 @@ class Session extends \yii\db\ActiveRecord {
         ];
     }
 
-    public static function add($userId) {
+    public static function add($userId)
+    {
         $model = new Session();
         $model->ses_usr_id = $userId;
         $model->ses_key = sha1($userId . time());
@@ -58,7 +63,8 @@ class Session extends \yii\db\ActiveRecord {
         return false;
     }
 
-    public static function check($userId, $key) {
+    public static function check($userId, $key)
+    {
         $model = Session::findOne([
                     'ses_usr_id' => $userId,
                     'ses_key' => $key
