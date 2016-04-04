@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b8a2bcbc55221759fc38fa1d6fa86e56",
-    "content-hash": "3794f4166bffed3b86f5a7065c7466c3",
+    "hash": "422466a1ab1b031dec4da7545b6b85a8",
+    "content-hash": "0134281b78598037e22eee9f712a851b",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -595,59 +595,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "bazilio/yii2-async",
-            "version": "0.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bazilio91/yii2-async.git",
-                "reference": "d12489dd64a62faf2e34a74795fafdecac7b2159"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bazilio91/yii2-async/zipball/d12489dd64a62faf2e34a74795fafdecac7b2159",
-                "reference": "d12489dd64a62faf2e34a74795fafdecac7b2159",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "yiisoft/yii2": "*"
-            },
-            "require-dev": {
-                "codeception/codeception": "2.0.*",
-                "kriswallsmith/spork": "dev-master",
-                "pdezwart/php-amqp": "dev-master",
-                "phpunit/phpunit": "4.6.*",
-                "yiisoft/yii2-codeception": "*",
-                "yiisoft/yii2-redis": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "bazilio\\async\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Vasily Ostanin",
-                    "email": "bazilio91@gmail.com"
-                }
-            ],
-            "description": "Provides translucent api for moving large tasks out of request context",
-            "keywords": [
-                "AMQP",
-                "Tasks",
-                "async",
-                "rabbitmq",
-                "redis",
-                "yii2"
-            ],
-            "time": "2016-01-28 10:30:47"
-        },
         {
             "name": "bower-asset/typeahead.js",
             "version": "v0.11.1",
