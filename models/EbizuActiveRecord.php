@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace app\models;
 
 /**
  * This model is an extend from yii\db\ActiveRecord.
@@ -12,7 +12,6 @@ use yii\db\ActiveRecord;
 
 class EbizuActiveRecord extends ActiveRecord
 {
-
     /**
      * Returns a value indicating whether the named attribute has been changed.
      * @param string $name the name of the attribute.

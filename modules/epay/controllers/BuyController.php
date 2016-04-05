@@ -4,6 +4,7 @@ namespace app\modules\epay\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use app\models\AuditReport;
 use app\models\Epay;
 use app\models\EpayDetail;
 use app\models\Voucher;
@@ -48,8 +49,8 @@ class BuyController extends EpaybaseController
             if(!empty(Voucher::findOne($model->epa_vou_id)->bought)) {
                 $voucher = Voucher::findOne($model->epa_vou_id)->bought;
                 $voucher->scenario = 'ready_to_sell';
-                $voucher->vob_ready_to_sell = $_POST['vob_ready_to_sell'];
-                if($voucher->save()) {
+                $voucher->vob_ready_to_sell = (int)$_POST['vob_ready_to_sell'];
+                if($voucher->save(false)) {
                     if($voucher->vob_status == 1) {
                         $epay = Epay::find()->where('epa_vou_id = :id', [':id' => $model->epa_vou_id])->one();
                         $success = 0;
@@ -61,7 +62,7 @@ class BuyController extends EpaybaseController
                         $voucher->save(false);
                     }
 
-                    $audit = AuditReport::setAuditReport('ready to sell :'.$model->hac_name, Yii::$app->user->id, HardwareCompany::className(), $model->hac_id)->save();
+                    $audit = AuditReport::setAuditReport('ready to sell: '.$voucher->vou_reward_name, Yii::$app->user->id, Voucher::className(), $voucher->vou_id)->save();
                     $this->setMessage('save', 'success', 'Voucher has been successfully ready for sell!');
                     $result = [
                         'url' => $this->getRememberUrl()

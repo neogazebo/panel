@@ -72,6 +72,15 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
                                     }
                                 ],
                                 [
+                                    'attribute' => 'voucherBought.vob_ready_to_sell',
+                                    'header' => 'Ready to Sell',
+                                    'format' => 'html',
+                                    'value' => function($data) {
+                                        if(!empty($data->voucherBought))
+                                            return $data->voucherBought->vob_ready_to_sell == 0 ? '<i class="fa fa-circle-o"></i>' : '<i class="fa fa-check"></i>';
+                                    }
+                                ],
+                                [
                                     'attribute' => 'voucherBought.vob_status',
                                     'header' => 'Status',
                                     'format' => 'html',
@@ -87,7 +96,7 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
                                         'sell' => function($url, $model) {
                                             if(!empty($model->voucherBought)) {
                                                 if($model->voucherBought->vob_status == 1)
-                                                    return Html::a('<i class="fa fa-check"></i>', 'javascript:;', ['data-id' => $model->epa_id, 'class' => 'sell btn btn-warning btn-xs']);
+                                                    return Html::a('<i class="fa fa-check"></i>', 'javascript:;', ['data-id' => $model->epa_id, 'data-qty' => $model->epa_success_qty, 'class' => 'sell btn btn-warning btn-xs']);
                                             }
                                         },
                                         'detail' => function($url, $model) {
@@ -135,9 +144,14 @@ $this->registerJs("
     });
 
     $('.sell').click(function() {
-        var id = $(this).data('id');
+        var id = $(this).data('id'),
+            qty = $(this).data('qty');
+
         $('#epa_id').val(id);
-        $('#ready-view').modal('show');
+        if(qty > 0)
+            $('#ready-view').modal('show');
+        else
+            alert('Epay qty is Zero!');
     });
 
     $('#save-sell').click(function() {

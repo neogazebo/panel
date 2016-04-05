@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace app\models;
 
 /**
  * This is the model class for tbl_audit_report

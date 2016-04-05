@@ -7,6 +7,21 @@ use app\models\EpayPrelogTrx;
 
 class EpaybridgeController extends Controller
 {
+    protected $EPAY_API_URL = 'https://admin.ebizu.com/app/epay';
+    protected $EPAY_TOKEN_API = '3f2d64f31ab572ecf322d06a2b961755';
+    protected $EPAYSVC_NETWORKCHECK = 'networkCheck';
+    protected $EPAYSVC_ONLINEPIN = 'onlinePIN';
+    protected $EPAYSVC_ONLINEPIN_REVERSAL = 'onlinePINReversal';
+    protected $EPAYSVC_ETOPUP = 'etopup';
+    protected $EPAYSVC_ETOPUP_REVERSAL = 'etopupReversal';
+    protected $OPERATOR_ID = 'IBS';
+    protected $MERCHANT_ID = '202433';
+    protected $TERMINAL_ID = '80017419';
+    protected $EPAY_OPERATOR_ID = 'IBS';
+    protected $EPAY_TERMINAL_ID = '80017419';
+    protected $EPAY_URL = 'ws1.oriongateway.com:33831';
+    protected $EPAY_URL_PATH = '/averni/services/oglws';
+
 	protected function processEpay($d)
     {
         $params_bebas = json_decode($d);
@@ -15,10 +30,10 @@ class EpaybridgeController extends Controller
             'productCode' => $params_bebas->d->product,
             'msisdn' => $params_bebas->d->msisdn,
             'amount' => $params_bebas->d->amount,
-            'merchantId' => Yii::$app->params['MERCHANT_ID'],
-            'operatorId' => Yii::$app->params['OPERATOR_ID'],
+            'merchantId' => $this->MERCHANT_ID,
+            'operatorId' => $this->OPERATOR_ID,
             'retTransRef' => 'MA-' . time() . substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"), 0, 20),
-            'terminalId' => Yii::$app->params['TERMINAL_ID'],
+            'terminalId' => $this->TERMINAL_ID,
             'transDateTime' => date('YmdHis'),
             'transTraceId' => substr(str_shuffle("01234567891011121314151617181920"), 0, 6), // 6 character number 1-999999
         );
@@ -32,23 +47,23 @@ class EpaybridgeController extends Controller
 
         $request_type = 'NET-CHECK';
         switch ($params_bebas->d->service) {
-            case Yii::$app->params['EPAYSVC_NETWORKCHECK'] :
+            case $this->EPAYSVC_NETWORKCHECK :
                 $data['response'] = $this->epayJar('networkCheck', $params);
                 $request_type = 'NET-CHECK';
                 break;
-            case Yii::$app->params['EPAYSVC_ONLINEPIN'] :
+            case $this->EPAYSVC_ONLINEPIN :
                 $data['response'] = $this->epayJar('onlinePIN', $params);
                 $request_type = 'PIN';
                 break;
-            case Yii::$app->params['EPAYSVC_ONLINEPIN_REVERSAL'] :
+            case $this->EPAYSVC_ONLINEPIN_REVERSAL :
                 $data['response'] = $this->epayJar('onlinePINReversal', $params);
                 $request_type = 'PIN-REV';
                 break;
-            case Yii::$app->params['EPAYSVC_ETOPUP'] :
+            case $this->EPAYSVC_ETOPUP :
                 $data['response'] = $this->epayJar('etopup', $params);
                 $request_type = 'ETU';
                 break;
-            case Yii::$app->params['EPAYSVC_ETOPUP_REVERSAL'] :
+            case $this->EPAYSVC_ETOPUP_REVERSAL :
                 $data['response'] = $this->epayJar('etopupReversal', $params);
                 $request_type = 'ETU-REV';
                 break;
@@ -83,7 +98,8 @@ class EpaybridgeController extends Controller
             $array[] = '"' . $key . '=' . $value . '"';
         }
 
-        $command = '/usr/bin/java -jar ' . dirname(__FILE__) . '..' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'epay' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'EpayTLS.jar ' . Yii::$app->params['EPAY_URL'] . ' ' . Yii::$app->params['EPAY_URL_PATH'] . ' ' . $service . ' ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . ' ' . implode(' ', $array);
+        $file_in_command = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'epay' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR;
+        $command = '/usr/bin/java -jar ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'epay' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'EpayTLS.jar ' . $this->EPAY_URL . ' ' . $this->EPAY_URL_PATH . ' ' . $service . ' ' . $file_in_command . ' ' . implode(' ', $array);
         $xml = `$command`;
         $parser = xml_parser_create('');
         xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, "UTF-8");

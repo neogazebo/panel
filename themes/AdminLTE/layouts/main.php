@@ -128,6 +128,7 @@ $this->registerCss("
 
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
+                <?= $this->render('_notification') ?>
                 <?php echo $content; ?>
             </div><!-- /.content-wrapper -->
 
