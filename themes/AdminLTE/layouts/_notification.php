@@ -1,5 +1,5 @@
-<?php $this->registerCss('.alert { margin-bottom: 0 }') ?>
-<div class="row" style="padding: 14px;">
+<?php $this->registerCss('.alert { margin-bottom: 0; margin: 14px; }') ?>
+<div class="row">
     <div class="col-xs-12 col-sm-12 col-lg-12">
         <?php if ($flash = Yii::$app->session->getFlash('success')): ?>
             <div class="alert alert-dismissable alert-success">

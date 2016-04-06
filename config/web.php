@@ -60,9 +60,9 @@ $config = [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
-        'formater' => [
+        'formatter' => [
             'class' => 'yii\i18n\Formatter',
-            'dateFormat' => 'M . d Y',
+            'dateFormat' => 'dd MMM yyyy',
         ],
         'request' => [
             'enableCookieValidation' => false,
@@ -79,9 +79,9 @@ $config = [
                 'timeout' => 120
             ],
         ],
-        'loggedin' => [
-            'class' => 'app\components\extensions\Loggedin',
-        ],
+        // 'loggedin' => [
+        //     'class' => 'app\components\extensions\Loggedin',
+        // ],
     ],
     'params' => $params,
 ];
