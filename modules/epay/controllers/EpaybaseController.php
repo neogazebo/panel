@@ -33,8 +33,10 @@ class EpaybaseController extends BaseController
     protected $EPAY_TERMINAL_ID = '80017419';
 
     //epay url
-    protected $EPAY_URL = 'ws1.oriongateway.com:33831';
-    protected $EPAY_URL_PATH = '/averni/services/oglws';
+    protected $EPAY_URL = 'wstest.oriongateway.com:22837';
+    // protected $EPAY_URL = 'ws.oriongateway.com:33831';
+    protected $EPAY_URL_PATH = '/willani/services/oglws';
+    // protected $EPAY_URL_PATH = '/averni/services/oglws';
 
     public function init()
     {

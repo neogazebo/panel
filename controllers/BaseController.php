@@ -23,9 +23,9 @@ class BaseController extends Controller
     public function behaviors()
     {
         return [
-            'session' => [
-                'class' => \app\components\filters\SessionFilter::className(),
-            ],
+            // 'session' => [
+            //     'class' => \app\components\filters\SessionFilter::className(),
+            // ],
             'https' => [
                 'class' => \app\components\filters\Https::className(),
             ],

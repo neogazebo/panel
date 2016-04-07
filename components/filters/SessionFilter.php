@@ -17,11 +17,11 @@ class SessionFilter extends ActionFilter
     public function init()
     {
         parent::init();
-        $this->user = Yii::$app->user->identity;
-        if (!Session::check($this->user->id, Yii::$app->session->get('ebz_session_key'))) {
-            Yii::$app->user->logout();
-            return Yii::$app->controller->redirect(Yii::$app->urlManager->createAbsoluteUrl('/auth/login'));
-        }
+        // $this->user = Yii::$app->user->identity;
+        // if (!Session::check($this->user->id, Yii::$app->session->get('ebz_session_key'))) {
+        //     Yii::$app->user->logout();
+            // return Yii::$app->controller->redirect(Yii::$app->urlManager->createAbsoluteUrl('/auth/login'));
+        // }
     }
 
 }

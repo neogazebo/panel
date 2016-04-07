@@ -24,7 +24,7 @@ class ReconController extends Controller
     public function init()
     {
         parent::init();
-        date_default_timezone_set('Asia/Jakarta');
+        date_default_timezone_set('Etc/UTC');
     }
     
     public function behaviors()
