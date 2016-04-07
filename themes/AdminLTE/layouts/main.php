@@ -84,8 +84,8 @@ $this->registerCss("
                                     <li class="user-header">
                                         <img src="<?= $this->theme->baseUrl ?>/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                                         <p>
-                                            <?= Yii::$app->user->identity->username ?>
-                                            <small>Admin User since <?= Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) ?></small>
+                                            <?//= Yii::$app->user->identity->username ?>
+                                            <small>Admin User since <?//= Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) ?></small>
                                         </p>
                                     </li>
                                     <!-- Menu Footer-->
