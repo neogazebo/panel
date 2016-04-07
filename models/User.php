@@ -25,7 +25,6 @@ class User extends ActiveRecord implements IdentityInterface
     const LEVEL_ADMIN = 2;
     const LEVEL_MODERATOR = 3;
 
-    public $mal_name;
     public $password;
     public $password_repeat;
     public $old_password;
@@ -34,7 +33,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return 'tbl_admin_user';
     }
-
 
     public function behaviors()
     {
@@ -113,18 +111,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findIdentity($id)
     {
         $identity = User::find()->where(['id' => $id, 'status' => self::STATUS_ACTIVE])->one();
-
-        if (isset($identity->type) && $identity->type == 3)
-        {
-            $malls = Mall::find()->where(['mal_id' => $identity->mall])->one();
-            $mall = ['mal_name' => $malls->mal_name];
-            $model = yii\helpers\ArrayHelper::merge($identity, $mall);
-            return $model;
-        }
-        else
-        {
-            return $identity;
-        }        
+        return $identity;
     }
 
     public static function findIdentityByAccessToken($token, $type = null)
@@ -139,18 +126,8 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findByEmail($email, $type = '')
     {
-            $user = static::find()->where('(username = :username OR email = :email) AND status = :status', [':username' => $email, ':email' => $email, ':status' => self::STATUS_ACTIVE]);
-
-            if ($type == User::TYPE_MALL)
-            {
-                $user->andWhere('type = :type', [':type' => $type]);
-            }
-            else
-            {
-                $user->andWhere('type != :type', [':type' => User::TYPE_MALL]);
-            }
-
-            return $user->one();
+        $user = static::find()->where('(username = :username OR email = :email) AND status = :status', [':username' => $email, ':email' => $email, ':status' => self::STATUS_ACTIVE]);
+        return $user->one();
     }
 
     public static function findByPasswordResetToken($token)
@@ -158,8 +135,7 @@ class User extends ActiveRecord implements IdentityInterface
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         $parts = explode('_', $token);
         $timestamp = (int) end($parts);
-        if ($timestamp + $expire < time())
-        {
+        if ($timestamp + $expire < time()) {
             // token expired
             return null;
         }
@@ -205,58 +181,18 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
-    public function getMall()
-    {
-        $model = Mall::find()->all();
-        return \common\components\helpers\Html::listData($model, 'mal_id', 'mal_name');
-    }
-
-    public function getMallModel()
-    {
-        return $this->hasOne(Mall::className(), ['mal_id' => 'mall']);
-    }
-
-    public function getUserEbn()
-    {
-        return $this->hasOne(UserEbn::className(), ['ubn_pk_id' => 'id']);
-    }
-
-    public function getCompany()
-    {
-        return false;
-    }
-
-    public function getMallLevelAvailable()
-    {
-        return[
-            self::LEVEL_ADMIN => 'Admin',
-            self::LEVEL_MODERATOR => 'Moderator'
-        ];
-    }
-
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert))
-        {
-            if ($this->isNewRecord)
-            {
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord) {
                 $this->setPasswordAccount();
-                if ($this->type != self::TYPE_MALL)
-                {
-                    $this->mall = '';
-                }
-            }
-            else
-            {
-                if ($this->getScenario() != 'update')
-                {
+            } else {
+                if ($this->getScenario() != 'update') {
                     $this->setPasswordAccount();
                 }
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -268,18 +204,4 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
-    public function getAvailableMallRole()
-    {
-        if (Yii::$app->user->identity->type != self::TYPE_MALL)
-        {
-            return [];
-        }
-
-        return MallUserRole::find()->where(['mur_mal_id' => Yii::$app->user->identity->mall])->all();
-    }
-
-    public function getMallRole()
-    {
-        return $this->hasOne(MallUserRole::className(), ['mur_id' => 'mall_role_id']);
-    }                                                    
 }
