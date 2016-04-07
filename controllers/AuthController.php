@@ -42,11 +42,6 @@ class AuthController extends GuestController
     
     public function actionLogout()
     {
-        $user = Yii::$app->loggedin->user;
-        if (!empty($user)) {
-            // $user->usr_last_logout = time();
-            // $user->save();
-        }
         Yii::$app->user->logout();
         return $this->goHome();
     }
