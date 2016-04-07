@@ -18,6 +18,7 @@ class User extends ActiveRecord implements IdentityInterface
     const libsodium = 10;
     const ROLE_USER = 10;
     const TYPE_ADMIN = 1;
+    const STATUS_ACTIVE = 10;
     const TYPE_TM = 2;
     const TYPE_MALL = 3;
     const TYPE_SALES = 4;
