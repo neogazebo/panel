@@ -30,9 +30,8 @@ class AuthController extends GuestController
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if($model->login())
-                return $this->redirect(['epay/index']);
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('epay/index'));
         } else {
             return $this->render('login', [
                 'model' => $model,
