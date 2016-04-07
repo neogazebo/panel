@@ -28,7 +28,6 @@ $this->registerCss("
     </head>
 
     <body class="hold-transition skin-blue sidebar-mini">
-        <?= var_dump(Yii::$app->user->identity); exit; ?>
         <?php $this->beginBody(); ?>
         <div class="wrapper">
             <header class="main-header">

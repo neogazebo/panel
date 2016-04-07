@@ -110,8 +110,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findIdentity($id)
     {
-        $identity = User::find()->where(['id' => $id, 'status' => self::STATUS_ACTIVE])->one();
-        return $identity;
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
     public static function findIdentityByAccessToken($token, $type = null)
@@ -124,10 +123,18 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
-    public static function findByEmail($email, $type = '')
+    public static function findByEmail($email)
     {
-        $user = static::find()->where('(username = :username OR email = :email) AND status = :status', [':username' => $email, ':email' => $email, ':status' => self::STATUS_ACTIVE]);
-        return $user->one();
+        return static::find()
+            ->where('
+                (username = :username OR 
+                    email = :email) 
+                AND status = :status
+            ', [
+                ':username' => $email,
+                ':email' => $email,
+                ':status' => self::STATUS_ACTIVE
+            ])->one();
     }
 
     public static function findByPasswordResetToken($token)

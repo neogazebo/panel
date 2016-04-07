@@ -35,20 +35,5 @@ $this->title = 'Ebizu Backend Service | Login';
         <?php echo $content; ?>
         <?php $this->endBody(); ?>
     </body>
-
-    <?php
-    // $this->registerJsFile($this->theme->baseUrl . "/plugins/jQuery/jQuery-2.1.4.min.js");
-    $this->registerJsFile($this->theme->baseUrl . "/bootstrap/js/bootstrap.min.js");
-    $this->registerJsFile($this->theme->baseUrl . "/plugins/iCheck/icheck.min.js");
-    $this->registerJs("
-        $(function () {
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-            });
-        });
-    ", yii\web\View::POS_END, 'login');
-    ?>
 </html>
 <?php $this->endPage(); ?>
