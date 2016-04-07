@@ -19,7 +19,7 @@ class EpaybridgeController extends Controller
     protected $TERMINAL_ID = '80017419';
     protected $EPAY_OPERATOR_ID = 'IBS';
     protected $EPAY_TERMINAL_ID = '80017419';
-    protected $EPAY_URL = 'ws1.oriongateway.com:22831';
+    protected $EPAY_URL = 'ws1.oriongateway.com:33831';
     // protected $EPAY_URL = 'wstest.oriongateway.com:22837';
     protected $EPAY_URL_PATH = '/willani/services/oglws';
     // protected $EPAY_URL = 'ws.oriongateway.com:33831';
