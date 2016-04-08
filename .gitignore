@@ -58,3 +58,7 @@ config/params-local.php
 config/db.php
 web/index-test.php
 web/index.php
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
