@@ -57,7 +57,8 @@ class SiteController extends Controller
     {
         $this->layout = 'login';
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            echo 'noooo';
+            // return $this->goHome();
         }
 
         $model = new LoginForm();
