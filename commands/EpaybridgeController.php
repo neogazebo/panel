@@ -85,7 +85,7 @@ class EpaybridgeController extends Controller
         }
 
         $file_in_command = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'epay' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR;
-        $command = '/usr/bin/java -jar ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'epay' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'EpayTLS.jar ' . $this->EPAY_URL . ' ' . $this->EPAY_URL_PATH . ' ' . $service . ' ' . $file_in_command . ' ' . implode(' ', $array);
+        $command = '/usr/bin/java -jar ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'epay' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'EpayTLS.jar ' . Yii::$app->params['EPAY_URL'] . ' ' . Yii::$app->params['EPAY_URL_PATH'] . ' ' . $service . ' ' . $file_in_command . ' ' . implode(' ', $array);
         $xml = `$command`;
         $parser = xml_parser_create('');
         xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, "UTF-8");
