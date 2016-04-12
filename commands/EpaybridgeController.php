@@ -8,6 +8,29 @@ use app\models\EpayPrelogTrx;
 
 class EpaybridgeController extends Controller
 {
+    protected function convertTwoYearToFour($str)
+    {
+        // Our date
+        //$str = "01/04/10";
+        $cutoff = 50;
+        // See what YY is
+        // Get the substring of $str starting two from the end (-2)... this is YY
+        $year = substr($str, -2);
+        // Check whether year added should be 19 or 20
+        if ($year < 50)
+        // PHP converts string to number nicely, so this is our 20YY
+            $year += 2000;
+        else
+        // This is 19YY
+            $year += 1900;
+        // Repace YY with YYYY
+        // This will take $str and replace the part two from the end (-2) undtil
+        // the end with $year.
+        $str = substr_replace($str, $year, -2);
+        // See what we got
+        return $str;
+    }
+
 	protected function processEpay($d)
     {
         $params_bebas = json_decode($d);
@@ -33,23 +56,23 @@ class EpaybridgeController extends Controller
 
         $request_type = 'NET-CHECK';
         switch ($params_bebas->d->service) {
-            case $this->EPAYSVC_NETWORKCHECK :
+            case Yii::$app->params['EPAYSVC_NETWORKCHECK'] :
                 $data['response'] = $this->epayJar('networkCheck', $params);
                 $request_type = 'NET-CHECK';
                 break;
-            case $this->EPAYSVC_ONLINEPIN :
+            case Yii::$app->params['EPAYSVC_ONLINEPIN'] :
                 $data['response'] = $this->epayJar('onlinePIN', $params);
                 $request_type = 'PIN';
                 break;
-            case $this->EPAYSVC_ONLINEPIN_REVERSAL :
+            case Yii::$app->params['EPAYSVC_ONLINEPIN_REVERSAL'] :
                 $data['response'] = $this->epayJar('onlinePINReversal', $params);
                 $request_type = 'PIN-REV';
                 break;
-            case $this->EPAYSVC_ETOPUP :
+            case Yii::$app->params['EPAYSVC_ETOPUP'] :
                 $data['response'] = $this->epayJar('etopup', $params);
                 $request_type = 'ETU';
                 break;
-            case $this->EPAYSVC_ETOPUP_REVERSAL :
+            case Yii::$app->params['EPAYSVC_ETOPUP_REVERSAL'] :
                 $data['response'] = $this->epayJar('etopupReversal', $params);
                 $request_type = 'ETU-REV';
                 break;
@@ -85,7 +108,7 @@ class EpaybridgeController extends Controller
         }
 
         $file_in_command = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'epay' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR;
-        $command = '/usr/bin/java -jar ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'epay' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'EpayTLS.jar ' . $this->EPAY_URL . ' ' . $this->EPAY_URL_PATH . ' ' . $service . ' ' . $file_in_command . ' ' . implode(' ', $array);
+        $command = '/usr/bin/java -jar ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'epay' . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . 'EpayTLS.jar ' . Yii::$app->params['EPAY_URL'] . ' ' . Yii::$app->params['EPAY_URL_PATH'] . ' ' . $service . ' ' . $file_in_command . ' ' . implode(' ', $array);
         $xml = `$command`;
         $parser = xml_parser_create('');
         xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, "UTF-8");
