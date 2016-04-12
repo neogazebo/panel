@@ -22,6 +22,7 @@ $this->registerCss("
         animation: fa-spin 1s infinite linear;
     }
 ");
+
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
@@ -61,7 +62,7 @@ $this->registerCss("
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+<!--                             <tr>
                                 <td>Recon All Data & Download to local</td>
                                 <td></td>
                                 <td>
@@ -74,7 +75,7 @@ $this->registerCss("
                                 <td>
                                     <?= Html::a('<i class="fa fa-external-link-square"></i> <span>' . Yii::t('app', 'Process') . '</span>', ['recon/manual-recon/?data=today'], ['id' => 'rec-today', 'class' => 'btn btn-xs btn-midnightblue DTTT_button_text']); ?>                                    
                                 </td>
-                            </tr>    
+                            </tr>  -->   
                             <?php
                             $form = ActiveForm::begin([
                                 'id' => 'category-form',
@@ -91,13 +92,13 @@ $this->registerCss("
                                 </td>
                             </tr>                                                                
                             <?php ActiveForm::end(); ?>
-                            <tr>
+   <!--                          <tr>
                                 <td>Recon Data Today & Upload to Epay Server</td>
                                 <td></td>
                                 <td>
                                     <?= Html::a('<i class="fa fa-external-link-square"></i> <span>' . Yii::t('app', 'Process') . '</span>', ['recon/ftp'], ['id' => 'rec-today', 'class' => 'btn btn-xs btn-midnightblue DTTT_button_text']); ?>                                    
                                 </td>
-                            </tr>   
+                            </tr>  -->  
                             <?php
                             $form = ActiveForm::begin([
                                 'id' => 'ftp-form',
