@@ -1,13 +1,13 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
 <ul class="sidebar-menu">
     <li class="header">MAIN NAVIGATION</li>
-    <li>
+<!--     <li>
         <a href="<?= Yii::$app->urlManager->createUrl('dashboard/index') ?>">
             <i class="fa fa-dashboard"></i>
             <span>Dashboard</span>
             <span class="label label-primary pull-right"></span>
         </a>
-    </li>
+    </li> -->
     <li class="treeview">
         <a href="#">
             <i class="fa fa-files-o"></i>
@@ -16,7 +16,8 @@
         </a>
         <ul class="treeview-menu">
             <li><a href="<?= Yii::$app->urlManager->createUrl('epay/index') ?>"><i class="fa fa-circle-o"></i> Dashboard</a></li>
-            <li><a href="<?= Yii::$app->urlManager->createUrl('epay/buy') ?>"><i class="fa fa-circle-o"></i> Buy Ticket</a></li>
+            <li><a href="<?= Yii::$app->urlManager->createUrl('epay/buy') ?>"><i class="fa fa-circle-o"></i> Buy Online PIN</a></li>
+            <li><a href="<?= Yii::$app->urlManager->createUrl('epay/recon/index') ?>"><i class="fa fa-circle-o"></i> Report</a></li>
         </ul>
     </li>
 </ul>

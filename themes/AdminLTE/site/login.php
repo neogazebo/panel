@@ -16,7 +16,5 @@ use yii\bootstrap\ActiveForm;
                 <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block btn-flat', 'name' => 'login-button']) ?>
             </div>
         <?php ActiveForm::end(); ?>
-        <a href="<?= Yii::$app->urlManager->createUrl('site/forgot') ?>">I forgot my password</a><br>
-        <a href="<?= Yii::$app->urlManager->createUrl('site/register') ?>" class="text-center">Register a new user</a>
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->

@@ -1,8 +1,11 @@
 <?php
 
 use gftp\FtpWidget;
-
+$this->title = "Recon Transaction";
 ?>
+<section class="content-header ">
+    <h1><?= $this->title ?></h1>
+</section>
 <section class="content">
     <div class="row">
     	<div class="col-xs-12">
