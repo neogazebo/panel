@@ -62,8 +62,12 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
-            if($model->login())
+            if($model->login()) {
+                // echo '<pre>';
+                // var_dump(Yii::$app->params['EPAY_TERMINAL_ID']);
+                // exit;
                 return $this->redirect(['epay/index']);
+            };
             // return $this->goBack();
         } else {
             return $this->render('login', [
