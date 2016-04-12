@@ -38,7 +38,7 @@ class ReconController extends Controller
 
     public function actionIndex()
     {
-        echo 'work';
+        return $this->render('index');
     }
 
     /*
