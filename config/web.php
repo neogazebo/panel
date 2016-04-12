@@ -9,6 +9,7 @@ $config = [
     'id' => 'ebizu-bs',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'defaultRoute' => 'epay/index',
     'modules' => [
         'epay' => [
             'class' => 'app\modules\epay\Module'
