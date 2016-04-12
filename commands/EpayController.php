@@ -56,10 +56,11 @@ class EpayController extends EpaybridgeController
         $fail = 0;
 
         $model = Epay::findOne($id);
-        $voucherBought = VoucherBought::find()->where('vob_vou_id = :vou_id', [':vou_id' => $model->epa_vou_id])->one();
+        $voucherBought = VoucherBought::find()
+            ->where('vob_vou_id = :vou_id', [':vou_id' => $model->epa_vou_id])
+            ->one();
         $product = $model->productInfo();
 
-        // $transaction = Yii::$app->db->beginTransaction();
         for ($i = 1; $i <= $model->epa_qty; $i++) {
             try {
                 $postParams = json_encode([
@@ -147,7 +148,6 @@ class EpayController extends EpaybridgeController
         $voucherBought->vob_status = 1;
         $voucherBought->save(false);
 
-        // $transaction->commit();
         return 1;
     }
 
@@ -157,8 +157,7 @@ class EpayController extends EpaybridgeController
      */
     public function actionIndex()
     {
-        echo var_dump(Yii::$app->params);
-        exit;
+        echo var_dump(Yii::$app->params); exit;
         // return $this->actionInit(date("Y-m-d"), date("Y-m-d"));
     }
 

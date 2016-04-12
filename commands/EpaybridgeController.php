@@ -8,28 +8,6 @@ use app\models\EpayPrelogTrx;
 
 class EpaybridgeController extends Controller
 {
-    // protected $EPAY_API_URL = 'https://admin.ebizu.com/app/epay';
-    // protected $EPAY_TOKEN_API = '3f2d64f31ab572ecf322d06a2b961755';
-    // protected $EPAYSVC_NETWORKCHECK = 'networkCheck';
-    // protected $EPAYSVC_ONLINEPIN = 'onlinePIN';
-    // protected $EPAYSVC_ONLINEPIN_REVERSAL = 'onlinePINReversal';
-    // protected $EPAYSVC_ETOPUP = 'etopup';
-    // protected $EPAYSVC_ETOPUP_REVERSAL = 'etopupReversal';
-    // protected $OPERATOR_ID = 'IBS';
-    // protected $MERCHANT_ID = '912401';
-    // // protected $MERCHANT_ID = '202433';
-    // protected $TERMINAL_ID = '10000061';
-    // // protected $TERMINAL_ID = '80017419';
-    // protected $EPAY_OPERATOR_ID = 'IBS';
-    // protected $EPAY_TERMINAL_ID = '10000061';
-    // // protected $EPAY_TERMINAL_ID = '80017419';
-    // // protected $EPAY_URL = 'ws1.oriongateway.com:33831';
-    // // protected $EPAY_URL = 'ws.oriongateway.com:33831';
-    // protected $EPAY_URL = 'wstest.oriongateway.com:22836';
-    // protected $EPAY_URL_PATH = '/willani/services/oglws';
-    // // protected $EPAY_URL = 'ws.oriongateway.com:33831';
-    // // protected $EPAY_URL_PATH = '/averni/services/oglws';
-
 	protected function processEpay($d)
     {
         $params_bebas = json_decode($d);

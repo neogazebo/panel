@@ -37,7 +37,6 @@ class SiteController extends Controller
     public function actionIndex() 
     {
         return $this->render('index');
-        // return $this->redirect(['/auth/login']);
     }
 
     public function actions()
@@ -57,19 +56,12 @@ class SiteController extends Controller
     {
         $this->layout = 'login';
         if (!\Yii::$app->user->isGuest) {
-            echo 'noooo';
-            // return $this->goHome();
+            return $this->goHome();
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if($model->login()) {
-                // echo '<pre>';
-                // var_dump(Yii::$app->params['EPAY_TERMINAL_ID']);
-                // exit;
-                return $this->redirect(['epay/index']);
-            };
-            // return $this->goBack();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->redirect(['epay/index']);
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -81,7 +73,6 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
         return $this->redirect(['login']);
-        // return $this->goHome();
     }
 
 }
