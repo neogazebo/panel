@@ -33,23 +33,23 @@ class EpaybridgeController extends Controller
 
         $request_type = 'NET-CHECK';
         switch ($params_bebas->d->service) {
-            case $this->EPAYSVC_NETWORKCHECK :
+            case Yii::$app->params['EPAYSVC_NETWORKCHECK'] :
                 $data['response'] = $this->epayJar('networkCheck', $params);
                 $request_type = 'NET-CHECK';
                 break;
-            case $this->EPAYSVC_ONLINEPIN :
+            case Yii::$app->params['EPAYSVC_ONLINEPIN'] :
                 $data['response'] = $this->epayJar('onlinePIN', $params);
                 $request_type = 'PIN';
                 break;
-            case $this->EPAYSVC_ONLINEPIN_REVERSAL :
+            case Yii::$app->params['EPAYSVC_ONLINEPIN_REVERSAL'] :
                 $data['response'] = $this->epayJar('onlinePINReversal', $params);
                 $request_type = 'PIN-REV';
                 break;
-            case $this->EPAYSVC_ETOPUP :
+            case Yii::$app->params['EPAYSVC_ETOPUP'] :
                 $data['response'] = $this->epayJar('etopup', $params);
                 $request_type = 'ETU';
                 break;
-            case $this->EPAYSVC_ETOPUP_REVERSAL :
+            case Yii::$app->params['EPAYSVC_ETOPUP_REVERSAL'] :
                 $data['response'] = $this->epayJar('etopupReversal', $params);
                 $request_type = 'ETU-REV';
                 break;
