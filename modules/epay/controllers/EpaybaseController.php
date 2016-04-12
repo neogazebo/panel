@@ -28,8 +28,6 @@ class EpaybaseController extends BaseController
     protected $EPAYSVC_ETOPUP_REVERSAL = 'etopupReversal';
     protected $OPERATOR_ID = 'IBS';
 
-
-
     public function init()
     {
         parent::init();

@@ -6,7 +6,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Modal;
 
-$this->title = 'Epay Transaction';
+$this->title = 'Epay Transaction List';
 $dataProvider->sort->defaultOrder = ['epa_datetime' => SORT_DESC];
 $dataProvider->sort->attributes['reward.vou_reward_name'] = [
     'asc' => ['reward.vou_reward_name' => SORT_ASC],
@@ -22,7 +22,7 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><?= $this->title ?> List</h3>
+                    <?= Html::a('<i class="fa fa-plus-square"></i> New Buy', ['create'], ['class' => 'btn btn-primary btn-sm']) ?>
                     <div class="box-tools pull-right">
                         <div class="has-feedback">
                             <input value="<?= (!empty($_GET['search']) ? $_GET['search'] : '') ?>" type="text" name="search" class="form-control input-sm" id="filtersearch" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="You can search by Admin Name, Reward, Quantity, Success Qty & Failed Qty">
@@ -31,9 +31,6 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
                     </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                    <div class="mailbox-controls">
-                        <?= Html::a('<i class="fa fa-plus-square"></i> New Buy', ['create'], ['class' => 'btn btn-primary btn-sm']) ?>
-                    </div>
                     <div class="table-responsive">
                         <?= 
                         GridView::widget([
