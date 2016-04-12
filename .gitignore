@@ -35,7 +35,7 @@ phpunit.phar
 /phpunit.xml
 
 # ignore runtime
-runtime
+/runtime/*
 
 # composer vendor dir
 /vendor
