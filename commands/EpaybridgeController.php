@@ -8,6 +8,29 @@ use app\models\EpayPrelogTrx;
 
 class EpaybridgeController extends Controller
 {
+    protected function convertTwoYearToFour($str)
+    {
+        // Our date
+        //$str = "01/04/10";
+        $cutoff = 50;
+        // See what YY is
+        // Get the substring of $str starting two from the end (-2)... this is YY
+        $year = substr($str, -2);
+        // Check whether year added should be 19 or 20
+        if ($year < 50)
+        // PHP converts string to number nicely, so this is our 20YY
+            $year += 2000;
+        else
+        // This is 19YY
+            $year += 1900;
+        // Repace YY with YYYY
+        // This will take $str and replace the part two from the end (-2) undtil
+        // the end with $year.
+        $str = substr_replace($str, $year, -2);
+        // See what we got
+        return $str;
+    }
+
 	protected function processEpay($d)
     {
         $params_bebas = json_decode($d);
