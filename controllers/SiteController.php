@@ -57,13 +57,18 @@ class SiteController extends Controller
     {
         $this->layout = 'login';
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            echo 'noooo';
+            // return $this->goHome();
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post())) {
-            if($model->login())
+            if($model->login()) {
+                // echo '<pre>';
+                // var_dump(Yii::$app->params['EPAY_TERMINAL_ID']);
+                // exit;
                 return $this->redirect(['epay/index']);
+            };
             // return $this->goBack();
         } else {
             return $this->render('login', [
