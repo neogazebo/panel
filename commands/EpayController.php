@@ -7,6 +7,7 @@
 
 namespace app\commands;
 
+use Yii;
 use yii\console\Application;
 use fedemotta\cronjob\models\CronJob;
 use app\commands\EpaybridgeController;
@@ -55,16 +56,17 @@ class EpayController extends EpaybridgeController
         $fail = 0;
 
         $model = Epay::findOne($id);
-        $voucherBought = VoucherBought::find()->where('vob_vou_id = :vou_id', [':vou_id' => $model->epa_vou_id])->one();
+        $voucherBought = VoucherBought::find()
+            ->where('vob_vou_id = :vou_id', [':vou_id' => $model->epa_vou_id])
+            ->one();
         $product = $model->productInfo();
 
-        // $transaction = Yii::$app->db->beginTransaction();
         for ($i = 1; $i <= $model->epa_qty; $i++) {
             try {
                 $postParams = json_encode([
-                    't' => $this->EPAY_TOKEN_API,
+                    't' => Yii::$app->params['EPAY_TOKEN_API'],
                     'd' => [
-                        'service' => $this->EPAYSVC_ONLINEPIN,
+                        'service' => Yii::$app->params['EPAYSVC_ONLINEPIN'],
                         'amount' => $product->epp_amount_incent,
                         'product' => $product->epp_product_code,
                         'msisdn' => '0',
@@ -85,8 +87,8 @@ class EpayController extends EpaybridgeController
                         $detail->epd_red_id = 3;
                         $detail->epd_request = 'PIN';
                         $detail->epd_amount = $result['response']->amount;
-                        $detail->epd_merchant_id = $this->MERCHANT_ID;
-                        $detail->epd_operator_id = $this->OPERATOR_ID;
+                        $detail->epd_merchant_id = Yii::$app->params['MERCHANT_ID'];
+                        $detail->epd_operator_id = Yii::$app->params['OPERATOR_ID'];
                         $detail->epd_org_trans_ref = (isset($result['response']->orgTransRef) && !empty($result['response']->orgTransRef)) ? $result['response']->orgTransRef : null;
                         $detail->epd_ret_trans_ref = $result['response']->retTransRef;
                         $detail->epd_terminal_id = $result['response']->terminalId;
@@ -146,7 +148,6 @@ class EpayController extends EpaybridgeController
         $voucherBought->vob_status = 1;
         $voucherBought->save(false);
 
-        // $transaction->commit();
         return 1;
     }
 
@@ -156,7 +157,8 @@ class EpayController extends EpaybridgeController
      */
     public function actionIndex()
     {
-        return $this->actionInit(date("Y-m-d"), date("Y-m-d"));
+        echo var_dump(Yii::$app->params); exit;
+        // return $this->actionInit(date("Y-m-d"), date("Y-m-d"));
     }
 
     /**

@@ -37,7 +37,6 @@ class SiteController extends Controller
     public function actionIndex() 
     {
         return $this->render('index');
-        // return $this->redirect(['/auth/login']);
     }
 
     public function actions()
@@ -61,10 +60,8 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if($model->login())
-                return $this->redirect(['epay/index']);
-            // return $this->goBack();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->redirect(['epay/index']);
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -76,7 +73,6 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
         return $this->redirect(['login']);
-        // return $this->goHome();
     }
 
 }
