@@ -158,6 +158,7 @@ $('#check-connection').on('click', function(){
                     $('#bip').addClass('green');
                     $('.fa-refresh').removeClass('fa-spin');
                     $('.info-box-signal small').text('Connected!');
+                    $('.info-box-signal small').css('color','green');
                 } else {
                     swal('Failed!', 'Connection failed.', 'error');
                     clearInterval(timer);

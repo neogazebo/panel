@@ -27,21 +27,8 @@ class EpaybaseController extends BaseController
     protected $EPAYSVC_ETOPUP = 'etopup';
     protected $EPAYSVC_ETOPUP_REVERSAL = 'etopupReversal';
     protected $OPERATOR_ID = 'IBS';
-    protected $MERCHANT_ID = '912401';
-    protected $TERMINAL_ID = '10000061';
-    // protected $MERCHANT_ID = '202433';
-    // protected $TERMINAL_ID = '80017419';
-    protected $EPAY_OPERATOR_ID = 'IBS';
-    protected $EPAY_TERMINAL_ID = '10000061';
-    // protected $EPAY_TERMINAL_ID = '80017419';
 
-    //epay url
-    // protected $EPAY_URL = 'ws1.oriongateway.com:33831';
-    // protected $EPAY_URL = 'ws.oriongateway.com:33831';
-    protected $EPAY_URL = 'wstest.oriongateway.com:22836';
-    // protected $EPAY_URL = 'ws.oriongateway.com:33831';
-    protected $EPAY_URL_PATH = '/willani/services/oglws';
-    // protected $EPAY_URL_PATH = '/averni/services/oglws';
+
 
     public function init()
     {
@@ -100,7 +87,7 @@ class EpaybaseController extends BaseController
     protected function epayOnlinePINRequest($params)
     {
         try {
-            $client = new SoapClient($this->EPAY_URL, array(
+            $client = new SoapClient(Yii::$app->params['EPAY_URL'], array(
                 'trace' => 1,
             ));
             $result = $client->onlinePin(array('in0' => $params));
@@ -136,10 +123,10 @@ class EpaybaseController extends BaseController
             'productCode' => $params_bebas->d->product,
             'msisdn' => $params_bebas->d->msisdn,
             'amount' => $params_bebas->d->amount,
-            'merchantId' => $this->MERCHANT_ID,
+            'merchantId' => Yii::$app->params['MERCHANT_ID'],
             'operatorId' => $this->OPERATOR_ID,
             'retTransRef' => 'MA-' . time() . substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"), 0, 20),
-            'terminalId' => $this->TERMINAL_ID,
+            'terminalId' => Yii::$app->params['TERMINAL_ID'],
             'transDateTime' => date('YmdHis'),
             'transTraceId' => substr(str_shuffle("01234567891011121314151617181920"), 0, 6), // 6 character number 1-999999
         );
@@ -204,7 +191,7 @@ class EpaybaseController extends BaseController
             $array[] = '"' . $key . '=' . $value . '"';
         }
 
-        $command = '/usr/bin/java -jar ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'EpayTLS.jar ' . $this->EPAY_URL . ' ' . $this->EPAY_URL_PATH . ' ' . $service . ' ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . ' ' . implode(' ', $array);
+        $command = '/usr/bin/java -jar ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . 'EpayTLS.jar ' . Yii::$app->params['EPAY_URL'] . ' ' . Yii::$app->params['EPAY_URL_PATH'] . ' ' . $service . ' ' . dirname(__FILE__) . DIRECTORY_SEPARATOR . ' ' . implode(' ', $array);
         $xml = `$command`;
         $parser = xml_parser_create('');
         xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, "UTF-8");
