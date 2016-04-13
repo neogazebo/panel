@@ -94,7 +94,7 @@ class BuyController extends EpaybaseController
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $productID = $_POST['Epay']['epa_epp_id'];
+                $productID = Voucher::findOne($model->epa_vou_id)->vou_epp_id;
                 $model->epa_epp_id = $productID;
                 $model->epa_admin_id = Yii::$app->user->identity->id;
                 $model->epa_admin_name = Yii::$app->user->identity->username;

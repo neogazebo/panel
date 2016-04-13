@@ -94,7 +94,6 @@ class EpayDetail extends \yii\db\ActiveRecord {
     public function getReconciliationData($recap = 'today', $date=null) {
         
         $stringdate = date('Ymd', (strtotime('-1 day', strtotime(date('Ymd')))));
-
         $epay_detail = EpayDetail::find()->where('epd_response_code="00"');
         if ($recap == 'today') {
             $stringdate = date('Ymd', (strtotime('-1 day', strtotime(date('Ymd')))));
@@ -103,7 +102,6 @@ class EpayDetail extends \yii\db\ActiveRecord {
         }
         $epay_detail->andWhere('SUBSTR(epd_trans_datetime, 1, 8)=:date', ['date' => $stringdate]);
         $model = $epay_detail->all();
-
         $rows = array();
         $total_detail = 0;
         $total_amount = 0;

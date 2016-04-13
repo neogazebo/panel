@@ -32,7 +32,6 @@ $this->title = $model->isNewRecord ? 'New Epay Voucher' : 'Edit Voucher Epay';
                     ?>
 
                     <?= $form->field($model, 'epa_vou_id')->dropDownList(ArrayHelper::map($model->voucher, 'vou_id', 'vou_reward_name'))?>
-                    <?= $form->field($model, 'epa_epp_id')->dropDownList(ArrayHelper::map($model->product, 'epp_id', 'epp_title'))?>
                     <?= $form->field($model, 'epa_qty')->textInput(); ?>
 
                     <div class="box-footer">
