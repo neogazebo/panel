@@ -24,15 +24,13 @@ class BaseController extends Controller
 
     public function beforeAction($action)
     {
-<<<<<<< HEAD
-        if (Yii::$app->user->isGuest) {
-            // return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
-            // exit(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
-            return $this->redirect("https://www.google.co.id");
-        }
-        $this->user = Yii::$app->user->identity;
-        return true;
-=======
+        // if (Yii::$app->user->isGuest) {
+        //     // return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
+        //     // exit(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
+        //     return $this->redirect("https://www.google.co.id");
+        // }
+        // $this->user = Yii::$app->user->identity;
+        // return true;
 	if (!parent::beforeAction($action))
 	{
 	    return false;
@@ -44,7 +42,6 @@ class BaseController extends Controller
 	}
 	$this->user = Yii::$app->user->identity;
 	return true;
->>>>>>> 9e4bebb424e8a0d04aff59d54fd6a32c426ae745
     }
 
     public function behaviors()
