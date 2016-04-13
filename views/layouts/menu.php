@@ -17,7 +17,7 @@
         <ul class="treeview-menu">
             <li><a href="<?= Yii::$app->urlManager->createUrl('epay/index') ?>"><i class="fa fa-circle-o"></i> Dashboard</a></li>
             <li><a href="<?= Yii::$app->urlManager->createUrl('epay/buy') ?>"><i class="fa fa-circle-o"></i> Buy Online PIN</a></li>
-            <li><a href="<?= Yii::$app->urlManager->createUrl('epay/recon/index') ?>"><i class="fa fa-circle-o"></i> Report</a></li>
+            <li><a href="<?= Yii::$app->urlManager->createUrl('epay/report/index') ?>"><i class="fa fa-circle-o"></i> Report</a></li>
         </ul>
     </li>
 </ul>
