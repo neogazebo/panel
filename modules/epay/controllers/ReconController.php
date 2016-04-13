@@ -47,12 +47,14 @@ class ReconController extends Controller
     public function actionManualRecon($data = 'today')
     {
         $model = new EpayDetail();
-
+        $date = null;
         $recapType = rtrim($data, '/');
-        $fileName = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
+        // echo $recapType;exit;
+        $filename = null;
         $date = date('Ymd', (strtotime('-1 day', strtotime(date('Ymd')))));
         if ($recapType == 'today') {
             $date = date('Ymd', (strtotime(date('Ymd'))));
+            $fileName = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
         } else if ($recapType == 'specific') {
             $postDate = $_POST['date'];
             $formatDate = str_replace('/','',strtotime($postDate));
@@ -61,7 +63,7 @@ class ReconController extends Controller
             $filename = EpayDetail::CLIENT_SHORTNAME . $fileDate . '.csv';
         }
         header("Content-type: text/csv");
-        header("Content-Disposition: attachment; filename=" . $fileName);
+        header("Content-Disposition: attachment; filename=" . $filename);
         header("Pragma: no-cache");
         header("Expires: 0");
         self::_out($model->getReconciliationData($recapType, $date));
