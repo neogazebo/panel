@@ -102,7 +102,7 @@ class ReconController extends Controller
         // create filename on local directory
         $output = fopen(Yii::$app->basePath."/runtime/sFTp/$filename", 'w');
         if ($output === false) {
-            $this->setMessage('save', 'error','Unable to write file on remote server.', 'attachment'.null);
+            Yii::$app->session->setFlash('error','Unable to write file on remote server.', 'attachment'.null);
         } else {
 
             // write value of csv file
@@ -112,7 +112,7 @@ class ReconController extends Controller
 
             // upload to server epay
             $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
-            $this->setMessage('save', 'success','Recon file successfully uploaded with name : ' . $filename, 'attachment'.$filename);
+            Yii::$app->session->setFlash('success','Recon file successfully uploaded with name : ' . $filename, 'attachment'.$filename);
         }
 
         // delete local dir
