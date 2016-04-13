@@ -8,9 +8,9 @@ use yii\bootstrap\Modal;
 
 $this->title = 'Epay Transaction List';
 $dataProvider->sort->defaultOrder = ['epa_datetime' => SORT_DESC];
-$dataProvider->sort->attributes['reward.vou_reward_name'] = [
-    'asc' => ['reward.vou_reward_name' => SORT_ASC],
-    'desc' => ['reward.vou_reward_name' => SORT_DESC],
+$dataProvider->sort->attributes['rewardBought.vob_datetime'] = [
+    'asc' => ['rewardBought.vob_datetime' => SORT_ASC],
+    'desc' => ['rewardBought.vob_datetime' => SORT_DESC],
 ];
 $dataProvider->sort->attributes['productTitle.epp_title'] = [
     'asc' => ['productTitle.epp_title' => SORT_ASC],
@@ -43,7 +43,14 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                             'layout' => '{items}{summary}{pager}',
                             'columns' => [
                                 'epa_admin_name',
-                                'reward.vou_reward_name',
+                                [
+                                    'attribute' => 'rewardBought.vob_datetime',
+                                    'format' => 'html',
+                                    'value' => function($data) {
+                                        if(!empty($data->rewardBought))
+                                            return Yii::$app->formatter->asDate($data->rewardBought->vob_datetime);
+                                    }
+                                ],
                                 'productTitle.epp_title',
                                 [
                                     'attribute' => 'epa_datetime',

@@ -76,6 +76,11 @@ class Epay extends \yii\db\ActiveRecord
         return $this->hasOne(Voucher::className(), ['vou_id' => 'epa_vou_id']);
     }
 
+    public function getRewardBought()
+    {
+        return $this->hasOne(VoucherBought::className(), ['vob_id' => 'epa_vob_id']);
+    }
+
     public function getVoucherBought()
     {
         $model = Voucher::find()->where('vou_id = :id', [':id' => $this->epa_vou_id])->one();
@@ -96,7 +101,8 @@ class Epay extends \yii\db\ActiveRecord
     public function getVoucher()
     {
         return Voucher::find()
-            ->where('vou_epp_id IS NOT NULL')
+            ->leftJoin('tbl_epay_product', 'epp_id = vou_epp_id')
+            ->where('vou_epp_id IS NOT NULL AND epp_product_type = "PIN"')
             ->all();
     }
 
