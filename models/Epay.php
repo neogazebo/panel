@@ -95,9 +95,16 @@ class Epay extends \yii\db\ActiveRecord
 
     public function getVoucher()
     {
-        return Voucher::find()->all();
+        return Voucher::find()
+            ->where('vou_epp_id IS NOT NULL')
+            ->all();
     }
-    
+
+    public function getProductTitle()
+    {
+        return $this->hasOne(EpayProduct::className(), ['epp_id' => 'epa_epp_id']);
+    }
+
     public function productInfo()
     {
         return EpayProduct::findOne($this->epa_epp_id);

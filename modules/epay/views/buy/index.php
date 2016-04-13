@@ -12,6 +12,10 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
     'asc' => ['reward.vou_reward_name' => SORT_ASC],
     'desc' => ['reward.vou_reward_name' => SORT_DESC],
 ];
+$dataProvider->sort->attributes['productTitle.epp_title'] = [
+    'asc' => ['productTitle.epp_title' => SORT_ASC],
+    'desc' => ['productTitle.epp_title' => SORT_DESC],
+];
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -40,6 +44,7 @@ $dataProvider->sort->attributes['reward.vou_reward_name'] = [
                             'columns' => [
                                 'epa_admin_name',
                                 'reward.vou_reward_name',
+                                'productTitle.epp_title',
                                 [
                                     'attribute' => 'epa_datetime',
                                     'format' => 'html',
