@@ -153,7 +153,7 @@ $this->registerJs("
         if(qty > 0)
             $('#ready-view').modal('show');
         else
-            alert('Epay qty is Zero!');
+            alert('Epay quantity is Zero!');
     });
 
     $('#save-sell').click(function() {
