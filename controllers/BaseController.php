@@ -14,7 +14,9 @@ class BaseController extends Controller
     public function init()
     {
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
+            // return $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
+            // exit(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
+            return $this->redirect("https://www.google.co.id");
         }
         $this->user = Yii::$app->user->identity;
         return true;
