@@ -35,6 +35,9 @@ class BuyController extends EpaybaseController
         $model->joinWith(['reward' => function($model) {
             $model->from(['reward' => 'tbl_voucher']);
         }]);
+        $model->joinWith(['productTitle' => function($model) {
+            $model->from(['productTitle' => 'tbl_epay_product']);
+        }]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -88,34 +91,41 @@ class BuyController extends EpaybaseController
         ]);
     }
 
+    public function actionCancel()
+    {
+        return $this->redirect([$this->getRememberUrl()]);
+    }
+
     public function actionCreate()
     {
         $model = new Epay();
         if ($model->load(Yii::$app->request->post())) {
+            $voucher = Voucher::findOne($model->epa_vou_id);
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $productID = Voucher::findOne($model->epa_vou_id)->vou_epp_id;
-                $model->epa_epp_id = $productID;
-                $model->epa_admin_id = Yii::$app->user->identity->id;
-                $model->epa_admin_name = Yii::$app->user->identity->username;
-                $model->epa_success_qty = 0;
-                $model->epa_failed_qty = 0;
+                // fetch product info
+                $model->epa_epp_id = $voucher->vou_epp_id;
+                $product = $model->productInfo();
 
-                $now = date('Y-m-d');
-                $yesterday = date('Y-m-d', strtotime('-1 days'));
+                // save voucher bought
+                $voucherBought = new VoucherBought();
+                $voucherBought->vob_com_id = null;
+                $voucherBought->vob_qty = $model->epa_qty;
+                $voucherBought->vob_price = $product->epp_amount_incent;
+                $voucherBought->vob_vou_id = $model->epa_vou_id;
 
-                if ($model->save()) {
-                    // fecth product info
-                    $product = $model->productInfo();
+                if ($voucherBought->save()) {
+                    $model->epa_datetime = !empty($model->epa_datetime) ? strtotime($model->epa_datetime) : time();
+                    $model->epa_admin_id = Yii::$app->user->id;
+                    $model->epa_admin_name = Yii::$app->user->identity->username;
+                    $model->epa_success_qty = 0;
+                    $model->epa_failed_qty = 0;
+                    $model->epa_vob_id = $voucherBought->vob_id;
 
-                    // save voucher bought
-                    $voucherBought = new VoucherBought();
-                    $voucherBought->vob_com_id = null;
-                    $voucherBought->vob_qty = $model->epa_qty;
-                    $voucherBought->vob_price = $product->epp_amount_incent;
-                    $voucherBought->vob_vou_id = $model->epa_vou_id;
+                    $now = date('Y-m-d');
+                    $yesterday = date('Y-m-d', strtotime('-1 days'));
 
-                    if ($voucherBought->save()) {
+                    if ($model->save()) {
                         $transaction->commit();
 
                         $cr = new ConsoleRunner(['file' => '@app/yii']);
@@ -131,23 +141,21 @@ class BuyController extends EpaybaseController
                             $errorMessages .= $errorBase[$k][0] . '<br/>';
                         }
                         $this->setMessage('save', 'error', $errorMessages);
-                        return $this->redirect(['index']);
                     }
                 } else {
                     $transaction->rollback();
                     $this->setMessage('save', 'error');
-                    return $this->redirect(['index']);
                 }
             } catch (Exception $e) {
                 $transaction->rollback();
                 $this->setMessage('save', 'error', $e->getMessage());
-                return $this->redirect(['index']);
             }
-        } else {
-            return $this->render('form', [
-                'model' => $model,
-            ]);
+            return $this->redirect([$this->getRememberUrl()]);
         }
+
+        return $this->render('form', [
+            'model' => $model,
+        ]);
     }
     
     public function actionBebas()

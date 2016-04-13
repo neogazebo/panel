@@ -82,52 +82,59 @@ class EpayController extends EpaybridgeController
                     $result = $local_request;
 
                     if (isset($result['response']) && !empty($result['response'])) {
-                        $detail = new EpayDetail();
-                        $detail->epd_epa_id = $model->epa_id;
-                        $detail->epd_red_id = 3;
-                        $detail->epd_request = 'PIN';
-                        $detail->epd_amount = $result['response']->amount;
-                        $detail->epd_merchant_id = Yii::$app->params['MERCHANT_ID'];
-                        $detail->epd_operator_id = Yii::$app->params['OPERATOR_ID'];
-                        $detail->epd_org_trans_ref = (isset($result['response']->orgTransRef) && !empty($result['response']->orgTransRef)) ? $result['response']->orgTransRef : null;
-                        $detail->epd_ret_trans_ref = $result['response']->retTransRef;
-                        $detail->epd_terminal_id = $result['response']->terminalId;
-                        $detail->epd_product_code = $result['response']->productCode;
-                        $detail->epd_msisdn = !empty($params['msisdn']) ? $params['msisdn'] : null;
-                        $detail->epd_trans_datetime = $result['transDateTime'];
-                        $detail->epd_trans_trace_id = $result['transTraceId'];
-                        $detail->epd_custom_field_1 = isset($result['response']->customField1) ? $result['response']->customField1 : null;
-                        $detail->epd_custom_field_2 = isset($result['response']->customField2) ? $result['response']->customField2 : null;
-                        $detail->epd_custom_field_3 = isset($result['response']->customField3) ? $result['response']->customField3 : null;
-                        $detail->epd_custom_field_4 = isset($result['response']->customField4) ? $result['response']->customField4 : null;
-                        $detail->epd_custom_field_5 = isset($result['response']->customField5) ? $result['response']->customField5 : null;
-                        $detail->epd_macing = null;
-                        $detail->epd_pin = isset($result['response']->pin) ? $result['response']->pin : null;
-                        $detail->epd_pin_expiry_date = $result['response']->pinExpiryDate;
-                        $detail->epd_response_code = $result['response']->responseCode;
-                        $detail->epd_trans_ref = $result['response']->transRef;
-
-                        if ($detail->save(false)) {
-                            // create voucher
-                            if ($result['response']->responseCode == '00') {
-                                // save voucher bought detail
-                                $voucherBoughtDetail = new VoucherBoughtDetail();
-                                $voucherBoughtDetail->vod_vob_id = $voucherBought->vob_id;
-                                $voucherBoughtDetail->vod_sn = ltrim($result['response']->transRef, '.');
-                                $voucherBoughtDetail->vod_code = $result['response']->pin;
-
-                                $fulldate = !empty($result['response']->pinExpiryDate) ? substr($result['response']->pinExpiryDate, 4, 2) . '/' . substr($result['response']->pinExpiryDate, 2, 2) . '/' . substr($result['response']->pinExpiryDate, 0, 2) : null;
-                                $pinExpiryDate = ($fulldate !== null) ? str_replace('/', '-', $this->convertTwoYearToFour($fulldate)) : 0;
-                                $voucherBoughtDetail->vod_expired = intval(strtotime($pinExpiryDate));
-                                $voucherBoughtDetail->vou_redeemed = 0;
-                                $voucherBoughtDetail->save(false);
-                                $success++;
+                        if(!isset($result['response']->responseCode)) {
+                            echo $result['response']->amount;
+                            $detail = new EpayDetail();
+                            $detail->epd_epa_id = $model->epa_id;
+                            $detail->epd_red_id = 3;
+                            $detail->epd_request = 'PIN';
+                            $detail->epd_amount = $result['response']->amount;
+                            $detail->epd_merchant_id = Yii::$app->params['MERCHANT_ID'];
+                            $detail->epd_operator_id = Yii::$app->params['OPERATOR_ID'];
+                            $detail->epd_org_trans_ref = (isset($result['response']->orgTransRef) && !empty($result['response']->orgTransRef)) ? $result['response']->orgTransRef : null;
+                            $detail->epd_ret_trans_ref = $result['response']->retTransRef;
+                            $detail->epd_terminal_id = $result['response']->terminalId;
+                            $detail->epd_product_code = $result['response']->productCode;
+                            $detail->epd_msisdn = !empty($params['msisdn']) ? $params['msisdn'] : null;
+                            $detail->epd_trans_datetime = $result['transDateTime'];
+                            $detail->epd_trans_trace_id = $result['transTraceId'];
+                            $detail->epd_custom_field_1 = isset($result['response']->customField1) ? $result['response']->customField1 : null;
+                            $detail->epd_custom_field_2 = isset($result['response']->customField2) ? $result['response']->customField2 : null;
+                            $detail->epd_custom_field_3 = isset($result['response']->customField3) ? $result['response']->customField3 : null;
+                            $detail->epd_custom_field_4 = isset($result['response']->customField4) ? $result['response']->customField4 : null;
+                            $detail->epd_custom_field_5 = isset($result['response']->customField5) ? $result['response']->customField5 : null;
+                            $detail->epd_macing = null;
+                            $detail->epd_pin = isset($result['response']->pin) ? $result['response']->pin : null;
+                            $detail->epd_pin_expiry_date = $result['response']->pinExpiryDate;
+                            $detail->epd_response_code = $result['response']->responseCode;
+                            $detail->epd_trans_ref = $result['response']->transRef;
+    
+                            if ($detail->save(false)) {
+                                // create voucher
+                                if ($result['response']->responseCode == '00') {
+                                    // save voucher bought detail
+                                    $voucherBoughtDetail = new VoucherBoughtDetail();
+                                    $voucherBoughtDetail->vod_vob_id = $voucherBought->vob_id;
+                                    $voucherBoughtDetail->vod_sn = ltrim($result['response']->transRef, '.');
+                                    $voucherBoughtDetail->vod_code = $result['response']->pin;
+    
+                                    $fulldate = !empty($result['response']->pinExpiryDate) ? substr($result['response']->pinExpiryDate, 4, 2) . '/' . substr($result['response']->pinExpiryDate, 2, 2) . '/' . substr($result['response']->pinExpiryDate, 0, 2) : null;
+                                    $pinExpiryDate = ($fulldate !== null) ? str_replace('/', '-', $this->convertTwoYearToFour($fulldate)) : 0;
+                                    $voucherBoughtDetail->vod_expired = intval(strtotime($pinExpiryDate));
+                                    $voucherBoughtDetail->vou_redeemed = 0;
+                                    $voucherBoughtDetail->save(false);
+                                    $success++;
+                                } else {
+                                    $fail++;
+                                }
                             } else {
                                 $fail++;
+                                break;
                             }
                         } else {
+                            echo 'code: ' . $result['response']->responseCode . ' ';
+                            echo 'message: ' . $result['response']->responseMsg;
                             $fail++;
-                            break;
                         }
                     } else {
                         break;

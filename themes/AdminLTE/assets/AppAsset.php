@@ -31,7 +31,6 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css',
         'themes/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
         'themes/AdminLTE/plugins/sweet-alert/sweetalert.css',
-        'themes/AdminLTE/plugins/bootstrap-editable/bootstrap3-editable/css/bootstrap-editable.css',
     ];
     public $js = [
         'themes/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js',
@@ -54,7 +53,6 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/dist/js/app.min.js',
         'themes/AdminLTE/dist/js/pages/dashboard.js',
         'themes/AdminLTE/dist/js/demo.js',
-        'themes/AdminLTE/plugins/bootstrap-editable/bootstrap3-editable/js/bootstrap-editable.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -33,12 +33,13 @@ $this->title = $model->isNewRecord ? 'New Epay Voucher' : 'Edit Voucher Epay';
 
                     <?= $form->field($model, 'epa_vou_id')->dropDownList(ArrayHelper::map($model->voucher, 'vou_id', 'vou_reward_name'))?>
                     <?= $form->field($model, 'epa_qty')->textInput(); ?>
+                    <?= $form->field($model, 'epa_datetime')->textInput(['class' => 'datepicker form-control', 'style' => 'width: 100px']); ?>
 
                     <div class="box-footer">
                         <div class="row">
                             <div class="col-sm-12">
                                 <button type="submit" class="pull-right btn-primary btn"><i class="fa fa-check"></i> Save</button>
-                                <button type="reset" class="pull-left btn" onclick="window.location = '<?= Yii::$app->urlManager->createUrl('epay/buy') ?>'"><i class="fa fa-times"></i> Cancel</button>
+                                <button type="reset" class="pull-left btn" onclick="window.location = '<?= Yii::$app->urlManager->createUrl('epay/buy/cancel') ?>'"><i class="fa fa-times"></i> Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -48,3 +49,9 @@ $this->title = $model->isNewRecord ? 'New Epay Voucher' : 'Edit Voucher Epay';
         </div>
     </div>
 </section>
+
+<?php
+$this->registerJs("
+    $('.datepicker').datepicker();
+", yii\web\View::POS_END, 'epay-buy');
+?>

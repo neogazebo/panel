@@ -2,6 +2,8 @@
 
 namespace app\modules\epay\controllers;
 
+
+use Yii;
 /*
  */
 
@@ -12,8 +14,7 @@ namespace app\modules\epay\controllers;
  */
 class IndexController extends EpaybaseController
 {
-    public function actionIndex()
-    {
+    public function actionIndex(){
         return $this->render('index');
         // return $this->redirect(['/auth/login']);
     }

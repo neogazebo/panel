@@ -13,7 +13,6 @@ class EpayQuery extends ActiveQuery
 {
     public function voucher($state = true)
     {
-        $this->leftJoin('tbl_epay_product', 'epp_id = vou_epp_id');
         $this->where('epa_vou_id IS NOT NULL');
         if(isset($_GET['search'])) {
         	$this->andWhere('

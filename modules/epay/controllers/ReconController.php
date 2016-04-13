@@ -178,20 +178,6 @@ class ReconController extends Controller
         }
         fclose($output);
     }
-    
-    private function setMessage($key, $type, $customText = null)
-    {
-        switch ($key) {
-            case 'save' :
-                Yii::$app->session->setFlash($type, $customText !== null ? Yii::t('app', $customText) : Yii::$app->params['flashmsg']['save'][$type]);
-                break;
-            case 'update' :
-                Yii::$app->session->setFlash($type, $customText !== null ? Yii::t('app', $customText) : Yii::$app->params['flashmsg']['update'][$type]);
-                break;
-            case 'delete' :
-                Yii::$app->session->setFlash($type, $customText !== null ? Yii::t('app', $customText) : Yii::$app->params['flashmsg']['delete'][$type]);
-                break;
-        }
-    }    
+      
 
 }
