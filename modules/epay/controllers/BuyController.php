@@ -131,7 +131,7 @@ class BuyController extends EpaybaseController
                         
 			$output = '';
 			$runner = new Runner();
-			$runner->run('epay/buy '. $model->epa_id, $output);
+			$runner->run('epay/buy '. $model->epa_id);
 //			echo $output;exit; //prints the command output
 			
 //                        $cr = new ConsoleRunner(['file' => '@app/yii']);
