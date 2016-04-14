@@ -115,8 +115,8 @@ class BuyController extends EpaybaseController
                 $voucherBought->vob_qty = $model->epa_qty;
                 $voucherBought->vob_price = $product->epp_amount_incent;
                 $voucherBought->vob_vou_id = $model->epa_vou_id;
-                echo '<pre>';
-                var_dump($voucherBought);exit;
+//                echo '<pre>';
+//                var_dump($voucherBought);exit;
                 if ($voucherBought->save()) {
                     $model->epa_datetime = !empty($model->epa_datetime) ? strtotime($model->epa_datetime) : time();
                     $model->epa_admin_id = Yii::$app->user->id;
