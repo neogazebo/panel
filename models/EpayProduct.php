@@ -49,7 +49,7 @@ class EpayProduct extends \yii\db\ActiveRecord
     {
         return [
             'epp_id' => 'ID',
-            'epp_title' => 'Title',
+            'epp_title' => 'Product',
             'epp_denomination' => 'Denomination',
             'epp_product_code' => 'Product Code',
             'epp_amount_incent' => 'Amount Incent',

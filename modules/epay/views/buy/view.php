@@ -38,7 +38,7 @@ $this->title = 'Detail Epay Transaction';
                                     }
                                 ],
                                 [
-                                    'header' => 'Product',
+                                    'header' => 'Product Code',
                                     'format' => 'raw',
                                     'value' => function($data) {
                                         return $data->epd_product_code;
