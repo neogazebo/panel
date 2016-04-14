@@ -10,8 +10,8 @@ use app\models\EpayDetail;
 use app\models\Voucher;
 use app\models\VoucherBought;
 use app\models\VoucherBoughtDetail;
-//use vova07\console\ConsoleRunner;
-use toriphes\console\Runner;
+use vova07\console\ConsoleRunner; 
+//use toriphes\console\Runner;
 /**
  * Description of BuyController
  *
@@ -129,16 +129,16 @@ class BuyController extends EpaybaseController
                     if ($model->save()) {
                         $transaction->commit();
                         
-			$output = '';
-			$runner = new Runner();
-			$runner->run('epay/buy '. $model->epa_id);
+//			$output = '';
+//			$runner = new Runner();
+//			$runner->run('epay/buy '. $model->epa_id);
 //			echo $output;exit; //prints the command output
 			
-//                        $cr = new ConsoleRunner(['file' => '@app/yii']);
-//                        $cr->run(' epay/buy ' . $model->epa_id);
+                        $cr = new ConsoleRunner(['file' => '@app/yii']);
+                        $cr->run('epay/buy ' . $model->epa_id);
 
                         $this->setMessage('save', 'success');
-                        return $this->redirect(['index']);
+                        return $this->redirect(['epay/index']);
                     } else {
                         $transaction->rollback();
                         $errorMessages = '';

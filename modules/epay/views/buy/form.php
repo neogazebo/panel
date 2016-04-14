@@ -55,28 +55,6 @@ $this->registerJs("
     var baseUrl = '".\yii\helpers\BaseUrl::base(true)."';
 
     $('.datepicker').datepicker();
-    
-    $('.btn-submitBuy').on('click',function(){
-        
-        swal({
-            title: 'We Are Processing Your Transaction',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#DD6B55',
-            confirmButtonText: 'Go to Transaction List Page',
-            cancelButtonText: 'Wait',
-            closeOnConfirm: false,
-            closeOnCancel: false
-        },
-          function(isConfirm){
-            if (isConfirm) {
-              swal('Index!', 'We Are Redirecting To The Transaction List Page Now', 'success');
-              window.location = baseUrl + '/epay/index';
-            } else {
-                swal('Wait', 'The Process Will be Take a While Before Redirect to Transaction List Page', 'warning');
-                $('.btn-submitBuy').hide();
-            }
-        });
-    });
+   
 ", yii\web\View::POS_LOAD, 'epay-buy');
 ?>
