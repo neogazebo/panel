@@ -78,15 +78,17 @@ class BuyController extends EpaybaseController
 
     public function actionView($id)
     {
+        $model = VoucherBoughtDetail::find()->where('vod_vob_id = :vob_id',[':vob_id' => $id])->all();
         $dataProvider = new ActiveDataProvider([
-            'query' => EpayDetail::find()->voucher(true),
+            // 'query' => EpayDetail::find()->voucher(true),
+            'query' => $model,
             'pagination' => [
                 'pageSize' => $this->_pageSize,
             ],
         ]);
 
         return $this->render('view', [
-            'id' => $id,
+            // 'id' => $id,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -150,7 +152,8 @@ class BuyController extends EpaybaseController
                 $transaction->rollback();
                 $this->setMessage('save', 'error', $e->getMessage());
             }
-            return $this->redirect([$this->getRememberUrl()]);
+            // return $this->redirect([$this->getRememberUrl()]);
+            return $this->refresh();
         }
 
         return $this->render('form', [

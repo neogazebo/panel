@@ -43,15 +43,24 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                             'layout' => '{items}{summary}{pager}',
                             'columns' => [
                                 'epa_admin_name',
+                                // [
+                                //     'attribute' => 'rewardBought.vob_datetime',
+                                //     'format' => 'html',
+                                //     'value' => function($data) {
+                                //         if(!empty($data->rewardBought))
+                                //             return Yii::$app->formatter->asDate($data->rewardBought->vob_datetime);
+                                //     }
+                                // ],
+                                // 'productTitle.epp_title',
                                 [
-                                    'attribute' => 'rewardBought.vob_datetime',
+                                    'label' => 'Reward',
                                     'format' => 'html',
-                                    'value' => function($data) {
-                                        if(!empty($data->rewardBought))
-                                            return Yii::$app->formatter->asDate($data->rewardBought->vob_datetime);
+                                    'value' => function($model, $url){
+                                        $vbought = $model->rewardBought;
+                                        if(!empty($vbought))
+                                            return $vbought->voucher->vou_reward_name;
                                     }
                                 ],
-                                'productTitle.epp_title',
                                 [
                                     'attribute' => 'epa_datetime',
                                     'format' => 'html',

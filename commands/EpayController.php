@@ -147,13 +147,14 @@ class EpayController extends EpaybridgeController
             }
             sleep(3); // delay 3 second for each loop
         }
-        
-        $model->epa_success_qty = $success;
-        $model->epa_failed_qty = $fail;
-        $model->save(false);
 
         $voucherBought->vob_status = 1;
         $voucherBought->save(false);
+        
+        $model->epa_success_qty = $success;
+        $model->epa_failed_qty = $fail;
+        $model->epa_vob_id = $voucherBought->vob_id;
+        $model->save(false);
 
         return 1;
     }
