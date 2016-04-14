@@ -10,8 +10,7 @@ use app\models\EpayDetail;
 use app\models\Voucher;
 use app\models\VoucherBought;
 use app\models\VoucherBoughtDetail;
-use vova07\console\ConsoleRunner; 
-//use toriphes\console\Runner;
+use vova07\console\ConsoleRunner;
 /**
  * Description of BuyController
  *
@@ -98,8 +97,6 @@ class BuyController extends EpaybaseController
 
     public function actionCreate()
     {
-        $cr = new ConsoleRunner(['file' => '@app/yii']);
-        $cr->run('epay/buy ' . 4536);
         $model = new Epay();
         if ($model->load(Yii::$app->request->post())) {
             $voucher = Voucher::findOne($model->epa_vou_id);
@@ -131,8 +128,8 @@ class BuyController extends EpaybaseController
                     if ($model->save()) {
                         $transaction->commit();
 			
-                        $cr = new ConsoleRunner(['file' => '@app/yii']);
-                        $cr->run('epay/buy ' . $model->epa_id);
+                        $console = new ConsoleRunner(['file' => '@app/yii']);
+                        $console->run('epay/buy '.$model->epa_id);
 
                         $this->setMessage('save', 'success');
                         return $this->redirect(['index']);

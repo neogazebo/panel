@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e72144f1edbada8bbbb8ba799fdea38d",
-    "content-hash": "62365fc1ddf23a4c87fbec1794bbca85",
+    "hash": "4da12ddeb1f4a45166651be78cda9b1c",
+    "content-hash": "38f862a3f5aff8e9421abc400a9f1cd3",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -58,16 +58,16 @@
         },
         {
             "name": "bower-asset/jquery",
-            "version": "2.2.2",
+            "version": "2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jquery/jquery-dist.git",
-                "reference": "086d381cd2f3b4b8b0af85ecb2c9593a61e5b4bd"
+                "reference": "af22a351b2ea5801ffb1695abb3bb34d5bed9198"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/086d381cd2f3b4b8b0af85ecb2c9593a61e5b4bd",
-                "reference": "086d381cd2f3b4b8b0af85ecb2c9593a61e5b4bd",
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/af22a351b2ea5801ffb1695abb3bb34d5bed9198",
+                "reference": "af22a351b2ea5801ffb1695abb3bb34d5bed9198",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -353,26 +353,26 @@
             "time": "2015-06-06 14:19:39"
         },
         {
-            "name": "toriphes/yii2-console-runner",
-            "version": "1.0.0",
+            "name": "vova07/yii2-console-runner-extension",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/toriphes/yii2-console-runner.git",
-                "reference": "9bf9f22abdf84685b69bb990d30bc69244349b49"
+                "url": "https://github.com/vova07/yii2-console-runner-extension.git",
+                "reference": "b67af1ff0a5de74ae06aece83d0273a92d9f657d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/toriphes/yii2-console-runner/zipball/9bf9f22abdf84685b69bb990d30bc69244349b49",
-                "reference": "9bf9f22abdf84685b69bb990d30bc69244349b49",
+                "url": "https://api.github.com/repos/vova07/yii2-console-runner-extension/zipball/b67af1ff0a5de74ae06aece83d0273a92d9f657d",
+                "reference": "b67af1ff0a5de74ae06aece83d0273a92d9f657d",
                 "shasum": ""
             },
             "require": {
-                "yiisoft/yii2": ">=2.0.0"
+                "yiisoft/yii2": "*"
             },
             "type": "yii2-extension",
             "autoload": {
                 "psr-4": {
-                    "toriphes\\console\\": ""
+                    "vova07\\console\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -381,20 +381,21 @@
             ],
             "authors": [
                 {
-                    "name": "Giulio Ganci",
-                    "email": "giulioganci@gmail.com"
+                    "name": "Crudu Vasile",
+                    "email": "bazillio07@yandex.ru"
                 }
             ],
-            "description": "Runs console command in yii web application",
+            "description": "An extension for running console commands on background in Yii framework.",
+            "homepage": "https://github.com/vova07/yii2-console-runner-extension",
             "keywords": [
-                "application",
+                "background",
+                "commands",
                 "console",
-                "extension",
                 "runner",
-                "web",
+                "yii 2",
                 "yii2"
             ],
-            "time": "2015-06-13 09:30:59"
+            "time": "2014-05-27 10:35:28"
         },
         {
             "name": "yiisoft/yii2",
@@ -998,22 +999,27 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "1.8.2",
+            "version": "v1.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "0c274e31e4392cbafc5fe158eae81738794e02ce"
+                "reference": "3115b09aeb15a5e06f38dc16860baf153d9bf70e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/0c274e31e4392cbafc5fe158eae81738794e02ce",
-                "reference": "0c274e31e4392cbafc5fe158eae81738794e02ce",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/3115b09aeb15a5e06f38dc16860baf153d9bf70e",
+                "reference": "3115b09aeb15a5e06f38dc16860baf153d9bf70e",
                 "shasum": ""
             },
             "require": {
                 "yiisoft/yii2-bootstrap": "@dev"
             },
             "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "kartik\\base\\": ""
@@ -1040,7 +1046,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-01-10 12:26:29"
+            "time": "2016-04-11 09:07:40"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -2098,19 +2104,24 @@
         },
         {
             "name": "phpspec/php-diff",
-            "version": "v1.0.2",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/php-diff.git",
-                "reference": "30e103d19519fe678ae64a60d77884ef3d71b28a"
+                "reference": "0464787bfa7cd13576c5a1e318709768798bec6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/php-diff/zipball/30e103d19519fe678ae64a60d77884ef3d71b28a",
-                "reference": "30e103d19519fe678ae64a60d77884ef3d71b28a",
+                "url": "https://api.github.com/repos/phpspec/php-diff/zipball/0464787bfa7cd13576c5a1e318709768798bec6a",
+                "reference": "0464787bfa7cd13576c5a1e318709768798bec6a",
                 "shasum": ""
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Diff": "lib/"
@@ -2123,57 +2134,11 @@
             "authors": [
                 {
                     "name": "Chris Boulton",
-                    "homepage": "http://github.com/chrisboulton",
-                    "role": "Original developer"
+                    "homepage": "http://github.com/chrisboulton"
                 }
             ],
             "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
-            "time": "2013-11-01 13:02:21"
-        },
-        {
-            "name": "vova07/yii2-console-runner-extension",
-            "version": "0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/vova07/yii2-console-runner-extension.git",
-                "reference": "b67af1ff0a5de74ae06aece83d0273a92d9f657d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vova07/yii2-console-runner-extension/zipball/b67af1ff0a5de74ae06aece83d0273a92d9f657d",
-                "reference": "b67af1ff0a5de74ae06aece83d0273a92d9f657d",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "vova07\\console\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Crudu Vasile",
-                    "email": "bazillio07@yandex.ru"
-                }
-            ],
-            "description": "An extension for running console commands on background in Yii framework.",
-            "homepage": "https://github.com/vova07/yii2-console-runner-extension",
-            "keywords": [
-                "background",
-                "commands",
-                "console",
-                "runner",
-                "yii 2",
-                "yii2"
-            ],
-            "time": "2014-05-27 10:35:28"
+            "time": "2016-04-07 12:29:16"
         },
         {
             "name": "yiisoft/yii2-codeception",
