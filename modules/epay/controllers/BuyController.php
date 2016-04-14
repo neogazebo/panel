@@ -115,7 +115,8 @@ class BuyController extends EpaybaseController
                 $voucherBought->vob_qty = $model->epa_qty;
                 $voucherBought->vob_price = $product->epp_amount_incent;
                 $voucherBought->vob_vou_id = $model->epa_vou_id;
-
+                echo '<pre>';
+                var_dump($voucherBought);exit;
                 if ($voucherBought->save()) {
                     $model->epa_datetime = !empty($model->epa_datetime) ? strtotime($model->epa_datetime) : time();
                     $model->epa_admin_id = Yii::$app->user->id;
@@ -129,9 +130,9 @@ class BuyController extends EpaybaseController
 
                     if ($model->save()) {
                         $transaction->commit();
-
+                        
                         $cr = new ConsoleRunner(['file' => '@app/yii']);
-                        $cr->run('epay/buy ' . $model->epa_id);
+                        $cr->run(' epay/buy ' . $model->epa_id);
 
                         $this->setMessage('save', 'success');
                         return $this->redirect(['index']);
