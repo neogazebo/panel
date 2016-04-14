@@ -98,6 +98,8 @@ class BuyController extends EpaybaseController
 
     public function actionCreate()
     {
+         $cr = new ConsoleRunner(['file' => '@app/yii']);
+        $cr->run('epay/buy ' . 44);exit;
         $model = new Epay();
         if ($model->load(Yii::$app->request->post())) {
             $voucher = Voucher::findOne($model->epa_vou_id);
@@ -138,7 +140,7 @@ class BuyController extends EpaybaseController
                         $cr->run('epay/buy ' . $model->epa_id);
 
                         $this->setMessage('save', 'success');
-                        return $this->redirect(['epay/index']);
+                        return $this->redirect(['index']);
                     } else {
                         $transaction->rollback();
                         $errorMessages = '';
