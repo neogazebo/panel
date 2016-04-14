@@ -9,6 +9,7 @@ class TestController extends Controller
 {
 	public function actionIndex()
 	{
-		echo Yii::$app->params['EPAY_URL'];
+//		echo Yii::$app->params['EPAY_URL'];
+            echo "oke gud ";
 	}
 }
