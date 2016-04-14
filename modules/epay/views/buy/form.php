@@ -38,7 +38,7 @@ $this->title = $model->isNewRecord ? 'New Epay Voucher' : 'Edit Voucher Epay';
                     <div class="box-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <button type="submit" class="pull-right btn-primary btn"><i class="fa fa-check"></i> Save</button>
+                                <button type="submit" class="pull-right btn-primary btn btn-submitBuy"><i class="fa fa-check"></i> Save</button>
                                 <button type="reset" class="pull-left btn" onclick="window.location = '<?= Yii::$app->urlManager->createUrl('epay/buy/cancel') ?>'"><i class="fa fa-times"></i> Cancel</button>
                             </div>
                         </div>
@@ -52,6 +52,31 @@ $this->title = $model->isNewRecord ? 'New Epay Voucher' : 'Edit Voucher Epay';
 
 <?php
 $this->registerJs("
+    var baseUrl = '".\yii\helpers\BaseUrl::base(true)."';
+
     $('.datepicker').datepicker();
-", yii\web\View::POS_END, 'epay-buy');
+    
+    $('.btn-submitBuy').on('click',function(){
+        
+        swal({
+            title: 'We Are Processing Your Transaction',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Go to Transaction List Page',
+            cancelButtonText: 'Wait',
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+          function(isConfirm){
+            if (isConfirm) {
+              swal('Index!', 'We Are Redirecting To The Transaction List Page Now', 'success');
+              window.location = baseUrl + '/epay/buy';
+            } else {
+                swal('Wait', 'The Process Will be Take a While Before Redirect to Transaction List Page', 'warning');
+                $('.btn-submitBuy').hide();
+            }
+        });
+    });
+", yii\web\View::POS_LOAD, 'epay-buy');
 ?>
