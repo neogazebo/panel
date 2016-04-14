@@ -52,7 +52,7 @@ class EpayController extends EpaybridgeController {
     // }
 
     public function actionBuy($id) {
-//	echo $id;exit;
+	echo 'runing';
         $success = 0;
         $fail = 0;
 
@@ -61,7 +61,7 @@ class EpayController extends EpaybridgeController {
                 ->where('vob_vou_id = :vou_id', [':vou_id' => $model->epa_vou_id])
                 ->one();
         $product = $model->productInfo();
-
+       
         for ($i = 1; $i <= $model->epa_qty; $i++) {
             try {
                 $postParams = json_encode([

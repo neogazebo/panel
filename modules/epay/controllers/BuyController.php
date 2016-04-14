@@ -132,13 +132,17 @@ class BuyController extends EpaybaseController
 			$output = '';
 			$runner = new Runner();
 			$runner->run('epay/buy '. $model->epa_id, $output);
+                        if ($output == 'runing'){
+                            $this->setMessage('save', 'success');
+                            return $this->redirect(['index']);
+                        }
 //			echo $output;exit; //prints the command output
 			
 //                        $cr = new ConsoleRunner(['file' => '@app/yii']);
 //                        $cr->run(' epay/buy ' . $model->epa_id);
 
-                        $this->setMessage('save', 'success');
-                        return $this->redirect(['index']);
+//                        $this->setMessage('save', 'success');
+//                        return $this->redirect(['index']);
                     } else {
                         $transaction->rollback();
                         $errorMessages = '';
