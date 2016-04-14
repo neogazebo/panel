@@ -71,7 +71,7 @@ $this->registerJs("
           function(isConfirm){
             if (isConfirm) {
               swal('Index!', 'We Are Redirecting To The Transaction List Page Now', 'success');
-              window.location = baseUrl + '/epay/buy';
+              window.location = baseUrl + '/epay/index';
             } else {
                 swal('Wait', 'The Process Will be Take a While Before Redirect to Transaction List Page', 'warning');
                 $('.btn-submitBuy').hide();
