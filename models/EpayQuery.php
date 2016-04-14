@@ -11,9 +11,8 @@ use yii\db\ActiveQuery;
  */
 class EpayQuery extends ActiveQuery
 {
-    public function voucher($state = true)
+    public function voucher()
     {
-        $this->where('epa_vou_id IS NOT NULL');
         if(isset($_GET['search'])) {
         	$this->andWhere('
                 vou_reward_name LIKE :get OR 

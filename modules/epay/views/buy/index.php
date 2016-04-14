@@ -94,8 +94,8 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                                     'header' => 'Ready to Sell',
                                     'format' => 'html',
                                     'value' => function($data) {
-                                        if(!empty($data->voucherBought))
-                                            return $data->voucherBought->vob_ready_to_sell == 0 ? '<i class="fa fa-circle-o"></i>' : '<i class="fa fa-check"></i>';
+                                        if(!empty($data->rewardBought))
+                                            return $data->rewardBought->vob_ready_to_sell == 0 ? '<i class="fa fa-circle-o"></i>' : '<i class="fa fa-check"></i>';
                                     }
                                 ],
                                 [
@@ -103,8 +103,8 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                                     'header' => 'Status',
                                     'format' => 'html',
                                     'value' => function($data) {
-                                        if(!empty($data->voucherBought))
-                                            return $data->voucherBought->vob_status == 0 ? '<i class="btn btn-warning btn-xs">In Progress</i>' : '<i class="btn btn-success btn-xs">Done</i>';
+                                        if(!empty($data->rewardBought))
+                                            return $data->rewardBought->vob_status == 0 ? '<i class="btn btn-warning btn-xs">In Progress</i>' : '<i class="btn btn-success btn-xs">Done</i>';
                                     }
                                 ],
                                 [
@@ -112,8 +112,8 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                                     'template' => '<span class="pull-right">{sell} {detail}</span>',
                                     'buttons' => [
                                         'sell' => function($url, $model) {
-                                            if(!empty($model->voucherBought)) {
-                                                if($model->voucherBought->vob_status == 1)
+                                            if(!empty($model->rewardBought)) {
+                                                if($model->rewardBought->vob_status == 1)
                                                     return Html::a('<i class="fa fa-check"></i>', 'javascript:;', ['data-id' => $model->epa_id, 'data-qty' => $model->epa_success_qty, 'class' => 'sell btn btn-warning btn-xs']);
                                             }
                                         },

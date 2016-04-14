@@ -24,7 +24,7 @@ class BuyController extends EpaybaseController
     public function actionIndex()
     {
         $this->setRememberUrl();
-        $model = Epay::find()->with(['rewardBought', 'productTitle'])->voucher(true);
+        $model = Epay::find()->with(['rewardBought.voucher', 'productTitle'])->voucher();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
