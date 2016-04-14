@@ -32,12 +32,12 @@ class BuyController extends EpaybaseController
                 'pageSize' => $this->_pageSize,
             ],
         ]);
-        $model->joinWith(['rewardBought' => function($model) {
-            $model->from(['rewardBought' => 'tbl_voucher_bought']);
-        }]);
-        $model->joinWith(['productTitle' => function($model) {
-            $model->from(['productTitle' => 'tbl_epay_product']);
-        }]);
+//        $model->joinWith(['rewardBought' => function($model) {
+//            $model->from(['rewardBought' => 'tbl_voucher_bought']);
+//        }]);
+//        $model->joinWith(['productTitle' => function($model) {
+//            $model->from(['productTitle' => 'tbl_epay_product']);
+//        }]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
