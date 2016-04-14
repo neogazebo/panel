@@ -51,7 +51,7 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                                 //             return Yii::$app->formatter->asDate($data->rewardBought->vob_datetime);
                                 //     }
                                 // ],
-                                // 'productTitle.epp_title',
+                                 'productTitle.epp_title',
                                 [
                                     'label' => 'Reward',
                                     'format' => 'html',

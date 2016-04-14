@@ -11,7 +11,7 @@ use yii\db\ActiveQuery;
  */
 class EpayDetailQuery extends ActiveQuery
 {
-    public function voucher($state = true)
+    public function voucher()
     {
         $this->join('INNER JOIN', 'tbl_voucher_bought_detail b', 'vod_code = epd_pin');
         if(isset($_GET['search'])) {

@@ -78,17 +78,15 @@ class BuyController extends EpaybaseController
 
     public function actionView($id)
     {
-        $model = VoucherBoughtDetail::find()->where('vod_vob_id = :vob_id',[':vob_id' => $id])->all();
         $dataProvider = new ActiveDataProvider([
-            // 'query' => EpayDetail::find()->voucher(true),
-            'query' => $model,
+            'query' => EpayDetail::find()->where(['epd_epa_id' => $id])->voucher(),
             'pagination' => [
                 'pageSize' => $this->_pageSize,
             ],
         ]);
 
         return $this->render('view', [
-            // 'id' => $id,
+            'id' => $id,
             'dataProvider' => $dataProvider,
         ]);
     }
