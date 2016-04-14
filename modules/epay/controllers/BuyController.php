@@ -98,8 +98,8 @@ class BuyController extends EpaybaseController
 
     public function actionCreate()
     {
-         $cr = new ConsoleRunner(['file' => '@app/yii']);
-        $cr->run('epay/buy ' . 44);exit;
+        $cr = new ConsoleRunner(['file' => '@app/yii']);
+        $cr->run('epay/buy ' . 4536);
         $model = new Epay();
         if ($model->load(Yii::$app->request->post())) {
             $voucher = Voucher::findOne($model->epa_vou_id);
@@ -130,11 +130,6 @@ class BuyController extends EpaybaseController
 
                     if ($model->save()) {
                         $transaction->commit();
-                        
-//			$output = '';
-//			$runner = new Runner();
-//			$runner->run('epay/buy '. $model->epa_id);
-//			echo $output;exit; //prints the command output
 			
                         $cr = new ConsoleRunner(['file' => '@app/yii']);
                         $cr->run('epay/buy ' . $model->epa_id);

@@ -52,7 +52,7 @@ class EpayController extends EpaybridgeController {
     // }
 
     public function actionBuy($id) {
-	echo 'runing';
+	   // echo trim($id);exit;
         $success = 0;
         $fail = 0;
 
