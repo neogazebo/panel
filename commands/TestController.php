@@ -11,7 +11,7 @@ class TestController extends Controller
 	{
 	    $path = Yii::getAlias('@app/');
 	    sleep(60);
-	    exec('touch '.$path.'curut.txt');
+	    exec('touch '.$path.'curut4.txt');
 	    
 //		echo Yii::$app->params['EPAY_URL'];
             echo "oke gud ";
