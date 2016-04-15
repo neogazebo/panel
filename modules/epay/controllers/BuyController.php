@@ -10,7 +10,6 @@ use app\models\EpayDetail;
 use app\models\Voucher;
 use app\models\VoucherBought;
 use app\models\VoucherBoughtDetail;
-use vova07\console\ConsoleRunner;
 /**
  * Description of BuyController
  *
@@ -112,8 +111,7 @@ class BuyController extends EpaybaseController
                 $voucherBought->vob_qty = $model->epa_qty;
                 $voucherBought->vob_price = $product->epp_amount_incent;
                 $voucherBought->vob_vou_id = $model->epa_vou_id;
-//                echo '<pre>';
-//                var_dump($voucherBought);exit;
+
                 if ($voucherBought->save()) {
                     $model->epa_datetime = !empty($model->epa_datetime) ? strtotime($model->epa_datetime) : time();
                     $model->epa_admin_id = Yii::$app->user->id;
@@ -127,15 +125,9 @@ class BuyController extends EpaybaseController
 
                     if ($model->save()) {
                         $transaction->commit();
-			/**
-                        $console = new ConsoleRunner(['file' => '@app/yii']);
-                        $console->run('epay/buy '.$model->epa_id);
-			*/
-			$yiipath = Yii::getAlias('@app/yii');
-//			exec('php '. $path.' epay/buy '.$model->epa_id.' /dev/null &');
-//			pclose(popen('php '. $path.' epay/buy '.$model->epa_id.' /dev/null &', 'r'));
-			pclose(popen('php '. $yiipath.' epay/buy '.$model->epa_id.' /dev/null &', 'r'));
-			pclose(popen('php '. $yiipath.' test/index '.' /dev/null &', 'r'));
+
+			            $yiipath = Yii::getAlias('@app/yii');
+                        pclose(popen('php '. $yiipath.' epay/buy '.$model->epa_id.' /dev/null &', 'r'));
 			
                         $this->setMessage('save', 'success');
                         return $this->redirect(['index']);
@@ -183,13 +175,13 @@ class BuyController extends EpaybaseController
 	$yiipath = Yii::getAlias('@app/yii');
 	$path = Yii::getAlias('@app/');
 //	pclose(popen('php '. $path.' epay/buy '.$model->epa_id.' /dev/null &', 'r'));
-	pclose(popen('php '. $yiipath.' test/index '.' /dev/null &', 'r'));
-	pclose(popen('php '. $yiipath.' test/indexes', 'r'));
+	// pclose(popen('php '. $yiipath.' test/index '.' /dev/null &', 'r'));
+	// pclose(popen('php '. $yiipath.' test/indexes', 'r'));
 //	pclose(popen('php '. $yiipath.' test/index '.$path.'/red.txt', 'r'));
 //	pclose(popen('php '. $yiipath.' test/index'. $path.'/curut.txt', 'r'));
 //	pclose(popen('php '. $yiipath.' test/index', 'r'));
 //	pclose(popen('php '. $yiipath.' test/index '. $path.'/ahhy', 'r'));
-	shell_exec('php '.$yiipath.' test/index > /dev/null 2>/dev/null &');
+	// shell_exec('php '.$yiipath.' test/index > /dev/null 2>/dev/null &');
 //	return $this->redirect(['index']);
     }
 }
