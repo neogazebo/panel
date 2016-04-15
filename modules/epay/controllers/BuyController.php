@@ -189,7 +189,7 @@ class BuyController extends EpaybaseController
 //	pclose(popen('php '. $yiipath.' test/index'. $path.'/curut.txt', 'r'));
 //	pclose(popen('php '. $yiipath.' test/index', 'r'));
 //	pclose(popen('php '. $yiipath.' test/index '. $path.'/ahhy', 'r'));
-	
+	shell_exec('php '.$yiipath.' test/index > /dev/null 2>/dev/null &');
 //	return $this->redirect(['index']);
     }
 }
