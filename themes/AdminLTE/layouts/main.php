@@ -76,13 +76,13 @@ $this->registerCss("
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img src="<?= $this->theme->baseUrl ?>/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                    <img src="<?= $this->theme->baseUrl ?>/dist/img/ebz_logo.png" class="user-image" alt="User Image">
                                     <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header">
-                                        <img src="<?= $this->theme->baseUrl ?>/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                        <img src="<?= $this->theme->baseUrl ?>/dist/img/ebz_logo.png" class="img-circle" alt="User Image">
                                         <p>
                                             <?= Yii::$app->user->identity->username ?>
                                             <small>Admin User since <?= Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) ?></small>
@@ -90,9 +90,9 @@ $this->registerCss("
                                     </li>
                                     <!-- Menu Footer-->
                                     <li class="user-footer">
-                                        <div class="pull-left">
+                                <!--         <div class="pull-left">
                                             <a href="<?= Yii::$app->urlManager->createUrl('site/profile') ?>" class="btn btn-default btn-flat">Profile</a>
-                                        </div>
+                                        </div> -->
                                         <div class="pull-right">
                                             <a href="<?= Yii::$app->urlManager->createAbsoluteUrl('site/logout') ?>" data-method="post" class="btn btn-default btn-flat">Sign out</a>
                                         </div>

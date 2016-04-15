@@ -98,7 +98,7 @@ class ReconController extends Controller
         $dir = Yii::$app->basePath."/runtime/sFTp/";
 
         if(!is_dir($dir)){
-            $create = BaseFileHelper::createDirectory ( Yii::$app->basePath."/runtime/sFTp", $mode = 509, $recursive = true );
+            $create = BaseFileHelper::createDirectory ( $dir, $mode = 509, $recursive = true );
         }
 
         // create filename on local directory

@@ -15,12 +15,6 @@ $this->title = 'Detail Epay Transaction';
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <?= Html::a('<i class="fa fa-long-arrow-left"></i> <span>' . Yii::t('app', 'Back') . '</span>', ['index'], ['class'=>'btn btn-default btn-sm']) ?>
-                    <div class="box-tools pull-right">
-                        <div class="has-feedback">
-                            <input value="<?= (!empty($_GET['search']) ? $_GET['search'] : '') ?>" type="text" name="search" class="form-control input-sm" id="filtersearch"> 
-                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                        </div>
-                    </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
