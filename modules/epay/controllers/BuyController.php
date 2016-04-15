@@ -127,10 +127,13 @@ class BuyController extends EpaybaseController
 
                     if ($model->save()) {
                         $transaction->commit();
-			
+			/**
                         $console = new ConsoleRunner(['file' => '@app/yii']);
                         $console->run('epay/buy '.$model->epa_id);
-
+			*/
+			$path = Yii::getAlias('@app/yii');
+			exec('php '. $path.' epay/buy '.$model->epa_id.'  > /dev/null 2>&1');
+			
                         $this->setMessage('save', 'success');
                         return $this->redirect(['index']);
                     } else {
