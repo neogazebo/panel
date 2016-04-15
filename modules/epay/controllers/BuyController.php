@@ -127,7 +127,8 @@ class BuyController extends EpaybaseController
                         $transaction->commit();
 
 			            $yiipath = Yii::getAlias('@app/yii');
-                        pclose(popen('php '. $yiipath.' epay/buy '.$model->epa_id.' /dev/null &', 'r'));
+                        shell_exec('php '.$yiipath.' epay/buy '.$model->epa_id.' > /dev/null 2>/dev/null &');
+                        // pclose(popen('php '. $yiipath.' epay/buy '.$model->epa_id.' /dev/null &', 'r'));
 			
                         $this->setMessage('save', 'success');
                         return $this->redirect(['index']);
@@ -173,7 +174,7 @@ class BuyController extends EpaybaseController
     public function actionTest()
     {
 	$yiipath = Yii::getAlias('@app/yii');
-	$path = Yii::getAlias('@app/');
+	// $path = Yii::getAlias('@app/');
 //	pclose(popen('php '. $path.' epay/buy '.$model->epa_id.' /dev/null &', 'r'));
 	// pclose(popen('php '. $yiipath.' test/index '.' /dev/null &', 'r'));
 	// pclose(popen('php '. $yiipath.' test/indexes', 'r'));
@@ -181,7 +182,7 @@ class BuyController extends EpaybaseController
 //	pclose(popen('php '. $yiipath.' test/index'. $path.'/curut.txt', 'r'));
 //	pclose(popen('php '. $yiipath.' test/index', 'r'));
 //	pclose(popen('php '. $yiipath.' test/index '. $path.'/ahhy', 'r'));
-	// shell_exec('php '.$yiipath.' test/index > /dev/null 2>/dev/null &');
+	shell_exec('php '.$yiipath.' test/index > /dev/null 2>/dev/null &');
 //	return $this->redirect(['index']);
     }
 }
