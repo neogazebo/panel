@@ -16,4 +16,13 @@ class TestController extends Controller
 //		echo Yii::$app->params['EPAY_URL'];
             echo "oke gud ";
 	}
+	
+	public function actionIndexes()
+	{
+	    $path = Yii::getAlias('@app/');
+	    exec('touch '.$path.'curut2.txt');
+	    
+//		echo Yii::$app->params['EPAY_URL'];
+            echo "oke gud ";
+	}
 }
