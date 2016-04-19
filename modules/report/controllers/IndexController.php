@@ -1,13 +1,13 @@
 <?php
 
-namespace app\modules\partner\controllers;
+namespace app\modules\report\controllers;
 
 use yii\web\Controller;
 
 /**
- * Default controller for the `partner` module
+ * Default controller for the `report` module
  */
-class DefaultController extends Controller
+class IndexController extends Controller
 {
     /**
      * Renders the index view for the module

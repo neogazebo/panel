@@ -1,13 +1,13 @@
 <?php
 
-namespace app\modules\mobile\controllers;
+namespace app\modules\partner\controllers;
 
 use yii\web\Controller;
 
 /**
- * Default controller for the `mobile` module
+ * Default controller for the `partner` module
  */
-class DefaultController extends Controller
+class IndexController extends Controller
 {
     /**
      * Renders the index view for the module

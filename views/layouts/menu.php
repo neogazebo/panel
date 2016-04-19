@@ -7,6 +7,13 @@
             <span>Partner</span>
             <span class="label label-primary pull-right"></span>
         </a>
+        <ul class="treeview-menu">
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('partner/index') ?>">
+                    <i class="fa fa-circle-o"></i> Dashboard
+                </a>
+            </li>
+        </ul>
     </li>
     <li class="treeview">
         <a href="#">
@@ -28,7 +35,9 @@
         </a>
         <ul class="treeview-menu">
             <li>
-                <a href=""></a>
+                <a href="<?= Yii::$app->urlManager->createUrl('mobile/index') ?>">
+                    <i class="fa fa-circle-o"></i> Dashboard
+                </a>
             </li>
         </ul>
     </li>
@@ -54,7 +63,9 @@
         </a>
         <ul class="treeview-menu">
             <li>
-                <a href=""></a>
+                <a href="<?= Yii::$app->urlManager->createUrl('report/index') ?>">
+                    <i class="fa fa-circle-o"></i> Dashboard
+                </a>
             </li>
         </ul>
     </li>

@@ -1,13 +1,13 @@
 <?php
 
-namespace app\modules\voucher\controllers;
+namespace app\modules\mobile\controllers;
 
 use yii\web\Controller;
 
 /**
- * Default controller for the `voucher` module
+ * Default controller for the `mobile` module
  */
-class DefaultController extends Controller
+class IndexController extends Controller
 {
     /**
      * Renders the index view for the module
