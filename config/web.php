@@ -14,6 +14,18 @@ $config = [
         'epay' => [
             'class' => 'app\modules\epay\Module'
         ],
+        'voucher' => [
+            'class' => 'app\modules\voucher\Voucher',
+        ],
+        'partner' => [
+            'class' => 'app\modules\partner\Partner',
+        ],
+        'mobile' => [
+            'class' => 'app\modules\mobile\Mobile',
+        ],
+        'report' => [
+            'class' => 'app\modules\report\Report',
+        ],
     ],
     'components' => [
         'request' => [
