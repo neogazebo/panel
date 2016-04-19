@@ -37,7 +37,7 @@ class BaseController extends Controller
 		}
 		if (Yii::$app->user->isGuest)
 		{
-		    $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
+			$this->redirect(Yii::$app->urlManager->createUrl(['site/login/']));
 		    return false;
 		}
 		$this->user = Yii::$app->user->identity;
