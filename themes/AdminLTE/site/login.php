@@ -4,7 +4,7 @@ use yii\bootstrap\ActiveForm;
 ?>
 <div class="login-box">
     <div class="login-logo">
-        <a href="javascript:;"><b>Ebizu</b>Rs</a>
+        <a href="javascript:;"><b>Ebizu</b>RED</a>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to Ebizu Redemption Store</p>
