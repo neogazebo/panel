@@ -34,7 +34,7 @@ $this->registerCss("
                 <!-- Logo -->
                 <a href="<?= Yii::$app->homeUrl ?>" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b>ER</b>s</span>
+                    <span class="logo-mini"><b>RED</b></span>
                     <!-- logo for regular state and mobile devices -->
                     <span class="logo-lg"><b>Ebizu</b>Redemption<i>Store</i></span>
                 </a>
