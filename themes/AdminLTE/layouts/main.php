@@ -34,9 +34,9 @@ $this->registerCss("
                 <!-- Logo -->
                 <a href="<?= Yii::$app->homeUrl ?>" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b>EBS</b></span>
+                    <span class="logo-mini"><b>ER</b>s</span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b>Ebizu</b>Backend<i>Service</i></span>
+                    <span class="logo-lg"><b>Ebizu</b>Redemption<i>Store</i></span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top" role="navigation">

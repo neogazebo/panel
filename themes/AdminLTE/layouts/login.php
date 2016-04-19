@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 $this->beginPage();
-$this->title = 'Ebizu Backend Service | Login';
+$this->title = 'Ebizu Redemption Store | Login';
 ?>
 <!DOCTYPE html>
 <html>
