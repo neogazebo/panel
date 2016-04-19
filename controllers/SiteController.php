@@ -31,6 +31,9 @@ class SiteController extends Controller
                     'logout' => ['post'],
                 ],
             ],
+            'https' => [
+                'class' => \app\components\filters\Https::className(),
+            ],
         ];
     }
 

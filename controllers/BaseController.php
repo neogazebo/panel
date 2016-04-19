@@ -31,17 +31,17 @@ class BaseController extends Controller
         // }
         // $this->user = Yii::$app->user->identity;
         // return true;
-	if (!parent::beforeAction($action))
-	{
-	    return false;
-	}
-	if (Yii::$app->user->isGuest)
-	{
-	    $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
-	    return false;
-	}
-	$this->user = Yii::$app->user->identity;
-	return true;
+		if (!parent::beforeAction($action))
+		{
+		    return false;
+		}
+		if (Yii::$app->user->isGuest)
+		{
+		    $this->redirect(Yii::$app->urlManager->createAbsoluteUrl('site/login'));
+		    return false;
+		}
+		$this->user = Yii::$app->user->identity;
+		return true;
     }
 
     public function behaviors()
@@ -51,7 +51,7 @@ class BaseController extends Controller
 	    //     'class' => \app\components\filters\SessionFilter::className(),
 	    // ],
 	    'https' => [
-		'class' => \app\components\filters\Https::className(),
+			'class' => \app\components\filters\Https::className(),
 	    ],
 	];
     }
