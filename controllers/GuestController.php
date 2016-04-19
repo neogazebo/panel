@@ -19,6 +19,13 @@ class GuestController extends Controller
         $this->enableCsrfValidation = false;
     }
 
+    public function behaviors()
+    {
+        'https' => [
+            'class' => \app\components\filters\Https::className(),
+        ],
+    }
+
     protected function setMessage($key, $type, $customText = null)
     {
         switch ($key) {
