@@ -79,6 +79,11 @@ $config = [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'dd MMM yyyy',
+        ],        
+        'format' => [
+            'class' => 'app\components\extensions\Formatter',
+            'dateFormat' => 'dd-MM-yyyy',
+            'decimalFormat' => '#,##0.00'
         ],
         'request' => [
             'enableCookieValidation' => false,

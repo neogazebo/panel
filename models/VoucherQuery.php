@@ -7,6 +7,17 @@ use yii\db\ActiveQuery;
 
 class VoucherQuery extends ActiveQuery {
 
+    public function voucherMall($count = null)
+    {
+        if(!$count == null){
+            $this->leftJoin('tbl_mall_merchant b', 'b.mam_com_id = vou_com_id');
+            $this->where('b.mam_mal_id = :mal_id', [':mal_id' => Yii::$app->user->identity->mall]);
+            $this->count();
+        }
+        $this->leftJoin('tbl_mall_merchant b', 'b.mam_com_id = vou_com_id');
+        return $this;
+    }
+    
     public function getList()
     {
     	if(isset($_GET['search'])) {
