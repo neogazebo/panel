@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = 'Rewards';
+$this->title = 'Voucher Manage';
 $dataProvider->sort->defaultOrder = ['vou_datetime' => SORT_DESC];
 ?>
 <section class="content-header ">
@@ -30,8 +30,14 @@ $dataProvider->sort->defaultOrder = ['vou_datetime' => SORT_DESC];
                                         return Html::img($data->image, ['height' => 32]);
                                     }
                                 ],
-                                'vou_reward_name',
-                                'business.com_name',
+                                [
+                                    'attribute' => 'vou_reward_name',
+                                    'label' => 'Voucher'
+                                ],
+                                [
+                                    'attribute' => 'business.com_name',
+                                    'label' => 'Merchant'
+                                ],
                                 [
                                     'attribute' => 'vou_datetime',
                                     'format' => 'html',
