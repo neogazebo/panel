@@ -101,8 +101,8 @@ class Epay extends \yii\db\ActiveRecord
     public function getVoucher()
     {
         return Voucher::find()
-            ->leftJoin('tbl_epay_product', 'epp_id = vou_epp_id')
-            ->where('vou_epp_id IS NOT NULL AND epp_product_type = "PIN"')
+            ->innerJoin('tbl_epay_product', 'epp_id = vou_epp_id')
+            ->where('vou_type = 1 AND vou_epp_id IS NOT NULL')
             ->all();
     }
 
