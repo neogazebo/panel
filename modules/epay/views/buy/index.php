@@ -168,7 +168,7 @@ $this->registerJs("
 
     $('#save-sell').click(function() {
         var epa_id = $('#epa_id').val(),
-            vob_ready_to_sell = $('#vob_ready_to_sell').is(':checked') ? 1 : 0;
+        vob_ready_to_sell = $('#vob_ready_to_sell').is(':checked') ? 1 : 0;
 
         $.ajax({
             method: 'POST',
