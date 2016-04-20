@@ -25,6 +25,7 @@ $this->title = 'Mobile Pulsa';
                                 'columns' => [
                                     [
                                         'attribute' => 'mpp_product_code',
+                                        'label' => 'Product',
                                         'format' => 'html',
                                         'value' => function($data) {
                                             return $data->mpp_product_code;

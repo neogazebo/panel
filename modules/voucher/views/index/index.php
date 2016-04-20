@@ -69,7 +69,7 @@ $dataProvider->sort->defaultOrder = ['vou_datetime' => SORT_DESC];
                                     'format' => 'raw',
                                     'options' => ['class' => 'pull-right col-md-1'],
                                     'value' => function($data) {
-                                        return Html::a('<i class="fa fa-search"></i>', ['index/view-bought/?id='.$data->vou_id]).'&nbsp;'
+                                        return Html::a('<i class="fa fa-search"></i>', ['index/detail/?id='.$data->vou_id]).'&nbsp;'
                                             . Html::a('<i class="fa fa-pencil"></i>', ['index/update/?id='.$data->vou_id]).'&nbsp'
                                             . Html::a('<i class="fa fa-trash-o"></i>', ['index/delete/?id='.$data->vou_id], [
                                                 'title' => 'Delete ' . $data->vou_reward_name,
