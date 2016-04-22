@@ -1,7 +1,7 @@
 <?php
 
 use gftp\FtpWidget;
-$this->title = "Recon Transaction";
+$this->title = "Report Transaction";
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>

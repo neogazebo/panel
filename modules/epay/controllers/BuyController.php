@@ -44,33 +44,57 @@ class BuyController extends EpaybaseController
 
     public function actionSell()
     {
-        if(isset($_POST)) {
-            $model = Epay::findOne($_POST['epa_id']);
+        if (Yii::$app->request->isAjax) {
             $transaction = Yii::$app->db->beginTransaction();
-            if(!empty(Voucher::findOne($model->epa_vou_id)->bought)) {
-                $voucher = Voucher::findOne($model->epa_vou_id)->bought;
-                $voucher->scenario = 'ready_to_sell';
-                $voucher->vob_ready_to_sell = (int)$_POST['vob_ready_to_sell'];
-                if($voucher->save(false)) {
-                    if($voucher->vob_status == 1) {
-                        $epay = Epay::find()->where('epa_vou_id = :id', [':id' => $model->epa_vou_id])->one();
-                        $success = 0;
-                        if(!empty($epay)) {
-                            $success = $epay->epa_success_qty;
-                        }
-                        $voucher = Voucher::find()->where('vou_id = :id', [':id' => $model->epa_vou_id])->one();
-                        $voucher->vou_stock_left = $voucher->vou_stock_left + $success;
-                        $voucher->save(false);
+            $model = Epay::findOne($_POST['epa_id']);
+            if(!empty($model)){
+                $vBought = VoucherBought::findOne($model->epa_vob_id);
+                $vBought->vob_ready_to_sell = (int)$_POST['vob_ready_to_sell'];
+                if($vBought->save(false)){
+                    $voucher = Voucher::findOne($vBought->vob_vou_id);
+                    $voucher->vou_stock_left = $voucher->vou_stock_left + $model->epa_success_qty;
+                    if($voucher->save(false)){
+                        $audit = AuditReport::setAuditReport('ready to sell: '.$voucher->vou_reward_name, Yii::$app->user->id, Voucher::className(), $voucher->vou_id)->save();
+                        $this->setMessage('save', 'success', 'Voucher has been successfully ready for sell!');
+                        $transaction->commit();
+                        $result = [
+                            'url' => $this->getRememberUrl()
+                        ];
+                        return \yii\helpers\Json::encode($result);
+                    }else{
+                        $transaction->rollback();
+                        $this->setMessage('save', 'error', General::extactErrorModel($voucher->getErrors()));
                     }
-
-                    $audit = AuditReport::setAuditReport('ready to sell: '.$voucher->vou_reward_name, Yii::$app->user->id, Voucher::className(), $voucher->vou_id)->save();
-                    $this->setMessage('save', 'success', 'Voucher has been successfully ready for sell!');
-                    $result = [
-                        'url' => $this->getRememberUrl()
-                    ];
-                    return \yii\helpers\Json::encode($result);
+                }else{
+                    $transaction->rollback();
+                    $this->setMessage('save', 'error', General::extactErrorModel($vBought->getErrors()));
                 }
             }
+            // $transaction = Yii::$app->db->beginTransaction();
+            // if(!empty(Voucher::findOne($model->epa_vou_id)->bought)) {
+            //     $voucher = Voucher::findOne($model->epa_vou_id)->bought;
+            //     $voucher->scenario = 'ready_to_sell';
+            //     $voucher->vob_ready_to_sell = (int)$_POST['vob_ready_to_sell'];
+            //     if($voucher->save(false)) {
+            //         if($voucher->vob_status == 1) {
+            //             $epay = Epay::find()->where('epa_vou_id = :id', [':id' => $model->epa_vou_id])->one();
+            //             $success = 0;
+            //             if(!empty($epay)) {
+            //                 $success = $epay->epa_success_qty;
+            //             }
+            //             $voucher = Voucher::find()->where('vou_id = :id', [':id' => $model->epa_vou_id])->one();
+            //             $voucher->vou_stock_left = $voucher->vou_stock_left + $success;
+            //             $voucher->save(false);
+            //         }
+
+            //         $audit = AuditReport::setAuditReport('ready to sell: '.$voucher->vou_reward_name, Yii::$app->user->id, Voucher::className(), $voucher->vou_id)->save();
+            //         $this->setMessage('save', 'success', 'Voucher has been successfully ready for sell!');
+            //         $result = [
+            //             'url' => $this->getRememberUrl()
+            //         ];
+            //         return \yii\helpers\Json::encode($result);
+            //     }
+            // }
         }
     }
 

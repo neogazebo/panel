@@ -98,7 +98,7 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                                     'format' => 'html',
                                     'value' => function($data) {
                                         if(!empty($data->rewardBought))
-                                            return $data->rewardBought->vob_status == 0 ? '<i class="btn btn-warning btn-xs">In Progress</i>' : '<i class="btn btn-success btn-xs">Done</i>';
+                                            return $data->rewardBought->vob_status == 0 ? '<i class="btn btn-warning btn-xs">In Progress</i>' : '<i class="btn btn-success disabled btn-xs">Done</i>';
                                     }
                                 ],
                                 [
@@ -107,8 +107,11 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                                     'buttons' => [
                                         'sell' => function($url, $model) {
                                             if(!empty($model->rewardBought)) {
-                                                if($model->rewardBought->vob_status == 1)
+                                                if($model->rewardBought->vob_status == 1 && $model->rewardBought->vob_ready_to_sell == 1 ){
+                                                    return "<span class='btn btn-warning disabled btn-xs'><i class='fa fa-check'></i></span>";
+                                                }else{
                                                     return Html::a('<i class="fa fa-check"></i>', 'javascript:;', ['data-id' => $model->epa_id, 'data-qty' => $model->epa_success_qty, 'class' => 'sell btn btn-warning btn-xs']);
+                                                }
                                             }
                                         },
                                         'detail' => function($url, $model) {
@@ -168,7 +171,7 @@ $this->registerJs("
 
     $('#save-sell').click(function() {
         var epa_id = $('#epa_id').val(),
-            vob_ready_to_sell = $('#vob_ready_to_sell').is(':checked') ? 1 : 0;
+        vob_ready_to_sell = $('#vob_ready_to_sell').is(':checked') ? 1 : 0;
 
         $.ajax({
             method: 'POST',
