@@ -49,6 +49,7 @@ class BuyController extends EpaybaseController
             $model = Epay::findOne($_POST['epa_id']);
             if(!empty($model)){
                 $vBought = VoucherBought::findOne($model->epa_vob_id);
+                $vBought->scenario = 'ready_to_sell';
                 $vBought->vob_ready_to_sell = (int)$_POST['vob_ready_to_sell'];
                 if($vBought->save(false)){
                     $voucher = Voucher::findOne($vBought->vob_vou_id);

@@ -56,7 +56,7 @@ class VoucherBought extends \yii\db\ActiveRecord
             [['vob_vou_id', 'vob_qty', 'vob_price'], 'required'],
             [['vob_com_id', 'vob_qty', 'vob_vou_id', 'vob_ready_to_sell'], 'integer'],
             [['vob_price'], 'number'],
-            [['vob_ready_to_sell'], 'required', 'on' => 'ready_to_sell'],
+            [['vob_ready_to_sell'], 'required', 'on' => 'ready_to_sell','integer'],
             [['vob_datetime', 'vob_datetime_bought'], 'safe']
         ];
     }
