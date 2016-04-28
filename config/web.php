@@ -88,6 +88,9 @@ $config = [
         'request' => [
             'enableCookieValidation' => false,
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
         // ftp setup
         'ftp' => [
             'class' => '\gftp\FtpComponent',
