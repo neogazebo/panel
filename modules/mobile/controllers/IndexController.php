@@ -5,7 +5,6 @@ namespace app\modules\mobile\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\data\ActiveDataProvider;
-use app\controllers\BaseController;
 use app\models\MobilePulsaProduct;
 use app\models\MobilePulsaTopup;
 
@@ -32,7 +31,7 @@ class IndexController extends MpController
         return $this->render('index', [
             'dataProviderProduct' => $dataProviderProduct,
             'balance' => $this->getBalance(),
-            'totalTopup' => \app\models\MobilePulsaTopup::find()->count(),
+            'totalTopup' => MobilePulsaTopup::find()->count(),
             'connected' => $this->getConnection(),
         ]);
     }
@@ -59,7 +58,7 @@ class IndexController extends MpController
                 return 0;
         }
     }
-    
+
     protected function getConnection()
     {
         $actionURL = $this->_url . $this->_action_checkbalance;

@@ -34,9 +34,9 @@ $this->registerCss("
                 <!-- Logo -->
                 <a href="<?= Yii::$app->homeUrl ?>" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b>RED</b></span>
+                    <span class="logo-mini"><b>v3</b></span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b>Ebizu</b>Redemption<i>Store</i></span>
+                    <span class="logo-lg"><b>Admin</b>Panel<i>v3</i></span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top" role="navigation">
@@ -145,9 +145,11 @@ $this->registerCss("
         <?php $this->endBody(); ?>
     </body>
 
-    <script>
-        var baseUrl = '<?= Yii::$app->homeUrl ?>';
+    <?php
+    $this->registerJs("
+        var baseUrl = '" . Yii::$app->homeUrl . "';
         $.widget.bridge('uibutton', $.ui.button);
-    </script>
+    ", yii\web\View::POS_BEGIN, 'main');
+    ?>
 </html>
 <?php $this->endPage(); ?>

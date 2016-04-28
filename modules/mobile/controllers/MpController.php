@@ -10,8 +10,8 @@ use app\controllers\BaseController;
  *
  * @author Tajhul Faijin <mrazoelcalm@gmail.com>
  */
-class MpController extends BaseController {
-    
+class MpController extends BaseController
+{
     protected $_urldev = 'https://apix.ebizu.com/mobilepulsa/';
     protected $_url = 'https://api.ebizu.com/mobilepulsa/';
     protected $_action_pricelist = 'pricelist';
@@ -21,7 +21,8 @@ class MpController extends BaseController {
     
     protected $_token = '3f2d64f31ab572ecf322d06a2b961755';
     
-    protected function makeRequest($url, $param){
+    protected function makeRequest($url, $param)
+    {
          $ch = curl_init();
          curl_setopt($ch, CURLOPT_URL, $url);
          curl_setopt($ch, CURLOPT_POST, 1);

@@ -4,10 +4,10 @@ use yii\bootstrap\ActiveForm;
 ?>
 <div class="login-box">
     <div class="login-logo">
-        <a href="javascript:;"><b>Ebizu</b>RED</a>
+        <a href="javascript:;"><b>Admin</b>Panel<i>v3</i></a>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">Sign in to Ebizu Redemption Store</p>
+        <p class="login-box-msg">Sign in to Ebizu Admin Panel</p>
         <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
             <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
             <?= $form->field($model, 'password')->passwordInput() ?>

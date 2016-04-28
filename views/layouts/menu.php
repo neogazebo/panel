@@ -34,11 +34,8 @@
             <i class="fa fa-angle-left pull-right"></i>
         </a>
         <ul class="treeview-menu">
-            <li>
-                <a href="<?= Yii::$app->urlManager->createUrl('mobile/index') ?>">
-                    <i class="fa fa-circle-o"></i> Dashboard
-                </a>
-            </li>
+            <li><a href="<?= Yii::$app->urlManager->createUrl('mobile/index') ?>"><i class="fa fa-circle-o"></i> Dashboard</a></li>
+            <li><a href="<?= Yii::$app->urlManager->createUrl('mobile/log') ?>"><i class="fa fa-circle-o"></i> Transaction Log</a></li>
         </ul>
     </li>
     <li class="treeview">

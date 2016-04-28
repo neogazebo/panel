@@ -79,10 +79,9 @@ $this->title = 'Mobile Pulsa';
 
 <?php
 $this->registerJs("
-    var baseUrl = '" . Yii::$app->homeUrl . "';
     $('#filtersearch').on('keypress', function(ev) {
         if(ev.which == 13) {
-            window.location = baseUrl + 'mobilepulsa/index/index/?search=' + $(this).val();
+            window.location = baseUrl + 'mobile/index/index/?search=' + encodeURIComponent($(this).val());
         }
     });
 ", yii\web\View::POS_END, 'epay-buy');
