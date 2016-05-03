@@ -26,6 +26,12 @@ $config = [
         'report' => [
             'class' => 'app\modules\report\Report',
         ],
+        'users' => [
+            'class' => 'app\modules\users\Users',
+        ],
+        'rbac' => [
+            'class' => 'app\modules\rbac\Rbac',
+        ],
     ],
     'components' => [
         'request' => [

@@ -1,7 +1,7 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
 <ul class="sidebar-menu">
     <li class="header">MAIN NAVIGATION</li>
-    <li class="treeview">
+    <!-- <li class="treeview">
         <a href="#">
             <i class="fa fa-th-list"></i>
             <span>Partner</span>
@@ -14,7 +14,7 @@
                 </a>
             </li>
         </ul>
-    </li>
+    </li> -->
     <li class="treeview">
         <a href="#">
             <i class="fa fa-credit-card"></i>
@@ -27,7 +27,7 @@
             <li><a href="<?= Yii::$app->urlManager->createUrl('epay/report/index') ?>"><i class="fa fa-circle-o"></i> Report</a></li>
         </ul>
     </li>
-    <li class="treeview">
+    <!-- <li class="treeview">
         <a href="">
             <i class="fa fa-signal"></i>
             <span>Mobile Pulsa</span>
@@ -62,6 +62,26 @@
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('report/index') ?>">
                     <i class="fa fa-circle-o"></i> Dashboard
+                </a>
+            </li>
+        </ul>
+    </li> -->
+    <!-- RBAC -->
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-gears"></i>
+            <span>User Management</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('users/index') ?>">
+                    <i class="fa fa-circle-o"></i> User
+                </a>
+            </li>
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('rbac/index') ?>">
+                    <i class="fa fa-circle-o"></i> Role
                 </a>
             </li>
         </ul>
