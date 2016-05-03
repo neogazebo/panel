@@ -35,7 +35,6 @@ $this->title = 'Create Role';
                     <?= $form->field($model,'description')->textArea() ?>
                     <?= $form->field($model,'rule_name') ?>
 
-
                 <?php ActiveForm::end(); ?>
                 </div>
             </div>
