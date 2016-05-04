@@ -50,9 +50,9 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                                     'label' => 'Reward',
                                     'format' => 'html',
                                     'value' => function($model, $url){
-                                        $vbought = $model->rewardBought;
+                                        $vbought = $model->rewardBought->voucher;
                                         if(!empty($vbought))
-                                            return $vbought->voucher->vou_reward_name;
+                                            return $vbought->vou_reward_name;
                                     }
                                 ],
                                 [
