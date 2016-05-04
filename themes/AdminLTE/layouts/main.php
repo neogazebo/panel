@@ -146,10 +146,10 @@ $this->registerCss("
     </body>
 
     <?php
-    $this->registerJs("
-        var baseUrl = '" . Yii::$app->homeUrl . "';
-        $.widget.bridge('uibutton', $.ui.button);
-    ", yii\web\View::POS_BEGIN, 'main');
+    // $this->registerJs("
+    //     var baseUrl = '" . Yii::$app->homeUrl . "';
+    //     $.widget.bridge('uibutton', $.ui.button);
+    // ", yii\web\View::POS_BEGIN, 'main');
     ?>
 </html>
 <?php $this->endPage(); ?>

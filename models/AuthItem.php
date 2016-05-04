@@ -4,6 +4,9 @@ namespace app\models;
 
 use Yii;
 use app\models\AuthRule;
+use yii\base\NotSupportedException;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 /**
  * This is the model class for table "auth_item".
  *
@@ -39,13 +42,36 @@ class AuthItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'type', 'created_by'], 'required'],
-            [['type', 'created_at', 'updated_at'], 'integer'],
+            [['name', 'type'], 'required'],
+            [['type', 'created_at', 'updated_at', 'created_by'], 'integer'],
             [['description', 'data'], 'string'],
             [['name', 'rule_name'], 'string', 'max' => 64],
-            [['created_by'], 'string', 'max' => 11],
+            [['name'],'unique'],
+            [['name'],'validWord'],
             [['rule_name'], 'exist', 'skipOnError' => true, 'targetClass' => AuthRule::className(), 'targetAttribute' => ['rule_name' => 'name']],
         ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
+                ],
+            ],
+        ];
+    }
+
+    public function validWord($data)
+    {
+        if(str_word_count($this->name) > 1){
+            $this->addError($data, Yii::t('app', 'Role name, only accepted one word'));
+        }elseif (!preg_match('/^[A-z]+$/', $this->name)) {
+            $this->addError($data, Yii::t('app', 'Role name, only accepted alphabet'));
+        }
     }
 
     /**
@@ -63,6 +89,11 @@ class AuthItem extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(),['id' => 'created_by']);
     }
 
     /**
