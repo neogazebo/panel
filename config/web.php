@@ -97,6 +97,9 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'getRoutes' => [
+            'class' => 'app\components\helpers\GetRoutes',
+        ],
         // ftp setup
         'ftp' => [
             'class' => '\gftp\FtpComponent',

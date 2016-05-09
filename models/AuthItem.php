@@ -26,11 +26,16 @@ use yii\db\ActiveRecord;
  * @property AuthItem[] $children
  * @property AuthItem[] $parents
  */
-class AuthItem extends \yii\db\ActiveRecord
+class AuthItem extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
+    public static function find()
+    {
+        return new AuthItemQuery(get_called_class());
+    }
+
     public static function tableName()
     {
         return 'auth_item';
@@ -67,11 +72,14 @@ class AuthItem extends \yii\db\ActiveRecord
 
     public function validWord($data)
     {
-        if(str_word_count($this->name) > 1){
+        if($this->type == 1){
+            if(str_word_count($this->name) > 1){
             $this->addError($data, Yii::t('app', 'Role name, only accepted one word'));
-        }elseif (!preg_match('/^[A-z]+$/', $this->name)) {
-            $this->addError($data, Yii::t('app', 'Role name, only accepted alphabet'));
+            }elseif (!preg_match('/^[A-z]+$/', $this->name)) {
+                $this->addError($data, Yii::t('app', 'Role name, only accepted alphabet'));
+            }
         }
+        
     }
 
     /**

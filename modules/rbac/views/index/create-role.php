@@ -21,7 +21,6 @@ use yii\widgets\ActiveForm;
                 ?>
                 <div class="box-body">
                     <?= $form->field($model,'name') ?>
-                    <?= $form->field($model,'type') ?>
                     <?= $form->field($model,'description')->textArea() ?>
                 </div>
                 <div class="box-footer">

@@ -21,9 +21,9 @@ class GuestController extends Controller
 
     public function behaviors()
     {
-        'https' => [
-            'class' => \app\components\filters\Https::className(),
-        ],
+        // 'https' => [
+        //     'class' => \app\components\filters\Https::className(),
+        // ],
     }
 
     protected function setMessage($key, $type, $customText = null)

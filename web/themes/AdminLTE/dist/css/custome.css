@@ -1,0 +1,18 @@
+.actionColumn > button {
+    border: none;
+    background-color: transparent;
+    color: #367fa9;
+}
+
+.ms-container {
+    background: transparent url('../img/switch.png') no-repeat 50% 50%;
+    width: 100% !important;
+}
+
+.ms-container .ms-list {
+	height: 400px !important;
+}
+
+.ms-container .ms-selectable li.ms-elem-selectable, .ms-container .ms-selection li.ms-elem-selection {
+	padding: 5px 10px !important;
+}
