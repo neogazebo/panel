@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\modal;
-// use yii\helpers\BaseUrl;
 use yii\helpers\Url;
 
 $this->title = 'List Role';
@@ -16,13 +15,19 @@ $this->title = 'List Role';
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <?= Html::button('<i class="fa fa-plus-square"></i> Create Role',['value' => Url::to(['create']),'class' => 'modalButton btn btn-primary btn-sm']) ?>
+                    <?=
+                    Html::button('<i class="fa fa-plus-square"></i> New Role', [
+                        'value' => Url::to(['create']),
+                        'class' => 'modalButton btn btn-primary btn-sm'
+                    ]);
+                    ?>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">
-                        <?= GridView::widget([
+                        <?= 
+                        GridView::widget([
                             'id' => 'ListRole',
-                            'layout' => '{items}{summary}{pager}',
+                            'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
                             'columns' => [
                                 'name',
@@ -30,20 +35,20 @@ $this->title = 'List Role';
                                 [
                                     'attribute' => 'created_by',
                                     'format' => 'html',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         if(!empty($data->user))
                                             return $data->user->username;
                                     }
                                 ],
                                 [
                                     'attribute' => 'created_at',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         return Yii::$app->formatter->asDateTime($data->created_at);
                                     }
                                 ],
                                 [
                                     'attribute' => 'updated_at',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         $create = Yii::$app->formatter->asDateTime($data->created_at);
                                         $update = Yii::$app->formatter->asDateTime($data->updated_at);
                                         if($create!== $update)
@@ -52,38 +57,37 @@ $this->title = 'List Role';
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right actionColumn">  {view} &nbsp; {update} &nbsp; {delete} &nbsp;</span>',
+                                    'template' => '<span class="pull-right actionColumn">{view} {update} {delete}</span>',
                                     'buttons' => [
-                                        'view' => function($url, $model){
+                                        'view' => function($url, $model) {
                                             return Html::a('<i class="fa fa-search"></i>', ['detail?name=' . $model->name]);
                                         },
-                                        'update' => function($url,$model){
-                                            return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?name='.$model->name]),'class' => 'modalButton']);
+                                        'update' => function($url,$model) {
+                                            return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?name='.$model->name]), 'class' => 'modalButton']);
                                         },
-                                        'delete' => function($url,$model){
-                                            return Html::button('<i class="fa fa-times-circle-o"></i>', ['value'=>Url::to(['delete?name=' . $model->name]),'class' => 'deleteBtn']);
+                                        'delete' => function($url,$model) {
+                                            return Html::button('<i class="fa fa-times-circle-o"></i>', ['value' => Url::to(['delete?name=' . $model->name]), 'class' => 'deleteBtn']);
                                         }
                                     ],
                                 ],
-                            ]
+                            ],
+                            'tableOptions' => ['class' => 'table table-striped table-hover']
                         ]);
-                        ?>
-
-
-
-                <!-- widget to create render modal -->
-                <?php
-                    Modal::begin([
-                            'header' => '<h2>Create Role</h2>',
-                            'id' => 'modal',
-                            'size' => 'modal-md',
-                        ]);
-                    echo "<div id='modalContent'></div>";
-                    Modal::end();
-                ?>
+                    ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- widget to create render modal -->
+<?php
+    Modal::begin([
+        'header' => '</button><h4 class="modal-title">Role</h4>',
+        'id' => 'modal',
+        'size' => 'modal-md',
+    ]);
+?>
+<div id="modalContent"></div>
+<?php Modal::end(); ?>

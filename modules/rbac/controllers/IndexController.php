@@ -12,7 +12,7 @@ use app\models\AuthRule;
 use app\models\AuthItemChild;
 use app\models\AuthAssignment;
 use app\controllers\BaseController;
-
+use app\components\helpers\General;
 
 /**
  * Default controller for the `rbac` module
@@ -27,50 +27,51 @@ class IndexController extends BaseController
     const TYPE_PERMISSION = 2;
     const INACTIVE_STATUS = 0;
 
-    public function actionIndex ()
+    public function actionIndex()
     {
-        $model = AuthItem::find()->getListRole();
+        $this->setRememberUrl();
+        $model = AuthItem::find()->with(['user'])->list;
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
                 'pageSize' => 20
             ]
         ]);
-        return $this->render ('index',[
-                'dataProvider' => $dataProvider
-            ]);
+
+        return $this->render ('index', [
+            'dataProvider' => $dataProvider
+        ]);
     }
 
-    public function actionCreate () 
+    public function actionCreate() 
     {
         $model = new AuthItem();
         // ajax validation
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post ())) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->type = self::TYPE_ROLE;
             Yii::$app->response->format = 'json';
             return \yii\widgets\ActiveForm::validate($model);
         }
 
-    	if ( $model->load(Yii::$app->request->post ())) {
+    	if ($model->load(Yii::$app->request->post())) {
             $auth = $this->_role();
             $role = $auth->createRole($model->name);
             $role->description = $model->description;
-            if($auth->add($role)){
+            if($auth->add($role)) {
                 $model = AuthItem::findOne($model->name);
                 $model->created_by = Yii::$app->user->identity->id;
-                if($model->save()){
+                if($model->save()) {
                     $this->setMessage('save', 'success', 'Role "'.$model->name.'" sucess created!');
-                    return $this->redirect('index');
-                }else{
-                    $this->setMessage('save', 'error', General::extactErrorModel($model->getErrors()));
-                    return $this->redirect('index');
+                } else {
+                    $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
+                return $this->redirect([$this->getRememberUrl()]);
             }
     	}
 
-    	return $this->renderAjax('create-role',[
-    			'model' => $model,
-			]);	
+    	return $this->renderAjax('form', [
+			'model' => $model,
+		]);
     }
 
     public function actionDetail($name)
@@ -78,7 +79,7 @@ class IndexController extends BaseController
         $lists = $this->allModel($name)->all();
         $models = AuthItemChild::findAll($name);
         $title = $name;
-        return $this->render('detail',[
+        return $this->render('detail', [
             'lists' => $lists,
             'models' => $models,
             'title' => $title,
@@ -90,46 +91,46 @@ class IndexController extends BaseController
         $model = $this->findModel($name);
         $oldName = $model->name;
         // ajax validation
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post ())) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->type = self::TYPE_ROLE;
             Yii::$app->response->format = 'json';
             return \yii\widgets\ActiveForm::validate($model);
         }
 
-        if ( $model->load(Yii::$app->request->post ())) {
+        if($model->load(Yii::$app->request->post())) {
             $model->created_by = Yii::$app->user->identity->id;
             if ($model->save()) {
-
                 $parent = AuthItemChild::findOne($name);
                 $child = AuthItemChild::find()->where("child = '$name'")->one();
-                if (!empty($parent)) {
+                if(!empty($parent)) {
                     $parent->parent = $name;
                     $parent->save();
-                }elseif (!empty($child)) {
+                } elseif(!empty($child)) {
                     $parent->child = $name;
                     $parent->save();
                 }
 
                 $assign = AuthAssignment::findOne($name);
-                if (!empty($assign)) {
+                if(!empty($assign)) {
                     $assign->item_name = $name;
                     $assign->save();
                 }
 
                 $this->setMessage('save', 'success', 'Role "'.$oldName.'" sucess updated to '.$model->name);
-                return $this->redirect('index');
-
+            } else {
+                $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
             }
+            return $this->redirect([$this->getRememberUrl()]);
         }
-        return $this->renderAjax('create-role',[
-                'model' => $model,
-            ]); 
 
+        return $this->renderAjax('form', [
+            'model' => $model,
+        ]);
     }
 
     public function actionDelete($name)
     {
-        if (Yii::$app->request->isAjax){
+        if(Yii::$app->request->isAjax) {
             $model = $this->findModel($name);
             if (!empty($model)) {
                 $model->status = self::INACTIVE_STATUS;
@@ -141,12 +142,13 @@ class IndexController extends BaseController
                     ];
                 return \yii\helpers\Json::encode($result);
             }
+            return $this->redirect([$this->getRememberUrl()]);
         }
     }
 
     public function actionGetPermission()
     {
-        if( Yii::$app->request->isAjax ) {
+        if(Yii::$app->request->isAjax) {
             $result = Yii::$app->getRoutes->generatePermission();
             return \yii\helpers\Json::encode($result);
         }
@@ -161,16 +163,16 @@ class IndexController extends BaseController
     {
         if (!empty($model = AuthItem::find()->where("name != '$name'")->orderBy('date(from_unixtime(created_at)) DESC'))) {
             return $model;
-        }else{
+        } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
     private function findModel ($id)
     {
-        if (($model = AuthItem::findOne($id)) !== null){
+        if (($model = AuthItem::findOne($id)) !== null) {
             return $model;
-        }else{
+        } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }

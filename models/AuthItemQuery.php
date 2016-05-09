@@ -1,31 +1,24 @@
 <?php
-namespace app\models;
 
+namespace app\models;
 
 use Yii;
 use app\models\AuthRule;
 use yii\base\NotSupportedException;
 use yii\db\ActiveQuery;
-/**
-* 
-*/
+
 class AuthItemQuery extends ActiveQuery
 {
-
-    
     const TYPE_ROLE = 1;
     const ACTIVE_STATUS = 1;
     const INACTIVE_STATUS = 0;
     
-	public function getListRole()
+	public function getList()
 	{
-		$this->andWhere('type = :type',[
-				':type' => self::TYPE_ROLE
-			]);
-		$this->andWhere('status = :status',[
-				':status' => self::ACTIVE_STATUS,
-			]);
-		$this->orderBy('date(from_unixtime(created_at)) DESC');
+		$this->where('type = :type AND status = :status', [
+			':type' => self::TYPE_ROLE,
+			':status' => self::ACTIVE_STATUS
+		]);
 		return $this;
 	}
 }

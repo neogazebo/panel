@@ -8,7 +8,7 @@ use yii\helpers\Url;
 use kartik\sortable\Sortable;
 
 $this->title = 'Permission List of "'.$title.'"';
-$this->registerCssFile(Yii::$app->urlManager->baseUrl.'/themes/AdminLTE/dist/plugins/multi-select/multi-select.css',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerCssFile(Yii::$app->urlManager->baseUrl.'/themes/AdminLTE/dist/plugins/multi-select/multi-select.css', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -18,7 +18,7 @@ $this->registerCssFile(Yii::$app->urlManager->baseUrl.'/themes/AdminLTE/dist/plu
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <?= Html::button('<i class="fa fa-refresh"></i> &nbsp; Update Permission List',['value' => Url::to('get-permission'),'class' => 'ajaxRequest btn btn-primary btn-sm','data-key' => Url::current()]) ?>
+                    <?= Html::button('<i class="fa fa-refresh"></i> &nbsp; Update Permission List', ['value' => Url::to('get-permission'), 'class' => 'ajaxRequest btn btn-primary btn-sm', 'data-key' => Url::current()]) ?>
                 </div>
                 <div class="box-body">
                     <div id="searchList" class="col-sm-5">
