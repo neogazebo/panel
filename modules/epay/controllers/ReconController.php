@@ -130,6 +130,10 @@ class ReconController extends Controller
         $date = null;
         $return = array();
         $filename = null;
+        $tx=    microtime(true);
+        //prosessss
+        $rx= microtime(true);
+        $elapsed = number_format($rx - $tx, 2) . 'secs';
 
         if (isset($_POST['date'])) {
             $postDate = explode('/', $_POST['date']);
@@ -152,7 +156,7 @@ class ReconController extends Controller
         // create filename on local directory
         $output = fopen(Yii::$app->basePath."/runtime/sFTp/$filename", 'w');
         if ($output === false) {
-            $return['data'] = array('code' => 505, 'message' => 'Unable to write file on remote server.', 'attachment' => null);
+            $return['data'] = array('code' => 505, 'message' => 'Unable to write file on remote server.', 'attachment' => null,'date' => date('Ymd H:i:s'),'time-execute' => $elapsed);
         } else {
 
             // write value of csv file
@@ -161,9 +165,9 @@ class ReconController extends Controller
             }
 
             // upload to server epay
-            $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
+            // $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
 
-            $return['data'] = array('code' => 200, 'message' => 'Recon file successfully uploaded with name : ' . $filename, 'attachment' => $filename);
+            $return['data'] = array('code' => 200, 'message' => 'Recon file successfully uploaded with name : ' . $filename, 'attachment' => $filename,'date' => date('Y-m-d H:i:s'),'time-execute' => $elapsed);
         }
 
         // delete local dir
