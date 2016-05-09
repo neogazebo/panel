@@ -165,9 +165,9 @@ class ReconController extends Controller
             }
 
             // upload to server epay
-            // $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
+            $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
 
-            $return['data'] = array('code' => 200, 'message' => 'Recon file successfully uploaded with name : ' . $filename, 'attachment' => $filename,'date' => date('Y-m-d H:i:s'),'time-execute' => $elapsed);
+            $return['data'] = array('code' => 200, 'message' => 'Recon file successfully uploaded with name : ' . $filename, 'attachment' => $filename,'date' => date('Y-m-d H:i:s'),'execute' => $elapsed);
         }
 
         // delete local dir
