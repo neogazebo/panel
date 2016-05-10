@@ -38,7 +38,7 @@ class IndexController extends BaseController
             ]
         ]);
 
-        return $this->render ('index', [
+        return $this->render('index', [
             'dataProvider' => $dataProvider
         ]);
     }
@@ -61,11 +61,11 @@ class IndexController extends BaseController
                 $model = AuthItem::findOne($model->name);
                 $model->created_by = Yii::$app->user->identity->id;
                 if($model->save()) {
-                    $this->setMessage('save', 'success', 'Role "'.$model->name.'" sucess created!');
+                    $this->setMessage('save', 'success', 'Role "'.$model->name.'" successfully created!');
                 } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
-                return $this->redirect([$this->getRememberUrl()]);
+                return $this->redirect($this->getRememberUrl());
             }
     	}
 
@@ -79,6 +79,7 @@ class IndexController extends BaseController
         $lists = $this->allModel($name)->all();
         $models = AuthItemChild::findAll($name);
         $title = $name;
+
         return $this->render('detail', [
             'lists' => $lists,
             'models' => $models,
@@ -116,11 +117,11 @@ class IndexController extends BaseController
                     $assign->save();
                 }
 
-                $this->setMessage('save', 'success', 'Role "'.$oldName.'" sucess updated to '.$model->name);
+                $this->setMessage('save', 'success', 'Role "' . $oldName . '" successfully updated to ' . $model->name);
             } else {
                 $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
             }
-            return $this->redirect([$this->getRememberUrl()]);
+            return $this->redirect($this->getRememberUrl());
         }
 
         return $this->renderAjax('form', [
@@ -133,16 +134,18 @@ class IndexController extends BaseController
         if(Yii::$app->request->isAjax) {
             $model = $this->findModel($name);
             if (!empty($model)) {
-                $model->status = self::INACTIVE_STATUS;
-
-                if($model->save())
+                // $model->status = self::INACTIVE_STATUS;
+                $result = [
+                    'status' => 'error',
+                    'name' => $name
+                ];
+                if($model->delete())
                     $result = [
                         'status' => 'success',
                         'name' => $name
                     ];
                 return \yii\helpers\Json::encode($result);
             }
-            return $this->redirect([$this->getRememberUrl()]);
         }
     }
 
@@ -159,7 +162,7 @@ class IndexController extends BaseController
         return Yii::$app->authManager;
     }
 
-    private function allModel ($name)
+    private function allModel($name)
     {
         if (!empty($model = AuthItem::find()->where("name != '$name'")->orderBy('date(from_unixtime(created_at)) DESC'))) {
             return $model;
@@ -168,7 +171,7 @@ class IndexController extends BaseController
         }
     }
 
-    private function findModel ($id)
+    private function findModel($id)
     {
         if (($model = AuthItem::findOne($id)) !== null) {
             return $model;

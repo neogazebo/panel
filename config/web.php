@@ -105,10 +105,10 @@ $config = [
             'class' => '\gftp\FtpComponent',
             'driverOptions' => [
                 'class' => \gftp\FtpProtocol::valueOf('sftp')->driver,
-                'user' => 'ebizu',
-                'pass' => 'Mbr6khXJ79kAY',
-                'host' => 'sftp.e-pay.com.my',
-                'port' => 22,
+                'user' => $params['EPAY_FTP_USER'],
+                'pass' => $params['EPAY_FTP_PASSWORD'],
+                'host' => $params['EPAY_FTP_HOST'],
+                'port' => $params['EPAY_FTP_PORT'],
                 'timeout' => 120
             ],
         ],
