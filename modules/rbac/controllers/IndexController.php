@@ -86,6 +86,17 @@ class IndexController extends BaseController
         ]);
     }
 
+    public function actionAddChild()
+    {
+        if (Yii::$app->request->isAjax){
+            $auth = $this->_role();
+            $child = Yii::$app->request->post('to');
+            foreach ($child as $val) {
+                
+            }
+        }
+    }
+
     public function actionUpdate($name)
     {
         $model = $this->findModel($name);

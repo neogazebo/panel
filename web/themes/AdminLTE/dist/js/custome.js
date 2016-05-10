@@ -98,4 +98,17 @@ $(function(){
         }
     });
 
+    $('#addChild').on('submit',function(event){
+    	var data = $('search_to').val();
+    	$.ajax({
+    			type : 'POST',
+    			url : $(this).attr('action'),
+    			data: $(this).serialize(),
+    			success: function(results){
+    				console.log(results);
+    			}
+    		});
+    	event.preventDefault();
+    })
+
 });

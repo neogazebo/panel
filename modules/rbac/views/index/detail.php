@@ -5,10 +5,8 @@ use yii\grid\GridView;
 use yii\web\View;
 use yii\bootstrap\modal;
 use yii\helpers\Url;
-use kartik\sortable\Sortable;
 
 $this->title = 'Permission List of "'.$title.'"';
-$this->registerCssFile(Yii::$app->urlManager->baseUrl.'/themes/AdminLTE/dist/plugins/multi-select/multi-select.css', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -18,8 +16,9 @@ $this->registerCssFile(Yii::$app->urlManager->baseUrl.'/themes/AdminLTE/dist/plu
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <?= Html::button('<i class="fa fa-refresh"></i> &nbsp; Update Permission List', ['value' => Url::to('get-permission'), 'class' => 'ajaxRequest btn btn-primary btn-sm', 'data-key' => Url::current()]) ?>
+                    <?= Html::button('<i class="fa fa-refresh"></i> &nbsp; Update Permission List', ['value' => Url::to(['get-permission']), 'class' => 'ajaxRequest btn btn-primary btn-sm', 'data-key' => Url::current()]) ?>
                 </div>
+                <form id="addChild" action="<?= Url::to(['add-child']) ?>" method="post">
                 <div class="box-body">
                     <div id="searchList" class="col-sm-5">
                         <h2><?= $title ?> Permission</h2>
@@ -50,16 +49,8 @@ $this->registerCssFile(Yii::$app->urlManager->baseUrl.'/themes/AdminLTE/dist/plu
                     <?= Html::resetButton('Cancel', ['class' => 'btn btn-warning']) ?>
                     <?= Html::submitButton('Submit', ['class' => 'btn btn-primary pull-right']) ?>
                 </div>
+                </form>
             </div>
         </div>
     </div>
 </section>
-<?php
-$this->registerJsFile(Yii::$app->urlManager->baseUrl.'/themes/AdminLTE/dist/plugins/multi-select/jquery.multi-select.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-$inlineScript = "
-$('#listRole').multiSelect();
-$('div.ms-selectable').prepend('<h3>All Permission</h3>');
-$('div.ms-selection').prepend('<h3> ".$title." Permission</h3>');
-";
-$this->registerJs($inlineScript, View::POS_END, 'inline-js');
-?>
