@@ -27,6 +27,7 @@ $this->title = 'Permission List of "'.$title.'"';
                             <option value="<?= $model['child'] ?>"><?= $model['child'] ?></option>
                         <?php endforeach; ?>
                         </select>
+                        <input type="hidden" name="role" value="<?= $title ?>">
                     </div>
                     <div class="col-sm-2">
                         <h2></h2>

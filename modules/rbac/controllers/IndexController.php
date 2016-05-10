@@ -89,11 +89,18 @@ class IndexController extends BaseController
     public function actionAddChild()
     {
         if (Yii::$app->request->isAjax){
-            $auth = $this->_role();
             $child = Yii::$app->request->post('to');
+            $role = Yii::$app->request->post('role');
+            $auth = $this->_role();
+            $parent = $auth->getRole($role);
+            $auth->addChild('author','/base/*');
             foreach ($child as $val) {
-                
+                // $auth->addChild($role->name,$val);
+                // echo $role.','.$val;
             }
+            $result = ['status' => 'success'];
+            return \yii\helpers\Json::encode($result);
+
         }
     }
 
