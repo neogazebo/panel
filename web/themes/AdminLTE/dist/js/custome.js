@@ -8,7 +8,7 @@ $(function(){
 	};
 	timeout();
 
-	function alert(status,message){
+	function cutomeAlert(status,message){
 		var html  = "<div class='row'><div class='col-xs-12 col-sm-12 col-lg-12'>";
 			if(status == 'success'){
 				html += "<div class='alert alert-dismissable alert-success'>";
@@ -44,7 +44,7 @@ $(function(){
 			  type: "info",
 			  showCancelButton: true,
 			  closeOnCancel: true,
-			  closeOnConfirm: false,
+			  closeOnConfirm: true,
 			  showLoaderOnConfirm: true,
 		},function(){
 			$.get(Url,function(results){
@@ -69,22 +69,20 @@ $(function(){
 			  type: "info",
 			  showCancelButton: true,
 			  closeOnCancel: true,
-			  closeOnConfirm: false,
+			  closeOnConfirm: true,
 			  showLoaderOnConfirm: true,
 		},function(){
 			$.get(Url,function(results){
 				data = JSON.parse(results);
 				if (data.status = 'success') {
-					// swal("Delete "+name+" Role successed!","success");
 					swal.close();
 					message = "Delete "+name+" Role successed!";
-					alert(data.status,message);
+					cutomeAlert(data.status,message);
 					element.remove();
 				}else{
-					// swal("Delete "+name+" Role Failed!", "error");
 					swal.close();
 					message = "Delete "+name+" Role failed!";
-					alert('error',message);
+					cutomeAlert('error',message);
 				}
 			})
 		});
@@ -99,15 +97,41 @@ $(function(){
     });
 
     $('#addChild').on('submit',function(event){
-    	var data = $('search_to').val();
-    	$.ajax({
-    			type : 'POST',
-    			url : $(this).attr('action'),
-    			data: $(this).serialize(),
-    			success: function(results){
-    				console.log(results);
-    			}
-    		});
+    	var data = $('#search_to').val();
+    		thisRole = $(this).data('key');
+    	if(data !== null){
+	    	swal({
+				  title: "Add child Role",
+				  text: "Are You Sure ?",
+				  type: "info",
+				  showCancelButton: true,
+				  closeOnCancel: true,
+				  closeOnConfirm: true,
+				  showLoaderOnConfirm: true,
+			},function(){
+				console.log($(this).serialize());
+		    	$.ajax({
+	    			type : 'POST',
+	    			url : $('#addChild').attr('action'),
+	    			data: $('#addChild').serialize(),
+	    			success: function(results){
+	    	// 			data = JSON.parse(results);
+						// if (data.status == 'success') {
+						// 	$('body').load('detail?name='+thisRole);
+						// 	swal.close();
+						// 	message = "Add new Item successed!";
+						// 	cutomeAlert(data.status,message);
+						// }else{
+						// 	swal.close();
+						// 	message = "Add new Item failed!";
+						// 	cutomeAlert(data.status,message);
+						// }
+	    			}
+	    		});
+			});
+    	}else{
+    		swal("Warning!", "Fill permission list before submit", "error");
+    	}
     	event.preventDefault();
     })
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace app\components\helpers;
 
 use Yii;
@@ -12,12 +13,9 @@ use yii\caching\TagDependency;
 use yii\web\Response;
 use app\models\AuthItem;
 use app\models\AuthRule;
-/**
-* 
-*/
+
 class GetRoutes
 {
-
 	public function generatePermission()
     {
         $routes = $this->searchRoute('all');
@@ -39,11 +37,10 @@ class GetRoutes
             }
         }
         $result = [
-                'status' => 'success',
-            ];
+            'status' => 'success',
+        ];
         return $result;
     }
-
 
     public function searchRoute($target, $term = '', $refresh = '0')
     {
