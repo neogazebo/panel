@@ -113,19 +113,19 @@ $(function(){
     			url : $('#addChild').attr('action'),
     			data: $('#addChild').serialize(),
     			success: function(results){
-    				data = JSON.parse(results);
-					if (data.status == 'success') {
-						$('body').load('detail?name='+thisRole);
-						swal.close();
-						timeout();
-						// message = "Add new Item successed!";
-						// cutomeAlert(data.status,message);
-					}else{
-						swal.close();
-						timeout();
-						// message = "Add new Item failed!";
-						// cutomeAlert(data.status,message);
-					}
+    	// 			data = JSON.parse(results);
+					// if (data.status == 'success') {
+					// 	$('body').load('detail?name='+thisRole);
+					// 	swal.close();
+					// 	timeout();
+					// 	// message = "Add new Item successed!";
+					// 	// cutomeAlert(data.status,message);
+					// }else{
+					// 	swal.close();
+					// 	timeout();
+					// 	// message = "Add new Item failed!";
+					// 	// cutomeAlert(data.status,message);
+					// }
     			}
     		});
 		});

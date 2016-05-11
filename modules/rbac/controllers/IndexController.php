@@ -96,32 +96,37 @@ class IndexController extends BaseController
             $auth = $this->_role();
             $parent = $auth->getRole($role);
 
-            foreach ($childs as $val) {
-                $child = $auth->getPermission($val);
-                if(!$child){
-                    $child = $auth->getRole($val);
-                }
-                if (!$auth->hasChild($parent,$child)) {
-                    $auth->addChild($parent,$child);
+            if(!empty($childs)){
+                foreach ($childs as $val) {
+                    $child = $auth->getPermission($val);
+                    if(!$child){
+                        $child = $auth->getRole($val);
+                    }
+                    if (!$auth->hasChild($parent,$child)) {
+                        $auth->addChild($parent,$child);
+                    }
                 }
             }
 
-            foreach ($revokes as $val) {
-                $revoke = $auth->getPermission($val);
-                if(!$revoke){
-                    $revoke = $auth->getRole($val);
-                }
-                if ($auth->hasChild($parent,$revoke)) {
-                    $auth->removeChild($parent,$revoke);
+            if(!empty($revokes)) {
+                foreach ($revokes as $val) {
+                    $revoke = $auth->getPermission($val);
+                    if(!$revoke){
+                        $revoke = $auth->getRole($val);
+                    }
+                    if ($auth->hasChild($parent,$revoke)) {
+                        $auth->removeChild($parent,$revoke);
+                    }
                 }
             }
-            
+
             $result = [
                 'status' => 'success',
                 'name' => $role
             ];
             $this->setMessage('save', 'success', 'Update item child successfully');
-            return \yii\helpers\Json::encode($result);
+            return $this->redirect(['detail?name='.$role]);
+            // return \yii\helpers\Json::encode($result);
         }
     }
 
