@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use yii\bootstrap\modal;
 use yii\helpers\Url;
 
-$this->title = 'List Role';
+$this->title = 'User Management';
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
