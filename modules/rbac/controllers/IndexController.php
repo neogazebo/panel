@@ -89,25 +89,39 @@ class IndexController extends BaseController
 
     public function actionAddChild()
     {
-        if (Yii::$app->request->isAjax){
-            $child = Yii::$app->request->post('to');
+        if (Yii::$app->request->isAjax) {
+            $childs = Yii::$app->request->post('to');
+            $revokes = Yii::$app->request->post('from');
             $role = Yii::$app->request->post('role');
             $auth = $this->_role();
             $parent = $auth->getRole($role);
-            foreach ($child as $val) {
+
+            foreach ($childs as $val) {
                 $child = $auth->getPermission($val);
+                if(!$child){
+                    $child = $auth->getRole($val);
+                }
                 if (!$auth->hasChild($parent,$child)) {
                     $auth->addChild($parent,$child);
-                    $result = ['status' => 'success'];
                 }
             }
 
-            if ($result['status'] == 'success') {
-                $this->setMessage('save', 'success', 'Add new Child successfully created!');
-                return $this->redirect(['detail?name='.$role]);
+            foreach ($revokes as $val) {
+                $revoke = $auth->getPermission($val);
+                if(!$revoke){
+                    $revoke = $auth->getRole($val);
+                }
+                if ($auth->hasChild($parent,$revoke)) {
+                    $auth->removeChild($parent,$revoke);
+                }
             }
+            
+            $result = [
+                'status' => 'success',
+                'name' => $role
+            ];
+            $this->setMessage('save', 'success', 'Update item child successfully');
             return \yii\helpers\Json::encode($result);
-
         }
     }
 

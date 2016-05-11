@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\modal;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 $this->title = 'List Role';
 ?>

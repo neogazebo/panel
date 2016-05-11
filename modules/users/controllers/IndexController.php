@@ -5,6 +5,7 @@ namespace app\modules\users\controllers;
 use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
+use app\models\AuthAssignment;
 use app\models\User;
 
 /**
@@ -18,7 +19,7 @@ class IndexController extends Controller
      */
     public function actionIndex()
     {
-    	$model = User::find();
+    	$model = User::find()->where("type = 1")->orderBy('id DESC');
     	$dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [

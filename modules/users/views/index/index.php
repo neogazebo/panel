@@ -28,6 +28,20 @@ $this->title = 'User Management';
                                 'username',
                                 'email',
                                 [
+                                    'label' => 'Role',
+                                    'value' => function($data){
+                                        if(!empty($data->AuthAssignment->item_name)){
+                                            return $data->AuthAssignment->item_name;
+                                        }
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'create_time',
+                                    'value' => function($data){
+                                        return Yii::$app->formatter->asDateTime($data->create_time);
+                                    }
+                                ],
+                                [
                                     'class' => 'yii\grid\ActionColumn',
                                     'template' => '<span class="pull-right actionColumn">{view} {update} {delete}</span>',
                                     'buttons' => [

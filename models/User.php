@@ -212,4 +212,9 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
+    public function getAuthAssignment()
+    {
+        return $this->hasOne(AuthAssignment::className(),['user_id' => 'id']);
+    }
+
 }
