@@ -35,7 +35,7 @@ use Yii;
  * @property integer $created_date
  * @property integer $updated_date
  */
-class MerchantSignup extends \yii\db\ActiveRecord
+class MerchantSignup extends EbizuActiveRecord
 {
     /**
      * @inheritdoc
