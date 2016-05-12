@@ -21,4 +21,15 @@ class AuthItemQuery extends ActiveQuery
 		]);
 		return $this;
 	}
+
+	public function getListPermission($name)
+	{
+		$this->andWhere('name != :name',[
+				':name' => $name
+			]);
+		// $this->andWhere("substr(name, -1) != '/'");
+		// $this->andWhere("LEFT(name, 1) = '/'");
+		$this->orderBy('date(from_unixtime(created_at)) DESC');
+		return $this;
+	}
 }

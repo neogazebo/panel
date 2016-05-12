@@ -130,7 +130,7 @@ class GetRoutes
 
             $namespace = trim($module->controllerNamespace, '\\') . '\\';
             $this->getControllerFiles($module, $namespace, '', $result);
-            $result[] = ($module->uniqueId === '' ? '' : '/' . $module->uniqueId) . '/*';
+            $result[] = ($module->uniqueId === '' ? '/' : $module->uniqueId) ;
         } catch (\Exception $exc) {
             Yii::error($exc->getMessage(), __METHOD__);
         }
@@ -189,7 +189,7 @@ class GetRoutes
             /* @var $controller \yii\base\Controller */
             $controller = Yii::createObject($type, [$id, $module]);
             $this->getActionRoutes($controller, $result);
-            $result[] = '/' . $controller->uniqueId . '/*';
+            $result[] = '/' . $controller->uniqueId;
         } catch (\Exception $exc) {
             Yii::error($exc->getMessage(), __METHOD__);
         }

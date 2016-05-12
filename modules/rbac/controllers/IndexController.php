@@ -192,11 +192,13 @@ class IndexController extends BaseController
         }
     }
 
-    public function actionGetPermission()
+    public function actionGetPermission($role)
     {
         if(Yii::$app->request->isAjax) {
             $result = Yii::$app->getRoutes->generatePermission();
-            return \yii\helpers\Json::encode($result);
+            $this->setMessage('save', 'success', 'Update list item successfully');
+            return $this->redirect(['detail?name='.$role]);
+            // return \yii\helpers\Json::encode($result);
         }
     }
 
@@ -207,7 +209,7 @@ class IndexController extends BaseController
 
     private function allModel($name)
     {
-        if (!empty($model = AuthItem::find()->where("name != '$name'")->orderBy('date(from_unixtime(created_at)) DESC'))) {
+        if (!empty($model = AuthItem::find()->getListPermission($name))) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
