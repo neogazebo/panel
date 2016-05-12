@@ -97,6 +97,12 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'access' => [
+            'class' => 'yii\filters\AccessControl',
+            'allowActions' => [
+                'site/*'
+            ]
+        ],
         'getRoutes' => [
             'class' => 'app\components\helpers\GetRoutes',
         ],

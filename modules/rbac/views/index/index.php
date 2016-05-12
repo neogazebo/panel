@@ -9,7 +9,7 @@ use yii\widgets\Pjax;
 $this->title = 'List Role';
 ?>
 <section class="content-header ">
-    <h1><?= $this->title ?></h1>
+    <h1><?= $this->title?></h1>
 </section>
 <section class="content">
     <div class="row">

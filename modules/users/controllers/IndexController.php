@@ -7,11 +7,12 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\models\AuthAssignment;
 use app\models\User;
+use app\controllers\BaseController;
 
 /**
  * Default controller for the `users` module
  */
-class IndexController extends Controller
+class IndexController extends BaseController
 {
     /**
      * Renders the index view for the module

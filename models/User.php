@@ -26,6 +26,9 @@ class User extends ActiveRecord implements IdentityInterface
     const LEVEL_ADMIN = 2;
     const LEVEL_MODERATOR = 3;
 
+    const TYPE_ROLE = 1;
+    const TYPE_PERMISSION = 2;
+
     public $password;
     public $password_repeat;
     public $old_password;
