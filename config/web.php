@@ -98,7 +98,7 @@ $config = [
             'class' => 'yii\rbac\DbManager',
         ],
         'access' => [
-            'class' => 'yii\filters\AccessControl',
+            'class' => 'app\components\filters\AccessFilters',
             'allowActions' => [
                 'site/*'
             ]

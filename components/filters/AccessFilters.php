@@ -29,6 +29,9 @@ class AccessFilters extends ActionFilter
 		$usrId = Yii::$app->user->identity->id;
 		$rolename = $auth->getRolesByUser($usrId);
 		$currentUrl = Url::current();
+		if(!$rolename) {
+			throw new ForbiddenHttpException;
+		}
 		foreach ($rolename as $key) {
 			$permissions = $auth->getPermissionsByRole($key->name);
 			foreach ($permissions as $child) {
