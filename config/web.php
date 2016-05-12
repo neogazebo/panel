@@ -100,7 +100,8 @@ $config = [
         'access' => [
             'class' => 'app\components\filters\AccessFilters',
             'allowActions' => [
-                'site/*'
+                'site/*',
+                'site/logout'
             ]
         ],
         'getRoutes' => [
