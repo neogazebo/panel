@@ -59,7 +59,6 @@ class IndexController extends BaseController
             $role->description = $model->description;
             if($auth->add($role)) {
                 $model = AuthItem::findOne($model->name);
-                $model->created_by = Yii::$app->user->identity->id;
                 if($model->save()) {
                     $this->setMessage('save', 'success', 'Role "'.$model->name.'" successfully created!');
                 } else {
@@ -96,27 +95,25 @@ class IndexController extends BaseController
             $auth = $this->_role();
             $parent = $auth->getRole($role);
 
-            if(!empty($childs)){
+            if(!empty($childs)) {
                 foreach ($childs as $val) {
                     $child = $auth->getPermission($val);
-                    if(!$child){
+                    if(!$child)
                         $child = $auth->getRole($val);
-                    }
-                    if (!$auth->hasChild($parent,$child)) {
-                        $auth->addChild($parent,$child);
-                    }
+
+                    if (!$auth->hasChild($parent, $child))
+                        $auth->addChild($parent, $child);
                 }
             }
 
             if(!empty($revokes)) {
                 foreach ($revokes as $val) {
                     $revoke = $auth->getPermission($val);
-                    if(!$revoke){
+                    if(!$revoke)
                         $revoke = $auth->getRole($val);
-                    }
-                    if ($auth->hasChild($parent,$revoke)) {
-                        $auth->removeChild($parent,$revoke);
-                    }
+
+                    if ($auth->hasChild($parent, $revoke))
+                        $auth->removeChild($parent, $revoke);
                 }
             }
 
@@ -124,9 +121,8 @@ class IndexController extends BaseController
                 'status' => 'success',
                 'name' => $role
             ];
-            $this->setMessage('save', 'success', 'Update item child successfully');
-            return $this->redirect(['detail?name='.$role]);
-            // return \yii\helpers\Json::encode($result);
+            $this->setMessage('save', 'success', 'Edit item child successfully');
+            return $this->redirect(['detail?name=' . $role]);
         }
     }
 
@@ -142,7 +138,6 @@ class IndexController extends BaseController
         }
 
         if($model->load(Yii::$app->request->post())) {
-            $model->created_by = Yii::$app->user->identity->id;
             if ($model->save()) {
                 $parent = AuthItemChild::findOne($name);
                 $child = AuthItemChild::find()->where("child = '$name'")->one();
@@ -177,16 +172,13 @@ class IndexController extends BaseController
         if(Yii::$app->request->isAjax) {
             $model = $this->findModel($name);
             if (!empty($model)) {
-                // $model->status = self::INACTIVE_STATUS;
-                $result = [
-                    'status' => 'error',
-                    'name' => $name
-                ];
+                $model->status = self::INACTIVE_STATUS;
                 if($model->delete())
                     $result = [
                         'status' => 'success',
                         'name' => $name
                     ];
+
                 return \yii\helpers\Json::encode($result);
             }
         }
@@ -200,6 +192,36 @@ class IndexController extends BaseController
             return $this->redirect(['detail?name='.$role]);
             // return \yii\helpers\Json::encode($result);
         }
+    }
+
+    public function actionCancel()
+    {
+        return $this->redirect([$this->getRememberUrl()]);
+    }
+
+    public function actionUser($name)
+    {
+        $model = AuthAssignment::find()
+            ->where('
+                item_name = :item
+            ', [
+                ':item' => $name
+            ]);
+        $model->joinWith(['user' => function($model) {
+            $model->from(['user' => 'tbl_admin_user']);
+        }]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $model,
+            'pagination' => [
+                'pageSize' => 20
+            ]
+        ]);
+
+        return $this->render('user', [
+            'dataProvider' => $dataProvider,
+            'name' => $name
+        ]);
     }
 
     private function _role()

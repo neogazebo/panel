@@ -58,8 +58,11 @@ $this->title = 'List Role';
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right actionColumn">{view} {update} {delete}</span>',
+                                    'template' => '<span class="pull-right actionColumn">{user} {view} {update} {delete}</span>',
                                     'buttons' => [
+                                        'user' => function($url, $model) {
+                                            return Html::a('<i class="fa fa-group"></i>', ['user?name=' . $model->name]);
+                                        },
                                         'view' => function($url, $model) {
                                             return Html::a('<i class="fa fa-search"></i>', ['detail?name=' . $model->name]);
                                         },

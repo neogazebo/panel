@@ -14,14 +14,16 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
     const libsodium = 10;
     const ROLE_USER = 10;
-    const TYPE_ADMIN = 1;
     const STATUS_ACTIVE = 10;
+    const STATUS_DELETED = 0;
+
+    const TYPE_ADMIN = 1;
     const TYPE_TM = 2;
     const TYPE_MALL = 3;
     const TYPE_SALES = 4;
+
     const LEVEL_SUPER_USER = 1;
     const LEVEL_ADMIN = 2;
     const LEVEL_MODERATOR = 3;

@@ -10,12 +10,13 @@ $this->title = 'User Management';
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
 </section>
+
 <section class="content">
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <?= Html::a('<i class="fa fa-plus-square"></i> Create User', ['create'], ['class' => 'btn btn-primary btn-sm']) ?>
+                    <?= Html::a('<i class="fa fa-plus-square"></i> New User', ['create'], ['class' => 'btn btn-primary btn-sm']) ?>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
@@ -29,15 +30,14 @@ $this->title = 'User Management';
                                 'email',
                                 [
                                     'label' => 'Role',
-                                    'value' => function($data){
-                                        if(!empty($data->AuthAssignment->item_name)){
-                                            return $data->AuthAssignment->item_name;
-                                        }
+                                    'value' => function($data) {
+                                        if(!empty($data->authAssignment))
+                                            return $data->authAssignment->item_name;
                                     }
                                 ],
                                 [
                                     'attribute' => 'create_time',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         return Yii::$app->formatter->asDateTime($data->create_time);
                                     }
                                 ],
@@ -56,7 +56,8 @@ $this->title = 'User Management';
                                         }
                                     ],
                                 ],
-                            ]
+                            ],
+                            'tableOptions' => ['class' => 'table table-striped table-hover']
                         ]);
                         ?>
                     </div>
