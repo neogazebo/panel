@@ -7,6 +7,7 @@ use app\models\AuthRule;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+
 /**
  * This is the model class for table "auth_item".
  *
@@ -28,9 +29,6 @@ use yii\db\ActiveRecord;
  */
 class AuthItem extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
     public static function find()
     {
         return new AuthItemQuery(get_called_class());
@@ -41,9 +39,6 @@ class AuthItem extends ActiveRecord
         return 'auth_item';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
@@ -72,10 +67,10 @@ class AuthItem extends ActiveRecord
 
     public function validWord($data)
     {
-        if($this->type == 1){
-            if(str_word_count($this->name) > 1){
-            $this->addError($data, Yii::t('app', 'Role name, only accepted one word'));
-            }elseif (!preg_match('/^[A-z]+$/', $this->name)) {
+        if ($this->type == 1) {
+            if (str_word_count($this->name) > 1) {
+                $this->addError($data, Yii::t('app', 'Role name, only accepted one word'));
+            } elseif (!preg_match('/^[A-z]+$/', $this->name)) {
                 $this->addError($data, Yii::t('app', 'Role name, only accepted alphabet'));
             }
         }
