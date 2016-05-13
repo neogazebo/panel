@@ -17,7 +17,7 @@ $this->title = 'Role List in "' . $title . '"';
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <?= Html::button('<i class="fa fa-refresh"></i> Refresh Permission List', ['value' => Url::to(['get-permission']), 'class' => 'ajaxRequest btn btn-primary btn-sm', 'data-key' => Url::current()]) ?>
+                    
                 </div>
                 <form id="addChild" action="<?= Url::to(['add-child']) ?>" data-key="<?= $title; ?>" method="post">
                     <div class="box-body">
@@ -49,7 +49,7 @@ $this->title = 'Role List in "' . $title . '"';
                         <div class="clearfix"></div>    
                     </div>
                     <div class="box-footer">
-                        <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'btn btn-warning']) ?>
+                        <?= Html::a('<i class="fa fa-times"></i> Cancel', ['cancel'], ['class' => 'btn btn-warning']) ?>
                         <?= Html::submitButton('<i class="fa fa-check"></i> Save', ['class' => 'btn btn-primary pull-right']) ?>
                     </div>
                 </form>
