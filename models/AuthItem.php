@@ -82,6 +82,16 @@ class AuthItem extends ActiveRecord
         
     }
 
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->created_by = Yii::$app->user->id;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @inheritdoc
      */

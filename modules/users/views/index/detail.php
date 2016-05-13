@@ -6,7 +6,7 @@ use yii\web\View;
 use yii\bootstrap\modal;
 use yii\helpers\Url;
 
-$this->title = 'Permission List of "'.$title.'"';
+$this->title = 'Role List in "' . $title . '"';
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -25,7 +25,7 @@ $this->title = 'Permission List of "'.$title.'"';
                             <h2><?= $title ?> Permission</h2>
                             <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
                             <?php foreach($models as $model): ?>
-                                <option value="<?= $model['child'] ?>"><?= $model['child'] ?></option>
+                                <option value="<?= $model['item_name'] ?>"><?= $model['item_name'] ?></option>
                             <?php endforeach; ?>
                             </select>
                         </div>
@@ -40,7 +40,7 @@ $this->title = 'Permission List of "'.$title.'"';
                             <h2>Permission list</h2>
                             <select name="from[]" id="search" class="form-control" size="8" multiple="multiple">
                             <?php foreach($lists as $list): ?>
-                                <option value="<?= $list['name'] ?>"><?= $list['name'] ?></option>
+                                <option value="<?= $list['parent'] ?>"><?= $list['parent'] ?></option>
                             <?php endforeach; ?>
                             </select>
                             <input type="hidden" name="role" value="<?= $title ?>">

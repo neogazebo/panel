@@ -59,7 +59,7 @@ $(function(){
 		});
 	});
 
-	$('.deleteBtn').on('click',function(){
+	$('.deleteBtn').on('click',function() {
 		var Url = $(this).attr('value');
 			name = Url.match(/\w+$/)[0];
 			element = $(this).closest('tr');
@@ -71,15 +71,15 @@ $(function(){
 			  closeOnCancel: true,
 			  closeOnConfirm: false,
 			  showLoaderOnConfirm: true,
-		},function(){
-			$.get(Url,function(results){
+		}, function() {
+			$.get(Url,function(results) {
 				data = JSON.parse(results);
 				if (data.status = 'success') {
 					swal.close();
 					message = "Delete "+name+" Role successed!";
 					cutomeAlert(data.status,message);
 					element.remove();
-				}else{
+				} else {
 					swal.close();
 					message = "Delete "+name+" Role failed!";
 					cutomeAlert('error',message);
@@ -96,7 +96,7 @@ $(function(){
         }
     });
 
-    $('#addChild').on('submit',function(event){
+    $('#addChild').on('submit',function(event) {
 	// var permission = $('#search_to').val();
 		thisRole = $(this).data('key');
     	swal({
@@ -107,12 +107,12 @@ $(function(){
 			  closeOnCancel: true,
 			  closeOnConfirm: false,
 			  showLoaderOnConfirm: true,
-		},function(){
+		}, function() {
 	    	$.ajax({
     			type : 'POST',
     			url : $('#addChild').attr('action'),
     			data: $('#addChild').serialize(),
-    			success: function(results){
+    			success: function(results) {
     	// 			data = JSON.parse(results);
 					// if (data.status == 'success') {
 					// 	$('body').load('detail?name='+thisRole);
@@ -130,6 +130,6 @@ $(function(){
     		});
 		});
     	event.preventDefault();
-    })
+    });
 
 });
