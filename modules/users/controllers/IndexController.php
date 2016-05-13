@@ -75,8 +75,6 @@ class IndexController extends BaseController
                         else
                             $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                     }
-                } else {
-                    $this->setMessage('save', 'warning', '"' . $username . '" assignment already exist!');
                 }
             } else {
                 $this->setMessage('save', 'info', 'No assignment saved!');
