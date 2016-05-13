@@ -69,21 +69,18 @@ class IndexController extends BaseController
             $auth = Yii::$app->authManager;
             if(!empty($childs)) {
                 foreach($childs as $child) {
-                    $model = AuthAssignment::find()
-                        ->where(['item_name' => $child, 'user_id' => $user_id])
-                        ->one();
-                    if(empty($model)) {
-                        $model = new AuthAssignment;
-                        $model->item_name = $child;
-                        $model->user_id = $user_id;
-                        if($model->save())
-                            $this->setMessage('save', 'success', 'Add "' . $username . '" assignment successfully!');
-                        else
-                            $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
-                    }
+                    $model = AuthAssignment::deleteAll(['item_name' => $child, 'user_id' => $user_id]);
+                    $model = new AuthAssignment;
+                    $model->item_name = $child;
+                    $model->user_id = $user_id;
+                    if($model->save())
+                        $this->setMessage('save', 'success', 'Add "' . $username . '" assignment successfully!');
+                    else
+                        $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
             } else {
-                $this->setMessage('save', 'info', 'No assignment saved!');
+                $model = AuthAssignment::deleteAll(['user_id' => $user_id]);
+                $this->setMessage('save', 'warning', 'No assignment saved!');
             }
             return $this->redirect(['detail?id=' . $user_id]);
         }

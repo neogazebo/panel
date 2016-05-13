@@ -6,7 +6,7 @@ use yii\web\View;
 use yii\bootstrap\modal;
 use yii\helpers\Url;
 
-$this->title = 'Role List in "' . $title . '"';
+$this->title = '"' . $title . '" Roles';
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -16,13 +16,11 @@ $this->title = 'Role List in "' . $title . '"';
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
-                <div class="box-header with-border">
-                    
-                </div>
+                <div class="box-header with-border"></div>
                 <form id="addChild" action="<?= Url::to(['add-child']) ?>" data-key="<?= $title; ?>" method="post">
                     <div class="box-body">
                         <div id="searchList" class="col-sm-6">
-                            <h2><?= $title ?> Permission</h2>
+                            <h2><?= $title ?> Role</h2>
                             <input type="hidden" name="user_id" value="<?= $id ?>">
                             <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
                             <?php foreach($models as $model): ?>
@@ -38,7 +36,7 @@ $this->title = 'Role List in "' . $title . '"';
                             <button type="button" id="search_leftAll" class="btn btn-default btn-block"><i class="fa fa-forward"></i></button>
                         </div>
                         <div id="searchSelected" class="col-sm-5">
-                            <h2>Permission list</h2>
+                            <h2>Role list</h2>
                             <select name="from[]" id="search" class="form-control" size="8" multiple="multiple">
                             <?php foreach($lists as $list): ?>
                                 <option value="<?= $list['parent'] ?>"><?= $list['parent'] ?></option>
