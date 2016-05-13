@@ -33,28 +33,21 @@ class AccessFilters extends ActionFilter
 		$userId = Yii::$app->user->identity->id;
 		$rolename = $auth->getRolesByUser($userId);
 		$currentUrl = '/'.Yii::$app->requestedRoute;
-		// var_dump($currentUrl);
-		// var_dump($auth->checkAccess($userId, $currentUrl,$param));exit;
 		if(!$rolename) {
 			throw new ForbiddenHttpException;
 		}
 
 		foreach ($rolename as $key) {
-
 			$child = AuthItemChild::find()->where("parent = '$key->name'")->all();
 			foreach ($child as $key => $value) {
 				$getItemType = AuthItem::findOne($value->child);
 				if($getItemType->type == 1) {
-					$this->getChildRole($value->name);
+					$this->getChildRole($getItemType->name);
 				}
 			}
-			exit;
 			$permissionName = $auth->getPermissionsByRole($key->name);
-			var_dump($permissionName);exit;
 			foreach ($permissionName as $key => $value) {
-				echo $value;exit;
 				if($value->type == UserAdmin::TYPE_ROLE) {
-					echo $value->name;exit;
 					$this->getChildRole($value->name);
 				}
 			}
@@ -69,28 +62,19 @@ class AccessFilters extends ActionFilter
 
 	public function getChildRole($role)
 	{
-		echo $role;exit;
 		if(!empty($role)) {
 			$auth = Yii::$app->authManager;
 			$userId = Yii::$app->user->identity->id;
-			$rolename = $auth->getRole($role);
+			$rolename = AuthItem::findOne($role);
 			$currentUrl = '/'.Yii::$app->requestedRoute;
-			if(!$rolename) {
-				throw new ForbiddenHttpException;
+			$permissionName = $auth->getPermissionsByRole($rolename->name);
+			if (array_key_exists($currentUrl, $permissionName)) {
+			    return true;
+			}else{
+				throw new ForbiddenHttpException; 
 			}
-			foreach ($rolename as $key) {
-				$permissionName = $auth->getPermissionsByRole($key->name);
-				if($key->type == UserAdmin::TYPE_ROLE) {
-					$chilPermision = $auth->getPermissionsByRole($key->name);
-					foreach ($chilPermision as $value) {	
-						$this->reUseGettingRole($value->name);
-					}
-				}
-				if (array_key_exists($currentUrl, $permissionName)) {
-				    return true;
-				}else{
-					throw new ForbiddenHttpException; 
-				}
+			if($permissionName->type == UserAdmin::TYPE_ROLE) {
+				$this->reUseGettingRole($value->name);
 			}
 	        return true;
 		}
