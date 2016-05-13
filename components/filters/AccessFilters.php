@@ -39,14 +39,14 @@ class AccessFilters extends ActionFilter
 
 		foreach ($rolename as $key) {
 			$child = AuthItemChild::find()->where("parent = '$key->name'")->all();
-			foreach ($child as $key => $value) {
+			foreach ($child as $keyin => $value) {
 				$getItemType = AuthItem::findOne($value->child);
 				if($getItemType->type == 1) {
 					$this->getChildRole($getItemType->name);
 				}
 			}
 			$permissionName = $auth->getPermissionsByRole($key->name);
-			foreach ($permissionName as $key => $value) {
+			foreach ($permissionName as $keyinto => $value) {
 				if($value->type == UserAdmin::TYPE_ROLE) {
 					$this->getChildRole($value->name);
 				}
