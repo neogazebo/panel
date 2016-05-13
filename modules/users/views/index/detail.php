@@ -23,6 +23,7 @@ $this->title = 'Role List in "' . $title . '"';
                     <div class="box-body">
                         <div id="searchList" class="col-sm-6">
                             <h2><?= $title ?> Permission</h2>
+                            <input type="hidden" name="user_id" value="<?= $id ?>">
                             <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
                             <?php foreach($models as $model): ?>
                                 <option value="<?= $model['item_name'] ?>"><?= $model['item_name'] ?></option>
