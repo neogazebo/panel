@@ -24,15 +24,14 @@ class AccessFilters extends ActionFilter
 	{
 		parent::init();
 		$auth = Yii::$app->authManager;
-		if(Yii::$app->user->identity->type != UserAdmin::TYPE_ADMIN)
-        {
+		if(Yii::$app->user->identity->type != UserAdmin::TYPE_ADMIN) {
             return true;
         }
 
 		$auth = Yii::$app->authManager;
-		$userId = Yii::$app->user->identity->id;
+		$userId = Yii::$app->user->id;
 		$rolename = $auth->getRolesByUser($userId);
-		$currentUrl = '/'.Yii::$app->requestedRoute;
+		$currentUrl = '/' . Yii::$app->requestedRoute;
 		if(!$rolename) {
 			throw new ForbiddenHttpException;
 		}
@@ -41,10 +40,10 @@ class AccessFilters extends ActionFilter
 			$child = AuthItemChild::find()->where("parent = '$key->name'")->all();
 			foreach ($child as $keyin => $value) {
 				$getItemType = AuthItem::findOne($value->child);
-				if($getItemType->type == 1) {
+				if($getItemType->type == 1)
 					$this->getChildRole($getItemType->name);
-				}
 			}
+
 			$permissionName = $auth->getPermissionsByRole($key->name);
 			foreach ($permissionName as $keyinto => $value) {
 				if($value->type == UserAdmin::TYPE_ROLE) {

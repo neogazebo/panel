@@ -53,7 +53,7 @@ $this->title = 'Permission List of "'.$title.'"';
                         <div class="clearfix"></div>    
                     </div>
                     <div class="box-footer">
-                        <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'btn btn-warning']) ?>
+                        <?= Html::a('<i class="fa fa-times"></i> Cancel',['index'], ['class' => 'btn btn-warning']) ?>
                         <?= Html::submitButton('<i class="fa fa-check"></i> Save', ['class' => 'btn btn-primary pull-right']) ?>
                     </div>
                 </form>

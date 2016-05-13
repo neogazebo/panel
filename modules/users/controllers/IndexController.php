@@ -66,24 +66,21 @@ class IndexController extends BaseController
             $user_id = Yii::$app->request->post('user_id');
             $username = User::findOne($user_id)->username;
 
-            $auth = Yii::$app->authManager;
+            // $auth = Yii::$app->authManager;
             if(!empty($childs)) {
                 foreach($childs as $child) {
-                    $model = AuthAssignment::find()
-                        ->where(['item_name' => $child, 'user_id' => $user_id])
-                        ->one();
-                    if(empty($model)) {
-                        $model = new AuthAssignment;
-                        $model->item_name = $child;
-                        $model->user_id = $user_id;
-                        if($model->save())
-                            $this->setMessage('save', 'success', 'Add "' . $username . '" assignment successfully!');
-                        else
-                            $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
-                    }
+                    $model = AuthAssignment::deleteAll(['item_name' => $child, 'user_id' => $user_id]);
+                    $model = new AuthAssignment;
+                    $model->item_name = $child;
+                    $model->user_id = $user_id;
+                    if($model->save())
+                        $this->setMessage('save', 'success', 'Add "' . $username . '" assignment successfully!');
+                    else
+                        $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
             } else {
-                $this->setMessage('save', 'info', 'No assignment saved!');
+                $model = AuthAssignment::deleteAll(['user_id' => $user_id]);
+                $this->setMessage('save', 'warning', 'No assignment saved!');
             }
             return $this->redirect(['detail?id=' . $user_id]);
         }

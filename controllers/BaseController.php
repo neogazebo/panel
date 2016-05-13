@@ -30,9 +30,9 @@ class BaseController extends Controller
 		    'https' => [
 				'class' => \app\components\filters\Https::className(),
 		    ],
-            // 'permission' => [
-            //     'class' => \app\components\filters\AccessFilters::className(),
-            // ],
+            'permission' => [
+                'class' => \app\components\filters\AccessFilters::className(),
+            ],
 		];
     }
 

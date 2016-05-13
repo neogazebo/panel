@@ -21,6 +21,7 @@ class AuthItemQuery extends ActiveQuery
 			':type' => self::TYPE_ROLE,
 			':status' => self::ACTIVE_STATUS
 		]);
+		$this->orderBy('from_unixtime(created_at) DESC');
 		return $this;
 	}
 
