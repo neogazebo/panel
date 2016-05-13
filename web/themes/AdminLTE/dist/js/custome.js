@@ -48,13 +48,13 @@ $(function(){
 			  showLoaderOnConfirm: true,
 		},function(){
 			$.get(Url,function(results){
-				data = JSON.parse(results);
-				if (data.status = 'success') {
-					dom.load(reload);
-					swal("Syncronized", "Successed", "success");
-				}else{
-					swal("Syncronized","Failed!", "error");
-				}
+				// data = JSON.parse(results);
+				// if (data.status = 'success') {
+				// 	dom.load(reload);
+				// 	swal("Syncronized", "Successed", "success");
+				// }else{
+				// 	swal("Syncronized","Failed!", "error");
+				// }
 			})
 		});
 	});
