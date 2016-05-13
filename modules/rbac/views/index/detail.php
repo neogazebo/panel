@@ -17,7 +17,7 @@ $this->title = 'Permission List of "'.$title.'"';
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <?= Html::button('<i class="fa fa-refresh"></i> Refresh Permission List', ['value' => Url::to(['get-permission?name='.$title]), 'class' => 'ajaxRequest btn btn-primary btn-sm', 'data-key' => Url::current()]) ?>
+                    <?= Html::button('<i class="fa fa-refresh"></i> Refresh Permission List', ['value' => Url::to(['get-permission?role='.$title]), 'class' => 'ajaxRequest btn btn-primary btn-sm', 'data-key' => Url::current()]) ?>
                 </div>
                 <form id="addChild" action="<?= Url::to(['add-child']) ?>" data-key="<?= $title; ?>" method="post">
                     <div class="box-body">
