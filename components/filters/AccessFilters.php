@@ -40,11 +40,11 @@ class AccessFilters extends ActionFilter
 			$child = AuthItemChild::find()->where("parent = '$key->name'")->all();
 			foreach ($child as $keyin => $value) {
 				$getItemType = AuthItem::findOne($value->child);
-				if($getItemType->type == 1)
+				if($getItemType->type == UserAdmin::TYPE_ROLE) {
 					$this->getChildRole($getItemType->name);
+				}
 			}
-
-			$permissionName = $auth->getPermissionsByRole($key->name);
+			$permissionName = $auth->getChildren($key->name);
 			foreach ($permissionName as $keyinto => $value) {
 				if($value->type == UserAdmin::TYPE_ROLE) {
 					$this->getChildRole($value->name);
@@ -66,7 +66,7 @@ class AccessFilters extends ActionFilter
 			$userId = Yii::$app->user->identity->id;
 			$rolename = AuthItem::findOne($role);
 			$currentUrl = '/'.Yii::$app->requestedRoute;
-			$permissionName = $auth->getPermissionsByRole($rolename->name);
+			$permissionName = $auth->getChildren($rolename->name);
 			foreach ($permissionName as $keyinto => $value) {
 				if($value->type == UserAdmin::TYPE_ROLE) {
 					$this->reUseGettingRole($value->name);
