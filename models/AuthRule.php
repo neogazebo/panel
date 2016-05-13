@@ -16,17 +16,11 @@ use Yii;
  */
 class AuthRule extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return 'auth_rule';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
