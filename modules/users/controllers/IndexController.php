@@ -25,6 +25,7 @@ class IndexController extends BaseController
      */
     public function actionIndex()
     {
+        $this->setRememberUrl();
     	$model = User::find()->where("type = 1")->orderBy('id DESC');
     	$dataProvider = new ActiveDataProvider([
             'query' => $model,
@@ -50,6 +51,11 @@ class IndexController extends BaseController
             'models' => $models,
             'title' => $title,
         ]);
+    }
+
+    public function actionCancel()
+    {
+        return $this->redirect([$this->getRememberUrl()]);
     }
 
     public function actionAddChild()
