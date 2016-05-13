@@ -28,6 +28,7 @@ $config = [
         ],
         'merchant-signup' => [
             'class' => 'app\modules\merchant_signup\MerchantSignup',
+        ],
         'users' => [
             'class' => 'app\modules\users\Users',
         ],
@@ -127,4 +128,5 @@ $config = [
     ],
     'params' => $params,
 ];
+
 return $config;
