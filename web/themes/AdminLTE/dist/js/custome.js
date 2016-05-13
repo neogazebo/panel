@@ -72,17 +72,20 @@ $(function() {
 			showLoaderOnConfirm: true,
 		}, function() {
 			$.get(Url, function(results) {
-				data = JSON.parse(results);
-				if (data.status = 'success') {
-					swal.close();
-					message = "Delete " + name + " role successed!";
-					customAlert(data.status,message);
-					element.remove();
-				} else {
-					swal.close();
-					message = "Delete " + name + " role failed!";
-					customAlert('error', message);
-				}
+				// data = JSON.parse(results);
+				// if (data.status = 'success') {
+					// element.remove();
+					// location.reload();
+					// swal.close();
+					// message = "Delete " + name + " role successed!";
+					// customAlert(data.status,message);
+					// element.remove();
+				// } else {
+					// swal.close();
+					// element.remove();
+					// message = "Delete " + name + " role failed!";
+					// customAlert('error', message);
+				// }
 			})
 		});
 	});
@@ -99,7 +102,7 @@ $(function() {
 		// var permission = $('#search_to').val();
 		thisRole = $(this).data('key');
     	swal({
-			title: "Add child role",
+			title: "Update Permission "+thisRole,
 			text: "Are you sure want to do this?",
 			type: "info",
 			showCancelButton: true,

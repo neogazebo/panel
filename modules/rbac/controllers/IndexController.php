@@ -173,13 +173,21 @@ class IndexController extends BaseController
             $model = $this->findModel($name);
             if (!empty($model)) {
                 $model->status = self::INACTIVE_STATUS;
-                if($model->delete())
+                if($model->delete()) {
+                    $this->setMessage('save', 'success', 'Role "' . $name . '" successfully deleted');
                     $result = [
                         'status' => 'success',
                         'name' => $name
                     ];
-
-                return \yii\helpers\Json::encode($result);
+                } else {
+                    $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
+                    $result = [
+                        'status' => 'error',
+                        'name' => $name
+                    ];
+                }
+                return $this->redirect(['index']);
+                // return \yii\helpers\Json::encode($result);
             }
         }
     }
