@@ -66,10 +66,9 @@ class IndexController extends BaseController
             $user_id = Yii::$app->request->post('user_id');
             $username = User::findOne($user_id)->username;
 
-            // $auth = Yii::$app->authManager;
             if(!empty($childs)) {
+                $model = AuthAssignment::deleteAll(['user_id' => $user_id]);
                 foreach($childs as $child) {
-                    $model = AuthAssignment::deleteAll(['item_name' => $child, 'user_id' => $user_id]);
                     $model = new AuthAssignment;
                     $model->item_name = $child;
                     $model->user_id = $user_id;
