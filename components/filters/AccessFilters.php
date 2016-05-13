@@ -68,13 +68,13 @@ class AccessFilters extends ActionFilter
 			$rolename = AuthItem::findOne($role);
 			$currentUrl = '/'.Yii::$app->requestedRoute;
 			$permissionName = $auth->getPermissionsByRole($rolename->name);
+			foreach ($permissionName as $keyinto => $value) {
+				if($value->type == UserAdmin::TYPE_ROLE) {
+					$this->reUseGettingRole($value->name);
+				}
+			}
 			if (array_key_exists($currentUrl, $permissionName)) {
 			    return true;
-			}else{
-				throw new ForbiddenHttpException; 
-			}
-			if($permissionName->type == UserAdmin::TYPE_ROLE) {
-				$this->reUseGettingRole($value->name);
 			}
 	        return true;
 		}
