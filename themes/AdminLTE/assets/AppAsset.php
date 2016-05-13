@@ -31,13 +31,14 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/plugins/daterangepicker/daterangepicker-bs3.css',
         'themes/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
         'themes/AdminLTE/plugins/sweet-alert/sweetalert.css',
+        'themes/AdminLTE/dist/css/custome.css',
     ];
     public $js = [
-        'themes/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js',
+        // 'themes/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js',
         'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js',
-        'themes/AdminLTE/bootstrap/js/bootstrap.min.js',
+        // 'themes/AdminLTE/bootstrap/js/bootstrap.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
-        'themes/AdminLTE/plugins/morris/morris.min.js',
+        // 'themes/AdminLTE/plugins/morris/morris.min.js',
         'themes/AdminLTE/plugins/iCheck/icheck.min.js',
         'themes/AdminLTE/plugins/sparkline/jquery.sparkline.min.js',
         'themes/AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js',
@@ -51,8 +52,10 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/plugins/fastclick/fastclick.min.js',
         'themes/AdminLTE/plugins/sweet-alert/sweetalert.min.js',
         'themes/AdminLTE/dist/js/app.min.js',
-        'themes/AdminLTE/dist/js/pages/dashboard.js',
+        // 'themes/AdminLTE/dist/js/pages/dashboard.js',
         'themes/AdminLTE/dist/js/demo.js',
+        'themes/AdminLTE/dist/plugins/multi-select/multi-select.js',
+        'themes/AdminLTE/dist/js/custome.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

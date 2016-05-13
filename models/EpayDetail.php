@@ -100,7 +100,8 @@ class EpayDetail extends \yii\db\ActiveRecord {
         } else if ($recap == 'specific') {
             $stringdate = $date;
         }
-        $epay_detail->andWhere('SUBSTR(epd_trans_datetime, 1, 8)=:date', ['date' => $stringdate]);
+        $epay_detail->andWhere('SUBSTR(epd_trans_datetime, 1, 8)= '.$stringdate);
+        // echo $epay_detail->createCommand()->sql;exit;
         $model = $epay_detail->all();
         $rows = array();
         $total_detail = 0;

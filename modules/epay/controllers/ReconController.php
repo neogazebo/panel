@@ -113,12 +113,12 @@ class ReconController extends Controller
             }
 
             // upload to server epay
-            $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
-            Yii::$app->session->setFlash('success','Recon file successfully uploaded with name : ' . $filename, 'attachment'.$filename);
+            // $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
+            // Yii::$app->session->setFlash('success','Recon file successfully uploaded with name : ' . $filename, 'attachment'.$filename);
         }
 
         // delete local dir
-        $delete = BaseFileHelper::removeDirectory(Yii::$app->basePath."/runtime/sFTp",$options = false);
+        // $delete = BaseFileHelper::removeDirectory(Yii::$app->basePath."/runtime/sFTp",$options = false);
 
         return $this->redirect(Yii::$app->urlManager->createUrl(['epay/index/']));
     }
@@ -145,7 +145,7 @@ class ReconController extends Controller
 
         // get data from table EpayDetail
         $data = $model->getReconciliationData($recapType, $date);
-
+        exit;
         // create local directory
         $dir = Yii::$app->basePath."/runtime/sFTp/";
 

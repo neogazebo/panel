@@ -13,9 +13,9 @@ class BaseController extends Controller
 
     public function beforeAction($action)
     {
-		if (!parent::beforeAction($action)) {
-		    return false;
-		}
+		// if (!parent::beforeAction($action)) {
+		//     return false;
+		// }
 		if (Yii::$app->user->isGuest) {
 			$this->redirect(Yii::$app->urlManager->createUrl(['site/login/']));
 		    return false;
@@ -30,6 +30,9 @@ class BaseController extends Controller
 		    'https' => [
 				'class' => \app\components\filters\Https::className(),
 		    ],
+            'permission' => [
+                'class' => \app\components\filters\AccessFilters::className(),
+            ],
 		];
     }
 

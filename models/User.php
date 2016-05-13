@@ -14,17 +14,22 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
     const libsodium = 10;
     const ROLE_USER = 10;
-    const TYPE_ADMIN = 1;
     const STATUS_ACTIVE = 10;
+    const STATUS_DELETED = 0;
+
+    const TYPE_ADMIN = 1;
     const TYPE_TM = 2;
     const TYPE_MALL = 3;
     const TYPE_SALES = 4;
+
     const LEVEL_SUPER_USER = 1;
     const LEVEL_ADMIN = 2;
     const LEVEL_MODERATOR = 3;
+
+    const TYPE_ROLE = 1;
+    const TYPE_PERMISSION = 2;
 
     public $password;
     public $password_repeat;
@@ -210,6 +215,11 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_hash = Yii::$app->security->generatePasswordHash($this->password);
         $this->auth_key = Yii::$app->security->generateRandomString();
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    public function getAuthAssignment()
+    {
+        return $this->hasOne(AuthAssignment::className(),['user_id' => 'id']);
     }
 
 }

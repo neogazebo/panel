@@ -4727,3 +4727,9 @@ table.text-center th {
     white-space: normal!important;
   }
 }
+
+.actionColumn > button {
+    border: none;
+    background-color: transparent;
+    color: #367fa9;
+}

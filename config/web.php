@@ -28,6 +28,11 @@ $config = [
         ],
         'merchant-signup' => [
             'class' => 'app\modules\merchant_signup\MerchantSignup',
+        'users' => [
+            'class' => 'app\modules\users\Users',
+        ],
+        'rbac' => [
+            'class' => 'app\modules\rbac\Rbac',
         ],
     ],
     'components' => [
@@ -94,15 +99,25 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'access' => [
+            'class' => 'app\components\filters\AccessFilters',
+            'allowActions' => [
+                'site/*',
+                'site/logout'
+            ]
+        ],
+        'getRoutes' => [
+            'class' => 'app\components\helpers\GetRoutes',
+        ],
         // ftp setup
         'ftp' => [
             'class' => '\gftp\FtpComponent',
             'driverOptions' => [
                 'class' => \gftp\FtpProtocol::valueOf('sftp')->driver,
-                'user' => 'ebizu',
-                'pass' => 'Mbr6khXJ79kAY',
-                'host' => 'sftp.e-pay.com.my',
-                'port' => 22,
+                'user' => $params['EPAY_FTP_USER'],
+                'pass' => $params['EPAY_FTP_PASSWORD'],
+                'host' => $params['EPAY_FTP_HOST'],
+                'port' => $params['EPAY_FTP_PORT'],
                 'timeout' => 120
             ],
         ],
