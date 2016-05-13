@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "auth_assignment".
@@ -13,7 +14,7 @@ use Yii;
  *
  * @property AuthItem $itemName
  */
-class AuthAssignment extends \yii\db\ActiveRecord
+class AuthAssignment extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -39,6 +40,20 @@ class AuthAssignment extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public function behaviors() {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+            ],            
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         return [
@@ -56,7 +71,8 @@ class AuthAssignment extends \yii\db\ActiveRecord
         return $this->hasOne(AuthItem::className(), ['name' => 'item_name']);
     }
 
-    public function getUser(){
-        return $this->hasOne(User::className(),['id' => 'user_id']);
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
