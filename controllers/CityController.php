@@ -2,10 +2,10 @@
 
 namespace app\controllers;
 
-use common\models\City;
-use common\models\Country;
-use common\models\Region;
-use common\models\Member;
+use app\models\City;
+use app\models\Country;
+use app\models\Region;
+use app\models\Member;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
