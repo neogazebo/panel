@@ -61,9 +61,65 @@ class DefaultController extends Controller
 
     public function actionReview($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model_merchant_signup = $this->findModel($id);
+
+        $model_company = new Company();
+        $model_company->com_name = 'Yoolan';
+
+        if ($model_merchant_signup->load(Yii::$app->request->post()) && $post_data_company) {
+            
+            $post_data_company = Yii::$app->request->post();
+            //TODO: isi post data company dari form merchant signup
+            $model_company->load($post_data_company);
+            
+            if ($model_merchant_signup->validate() && $model_company->validate()) {
+                $transaction = Yii::$app->db->beginTransaction();
+
+                try {
+
+                    if ($model_company->save()) {
+                        return $this->redirect(['index']);
+                    } else {
+                        $transaction->rollback();
+                        $this->setMessage('save','error', 'Something wrong while submit review. Please try again!');
+                        return $this->redirect(['index']);
+                    }
+
+                } catch (Exception $e) {
+                    $transaction->rollback();
+                    throw $e;
+                }
+                
+            } else {
+                //error validation
+                $this->setMessage('save','error', 'Something wrong while submit review. Please try again!');
+                return $this->redirect(['index']);
+            }
+        } else {
+            return $this->render('review', [
+                'model_merchant_signup' => $model_merchant_signup,
+                'model_company' => $model_company,
+            ]);
+        }
+
+
+        if ($model_merchant_signup->load(Yii::$app->request->post()) && $model_merchant_signup->save()) {
+            return $this->redirect(['view', 'id' => $model_merchant_signup->id]);
+        } else {
+            return $this->render('review', [
+                'model_merchant_signup' => $model_merchant_signup,
+                'model_company' => $model_company,
+            ]);
+        }
+
+
+        /*if ($model_company->load(Yii::$app->request->post()) && $model_company->save()) {
+            return $this->redirect(['view', 'id' => $model_company->id]);
+        } else {
+            return $this->render('create', [
+                'model_company' => $model_company,
+            ]);
+        }*/
     }
 
     protected function findModel($id)
