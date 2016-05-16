@@ -8,10 +8,12 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\MerchantSignup;
 use app\models\MerchantSignupSearch;
+use app\models\Company;
 use yii\data\ActiveDataProvider;
 
 /**
  * Default controller for the `MerchantSignup` module
+ * @author Ganjar Setia M <ganjar.setia@ebizu.com>
  */
 class DefaultController extends Controller
 {
