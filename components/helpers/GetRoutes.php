@@ -21,7 +21,6 @@ class GetRoutes
         $routes = $this->searchRoute('all');
         $insert = 0;
         foreach ($routes as $route => $status) {
-            // echo  $insert++ .' => '. $route.'<br>';
             if(!AuthItem::findOne($route)) {
                 $auth = Yii::$app->authManager;
                 $pos = (strrpos($route, '/'));
@@ -132,7 +131,10 @@ class GetRoutes
 
                 $namespace = trim($module->controllerNamespace, '\\') . '\\';
                 $this->getControllerFiles($module, $namespace, '', $result);
-                $result[] = ($module->uniqueId === '' ? '/' : '/'. $module->uniqueId .'/*');
+                // $result[] = ($module->uniqueId === '' ? '/' : '/'. $module->uniqueId .'/*');
+                if ($module->uniqueId !== '') {
+                    $result[] = '/'. $module->uniqueId .'/*';
+                }
             }
         } catch (\Exception $exc) {
             Yii::error($exc->getMessage(), __METHOD__);
@@ -140,14 +142,6 @@ class GetRoutes
         Yii::endProfile($token, __METHOD__);
     }
 
-    /**
-     * Get list controller under module
-     * @param \yii\base\Module $module
-     * @param string $namespace
-     * @param string $prefix
-     * @param mixed $result
-     * @return mixed
-     */
     private function getControllerFiles($module, $namespace, $prefix, &$result)
     {
         $path = @Yii::getAlias('@' . str_replace('\\', '/', $namespace));
@@ -179,13 +173,7 @@ class GetRoutes
         Yii::endProfile($token, __METHOD__);
     }
 
-    /**
-     * Get list action of controller
-     * @param mixed $type
-     * @param string $id
-     * @param \yii\base\Module $module
-     * @param string $result
-     */
+ 
     private function getControllerActions($type, $id, $module, &$result)
     {
         $token = "Create controller with cofig=" . VarDumper::dumpAsString($type) . " and id='$id'";
@@ -201,11 +189,7 @@ class GetRoutes
         Yii::endProfile($token, __METHOD__);
     }
 
-    /**
-     * Get route of action
-     * @param \yii\base\Controller $controller
-     * @param array $result all controller action.
-     */
+
     private function getActionRoutes($controller, &$result)
     {
         $token = "Get actions of controller '" . $controller->uniqueId . "'";
