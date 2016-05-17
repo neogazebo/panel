@@ -26,9 +26,6 @@ $config = [
         'report' => [
             'class' => 'app\modules\report\Report',
         ],
-        'merchant-signup' => [
-            'class' => 'app\modules\merchant_signup\MerchantSignup',
-        ],
         'users' => [
             'class' => 'app\modules\users\Users',
         ],
