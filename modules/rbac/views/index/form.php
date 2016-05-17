@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 $form = ActiveForm::begin([
     'id' => 'create-form',
-    'options' => ['class' => 'form-group'],
+    'options' => ['class' => 'form-group disabled'],
     'enableAjaxValidation' => true
 ]);
 ?>

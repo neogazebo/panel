@@ -23,65 +23,35 @@ class AccessFilters extends ActionFilter
 	public function init()
 	{
 		parent::init();
-		$auth = Yii::$app->authManager;
-		if(Yii::$app->user->identity->type != UserAdmin::TYPE_ADMIN) {
-            return true;
-        }
 
 		$auth = Yii::$app->authManager;
-		$userId = Yii::$app->user->id;
-		$rolename = $auth->getRolesByUser($userId);
-		$currentUrl = '/' . Yii::$app->requestedRoute;
-		if(!$rolename) {
-			throw new ForbiddenHttpException;
-		}
-
-		foreach ($rolename as $key) {
-			$child = AuthItemChild::find()->where("parent = '$key->name'")->all();
-			foreach ($child as $keyin => $value) {
-				$getItemType = AuthItem::findOne($value->child);
-				if($getItemType->type == UserAdmin::TYPE_ROLE) {
-					$this->getChildRole($getItemType->name);
+		$user = Yii::$app->user;
+		$obj = Yii::$app->controller;
+		$actionId = $obj->getRoute();
+		// var_dump($actionId);exit;
+		$permisionName = $auth->getPermissionsByUser($user->id);
+		foreach ($permisionName as $value) {
+			if ($user->can('/'.$actionId)) {
+				return true;
+			}
+			do {
+				if ($user->can('/'. ltrim($obj->getUniqueId() . '/*', '/'))) {
+					return true;
 				}
-			}
-			$permissionName = $auth->getChildren($key->name);
-			foreach ($permissionName as $keyinto => $value) {
-				if($value->type == UserAdmin::TYPE_ROLE) {
-					$this->getChildRole($value->name);
-				}
-			}
-			if (array_key_exists($currentUrl, $permissionName)) {
-			    return true;
-			}else{
-				throw new ForbiddenHttpException; 
-			}
-		}
-        return true;
-	}
-
-	public function getChildRole($role)
-	{
-		if(!empty($role)) {
-			$auth = Yii::$app->authManager;
-			$userId = Yii::$app->user->identity->id;
-			$rolename = AuthItem::findOne($role);
-			$currentUrl = '/'.Yii::$app->requestedRoute;
-			$permissionName = $auth->getChildren($rolename->name);
-			foreach ($permissionName as $keyinto => $value) {
-				if($value->type == UserAdmin::TYPE_ROLE) {
-					$this->reUseGettingRole($value->name);
-				}
-			}
-			if (array_key_exists($currentUrl, $permissionName)) {
-			    return true;
-			}
-	        return true;
+				$obj = $obj->module;
+			} while ($obj !== null);
+			$this->denyAccess($user);
+	        return false;
 		}
 		
 	}
 
-	public function reUseGettingRole($role)
+	protected function denyAccess($user)
 	{
-		return $this->getChildRole($role);
+		if ($user->getIsGuest()) {
+			$user->loginRequired();
+		} else {
+			throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
+		}
 	}
 }

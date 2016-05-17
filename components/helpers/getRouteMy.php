@@ -21,26 +21,28 @@ class GetRoutes
         $routes = $this->searchRoute('all');
         $insert = 0;
         foreach ($routes as $route => $status) {
-            // echo  $insert++ .' => '. $route.'<br>';
-            if(!AuthItem::findOne($route)) {
-                $auth = Yii::$app->authManager;
+            // if(!AuthItem::findOne($route)) {
+                // $auth = Yii::$app->authManager;
                 $pos = (strrpos($route, '/'));
                 $alias = substr($route, $pos + 1, 100);
-                $permissions = $auth->createPermission($route);
-                $permissions->description = $alias;
-                if($auth->add($permissions)){
-                    $model = AuthItem::findOne($route);
-                    $model->created_by = Yii::$app->user->identity->id;
-                    if($model->save()){
-                        $insert++;
-                    }
-                }
-            }
+                var_dump($route);
+                // $permissions = $auth->createPermission($route);
+                // $permissions->description = $alias;
+                // var_dump($route);
+                // if($auth->add($permissions)){
+                //     $model = AuthItem::findOne($route);
+                //     $model->created_by = Yii::$app->user->identity->id;
+                //     if($model->save()){
+                //         $insert++;
+                //     }
+                // }
+            // }
         }
-        $result = [
-            'status' => 'success',
-        ];
-        return $result;
+        exit;
+        // $result = [
+        //     'status' => 'success',
+        // ];
+        // return $result;
     }
 
     public function searchRoute($target, $term = '', $refresh = '0')
@@ -132,7 +134,10 @@ class GetRoutes
 
                 $namespace = trim($module->controllerNamespace, '\\') . '\\';
                 $this->getControllerFiles($module, $namespace, '', $result);
-                $result[] = ($module->uniqueId === '' ? '/' : '/'. $module->uniqueId .'/*');
+                if($module->uniqueId !== '') {
+                    $result[] = $module->uniqueId;
+                }
+                // $result[] = ($module->uniqueId === '' ? '' : $module->uniqueId) ;
             }
         } catch (\Exception $exc) {
             Yii::error($exc->getMessage(), __METHOD__);
@@ -194,7 +199,9 @@ class GetRoutes
             /* @var $controller \yii\base\Controller */
             $controller = Yii::createObject($type, [$id, $module]);
             $this->getActionRoutes($controller, $result);
-            $result[] = '/' .$controller->uniqueId . '/*';
+            if ($module->uniqueId === '') {
+                $result[] = $controller->uniqueId;
+            }
         } catch (\Exception $exc) {
             Yii::error($exc->getMessage(), __METHOD__);
         }
@@ -211,7 +218,7 @@ class GetRoutes
         $token = "Get actions of controller '" . $controller->uniqueId . "'";
         Yii::beginProfile($token, __METHOD__);
         try {
-            $prefix = '/'. $controller->uniqueId . '/';
+            $prefix = $controller->uniqueId . '/';
             foreach ($controller->actions() as $id => $value) {
                 $result[] = $prefix . $id;
             }

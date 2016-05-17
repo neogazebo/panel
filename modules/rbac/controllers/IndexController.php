@@ -128,77 +128,53 @@ class IndexController extends BaseController
 
     public function actionUpdate($name)
     {
+
         $model = $this->findModel($name);
         $oldName = $model->name;
-        // ajax validation
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->type = self::TYPE_ROLE;
             Yii::$app->response->format = 'json';
             return \yii\widgets\ActiveForm::validate($model);
         }
-
-        if($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
+            $auth = $this->_role();
+            $admin = $auth->createRole($model->name);
+            $auth->update($model->name, $admin);
             if ($model->save()) {
-                $parent = AuthItemChild::findOne($name);
-                $child = AuthItemChild::find()->where("child = '$name'")->one();
-                if(!empty($parent)) {
-                    $parent->parent = $name;
-                    $parent->save();
-                } elseif(!empty($child)) {
-                    $parent->child = $name;
-                    $parent->save();
-                }
-
-                $assign = AuthAssignment::findOne($name);
-                if(!empty($assign)) {
-                    $assign->item_name = $name;
-                    $assign->save();
-                }
-
                 $this->setMessage('save', 'success', 'Role "' . $oldName . '" successfully updated to ' . $model->name);
             } else {
                 $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
             }
             return $this->redirect($this->getRememberUrl());
+        } else {
+             return $this->renderAjax('form', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->renderAjax('form', [
-            'model' => $model,
-        ]);
     }
 
     public function actionDelete($name)
     {
         if(Yii::$app->request->isAjax) {
             $model = $this->findModel($name);
-            if (!empty($model)) {
-                $model->status = self::INACTIVE_STATUS;
-                if($model->delete()) {
-                    $this->setMessage('save', 'success', 'Role "' . $name . '" successfully deleted');
-                    $result = [
-                        'status' => 'success',
-                        'name' => $name
-                    ];
-                } else {
-                    $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
-                    $result = [
-                        'status' => 'error',
-                        'name' => $name
-                    ];
-                }
-                return $this->redirect(['index']);
-                // return \yii\helpers\Json::encode($result);
+            $auth = $this->_role();
+            $admin = $auth->createRole($model->name);
+            if ($auth->remove($admin) ) {
+                $this->setMessage('save', 'success', 'Role "' . $name . '" successfully deleted');
+            } else {
+                $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
             }
+            return $this->redirect(['index']);
         }
     }
 
     public function actionGetPermission($role)
     {
         if(Yii::$app->request->isAjax) {
-            $result = Yii::$app->getRoutes->generatePermission();
+            Yii::$app->getRoutes->generatePermission();
             $this->setMessage('save', 'success', 'Update list item successfully');
             return $this->redirect(['detail?name='.$role]);
-            // return \yii\helpers\Json::encode($result);
+            return \yii\helpers\Json::encode($result);
         }
     }
 
