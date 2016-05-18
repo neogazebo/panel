@@ -729,4 +729,34 @@ class Company extends EbizuActiveRecord
         ];
     }
 
+    public function getCategoryListData($type = 1)
+    {
+        $data = [];
+        $categori = CompanyCategory::findAll([
+            'com_parent_category_id' => '0'
+        ]);
+        foreach ($categori as $row)
+        {
+            if($row->com_category_type == $type) {
+                $subCategory = CompanyCategory::findAll([
+                    'com_parent_category_id' => $row->com_category_id
+                ]);
+
+                $dataSub = [];
+
+                foreach ($subCategory as $sub)
+                {
+                    //echo 'parent = '.$row->com_category_id .' - chile = '. $sub->com_parent_category_id.'<br/>';
+                    if ($sub->com_parent_category_id == $row->com_category_id)
+                    {
+                        $dataSub[$sub->com_category_id] = $sub->com_category;
+                    }
+                }
+
+                $data[$row->com_category] = $dataSub;
+            }
+        }
+        return $data;
+    }
+
 }
