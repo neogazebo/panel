@@ -38,6 +38,8 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 
                 <?= $form->field($model_merchant_signup, 'mer_bussiness_description')->textarea(['rows' => 6]) ?>
 
+                <?= $form->field($model_company, 'com_subcategory_id')->dropDownList($model_company->categoryListData); ?>
+
                 <?= $form->field($model_merchant_signup, 'mer_bussines_type_retail')->textInput() ?>
 
                 <?= $form->field($model_merchant_signup, 'mer_bussines_type_service')->textInput() ?>
