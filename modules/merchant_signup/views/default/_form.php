@@ -2,6 +2,15 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use common\models\Company;
+use yii\helpers\ArrayHelper;
+use yii\bootstrap\Modal;
+
+$this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$latitude = ($model_company->com_latitude ? $model_company->com_latitude : 3.139003);
+$longitude = ($model_company->com_longitude ? $model_company->com_longitude : 101.686855);
+$inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 1 ? 1 : 0);
 
 /* @var $this yii\web\View */
 /* @var $model_merchant_signup app\model_merchant_signups\MerchantSignup */
