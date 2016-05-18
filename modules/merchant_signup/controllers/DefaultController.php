@@ -62,11 +62,7 @@ class DefaultController extends Controller
     public function actionReview($id)
     {
 
-        return $this->render('review', [
-            'model_merchant_signup' => $this->findModel($id),
-        ]);
-
-        /*$model_merchant_signup = $this->findModel($id);
+        $model_merchant_signup = $this->findModel($id);
 
         $model_company = new Company();
         $model_company->com_name = 'Yoolan';
@@ -115,7 +111,7 @@ class DefaultController extends Controller
                 'model_merchant_signup' => $model_merchant_signup,
                 'model_company' => $model_company,
             ]);
-        }*/
+        }
 
 
         /*if ($model_company->load(Yii::$app->request->post()) && $model_company->save()) {
