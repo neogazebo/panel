@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model_merchant_signup' => $model_merchant_signup,
-        //'model_company' => $model_company,
+        'model_company' => $model_company,
     ]) ?>
 
 </div>
