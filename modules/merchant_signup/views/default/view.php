@@ -26,7 +26,7 @@ $arr_prefer_contact = [];
 ($model->mer_preferr_comm_email) ? $arr_prefer_contact[] = 'E-Mail' : '';
 ($model->mer_preferr_comm_mobile_phone) ? $arr_prefer_contact[] = 'Mobile Phone' : '';
 
-$multichain = ($model->mer_multichain) ? '<a href="https://d1307f5mo71yg9.cloudfront.net/images/media/web/business/'.$model->mer_multichain_file.'">'.$model->mer_multichain_file.'</a>' : '';
+$multichain = ($model->mer_multichain) ? '<a href="'.Yii::$app->params['awsUrl'].'images/media/web/business/'.$model->mer_multichain_file.'">'.$model->mer_multichain_file.'</a>' : '';
 //$multichain = '<a href="https://d1307f5mo71yg9.cloudfront.net/images/media/web/business/rsz_img-1457059048_56d8f4e8ca8f9.jpg">dfsdf</a>';
 ?>
 <section class="content-header">
