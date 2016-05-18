@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace app\models;
 
 /**
  * This is the model class for table "tbl_company_category".
