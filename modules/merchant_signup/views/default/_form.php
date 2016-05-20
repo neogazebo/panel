@@ -12,6 +12,8 @@ $latitude = ($model_company->com_latitude ? $model_company->com_latitude : 3.139
 $longitude = ($model_company->com_longitude ? $model_company->com_longitude : 101.686855);
 $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 1 ? 1 : 0);
 
+$this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::POS_HEAD);
+
 /* @var $this yii\web\View */
 /* @var $model_merchant_signup app\model_merchant_signups\MerchantSignup */
 /* @var $form yii\widgets\ActiveForm */
