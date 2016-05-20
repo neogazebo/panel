@@ -42,6 +42,18 @@ $this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::
 
                 <?= $form->field($model_company, 'com_subcategory_id')->dropDownList($model_company->categoryListData); ?>
 
+                <div id="tagging">
+                    <div class="form-group field-merchantsignup-tag required" id="business-tag">
+                        <label class="control-label" for="merchantsignup-tag">Tags</label>
+                        <br/>
+                        <span class="btn btn-sm btn-primary" id="add_tag" data-tag=""><i class="fa fa-plus"></i> Add Tag</span>
+                        <input type="hidden" id="company-tag" name="Company[tag]" value="">
+                        <div id="tagging-list"></div>
+
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+
                 <?= $form->field($model_merchant_signup, 'mer_bussines_type_retail')->textInput() ?>
 
                 <?= $form->field($model_merchant_signup, 'mer_bussines_type_service')->textInput() ?>
