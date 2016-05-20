@@ -10,6 +10,8 @@ use app\models\MerchantSignup;
 use app\models\MerchantSignupSearch;
 use app\models\Company;
 use yii\data\ActiveDataProvider;
+use yii\web\Response;
+use app\models\Tag;
 
 /**
  * Default controller for the `MerchantSignup` module
@@ -61,7 +63,6 @@ class DefaultController extends Controller
 
     public function actionReview($id)
     {
-
         $model_merchant_signup = $this->findModel($id);
 
         $model_company = new Company();
