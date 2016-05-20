@@ -124,6 +124,17 @@ class DefaultController extends Controller
         }*/
     }
 
+    public function actionTaglist() {
+        if (\Yii::$app->request->isAjax) {
+            $response = [];
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $tag_id = \Yii::$app->request->post('tag_id');
+            $category = \Yii::$app->request->post('category');
+            $response = Tag::find()->getCategoryTagList($category);
+            return $response;
+        }
+    }
+
     protected function findModel($id)
     {
         if (($model = MerchantSignup::findOne($id)) !== null) {
