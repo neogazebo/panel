@@ -135,6 +135,22 @@ class DefaultController extends Controller
         }
     }
 
+    public function actionSettag() {
+        if (\Yii::$app->request->isAjax) {
+            $response = ['success' => 0];
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $tag_id = \Yii::$app->request->post('tag_id');
+            if (!empty($tag_id)) {
+                $value = Tag::findOne($tag_id)->tag_name;
+                $response = ['success' => 1, 'data' => $tag_id, 'value' => $value];
+            } else {
+                $response = ['success' => 0];
+            }
+
+            return $response;
+        }
+    }
+
     protected function findModel($id)
     {
         if (($model = MerchantSignup::findOne($id)) !== null) {
