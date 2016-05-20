@@ -151,6 +151,29 @@ class DefaultController extends Controller
         }
     }
 
+    public function actionCityList($q = null)
+    {
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $query = "
+            SELECT a.cit_id, a.cit_name, b.reg_id, b.reg_name, c.cny_id, c.cny_name
+            FROM tbl_city a, tbl_region b, tbl_country c
+            WHERE a.cit_region_id = b.reg_id
+                AND b.reg_country_id = c.cny_id
+                AND a.cit_name LIKE '%" . $q . "%'
+            ORDER BY a.cit_name
+            LIMIT 10";
+        $connection = Yii::$app->db;
+        $query = $connection->createCommand($query)->queryAll();
+        $return = [];
+        foreach ($query as $row) {
+            $return[]['value'] = $row['cit_name'] . ', ' . $row['reg_name'] . ', ' . $row['cny_name'];
+        }
+
+        //the output will automaticaly convert to JSON
+        return $return;
+    }
+
     protected function findModel($id)
     {
         if (($model = MerchantSignup::findOne($id)) !== null) {
