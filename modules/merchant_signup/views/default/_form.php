@@ -106,3 +106,34 @@ $this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::
 </section>
 
 </div>
+
+
+<?php
+$this->registerJs("
+    var isUpdate = 0;
+
+    $(document).ready(function () {
+        var baseUrl = '" . Yii::$app->homeUrl . "';
+    });
+", \yii\web\View::POS_END, 'merchantsignup-review');
+
+Modal::begin([
+    'header' => '<h4>Add Business Tagging</h4>',
+    'id' => 'modal-tag'
+]);
+?>
+<div class="form-group" id="tag-select">
+    <select class="form-control" id="tag"></select>
+    <div>
+        <div class="help-block"></div>
+    </div>
+</div>
+<div class="form-group">
+    <?= Html::submitButton('<i class="fa fa-check"></i> Save', ['id' => 'save-tag', 'class' => 'btn btn-success']) ?>
+</div>
+<?php
+Modal::end();
+
+?>
+
+<?php $this->registerJsFile($this->theme->baseUrl . '/js/business-tag.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
