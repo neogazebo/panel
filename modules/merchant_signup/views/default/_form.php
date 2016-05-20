@@ -54,6 +54,26 @@ $this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::
                     </div>
                 </div>
 
+                <?=
+                $form->field($model_company, 'com_city')->widget(kartik\widgets\Typeahead::classname(), [
+                    'options' => ['placeholder' => 'City, Region, Country', 'id' => 'location'],
+                    'pluginOptions' => ['highlight' => true],
+                    'dataset' => [
+                        [
+                            'remote' => [
+                                'url' => yii\helpers\Url::to(['/merchant-signup/default/city-list']) . '?q=%QUERY',
+                                'wildcard' => '%QUERY'
+                            ],
+                            'limit' => 10,
+                            'display' => 'value',
+                        ]
+                    ],
+                    'pluginEvents' => [
+                        'typeahead:selected' => 'function(evt,data) {}',
+                    ]
+                ]);
+                ?>
+
                 <?= $form->field($model_merchant_signup, 'mer_bussines_type_retail')->textInput() ?>
 
                 <?= $form->field($model_merchant_signup, 'mer_bussines_type_service')->textInput() ?>
