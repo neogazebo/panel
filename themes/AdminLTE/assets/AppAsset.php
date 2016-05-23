@@ -36,7 +36,7 @@ class AppAsset extends AssetBundle
     public $js = [
         // 'themes/AdminLTE/plugins/jQuery/jQuery-2.1.4.min.js',
         'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js',
-        // 'themes/AdminLTE/bootstrap/js/bootstrap.min.js',
+        'themes/AdminLTE/bootstrap/js/bootstrap.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
         // 'themes/AdminLTE/plugins/morris/morris.min.js',
         'themes/AdminLTE/plugins/iCheck/icheck.min.js',

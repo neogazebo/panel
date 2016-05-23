@@ -6,8 +6,33 @@
 /* @var $exception Exception */
 
 use yii\helpers\Html;
+use yii\bootstrap\modal;
+use yii\web\View;
+use yii\helpers\Url;
 
 $this->title = $name;
+$image = $this->theme->baseUrl.'/dist/img/photo2.png';
+
+$this->registerCss('
+    .box-body {
+        min-height: 100%;
+    }
+    .site-error {
+        background: url('.$image.') no-repeat center center fixed; 
+         -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        min-height: 100%;
+        text-align: center;
+        color: #fff;
+        padding: 150px 30px;
+    }
+    .site-error .alert {
+        margin : 20px 40px;
+
+    }
+');
 ?>
 <section class="content">
     <div class="row">

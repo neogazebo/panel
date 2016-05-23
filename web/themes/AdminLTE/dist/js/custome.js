@@ -133,11 +133,18 @@ $(function() {
 		});
     	event.preventDefault();
     });
-    	$('#search>option , #search_to>option').each(function(){
-    		var id = $(this).text();
-    		if (id.substr(id.length - 1) === '*') {
-    			$(this).css({'font-weight':'bold'});
-    		}
-    	});
+
+    // css for parent role on page role
+	$('#search>option , #search_to>option').each(function(){
+		var id = $(this).text();
+		if (id.substr(id.length - 1) === '*') {
+			$(this).css({'font-weight':'bold'});
+		}
+	});
+
+	// action for blocking page modal
+	$('#tester').on('click',function(){
+		alert('oke');
+	})
 
 });

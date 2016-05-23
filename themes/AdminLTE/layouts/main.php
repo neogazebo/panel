@@ -77,7 +77,7 @@ $this->registerCss("
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <img src="<?= $this->theme->baseUrl ?>/dist/img/ebz_logo.png" class="user-image" alt="User Image">
-                                    <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
+                                    <span class="hidden-xs"><?= (isset(Yii::$app->user->identity)) ? Yii::$app->user->identity->username : '' ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
@@ -85,7 +85,7 @@ $this->registerCss("
                                         <img src="<?= $this->theme->baseUrl ?>/dist/img/ebz_logo.png" class="img-circle" alt="User Image">
                                         <p>
                                             <?= Yii::$app->user->identity->username ?>
-                                            <small>Admin User since <?= Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) ?></small>
+                                            <small>Admin User since <?= (isset(Yii::$app->user->identity)) ? Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) : '' ?></small>
                                         </p>
                                     </li>
                                     <!-- Menu Footer-->

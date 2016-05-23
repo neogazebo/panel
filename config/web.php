@@ -99,10 +99,6 @@ $config = [
         ],
         'access' => [
             'class' => 'app\components\filters\AccessFilters',
-            'allowActions' => [
-                'site/*',
-                'site/logout'
-            ]
         ],
         'getRoutes' => [
             'class' => 'app\components\helpers\GetRoutes',
