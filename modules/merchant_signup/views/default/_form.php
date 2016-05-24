@@ -87,13 +87,45 @@ $this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::
                 <?= $form->field($model_company, 'com_latitude')->hiddenInput()->label('') ?>
                 <?= $form->field($model_company, 'com_longitude')->hiddenInput()->label('') ?>
 
-                <?= $form->field($model_merchant_signup, 'mer_bussines_type_retail')->textInput() ?>
+                <?= $form->field($model_company, 'com_size')->dropDownList($model_company->companySizeListData); ?>
+                <?= $form->field($model_company, 'com_nbrs_employees')->dropDownList($model_company->numberEmployeeListData); ?>
+                <?= $form->field($model_company, 'com_fb')->textInput(); ?>
+                <?= $form->field($model_company, 'com_twitter')->textInput(); ?>
+                <?= $form->field($model_company, 'com_timezone')->dropDownList($model_company->timeZoneListData) ?>
+                <?= $form->field($model_company, 'com_reg_num')->textInput() ?>
 
-                <?= $form->field($model_merchant_signup, 'mer_bussines_type_service')->textInput() ?>
+                <div class="form-group field-merchantsignup-fes">
+                    <label class="control-label" for="merchantsignup-fes">Package</label>
+                    <div class="col-sm-12">
+                        <select name="Company[fes_id]" id="company-fes_id" class="form-control"></select>
+                    </div>
+                </div>
+                <?= $form->field($model_company, 'com_sales_id')->widget(kartik\widgets\Select2::classname(), [
+                    'data' => yii\helpers\ArrayHelper::map(app\models\AdminUser::find()
+                        ->where('type = :type', [':type' => 4])
+                        ->all(), 'id', 'username'),
+                    'options' => [
+                        'placeholder' => 'Choose a Sales ...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]); ?>
+                <?= $form->field($model_company, 'com_sales_order')->textInput(['class' => 'form-control datepicker']) ?>
 
-                <?= $form->field($model_merchant_signup, 'mer_bussines_type_franchise')->textInput() ?>
+                <div class="box">
+                    <div class="box-header"><strong>Business Type: </strong></div>
+                    <div class="box-body">
+                        <?= $form->field($model_merchant_signup, 'mer_bussines_type_retail')->checkBox() ?>
 
-                <?= $form->field($model_merchant_signup, 'mer_bussines_type_pro_services')->textInput() ?>
+                        <?= $form->field($model_merchant_signup, 'mer_bussines_type_service')->checkBox() ?>
+
+                        <?= $form->field($model_merchant_signup, 'mer_bussines_type_franchise')->checkBox() ?>
+
+                        <?= $form->field($model_merchant_signup, 'mer_bussines_type_pro_services')->checkBox() ?>
+                    </div>
+                </div>
+
 
                 <?= $form->field($model_merchant_signup, 'mer_post_code')->textInput(['maxlength' => true]) ?>
 
@@ -103,9 +135,13 @@ $this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::
 
                 <?= $form->field($model_merchant_signup, 'mer_website')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model_merchant_signup, 'mer_multichain')->textInput() ?>
+                <div class="form-group field-merchantsignup-mer_multichain">
+                    <label class="control-label" for="merchantsignup-mer_multichain">Multichain</label>
+                    <?php echo ($model_merchant_signup->mer_multichain) ? 'Yes' : 'No';  ?>
+                    <?php echo ($model_merchant_signup->mer_multichain) ? '. The File: '.'<a href="'.Yii::$app->params['awsUrl'].'images/media/web/business/'.$model_merchant_signup->mer_multichain_file.'">'.$model_merchant_signup->mer_multichain_file.'</a>' : '';  ?>
+                </div>
 
-                <?= $form->field($model_merchant_signup, 'mer_multichain_file')->textarea(['rows' => 6]) ?>
+                <?php //$form->field($model_merchant_signup, 'mer_multichain_file')->textarea(['rows' => 6]) ?>
 
                 <?= $form->field($model_merchant_signup, 'mer_login_email')->textInput(['maxlength' => true]) ?>
 
@@ -117,15 +153,20 @@ $this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::
 
                 <?= $form->field($model_merchant_signup, 'mer_contact_email')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model_merchant_signup, 'mer_preferr_comm_mail')->textInput() ?>
+                <div class="box">
+                    <div class="box-header"><strong>Preferred Communication: </strong></div>
+                    <div class="box-body">
+                    <?= $form->field($model_merchant_signup, 'mer_preferr_comm_mail')->checkBox() ?>
 
-                <?= $form->field($model_merchant_signup, 'mer_preferr_comm_email')->textInput() ?>
+                    <?= $form->field($model_merchant_signup, 'mer_preferr_comm_email')->checkBox() ?>
 
-                <?= $form->field($model_merchant_signup, 'mer_preferr_comm_mobile_phone')->textInput() ?>
+                    <?= $form->field($model_merchant_signup, 'mer_preferr_comm_mobile_phone')->checkBox() ?>
+                    </div>
+                </div>
 
 
                 <div class="form-group">
-                    <?= Html::submitButton($model_merchant_signup->isNewRecord ? 'Create' : 'Update', ['class' => $model_merchant_signup->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                    <?= Html::submitButton($model_merchant_signup->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model_merchant_signup->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'disabled' => true]) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>
@@ -140,6 +181,8 @@ $this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::
 
 
 <?php
+$this->registerCssFile("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/minified/jquery-ui.min.css");
+
 $this->registerJs("
     var isUpdate = 0;
 
