@@ -29,11 +29,13 @@ use Yii;
  * @property string $mer_contact_email
  * @property integer $mer_preferr_comm_mail
  * @property integer $mer_preferr_comm_email
+ * @property integer $mer_prefer_office_phone
  * @property integer $mer_preferr_comm_mobile_phone
  * @property string $mer_agent_code
  * @property integer $mer_applicant_acknowledge
  * @property integer $created_date
  * @property integer $updated_date
+ * @property integer $mer_reviewed
  */
 class MerchantSignup extends EbizuActiveRecord
 {
@@ -53,13 +55,15 @@ class MerchantSignup extends EbizuActiveRecord
         return [
             [['mer_bussines_name', 'mer_company_name', 'mer_login_email'], 'required'],
             [['mer_login_email', 'mer_contact_email'], 'email'],
-            [['mer_login_email'], 'validateEmail'],
-            [['website'], 'url'],
+            ['mer_login_email', 'unique'],
+            // [['mer_login_email'], 'validateEmail'],
+            [['mer_website'], 'url'],
             [['mer_bussiness_description', 'mer_address'], 'string'],
-            [['mer_bussines_type_retail', 'mer_bussines_type_service', 'mer_bussines_type_franchise', 'mer_bussines_type_pro_services', 'mer_office_phone', 'mer_office_fax', 'mer_multichain', 'mer_preferr_comm_mail', 'mer_preferr_comm_email', 'mer_preferr_comm_mobile_phone', 'mer_applicant_acknowledge', 'created_date', 'updated_date'], 'integer'],
+            [['mer_bussines_type_retail', 'mer_bussines_type_service', 'mer_bussines_type_franchise', 'mer_bussines_type_pro_services', 'mer_office_phone', 'mer_office_fax', 'mer_multichain', 'mer_preferr_comm_mail', 'mer_preferr_comm_email', 'mer_preferr_comm_mobile_phone', 'mer_applicant_acknowledge', 'created_date', 'updated_date', 'mer_reviewed'], 'integer'],
             [['mer_bussines_name', 'mer_company_name', 'mer_website', 'mer_login_email', 'mer_pic_name', 'mer_contact_phone', 'mer_contact_mobile', 'mer_contact_email', 'mer_agent_code'], 'string', 'max' => 255],
             [['mer_post_code'], 'string', 'max' => 10],
-            [['mer_multichain_file'], 'file'],
+            [['mer_multichain_file'], 'file', 'extensions' => 'xls, xlsx, csv'],
+            [['mer_bussines_name', 'mer_company_name', 'mer_login_email'], 'safe', 'on' => 'review']
         ];
     }
 
@@ -70,7 +74,7 @@ class MerchantSignup extends EbizuActiveRecord
     {
         return [
             'id' => 'ID',
-            'mer_bussines_name' => 'Bussines Name',
+            'mer_bussines_name' => 'Business Name',
             'mer_company_name' => 'Company Name',
             'mer_bussiness_description' => 'Business Description',
             'mer_bussines_type_retail' => 'Retail',
@@ -91,22 +95,15 @@ class MerchantSignup extends EbizuActiveRecord
             'mer_contact_email' => 'Email Address',
             'mer_preferr_comm_mail' => 'Mail',
             'mer_preferr_comm_email' => 'E-Mail',
+            'mer_prefer_office_phone' => 'Office Phone',
             'mer_preferr_comm_mobile_phone' => 'Mobile Phone',
             'mer_agent_code' => 'Agent Code',
             'mer_applicant_acknowledge' => 'Applicant Acknowledgement',
-            'created_date' => 'Created Date',
-            'updated_date' => 'Updated Date',
+            'created_date' => 'Created At',
+            'updated_date' => 'Updated At',
+            'mer_reviewed' => 'Reviewed',
         ];
     }
-
-    /**
-     * @inheritdoc
-     * @return MerchantSignupQuery the active query used by this AR class.
-     */
-    /*public static function find()
-    {
-        return new MerchantSignupQuery(get_called_class());
-    }*/
 
     public function behaviors() {
         return [
@@ -124,7 +121,7 @@ class MerchantSignup extends EbizuActiveRecord
     {
         $num_row = $this->find()->where(['mer_login_email' => $this->$attribute])->count();
         if ($num_row > 0) {
-            $this->addError($attribute, 'Email Already Exist');
+            $this->addError($attribute, 'Email Already Exist!');
         }
     }
 

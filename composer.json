@@ -26,7 +26,8 @@
         "yiisoft/yii2-faker": "*",
         "kartik-v/yii2-widgets": "*",
         "fedemotta/yii2-cronjob": "*",
-        "hguenot/yii2-gsftp": "*"
+        "hguenot/yii2-gsftp": "*",
+        "aws/aws-sdk-php": "2.*"
     },
     "config": {
         "process-timeout": 1800
