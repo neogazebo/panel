@@ -184,13 +184,34 @@ $this->registerJs("
         
     };
 
+    function loadRegister(reg)
+    {
+        $('select#company-fes_id').empty();
+        $.ajax({
+            type: 'GET',
+            url: baseUrl + 'merchant-signup/default/register',
+            data: { reg: reg },
+            success: function(result) {
+                var comfes = $('select#company-fes_id');
+                comfes.empty();
+                comfes.append(result);
+            }
+        });
+    }
+
     $(document).ready(function () {
         var baseUrl = '" . Yii::$app->homeUrl . "';
 
         $('.field-company-com_latitude').hide();
         $('.field-company-com_longitude').hide();
 
+        $('.datepicker').datepicker({
+          autoclose: true
+        });
+
         initialize();
+
+        loadRegister('EBC');
 
         $(function () {
                 $(PostCodeid).autocomplete({
