@@ -218,9 +218,7 @@ $this->registerJs("
                         $(latval).val(marker.getPosition().lat());
                         $(longval).val(marker.getPosition().lng());
                     }
-//                    else {
-//                        alert('Geocode was not successful for the following reason: ' + status);
-//                    }
+
                 });
                 e.preventDefault();
             });
@@ -237,18 +235,7 @@ $this->registerJs("
                 });
             });
             
-//            function rotate90() {
-//                var heading = map.getHeading() || 0;
-//                map.setHeading(heading + 90);
-//            }
-//
-//            function autoRotate() {
-//            alert(map.getTilt())
-//                // Determine if we're showing aerial imagery.
-//                if (map.getTilt() !== 0) {
-//                  window.setInterval(rotate90, 3000);
-//              }
-//            }
+
         //});
     });
 ", \yii\web\View::POS_END, 'merchantsignup-review');
