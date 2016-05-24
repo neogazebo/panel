@@ -175,6 +175,11 @@ class DefaultController extends Controller
         return $return;
     }
 
+    public function actionRegister() {
+        $fes_code = isset($_GET['reg']) ? $_GET['reg'] : 'EBC';
+        return FeatureSubscription::packageList($fes_code);
+    }
+
     protected function findModel($id)
     {
         if (($model = MerchantSignup::findOne($id)) !== null) {
