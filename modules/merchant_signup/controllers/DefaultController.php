@@ -12,6 +12,7 @@ use app\models\Company;
 use yii\data\ActiveDataProvider;
 use yii\web\Response;
 use app\models\Tag;
+use app\models\FeatureSubscription;
 
 /**
  * Default controller for the `MerchantSignup` module
