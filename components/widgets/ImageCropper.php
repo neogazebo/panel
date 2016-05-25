@@ -5,7 +5,7 @@
  * Author : tajhul <tajhul@ebizu.com>
  */
 
-namespace common\components\widgets;
+namespace app\components\widgets;
 
 use yii;
 use yii\base\Widget;
