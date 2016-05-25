@@ -164,6 +164,27 @@ $this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::
                     </div>
                 </div>
 
+                <div class="form-group field-merchantsignup-com_photo">
+                    <label class="control-label" for="merchantsignup-com_photo">Photo</label>
+                    
+                        <input type="hidden" id="com_photo" name="Company[com_photo]">
+                        <a data-toggle="modal" data-image="com_logo" data-field="com_photo" href="#" class="eb-cropper">
+                            <?php $image = isset($model->com_photo) ? Yii::$app->params['businessUrl'] . $model->com_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
+                            <img src="<?= $image ?>" id="com_logo" class="img-responsive" width="240">
+                        </a>
+                    <div class="help-block"></div>
+                </div>
+                <div class="form-group field-merchantsignup-com_banner">
+                    <label class="control-label" for="merchantsignup-com_banner">Banner</label>
+                    
+                        <input type="hidden" id="com_banner" name="Company[com_banner_photo]">
+                        <a data-toggle="modal" data-image="com_banner_photo" data-field="com_banner" href="#" class="eb-cropper">
+                            <?php $image = isset($model->com_banner_photo) ? Yii::$app->params['businessUrl'] . $model->com_banner_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
+                            <img src="<?= $image ?>" id="com_banner_photo" class="img-responsive" width="240">
+                        </a>
+                        <div class="help-block"></div>
+                </div>
+
 
                 <div class="form-group">
                     <?= Html::submitButton($model_merchant_signup->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model_merchant_signup->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'disabled' => true]) ?>
