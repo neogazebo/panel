@@ -275,6 +275,11 @@ $this->registerJs("
 
         initialize();
 
+        //triger modal for image-croper
+        $('.eb-cropper').on('click',function(){
+            $('#cropper-modal').modal({show: true});
+        });
+
         loadRegister('EBC');
 
         $(function () {
