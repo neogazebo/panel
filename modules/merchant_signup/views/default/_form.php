@@ -345,3 +345,15 @@ Modal::end();
 ?>
 
 <?php $this->registerJsFile($this->theme->baseUrl . '/js/business-tag.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
+
+<?php
+// start the widget
+echo \app\components\widgets\ImageCropper::widget([
+    'wsmall' => 200, // width small
+    'hsmall' => 134, // height small
+    'wbig' => 600, // width big
+    'hbig' => 400, // height big
+    'ratio' => 1.5, // ratio dimension crop box
+    'skipAndResize' => true, // true or false, if false => original image will be duplicated, if true original image will be resized to wbig x hbig
+    'prefix' => 'img-', // for file name prepix
+]);
