@@ -40,4 +40,5 @@ return [
             'error' => Yii::t('app', 'Something wrong while deleting data, please try again!'),
         ],
     ],
+    'frontendUrl' => 'https://biz.ebizu.com/',
 ];
