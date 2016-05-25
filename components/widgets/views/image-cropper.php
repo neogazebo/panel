@@ -96,6 +96,6 @@ table .td-crop{width: 50%;vertical-align: middle !important;border: 1px solid #c
 <?php $this->registerJs("var baseURL = '" . \yii\helpers\BaseUrl::base(true) . "';", \yii\web\View::POS_BEGIN, 'init-opt-begin'.time());?>
 <?php $this->registerCssFile(Yii::$app->params['frontendUrl'] . 'themes/avant/css/jcrop/jquery.Jcrop.css');?>
 <?php // $this->registerCssFile(Yii::$app->params['frontendUrl'] . 'themes/avant/css/styles.css');?>
-<?php $this->registerJsFile(Yii::$app->params['frontendUrl'] . 'themes/avant/js/jcrop/jquery.Jcrop.js',['depends' => app\themes\avant\assets\AppAsset::className()]); ?>
-<?php $this->registerJsFile(Yii::$app->params['frontendUrl'] . 'themes/avant/js/jquery.form.js',['depends' => app\themes\avant\assets\AppAsset::className()]); ?>
-<?php $this->registerJsFile(Yii::$app->params['frontendUrl'] . 'themes/avant/js/custom/image-cropper.js',['depends' => app\themes\avant\assets\AppAsset::className()]); ?>
+<?php $this->registerJsFile(Yii::$app->params['frontendUrl'] . 'themes/avant/js/jcrop/jquery.Jcrop.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
+<?php $this->registerJsFile(Yii::$app->params['frontendUrl'] . 'themes/avant/js/jquery.form.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
+<?php $this->registerJsFile(Yii::$app->params['frontendUrl'] . 'themes/avant/js/custom/image-cropper.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
