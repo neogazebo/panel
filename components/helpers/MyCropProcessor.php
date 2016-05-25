@@ -9,7 +9,7 @@
  * 2. -> common\components\widgets\ImageCropper
  */
 
-namespace common\components\helpers;
+namespace app\components\helpers;
 
 use PHPImageWorkshop\ImageWorkshop;
 use Yii;
