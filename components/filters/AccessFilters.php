@@ -23,37 +23,37 @@ class AccessFilters extends ActionFilter
 
 	public function init()
 	{
-		parent::init();
+		// parent::init();
 
-		$auth = Yii::$app->authManager;
-		$user = Yii::$app->user;
-		$obj = Yii::$app->controller;
-		$id = $obj->id;
-		$actionId = $obj->getRoute();
-		if ($user->can('/'.$actionId)) {
-			return true;
-		}
-		do {
-			if ($user->can('/'. ltrim($obj->getUniqueId() . '/*', '/'))) {
-				return true;
-			}
-			$obj = $obj->module;
-		} while ($obj !== null);
+		// $auth = Yii::$app->authManager;
+		// $user = Yii::$app->user;
+		// $obj = Yii::$app->controller;
+		// $id = $obj->id;
+		// $actionId = $obj->getRoute();
+		// if ($user->can('/'.$actionId)) {
+		// 	return true;
+		// }
+		// do {
+		// 	if ($user->can('/'. ltrim($obj->getUniqueId() . '/*', '/'))) {
+		// 		return true;
+		// 	}
+		// 	$obj = $obj->module;
+		// } while ($obj !== null);
 
-		foreach ($this->allowActions as $action) {
-			$action = (substr($action, 0, 1) == '/') ? $action : '/' . $action;
-			if ($action === '*' or $action === '*/*') {
-				return true;
-			} else if (substr($action, -1) === '*') {
-				$length = strlen($action) - 1;
-				return (substr($action, 0, $length) == substr($actionId, 0, $length));
-			} else {
-				return ($action == $actionId);
-			}
-		}
+		// foreach ($this->allowActions as $action) {
+		// 	$action = (substr($action, 0, 1) == '/') ? $action : '/' . $action;
+		// 	if ($action === '*' or $action === '*/*') {
+		// 		return true;
+		// 	} else if (substr($action, -1) === '*') {
+		// 		$length = strlen($action) - 1;
+		// 		return (substr($action, 0, $length) == substr($actionId, 0, $length));
+		// 	} else {
+		// 		return ($action == $actionId);
+		// 	}
+		// }
 
-		$this->denyAccess($user);
-        return false; 
+		// $this->denyAccess($user);
+  //       return false; 
 	}
 
 	protected function denyAccess($user)

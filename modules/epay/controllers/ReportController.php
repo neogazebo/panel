@@ -94,7 +94,7 @@ class ReportController extends EpaybaseController
         }
 
         // delete local dir
-        $delete = BaseFileHelper::removeDirectory(Yii::$app->basePath."/runtime/sFTp",$options = false);
+        // $delete = BaseFileHelper::removeDirectory(Yii::$app->basePath."/runtime/sFTp",$options = false);
 
         return $this->redirect(Yii::$app->urlManager->createUrl(['epay/index/']));
     }
