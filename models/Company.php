@@ -759,4 +759,26 @@ class Company extends EbizuActiveRecord
         return $data;
     }
 
+    public function getCompanySizeListData()
+    {
+        return [
+            'Small Enterprise' => 'Small Enterprise',
+            'Medium Enterprise' => 'Medium Enterprise',
+            'Large Enterprise' => 'Large Enterprise',
+            'Multinational Enterprise' => 'Multinational Enterprise'
+        ];
+    }
+
+    public function getNumberEmployeeListData()
+    {
+        return [
+            '1-5' => '1-5',
+            '6-25' => '6-25',
+            '26-50' => '26-50',
+            '51-250' => '51-250',
+            '251-500' => '251-500',
+            '500+' => '500+',
+        ];
+    }
+
 }

@@ -12,6 +12,7 @@ use app\models\Company;
 use yii\data\ActiveDataProvider;
 use yii\web\Response;
 use app\models\Tag;
+use app\models\FeatureSubscription;
 
 /**
  * Default controller for the `MerchantSignup` module
@@ -172,6 +173,11 @@ class DefaultController extends Controller
 
         //the output will automaticaly convert to JSON
         return $return;
+    }
+
+    public function actionRegister() {
+        $fes_code = isset($_GET['reg']) ? $_GET['reg'] : 'EBC';
+        return FeatureSubscription::packageList($fes_code);
     }
 
     protected function findModel($id)
