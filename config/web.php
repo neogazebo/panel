@@ -29,6 +29,12 @@ $config = [
         'merchant-signup' => [
             'class' => 'app\modules\merchant_signup\MerchantSignup',
         ],
+        'account' => [
+            'class' => 'app\modules\account\Account',
+        ],
+        'snapearn' => [
+            'class' => 'app\modules\snapearn\Snapearn',
+        ],
         'users' => [
             'class' => 'app\modules\users\Users',
         ],
@@ -77,6 +83,7 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'db2' => require(__DIR__ . '/db2.php'),
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -102,6 +109,10 @@ $config = [
         ],
         'access' => [
             'class' => 'app\components\filters\AccessFilters',
+            'allowActions' => [
+                'site/*',
+                'site/logout'
+            ]
         ],
         'getRoutes' => [
             'class' => 'app\components\helpers\GetRoutes',

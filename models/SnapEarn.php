@@ -1,0 +1,106 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "tbl_snapearn".
+ *
+ * @property integer $sna_id
+ * @property integer $sna_acc_id
+ * @property integer $sna_com_id
+ * @property string $sna_receipt_number
+ * @property string $sna_receipt_date
+ * @property string $sna_receipt_amount
+ * @property integer $sna_point
+ * @property integer $sna_status
+ * @property integer $sna_upload_date
+ * @property integer $sna_approved_datetime
+ * @property integer $sna_approved_by
+ * @property integer $sna_rejected_datetime
+ * @property integer $sna_rejected_by
+ * @property integer $sna_sem_id
+ * @property integer $sna_cat_id
+ * @property string $sna_receipt_image
+ * @property string $sna_com_name
+ */
+class SnapEarn extends \yii\db\ActiveRecord
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'tbl_snapearn';
+    }
+
+    /**
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb()
+    {
+        return Yii::$app->get('db2');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['sna_acc_id', 'sna_com_id', 'sna_receipt_number', 'sna_receipt_date', 'sna_receipt_amount', 'sna_upload_date', 'sna_cat_id', 'sna_receipt_image', 'sna_com_name'], 'required'],
+            [['sna_acc_id', 'sna_com_id', 'sna_point', 'sna_status', 'sna_upload_date', 'sna_approved_datetime', 'sna_approved_by', 'sna_rejected_datetime', 'sna_rejected_by', 'sna_sem_id', 'sna_cat_id'], 'integer'],
+            [['sna_receipt_number'], 'string', 'max' => 20],
+            [['sna_receipt_date', 'sna_receipt_amount'], 'string', 'max' => 10],
+            [['sna_receipt_image'], 'string', 'max' => 75],
+            [['sna_com_name'], 'string', 'max' => 100],
+        ];
+    }
+
+    public function getMerchant()
+    {
+        return $this->hasOne(Company::className(), ['com_id' => 'sna_com_id']);
+    }
+
+    public function getMember()
+    {
+        return $this->hasOne(Account::className(), ['acc_id' => 'sna_acc_id']);
+    }
+
+    public function getRemark()
+    {
+        return $this->hasOne(SnapEarnRemark::className(), ['sem_id' => 'sna_sem_id']);
+    }
+
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['cat_id' => 'sna_cat_id']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'sna_id' => 'ID',
+            'sna_acc_id' => 'Member',
+            'sna_com_id' => 'Merchant ID',
+            'sna_receipt_number' => 'Receipt Number',
+            'sna_receipt_date' => 'Receipt Date',
+            'sna_receipt_amount' => 'Receipt Amount',
+            'sna_point' => 'Point',
+            'sna_status' => 'Status',
+            'sna_upload_date' => 'Upload Date',
+            'sna_approved_datetime' => 'Approved Datetime',
+            'sna_approved_by' => 'Approved By',
+            'sna_rejected_datetime' => 'Rejected Datetime',
+            'sna_rejected_by' => 'Rejected By',
+            'sna_sem_id' => 'Remark',
+            'sna_cat_id' => 'Category',
+            'sna_receipt_image' => 'Receipt Image',
+            'sna_com_name' => 'Merchant Name',
+        ];
+    }
+}
