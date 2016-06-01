@@ -39,14 +39,14 @@ class Session extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'ses_id' => 'Ses ID',
-            'ses_usr_id' => 'Ses Usr ID',
-            'ses_key' => 'Ses Key',
-            'ses_activity' => 'Ses Activity',
-            'ses_valid' => 'Ses Valid',
-            'ses_last_ip' => 'Ses Last Ip',
-            'ses_create_datetime' => 'Ses Create Datetime',
-            'ses_app_type' => 'Ses App Type',
+            'ses_id' => 'ID',
+            'ses_usr_id' => 'User',
+            'ses_key' => 'Key',
+            'ses_activity' => 'Activity',
+            'ses_valid' => 'Valid',
+            'ses_last_ip' => 'Last Ip',
+            'ses_create_datetime' => 'Create At',
+            'ses_app_type' => 'App Type',
         ];
     }
 
