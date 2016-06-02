@@ -78,6 +78,16 @@ class SnapEarn extends \yii\db\ActiveRecord
         return $this->hasOne(Category::className(), ['cat_id' => 'sna_cat_id']);
     }
 
+    public function getAdminApproved()
+    {
+        return $this->hasOne(AdminUser::className(), ['id' => 'sna_approved_by']);
+    }
+
+    public function getAdminRejected()
+    {
+        return $this->hasOne(AdminUser::className(), ['id' => 'sna_rejected_by']);
+    }
+
     /**
      * @inheritdoc
      */

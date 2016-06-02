@@ -6,11 +6,12 @@ use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 
-$this->title = 'List Role';
+$this->title = 'Role List';
 ?>
 <section class="content-header ">
     <h1><?= $this->title?></h1>
 </section>
+
 <section class="content">
     <div class="row">
         <div class="col-md-12 col-xs-12">
