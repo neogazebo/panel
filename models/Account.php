@@ -71,6 +71,13 @@ class Account extends \yii\db\ActiveRecord
         return $this->hasOne(TimeZone::className(), ['acc_tmz_id' => 'tmz_id']);
     }
 
+    public function lastPointMember()
+    {
+        $model = LoyaltyPointHistory::find()->getTotalPointMember($this->acc_id);
+        $point = (!empty($model->lph_total_point)) ? $model->lph_total_point : '0';
+        return $point;
+    }
+
     /**
      * @inheritdoc
      */

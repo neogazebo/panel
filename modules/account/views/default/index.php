@@ -27,26 +27,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             'layout' => '{items} {summary} {pager}',
                             'filterModel' => $searchModel,
                             'columns' => [
-                                // ['class' => 'yii\grid\SerialColumn'],
-
-                                // 'acc_id',
-                                // 'acc_facebook_id',
-                                // 'acc_facebook_email:email',
-                                // 'acc_facebook_graph:ntext',
-                                // 'acc_google_id',
-                                // 'acc_google_email:email',
-                                // 'acc_google_token',
-                                'acc_screen_name',
-                                'acc_facebook_email:email',
-                                'acc_cty_id',
-                                // 'acc_photo',
-                                // 'acc_created_datetime:datetime',
-                                // 'acc_updated_datetime:datetime',
-                                'acc_status',
-                                // 'acc_tmz_id',
-                                // 'acc_birthdate',
-                                'acc_address',
-                                'acc_gender',
+                                [
+                                    'label' => 'Full Name',
+                                    'attribute' => 'acc_screen_name'
+                                ],
+                                [
+                                    'label' => 'Email',
+                                    'attribute' => 'acc_facebook_email'
+                                ],
+                                [
+                                    'label' => 'Registered Date',
+                                    'attribute' => 'acc_created_datetime',
+                                    'value' => function($data){
+                                       return Yii::$app->formatter->asDate($data->acc_created_datetime);
+                                    }
+                                ],
+                                [
+                                    'label' => 'Total Point',
+                                    'attribute' => 'acc_id',
+                                    'value' => function($data){
+                                        return $data->lastPointMember();
+                                    }
+                                ],
 
                                 ['class' => 'yii\grid\ActionColumn'],
                             ],

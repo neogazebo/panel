@@ -6,11 +6,12 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Account */
 
-$this->title = $model->acc_id;
+$this->title = $model->acc_screen_name;
+$model->acc_gender = ($model->acc_gender == 1) ? 'Male' : 'Female';
 $this->params['breadcrumbs'][] = ['label' => 'Accounts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="account-view">
+<!-- <div class="account-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -48,4 +49,35 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-</div>
+</div> -->
+
+<section class="content">
+
+          <div class="row">
+            <div class="col-md-3">
+
+              <!-- Profile Image -->
+              <div class="box box-primary">
+                <div class="box-body box-profile">
+                  <img class="profile-user-img img-responsive img-circle" src="<?= (!empty($model->acc_photo)) ? Yii::$app->params['memberUrl'].$model->acc_photo : $this->theme->baseUrl.'/dist/img/manis.png'?>" alt="<?= $model->acc_screen_name ?>">
+                  <h3 class="profile-username text-center"><?= $model->acc_screen_name ?></h3>
+                  <p class="text-muted text-center"><?= date('Y') - date('Y', strtotime($model->acc_birthdate)).' , '.$model->acc_gender  ?></p>
+
+                  <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item">
+                      <b>Status </b> <a class="pull-right"><?= ($model->acc_status == 1) ? 'Verified' : '' ?></a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Country </b> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Friends</b> <a class="pull-right">13,287</a>
+                    </li>
+                  </ul>
+
+                  <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                </div>
+              </div>
+            </div>
+        </div>
+</section>
