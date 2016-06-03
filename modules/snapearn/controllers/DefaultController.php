@@ -6,7 +6,10 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use app\controllers\BaseController;
 use app\components\helpers\Utc;
+use app\models\Account;
 use app\models\SnapEarn;
+use app\models\SnapEarnRule;
+use app\models\Company;
 
 /**
  * Default controller for the `snapearn` module
@@ -97,27 +100,27 @@ class DefaultController extends BaseController
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
-                $model->sna_point = floor($model->sna_amount);
+                $model->sna_point = floor($model->sna_receipt_amount);
 
                 $set_time = Utc::getNow();
                 $set_operator = Yii::$app->user->id;
     
                 $limitPoint = 0;
-                if($model->business->com_premium == 1) {
+                if($model->merchant->com_premium == 1) {
                     $model->sna_point = $model->sna_point * 2;
-                    $limit = SnapEarnConfig::find()->where('snc_country = :cny', [':cny' => $model->business->com_currency])->one()->snc_premium;
+                    $limit = SnapEarnRule::find()->where('ser_country = :cny', [':cny' => $model->merchant->com_currency])->one()->ser_premium;
                     if (!empty($limit)) {
                         $limitPoint = $limit;
                     }
                 } else {
-                    $limit = SnapEarnConfig::find()->where('snc_country = :cny', [':cny' => $model->business->com_currency])->one()->snc_point_cap;
+                    $limit = SnapEarnRule::find()->where('ser_country = :cny', [':cny' => $model->merchant->com_currency])->one()->ser_point_cap;
                     if (!empty($limit)) {
                         $limitPoint = $limit;
                     }
                 }
 
                 $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
-                $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_mem_id);
+                $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
                 if($point_history !== NULL) {
                     $current_point = $point_history->lph_total_point;
                 } else {
@@ -133,17 +136,17 @@ class DefaultController extends BaseController
                     $model->sna_approved_by = $set_operator;
                     $model->sna_rejected_datetime = NULL;
                     $model->sna_rejected_by = NULL;
-                    $model->sna_snr_id = '';
+                    $model->sna_sem_id = '';
                     // if rejected action
                 } elseif($model->sna_status == 2) {
-                    $username = $model->member->mem_screen_name;
-                    $email = $model->member->mem_email;
+                    $username = $model->member->acc_screen_name;
+                    $email = $model->member->acc_facebook_email;
                     $model->sna_approved_datetime = NULL;
                     $model->sna_approved_by = NULL;
                     $model->sna_rejected_datetime = $set_time;
                     $model->sna_rejected_by = $set_operator;
                     $model->sna_point = 0;
-                    $model->sna_amount = 0;
+                    $model->sna_receipt_amount = 0;
                 }
 
                 // execution save to snapearn
@@ -153,7 +156,7 @@ class DefaultController extends BaseController
                         $params = [
                             'current_point' => $current_point,
                             'sna_point' => $model->sna_point,
-                            'sna_mem_id' => $model->sna_mem_id,
+                            'sna_acc_id' => $model->sna_acc_id,
                             'sna_com_id' => $model->sna_com_id,
                             'sna_id' => $model->sna_id,
                         ];
@@ -165,15 +168,15 @@ class DefaultController extends BaseController
                         $history = $this->savePoint($params);
                         $point = $this->merchantPoint($merchantParams, false);
 
-                        if ($model->sna_push == 1) {
-                            $usr_id = Member::findOne($model->sna_mem_id)->mem_usr_id;
-                            $params = [$model->sna_mem_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
-                            $customData = ['type' => 'snapearn'];
-                            Activity::insertAct($usr_id, 31, $params, $customData);
-                        }
+                        // if ($model->sna_push == 1) {
+                        //     $usr_id = Account::findOne($model->sna_acc_id)->mem_usr_id;
+                        //     $params = [$model->sna_acc_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
+                        //     $customData = ['type' => 'snapearn'];
+                        //     Activity::insertAct($usr_id, 31, $params, $customData);
+                        // }
     
                         // create snapearn point detail
-                        SnapEarnPointDetail::savePoint($id, 7);
+                        // SnapEarnPointDetail::savePoint($id, 7);
     
                         $this->setMessage('save', 'success', 'Snap and Earn successfully approved!');
                         $snap_type = 'approved';
@@ -189,14 +192,14 @@ class DefaultController extends BaseController
                             $location = Company::findOne($model->sna_com_id)->com_address;
                         }
     
-                        if (!empty($model->sna_snr_id)) {
+                        if (!empty($model->sna_sem_id)) {
                             $type = 0;
                             $name = '';
                             $parsers = [];
                             $picture = Yii::$app->params['businessUrl'] . 'receipt/receipt_sample.jpg';
     
-                            $message = new SystemMessage;
-                            switch ($model->sna_snr_id) {
+                            // $message = new SystemMessage;
+                            switch ($model->sna_sem_id) {
                                 case 1:
                                     $type = 36;
                                     $name = 'snapearn_receipt_blur';
@@ -240,26 +243,26 @@ class DefaultController extends BaseController
                                     $parsers[] = ['[location]', $location];
                                     break;
                             }
-                            $message->parser($type, $name, $email, $parsers);
+                            // $message->parser($type, $name, $email, $parsers);
                         }
                         //if push notification checked then send to activity
-                        if ($model->sna_push == 1) {
-                            $usr_id = Member::findOne($model->sna_mem_id)->mem_usr_id;
-                            $params = [$model->sna_mem_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
-                            $customData = ['type' => 'snapearn'];
-                            Activity::insertAct($usr_id, 30, $params, $customData);
-                        }
+                        // if ($model->sna_push == 1) {
+                        //     $usr_id = Member::findOne($model->sna_acc_id)->mem_usr_id;
+                        //     $params = [$model->sna_acc_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
+                        //     $customData = ['type' => 'snapearn'];
+                        //     Activity::insertAct($usr_id, 30, $params, $customData);
+                        // }
     
                         // create snapearn point detail
-                        SnapEarnPointDetail::savePoint($id, $model->sna_snr_id);
+                        // SnapEarnPointDetail::savePoint($id, $model->sna_sem_id);
     
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
                     }
-                    Yii::$app->workingTime->end($id);
+                    // Yii::$app->workingTime->end($id);
                 }
 
-                $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
+                // $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
                 $transaction->commit();
             } catch(Exception $e) {
                 $transaction->rollBack();
@@ -280,6 +283,28 @@ class DefaultController extends BaseController
             'model' => $model,
             'id' => $id
         ]);
+    }
+
+    public function actionAjaxSnapearnPoint()
+    {
+        if(Yii::$app->request->isAjax) {
+            $id = Yii::$app->request->post('id');
+            $point = Yii::$app->request->post('point');
+            $com_id = Yii::$app->request->post('com_id');
+            $business = Company::findOne($com_id);
+
+            $config = SnapEarnRule::find()->where(['ser_country' => $business->com_currency])->one();
+            if(!empty($config)) {
+                if($business->com_premium == 1) {
+                    $point *= 2;
+                    $point_cap = $config->snc_premium;
+                } else
+                    $point_cap = $config->snc_point_cap;
+                if($point > $point_cap)
+                    return $point_cap;
+            }
+            return $point;
+        }
     }
 
     protected function findModel($id)

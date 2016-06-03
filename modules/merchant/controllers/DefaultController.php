@@ -18,7 +18,8 @@ class DefaultController extends Controller
         return $this->render('index');
     }
 
-    public function actionList($q = null, $id = null) {
+    public function actionList($q = null, $id = null)
+    {
 	    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 	    $out = ['results' => ['id' => '', 'text' => '']];
 	    if (!is_null($q)) {

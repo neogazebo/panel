@@ -62,6 +62,13 @@ class SnapEarn extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getImage()
+    {
+        if (!empty($this->sna_receipt_image))
+            return Yii::$app->params['businessUrl'] . 'receipt/' . $this->sna_receipt_image;
+        return Yii::$app->homeUrl . 'img/90.jpg';
+    }
+
     public function getMerchant()
     {
         return $this->hasOne(Company::className(), ['com_id' => 'sna_com_id']);
@@ -82,6 +89,14 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         $model = new Company();
         $model->setScenario('point');
+        return $model;
+    }
+
+    public function getNewSuggestion()
+    {
+        $model = CompanySuggestion::find()
+            ->where('cos_sna_id = :id', [':id' => $this->sna_id])
+            ->one();
         return $model;
     }
 

@@ -25,6 +25,13 @@ $this->title = 'Snap & Earn List';
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
                             'columns' => [
+                                [
+                                    'header' => 'Receipt',
+                                    'format' => 'raw',
+                                    'value' => function($data) {
+                                        return Html::img($data->image, ['height' => 32]);
+                                    }
+                                ],
                                 'merchant.com_name',
                                 'category.cat_name',
                                 'sna_receipt_number',

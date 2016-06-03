@@ -52,16 +52,16 @@ $this->registerCss("
                         <div class="col-sm-6">
                             <?php if(empty($model->business)): ?>
                                 <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_name')->textInput(['readonly'=>true]); ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_mall')->textInput(['readonly'=>true]); ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_location')->textInput(['readonly'=>true]); ?>
+                                    <?= $form->field($model->newSuggestion, 'cos_name')->textInput(['readonly' => true]); ?>
+                                    <?= $form->field($model->newSuggestion, 'cos_mall')->textInput(['readonly' => true]); ?>
+                                    <?= $form->field($model->newSuggestion, 'cos_location')->textInput(['readonly' => true]); ?>
                                 <?php endif ?>
                             <div class="form-group">
                                 <label for="" class="col-lg-3 control-label">Merchant</label>
                                 <?php if(!empty($model->newSuggestion)): ?>
                                     <?= Html::button('<i class="fa fa-plus-square"></i> Add New Merchant', ['value' => Url::to(['ajax-new?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-primary btn-sm']); ?>
                                 <?php endif ?>
-                                <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-primary btn-sm']); ?>
+                                <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-success btn-sm']); ?>
                             </div>
                             <?php else : ?>
                                 <?= $form->field($model, 'sna_business')->textInput(['value' => is_object($model->business) ? $model->business->com_name : '', 'readonly' => true]) ?>
@@ -99,7 +99,7 @@ $this->registerCss("
                                     ]
                                 ]);
                             ?>
-                            <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
+                            <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control']) ?>
 
                             <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                             <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
@@ -176,4 +176,43 @@ $this->registerCss("
 $this->registerCssFile($this->theme->baseUrl . '/plugins/perfect-zoom/jquery.iviewer.css', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile($this->theme->baseUrl . '/plugins/perfect-zoom/src/jquery.mousewheel.min.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile($this->theme->baseUrl . '/plugins/perfect-zoom/jquery.iviewer.min.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$imageSource = Yii::$app->params['businessUrl'] . 'receipt/' . $model->sna_receipt_image;
+$this->registerJs("
+    var id = '" . $model->sna_id . "',
+        com_id = '" . $model->sna_com_id . "';
+
+    $('#sna_image').iviewer({
+        src: '".$imageSource."'
+    });
+
+    $('#snapearn-sna_status').change(function() {
+        if($(this).val() == 1) {
+            $('.reject-form').css('display', 'none');
+            $('.point-form').css('display', 'block');
+        } else if($(this).val() == 2) {
+            $('.point-form').css('display', 'none');
+            $('.reject-form').css('display', 'block');
+            $('#snapearn-sna_receipt_amount, #snapearn-sna_point, #snapearn-sna_status').val('');
+        } else {
+            $('.reject-form').css('display', 'none');
+            $('.point-form').css('display', 'none');
+            $('#snapearn-sna_receipt_amount, #snapearn-sna_point, #snapearn-sna_status').val('');
+        }
+    }).trigger('change');
+
+    $('#snapearn-sna_receipt_amount').blur(function() {
+        var point = Math.floor($('#snapearn-sna_receipt_amount').val());
+        // $('#snapearn-sna_point').val(point);
+        $.ajax({
+            type: 'POST',
+            url: baseUrl + 'snapearn/default/ajax-snapearn-point',
+            data: { id: id, com_id: com_id, point: point },
+            dataType: 'json',
+            success: function(result) {
+                $('#snapearn-sna_point').val(result);
+            }
+        });
+    });
+
+", yii\web\View::POS_END, 'snapearn-form');
 ?>

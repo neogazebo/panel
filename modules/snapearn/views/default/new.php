@@ -182,19 +182,10 @@ SCRIPT;
 <?php ActiveForm::end(); ?>
 
 <?php
-$imageSource = Yii::$app->params['businessUrl'] . 'receipt/' . $model->sna_receipt_image;
 $this->registerJs("
-    var id = '" . $model->sna_id . "',
-        com_id = '" . $model->sna_com_id . "';
-
     //triger modal for image-croper
     $('.eb-cropper').on('click',function(){
         $('#cropper-modal').modal({show: true});
-    });
-
-    var mall_checked = 0;
-    $('#sna_image').iviewer({
-        src: '".$imageSource."'
     });
 
     var mall_checked = 0;

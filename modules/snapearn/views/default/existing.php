@@ -20,11 +20,10 @@ $form = ActiveForm::begin([
 <div class="modal-body">
 	<?php
 	$url = Url::to(['merchant/default/list']);
-	$business = empty($model->company->com_id) ? '' : Company::findOne($model->company->com_id)->com_name;
-	?>
-
-    <?= Select2::widget([
-        'initValueText' => $business, // set the initial display text
+	// $business = empty($model->company->com_id) ? '' : Company::findOne($model->company->com_id)->com_name;
+	echo Select2::widget([
+        // 'initValueText' => $business, // set the initial display text
+        'data' => $model,
 	    'options' => ['placeholder' => 'Search for a merchant ...'],
 	    'pluginOptions' => [
 	        'allowClear' => true,
@@ -48,4 +47,5 @@ $form = ActiveForm::begin([
     <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>
     <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'pull-right btn btn-info pull-right']) ?>
 </div>
+
 <?php ActiveForm::end(); ?>
