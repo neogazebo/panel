@@ -68,6 +68,11 @@ class AccountDevice extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getDevice()
+    {
+        return $this->hasOne(Device::className(), ['dvc_id' => 'adv_dvc_id']);
+    }
+
     /**
      * @inheritdoc
      * @return AccountDeviceQuery the active query used by this AR class.

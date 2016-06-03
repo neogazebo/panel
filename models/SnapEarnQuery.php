@@ -7,7 +7,7 @@ namespace app\models;
  *
  * @see AccountDevice
  */
-class AccountDeviceQuery extends \yii\db\ActiveQuery
+class SnapEarnQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -32,12 +32,12 @@ class AccountDeviceQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function getLastLocatione($id)
+    public function getLastUpload($id)
     {
-        $this->andWhere('adv_acc_id = :id',[
+        $this->andWhere('sna_acc_id = :id',[
                 ':id' => $id
             ]);
-        $this->orderBy('date(from_unixtime(adv_last_access)) DESC');
+        $this->orderBy('sna_id DESC');
         $this->limit(1);
         return $this;
     }

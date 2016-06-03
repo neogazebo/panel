@@ -16,6 +16,11 @@ $this->registerCss("
         display: block;
         width: 100%;
     }
+    .margin {
+        margin: 10px;
+        position: relative;
+        width: 200px;
+    }
 ");
 ?>
 <!-- <div class="account-view">
@@ -78,12 +83,18 @@ $this->registerCss("
                     <li class="list-group-item">
                       <b>Last Point </b> <a class="pull-right"><?= $model->lastPointMember() ?></a>
                     </li>
+                    <li class="list-group-item">
+                      <b>Last Login </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->lastLogin()) ?></a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Registered From  </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->acc_created_datetime) ?></a>
+                    </li>
                   </ul>
                 </div>
               </div>
             </div>
             <div class="col-md-9">
-              <div class="nav-tabs-custom">
+              <div class="nav-tabs-custom box-primary">
                 <ul class="nav nav-tabs">
                   <li class=""><a aria-expanded="false" href="#activity" data-toggle="tab">Activity</a></li>
                 </ul>
@@ -95,7 +106,7 @@ $this->registerCss("
                       <?php foreach ($model->lastLocation() as $location): ?>
                       <li class="time-label">
                         <span class="bg-red">
-                          <?= Yii::$app->formatter->asDate($location->adv_last_access) ?>
+                          Timeline
                         </span>
                       </li>
                       <!-- /.timeline-label -->
@@ -103,14 +114,14 @@ $this->registerCss("
                       <li>
                         <i class="fa fa-map-marker bg-blue"></i>
                         <div class="timeline-item">
-                          <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                          <span class="time"><i class="fa fa-clock-o"></i> <?= Yii::$app->formatter->asDateTime($location->adv_last_access) ?></span>
                           <h3 class="timeline-header"><a href="#">Last Location</a></h3>
                           <div class="timeline-body">
                             <?=
                                 \app\components\widgets\GmapLocation::widget([
                                     'lat' => $location->adv_last_latitude,
                                     'long' => $location->adv_last_longitude,
-                                    'height' => 100,
+                                    'height' => 150,
                                     'type' => 'static'
                                 ]);
                                 ?>
@@ -121,6 +132,7 @@ $this->registerCss("
                           </div>
                         </div>
                       </li>
+                      <?php endforeach; ?>
                       <!-- END timeline item -->
                       <!-- timeline item -->
                  <!--      <li>
@@ -150,19 +162,26 @@ $this->registerCss("
                       <li>
                         <i class="fa fa-camera bg-purple"></i>
                         <div class="timeline-item">
-                          <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+                        <?php foreach ($model->lastSnapUpload() as $upload) : ?>
+                          <span class="time"><i class="fa fa-clock-o"></i> <?= Yii::$app->formatter->asDateTime($upload->sna_upload_date) ?></span>
                           <h3 class="timeline-header"><a href="#">Last Uploaded Receipt</a></h3>
                           <div class="timeline-body">
-                            <img src="http://placehold.it/150x100" alt="..." class="margin">
-                            <img src="http://placehold.it/150x100" alt="..." class="margin">
-                            <img src="http://placehold.it/150x100" alt="..." class="margin">
-                            <img src="http://placehold.it/150x100" alt="..." class="margin">
+                            <div class="container">
+                              <div class="row col-sm-3">
+                                <img src="<?= Yii::$app->params['businessUrl'] . 'receipt/' . $upload->sna_receipt_image ?>" alt="..." class="margin">
+                              </div>
+                              <div class="col-sm-9">
+                                  <b>Status : </b> 
+                                  <a class="">
+                                      <?= ((!empty($upload->sna_approved_datetime)) ? 'Approved' : (!empty($upload->sna_rejected_datetime)) ? 'Rejected' : 'New') ?>
+                                  </a>
+                              </div>
+                            </div>
                           </div>
+                        <?php endforeach; ?>
                         </div>
                       </li>
                       <!-- END timeline item -->
-
-                      <?php endforeach; ?>
                       <li>
                         <i class="fa fa-clock-o bg-gray"></i>
                       </li>

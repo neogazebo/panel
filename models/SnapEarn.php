@@ -136,4 +136,9 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_transaction_time' => 'Transaction Time',
         ];
     }
+
+    public static function find()
+    {
+        return new SnapEarnQuery(get_called_class());
+    }
 }
