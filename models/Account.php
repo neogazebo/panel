@@ -78,6 +78,27 @@ class Account extends \yii\db\ActiveRecord
         return $point;
     }
 
+    public function lastLocation()
+    {
+        $model = AccountDevice::find()->getLastLocatione($this->acc_id);
+        $location = (!empty($model->all())) ? $model->all() : '0';
+        return $location;
+    }
+
+    public function lastLogin()
+    {
+        $model = AccountDevice::find()->getLastLocatione($this->acc_id);
+        $location = (!empty($model->one())) ? $model->one() : '0';
+        return $location->adv_last_login;
+    }
+
+    public function lastSnapUpload()
+    {
+        $model = SnapEarn::find()->getLastUpload($this->acc_id);
+        $upload = (!empty($model->all())) ? $model->all() : '0';
+        return $upload;
+    }
+
     /**
      * @inheritdoc
      */
