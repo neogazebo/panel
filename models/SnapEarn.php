@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\components\helpers\Html;
 
 /**
  * This is the model class for table "tbl_snapearn".
@@ -27,6 +28,8 @@ use Yii;
  */
 class SnapEarn extends \yii\db\ActiveRecord
 {
+    public $sna_push;
+
     /**
      * @inheritdoc
      */
@@ -55,12 +58,31 @@ class SnapEarn extends \yii\db\ActiveRecord
             [['sna_receipt_date', 'sna_receipt_amount'], 'string', 'max' => 10],
             [['sna_receipt_image'], 'string', 'max' => 75],
             [['sna_com_name'], 'string', 'max' => 100],
+            ['sna_transaction_time', 'safe']
         ];
     }
 
     public function getMerchant()
     {
         return $this->hasOne(Company::className(), ['com_id' => 'sna_com_id']);
+    }
+
+    public function getStatus()
+    {
+        return [0 => 'New', 1 => 'Approved', 2 => 'Rejected'];
+    }
+
+    public function getEmail()
+    {
+        $model = SnapEarnRemark::find()->all();
+        return Html::listData($model, 'sem_id', 'sem_name');
+    }
+
+    public function getCompany()
+    {
+        $model = new Company();
+        $model->setScenario('point');
+        return $model;
     }
 
     public function getMember()
@@ -111,6 +133,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_cat_id' => 'Category',
             'sna_receipt_image' => 'Receipt Image',
             'sna_com_name' => 'Merchant Name',
+            'sna_transaction_time' => 'Transaction Time',
         ];
     }
 }

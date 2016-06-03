@@ -52,9 +52,6 @@ $this->title = $model->isNewRecord ? 'New Epay Voucher' : 'Edit Voucher Epay';
 
 <?php
 $this->registerJs("
-    var baseUrl = '".\yii\helpers\BaseUrl::base(true)."';
-
     $('.datepicker').datepicker();
-   
 ", yii\web\View::POS_LOAD, 'epay-buy');
 ?>
