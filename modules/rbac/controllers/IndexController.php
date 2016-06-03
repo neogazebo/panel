@@ -129,7 +129,6 @@ class IndexController extends BaseController
 
     public function actionUpdate($name)
     {
-
         $model = $this->findModel($name);
         $oldName = $model->name;
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {

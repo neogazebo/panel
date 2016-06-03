@@ -50,6 +50,10 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'AdminMail' => [
+            'class' => 'common\components\extensions\AdminMail',
+            'template' => '//mail/template/template',
+        ],
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,

@@ -5,6 +5,7 @@ namespace app\modules\snapearn\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use app\controllers\BaseController;
+use app\components\helpers\Utc;
 use app\models\SnapEarn;
 
 /**
@@ -34,13 +35,251 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
-        Yii::$app->workingTime->start($id);
-        return $this->redirect(['snapearnupdate', 'id' => $id]);
+        // Yii::$app->workingTime->start($id);
+        return $this->redirect(['update', 'id' => $id]);
+    }
+
+    public function actionAjaxNew($id)
+    {
+        $model = $this->findModel($id);
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            echo '<pre>';
+            var_dump($model->attributes);
+            exit;
+            if ($model->save()) {
+                $this->setMessage('save', 'success', 'Merchant created successfully!');
+                return $this->redirect($this->getRememberUrl());
+            }
+        } else {
+            return $this->renderAjax('new', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionAjaxExisting($id)
+    {
+        $model = $this->findModel($id);
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            echo '<pre>';
+            var_dump($model->attributes);
+            exit;
+            if ($model->save()) {
+                $this->setMessage('save', 'success', 'Merchant created successfully!');
+                return $this->redirect($this->getRememberUrl());
+            }
+        } else {
+            return $this->renderAjax('existing', [
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionUpdate($id)
     {
-    	$model = $this->findModel($id);    	
+    	$model = $this->findModel($id);
+
+        // get old point
+        $oldPoint = $model->sna_point;
+
+        // get post request form
+        if($model->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
+                $model->sna_point = floor($model->sna_amount);
+
+                $set_time = Utc::getNow();
+                $set_operator = Yii::$app->user->id;
+    
+                $limitPoint = 0;
+                if($model->business->com_premium == 1) {
+                    $model->sna_point = $model->sna_point * 2;
+                    $limit = SnapEarnConfig::find()->where('snc_country = :cny', [':cny' => $model->business->com_currency])->one()->snc_premium;
+                    if (!empty($limit)) {
+                        $limitPoint = $limit;
+                    }
+                } else {
+                    $limit = SnapEarnConfig::find()->where('snc_country = :cny', [':cny' => $model->business->com_currency])->one()->snc_point_cap;
+                    if (!empty($limit)) {
+                        $limitPoint = $limit;
+                    }
+                }
+
+                $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
+                $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_mem_id);
+                if($point_history !== NULL) {
+                    $current_point = $point_history->lph_total_point;
+                } else {
+                    $current_point = 0;
+                }
+
+                // if approved action
+                if($model->sna_status == 1) {
+                    if($model->sna_point > $limitPoint) {
+                        $model->sna_point = $limitPoint;
+                    }
+                    $model->sna_approved_datetime = $set_time;
+                    $model->sna_approved_by = $set_operator;
+                    $model->sna_rejected_datetime = NULL;
+                    $model->sna_rejected_by = NULL;
+                    $model->sna_snr_id = '';
+                    // if rejected action
+                } elseif($model->sna_status == 2) {
+                    $username = $model->member->mem_screen_name;
+                    $email = $model->member->mem_email;
+                    $model->sna_approved_datetime = NULL;
+                    $model->sna_approved_by = NULL;
+                    $model->sna_rejected_datetime = $set_time;
+                    $model->sna_rejected_by = $set_operator;
+                    $model->sna_point = 0;
+                    $model->sna_amount = 0;
+                }
+
+                // execution save to snapearn
+                $snap_type = '';
+                if($model->save()) {
+                    if($model->sna_status == 1) {
+                        $params = [
+                            'current_point' => $current_point,
+                            'sna_point' => $model->sna_point,
+                            'sna_mem_id' => $model->sna_mem_id,
+                            'sna_com_id' => $model->sna_com_id,
+                            'sna_id' => $model->sna_id,
+                        ];
+                        $merchantParams = [
+                            'com_point' => $merchant_point->com_point,
+                            'sna_point' => $model->sna_point,
+                            'sna_com_id' => $model->sna_com_id,
+                        ];
+                        $history = $this->savePoint($params);
+                        $point = $this->merchantPoint($merchantParams, false);
+
+                        if ($model->sna_push == 1) {
+                            $usr_id = Member::findOne($model->sna_mem_id)->mem_usr_id;
+                            $params = [$model->sna_mem_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
+                            $customData = ['type' => 'snapearn'];
+                            Activity::insertAct($usr_id, 31, $params, $customData);
+                        }
+    
+                        // create snapearn point detail
+                        SnapEarnPointDetail::savePoint($id, 7);
+    
+                        $this->setMessage('save', 'success', 'Snap and Earn successfully approved!');
+                        $snap_type = 'approved';
+                    } elseif($model->sna_status == 2) {
+                        // send email to member
+                        $business = '';
+                        $location = '';
+                        if(empty($model->sna_com_id)) {
+                            $business = $model->newSuggestion->cos_name;
+                            $location = $model->newSuggestion->cos_location;
+                        } else {
+                            $business = Company::findOne($model->sna_com_id)->com_name;
+                            $location = Company::findOne($model->sna_com_id)->com_address;
+                        }
+    
+                        if (!empty($model->sna_snr_id)) {
+                            $type = 0;
+                            $name = '';
+                            $parsers = [];
+                            $picture = Yii::$app->params['businessUrl'] . 'receipt/receipt_sample.jpg';
+    
+                            $message = new SystemMessage;
+                            switch ($model->sna_snr_id) {
+                                case 1:
+                                    $type = 36;
+                                    $name = 'snapearn_receipt_blur';
+                                    $parsers[0] = ['[username]', $username];
+                                    $parsers[1] = ['[picture]', $picture];
+                                    break;
+                                case 2:
+                                    $type = 37;
+                                    $name = 'snapearn_receipt_dark';
+                                    $parsers[] = ['[username]', $username];
+                                    $parsers[] = ['[picture]', $picture];
+                                    break;
+                                case 3:
+                                    $type = 38;
+                                    $name = 'snapearn_receipt_incomplete';
+                                    $parsers[] = ['[username]', $username];
+                                    $parsers[] = ['[picture]', $picture];
+                                    break;
+                                case 4:
+                                    $type = 39;
+                                    $name = 'snapearn_receipt_suspicious';
+                                    $parsers[0] = ['[username]', $username];
+                                    $parsers[1] = ['[business]', $business];
+                                    break;
+                                case 5:
+                                    $type = 44;
+                                    $name = 'snapearn_duplicate';
+                                    $parsers[] = ['[username]', $username];
+                                    break;
+                                case 6:
+                                    $type = 45;
+                                    $name = 'snapearn_invalid';
+                                    $parsers[] = ['[username]', $username];
+                                    $parsers[] = ['[business]', $business];
+                                    break;
+                                case 7:
+                                    $type = 49;
+                                    $name = 'snapearn_receipt_violates';
+                                    $parsers[] = ['[username]', $username];
+                                    $parsers[] = ['[business]', $business];
+                                    $parsers[] = ['[location]', $location];
+                                    break;
+                            }
+                            $message->parser($type, $name, $email, $parsers);
+                        }
+                        //if push notification checked then send to activity
+                        if ($model->sna_push == 1) {
+                            $usr_id = Member::findOne($model->sna_mem_id)->mem_usr_id;
+                            $params = [$model->sna_mem_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
+                            $customData = ['type' => 'snapearn'];
+                            Activity::insertAct($usr_id, 30, $params, $customData);
+                        }
+    
+                        // create snapearn point detail
+                        SnapEarnPointDetail::savePoint($id, $model->sna_snr_id);
+    
+                        $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
+                        $snap_type = 'rejected';
+                    }
+                    Yii::$app->workingTime->end($id);
+                }
+
+                $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
+                $transaction->commit();
+            } catch(Exception $e) {
+                $transaction->rollBack();
+            }
+
+            // if($_POST['saveNext'] == 1) {
+            //     $nextUrl = SnapEarn::find()->saveNext($id, $ctr);
+            //     if(!empty($nextUrl))
+            //         return $this->redirect(['/loyaltypoint/snapearntoupdate/' . $nextUrl->sna_id]);
+            // }
+            return $this->redirect([$this->getRememberUrl()]);
+        }
+
+        $model->sna_transaction_time = date('Y-m-d H:i:s', Utc::convert($model->sna_upload_date));
+        $model->sna_upload_date = date('d, M Y H:i:s', Utc::convert($model->sna_upload_date));
+
+        return $this->render('form', [
+            'model' => $model,
+            'id' => $id
+        ]);
     }
 
     protected function findModel($id)
