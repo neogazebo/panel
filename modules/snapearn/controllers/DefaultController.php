@@ -269,7 +269,7 @@ class DefaultController extends BaseController
                     }
                     // Yii::$app->workingTime->end($id);
                 }else{
-                    var_dump($model->getErrors());exit;
+                    $this->setMessage('save', 'error', $model->getErrors());
                 }
 
                 // $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
@@ -362,7 +362,7 @@ class DefaultController extends BaseController
         $point->setScenario('snapEarnUpdate');
         $point->com_point = $com_point;
         if($point->save())
-            $this->setMessage('save', 'error', General::extactErrorModel($point->getErrors()));
+            $this->setMessage('save', 'error', $point->getErrors());
         // return $point;
     }
 }

@@ -41,13 +41,19 @@ $this->title = 'Snap & Earn List';
                                     }
                                 ],
                                 [
-                                    'label' => 'Category Mechant',
-                                    'attribute' => 'sna_cat_id',
+                                    'label' => 'Member',
+                                    'attribute' => 'sna_acc_id',
                                     'value' => function($data){
-                                        return $data->category['cat_name'];
+                                        return $data->member->acc_screen_name;
                                     }
                                 ],
-                                // 'category.cat_name',
+                                // [
+                                //     'label' => 'Category Mechant',
+                                //     'attribute' => 'sna_cat_id',
+                                //     'value' => function($data){
+                                //         return $data->category['cat_name'];
+                                //     }
+                                // ],
                                 'sna_receipt_number',
                                 'sna_receipt_date',
                                 [
@@ -107,9 +113,9 @@ $this->title = 'Snap & Earn List';
                                     'format' => 'html',
                                     'value' => function($data){
                                         if ($data->sna_status == 1) {
-                                            return "<i class='fa fa-check label-success'></i>";
+                                            return "<i class='fa fa-check approved-status'></i>";
                                         }elseif ($data->sna_status == 2) {
-                                            return "<i class='fa fa-close label-danger'></i>";
+                                            return "<i class='fa fa-close rejected-status'></i>";
                                         }
                                     }
                                 ],

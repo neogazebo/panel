@@ -21,3 +21,11 @@
     color: red;
     font-style: italic;
 }
+
+.approved-status{
+    color: #01A65A;
+}
+
+.rejected-status{
+    color: #DC0309;
+}
