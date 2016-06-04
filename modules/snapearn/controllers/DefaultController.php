@@ -6,12 +6,12 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use app\controllers\BaseController;
 use app\components\helpers\Utc;
+use app\components\helpers\General;
 use app\models\Account;
 use app\models\SnapEarn;
 use app\models\SnapEarnRule;
 use app\models\Company;
 use app\models\LoyaltyPointHistory;
-use app\components\helpers\General;
 
 
 /**
@@ -97,7 +97,7 @@ class DefaultController extends BaseController
 
         // get old point
         $oldPoint = $model->sna_point;
-
+        $ctr = $model->member->acc_cty_id;
         // ajax validation
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()))  {
             Yii::$app->response->format = 'json';
@@ -269,7 +269,7 @@ class DefaultController extends BaseController
                     }
                     // Yii::$app->workingTime->end($id);
                 }else{
-                    $this->setMessage('save', 'error', $model->getErrors());
+                    $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
 
                 // $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
@@ -278,11 +278,11 @@ class DefaultController extends BaseController
                 $transaction->rollBack();
             }
 
-            // if($_POST['saveNext'] == 1) {
-            //     $nextUrl = SnapEarn::find()->saveNext($id, $ctr);
-            //     if(!empty($nextUrl))
-            //         return $this->redirect(['/loyaltypoint/snapearntoupdate/' . $nextUrl->sna_id]);
-            // }
+            if($_POST['saveNext'] == 1) {
+                $nextUrl = SnapEarn::find()->saveNext($id, $ctr);
+                if(!empty($nextUrl))
+                    return $this->redirect(['/loyaltypoint/snapearntoupdate/' . $nextUrl->sna_id]);
+            }
             return $this->redirect([$this->getRememberUrl()]);
         }
 
@@ -302,7 +302,6 @@ class DefaultController extends BaseController
             $point = Yii::$app->request->post('point');
             $com_id = Yii::$app->request->post('com_id');
             $business = Company::findOne($com_id);
-
             $config = SnapEarnRule::find()->where(['ser_country' => $business->com_currency])->one();
             if(!empty($config)) {
                 if($business->com_premium == 1) {
@@ -347,7 +346,7 @@ class DefaultController extends BaseController
         $history->lph_expired = $time + $valid * 86400;
         $history->lph_current_point = $params['sna_point'];
         if($history->save())
-            $this->setMessage('save', 'error', $history->getErrors());
+            $this->setMessage('save', 'error', General::extractErrorModel($history->getErrors()));
         // return $history;
     }
 
@@ -362,7 +361,7 @@ class DefaultController extends BaseController
         $point->setScenario('snapEarnUpdate');
         $point->com_point = $com_point;
         if($point->save())
-            $this->setMessage('save', 'error', $point->getErrors());
+            $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
         // return $point;
     }
 }

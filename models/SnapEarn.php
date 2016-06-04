@@ -53,11 +53,17 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         return [
             [['sna_acc_id', 'sna_com_id', 'sna_receipt_date', 'sna_upload_date', 'sna_cat_id', 'sna_com_name'], 'required'],
+            [['sna_receipt_amount'],'checkPoint', 'when' => function($model) {
+                return $model->sna_status == 1;
+            }],
             [['sna_receipt_amount','sna_receipt_number', 'sna_receipt_image'],'required','when' => function($model) {
                 return $model->sna_status == 1;
             }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }"],
             [['sna_com_id', 'sna_point', 'sna_status', 'sna_upload_date', 'sna_approved_datetime', 'sna_approved_by', 'sna_rejected_datetime', 'sna_rejected_by', 'sna_sem_id', 'sna_cat_id','sna_receipt_amount'], 'integer'],
             [['sna_receipt_number'], 'string', 'max' => 20],
+            [['sna_receipt_number'], 'approvePerday', 'when' => function($model) {
+                return $model->sna_status == 1;
+            }],
             [['sna_receipt_date'], 'string', 'max' => 10],
             [['sna_receipt_amount'], 'checkPoint', 'when' => function($model) {
                 return $model->sna_status == 1;
@@ -66,6 +72,47 @@ class SnapEarn extends \yii\db\ActiveRecord
             [['sna_com_name'], 'string', 'max' => 100],
             ['sna_transaction_time', 'safe']
         ];
+    }
+
+
+
+    public function checkPoint($data)
+    {
+        $model = Company::findOne($this->sna_com_id);
+        $merchant_point = $model->com_point;
+        if (($merchant_point - $this->sna_point) < 0 || $this->sna_point > $merchant_point || empty($merchant_point)) {
+            $this->addError($data, Yii::t('app', 'Points merchant is Not Enough !'));
+        }
+    }
+
+    public function approvePerday($data)
+    {
+        $count = self::find()
+                ->where(['sna_acc_id' => $this->sna_acc_id])
+                ->andWhere(['date(from_unixtime(sna_transaction_time))' => date('Y-m-d', strtotime($this->sna_transaction_time))])
+                ->andWhere(['sna_com_id' => $this->sna_com_id])
+                ->count();
+
+        if ($count >= 2) {
+            $this->addError($data, Yii::t('app', "Receipt Limited!".$count));
+        }
+    }
+
+    public function validateReceipt($data)
+    {
+        if ($this->sna_status == 1) {
+            $query = self::find()
+                ->select('sna_receipt_number')
+                ->from('tbl_snapearn')
+                ->where('sna_com_id = :com_id AND sna_receipt_number = :receipt', [
+                    ':com_id' => $this->sna_com_id,
+                    ':receipt' => $this->sna_receipt_number
+                ])
+                ->createCommand()
+                ->queryAll();
+            if(!empty($query))
+                $this->addError($data, Yii::t('app', 'This number receipt has taken'));
+        }
     }
 
     public function getImage()
@@ -106,20 +153,14 @@ class SnapEarn extends \yii\db\ActiveRecord
         return $model;
     }
 
-    public function checkPoint($data)
-    {
-        $model = Company::findOne($this->sna_com_id);
-        $merchant_point = $model->com_point;
-        if (($merchant_point - $this->sna_point) < 0 || $this->sna_point > $merchant_point) {
-            $this->addError($data, Yii::t('app', 'Points merchant is Not Enough !'));
-        } elseif(empty($merchant_point)) {
-            $this->addError($data, Yii::t('app', 'This merchant point must be greater than zero !'));
-        }
-    }
-
     public function getMember()
     {
         return $this->hasOne(Account::className(), ['acc_id' => 'sna_acc_id']);
+    }
+
+    public function getBusiness()
+    {
+        return $this->hasOne(Company::className(), ['com_id' => 'sna_com_id']);
     }
 
     public function getRemark()

@@ -52,24 +52,24 @@ $this->registerCss("
                         <div class="col-sm-6">
                             <?php if(empty($model->business)): ?>
                                 <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_name')->textInput(['readonly' => true]); ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_mall')->textInput(['readonly' => true]); ?>
+                                    <?= $form->field($model->newSuggestion, 'cos_name')->textInput(['readonly' => true])->label('Sugest Merchant'); ?>
+                                    <?= $form->field($model->newSuggestion, 'cos_mall')->textInput(['readonly' => true])->label('Sugest Mall'); ?>
                                     <?= $form->field($model->newSuggestion, 'cos_location')->textInput(['readonly' => true]); ?>
                                 <?php endif ?>
                             <div class="form-group">
                                 <label for="" class="col-lg-3 control-label">Merchant</label>
                                 <?php if(!empty($model->newSuggestion)): ?>
                                     <?= Html::button('<i class="fa fa-plus-square"></i> Add New Merchant', ['value' => Url::to(['ajax-new?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-primary btn-sm']); ?>
-                                <?php endif ?>
                                 <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-success btn-sm']); ?>
+                                <?php endif ?>
                             </div>
                             <?php else : ?>
-                                <?= $form->field($model, 'sna_business')->textInput(['value' => is_object($model->business) ? $model->business->com_name : '', 'readonly' => true]) ?>
+                                <?= $form->field($model, 'sna_business')->textInput(['value' => is_object($model->business) ? $model->business->com_name : '', 'readonly' => true])->label('Merchant') ?>
                                 <?php if(is_object($model->business) && $model->business->com_premium == 1): ?>
-                                    <?= $form->field($model->business, 'com_premium')->checkBox(['style' => 'margin-top: 10px', 'disabled' => 'disabled'], false)->label('Premium Business') ?>
+                                    <?= $form->field($model->business, 'com_premium')->checkBox(['style' => 'margin-top: 10px', 'disabled' => 'disabled'], false)->label('Premium Merchant') ?>
                                 <?php endif ?>
 
-                                <?= $form->field($model->business, 'com_point')->textInput(['value' => is_object($model->business) ? $model->business->com_point : 0, 'readonly' => true, 'data-toggle' => 'popover', 'data-trigger' => 'hover', 'data-placement' => 'right', 'data-content' => 'Business Point'])->label('Business Point') ?>
+                                <?= $form->field($model->business, 'com_point')->textInput(['value' => is_object($model->business) ? $model->business->com_point : 0, 'readonly' => true, 'data-toggle' => 'popover', 'data-trigger' => 'hover', 'data-placement' => 'right', 'data-content' => 'Business Point'])->label('Point Merchant') ?>
 
                             <?php endif ?>
                             <?php if(Yii::$app->user->identity->level == 1): ?>
@@ -107,12 +107,11 @@ $this->registerCss("
                                 <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                                 <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
                                 <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
-                                <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
                             </div>
                             <div class="reject-form">
                                 <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control']) ?>
-                                <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
                             </div>
+                            <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
                             <div class="row">
                                 <div class="button-right pull-right">
                                     <button type="submit" class="btn-primary btn submit-button"><i class="fa fa-check"></i> Save</button>
