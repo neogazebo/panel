@@ -303,7 +303,7 @@ class DefaultController extends BaseController
             $com_id = Yii::$app->request->post('com_id');
             $business = Company::findOne($com_id);
 
-            $config = \app\models\SnapEarnRule::find()->where(['ser_country' => $business->com_currency])->one();
+            $config = SnapearnRule::find()->where(['ser_country' => $business->com_currency])->one();
             if(!empty($config)) {
                 if($business->com_premium == 1) {
                     $point *= 2;
