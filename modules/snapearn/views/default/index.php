@@ -21,12 +21,13 @@ $this->title = 'Snap & Earn List';
                     <div class="table-responsive">
                         <?= 
                         GridView::widget([
-                            'id' => 'ListRole',
+                            'id' => 'list_snapearn',
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
                             'columns' => [
                                 [
-                                    'header' => 'Receipt',
+                                    'label' => 'Receipt',
+                                    'attribute' => 'sna_receipt_image',
                                     'format' => 'raw',
                                     'value' => function($data) {
                                         return Html::img($data->image, ['style' => 'max-width: 70px; height: 32px']);
@@ -78,8 +79,6 @@ $this->title = 'Snap & Earn List';
                                             return Yii::$app->formatter->asDateTime($data->sna_approved_datetime);
                                         }elseif (!empty($data->sna_rejected_datetime)) {
                                             return Yii::$app->formatter->asDateTime($data->sna_rejected_datetime);
-                                        }else{
-                                            return 'Not set';
                                         }
                                         
                                     }
@@ -92,8 +91,6 @@ $this->title = 'Snap & Earn List';
                                             return $data->adminRejected['username'];
                                         }elseif (!empty($data->adminApproved['username'])) {
                                             return $data->adminApproved['username'];
-                                        }else{
-                                            return 'Not set';
                                         }
                                     }
                                 ],
@@ -113,8 +110,6 @@ $this->title = 'Snap & Earn List';
                                             return "<i class='fa fa-check label-success'></i>";
                                         }elseif ($data->sna_status == 2) {
                                             return "<i class='fa fa-close label-danger'></i>";
-                                        }else{
-                                            return "Not set";
                                         }
                                     }
                                 ],
