@@ -29,11 +29,24 @@ $this->title = 'Snap & Earn List';
                                     'header' => 'Receipt',
                                     'format' => 'raw',
                                     'value' => function($data) {
-                                        return Html::img($data->image, ['height' => 32]);
+                                        return Html::img($data->image, ['style' => 'max-width: 70px; height: 32px']);
                                     }
                                 ],
-                                'merchant.com_name',
-                                'category.cat_name',
+                                [
+                                    'label' => 'Merchant',
+                                    'attribute' => 'sna_com_id',
+                                    'value' => function($data){
+                                        return $data->merchant['com_name'];
+                                    }
+                                ],
+                                [
+                                    'label' => 'Category Mechant',
+                                    'attribute' => 'sna_cat_id',
+                                    'value' => function($data){
+                                        return $data->category['cat_name'];
+                                    }
+                                ],
+                                // 'category.cat_name',
                                 'sna_receipt_number',
                                 'sna_receipt_date',
                                 [
@@ -56,18 +69,53 @@ $this->title = 'Snap & Earn List';
                                         return Yii::$app->formatter->asDateTime($data->sna_upload_date);
                                     }
                                 ],
-                                'adminApproved.username',
+                                // 'adminApproved.username',
                                 [
+                                    'label' => 'Date Review',
                                     'attribute' => 'sna_approved_datetime',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDateTime($data->sna_approved_datetime);
+                                        if (!empty($data->sna_approved_datetime)) {
+                                            return Yii::$app->formatter->asDateTime($data->sna_approved_datetime);
+                                        }elseif (!empty($data->sna_rejected_datetime)) {
+                                            return Yii::$app->formatter->asDateTime($data->sna_rejected_datetime);
+                                        }else{
+                                            return 'Not set';
+                                        }
+                                        
                                     }
                                 ],
-                                'adminRejected.username',
                                 [
-                                    'attribute' => 'sna_rejected_datetime',
-                                    'value' => function($data) {
-                                        return Yii::$app->formatter->asDateTime($data->sna_rejected_datetime);
+                                    'label' => 'Operator',
+                                    'attribute' => 'sna_status',
+                                    'value' => function($data){
+                                        if (!empty($data->adminRejected['username'])) {
+                                            return $data->adminRejected['username'];
+                                        }elseif (!empty($data->adminApproved['username'])) {
+                                            return $data->adminApproved['username'];
+                                        }else{
+                                            return 'Not set';
+                                        }
+                                    }
+                                ],
+                                // 'adminRejected.username',
+                                // [
+                                //     'attribute' => 'sna_rejected_datetime',
+                                //     'value' => function($data) {
+                                //         return Yii::$app->formatter->asDateTime($data->sna_rejected_datetime);
+                                //     }
+                                // ],
+                                [
+                                    'label' => 'Status',
+                                    'attribute' => 'sna_status',
+                                    'format' => 'html',
+                                    'value' => function($data){
+                                        if ($data->sna_status == 1) {
+                                            return "<i class='fa fa-check label-success'></i>";
+                                        }elseif ($data->sna_status == 2) {
+                                            return "<i class='fa fa-close label-danger'></i>";
+                                        }else{
+                                            return "Not set";
+                                        }
                                     }
                                 ],
                                 [

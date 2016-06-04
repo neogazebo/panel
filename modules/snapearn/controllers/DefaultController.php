@@ -10,6 +10,9 @@ use app\models\Account;
 use app\models\SnapEarn;
 use app\models\SnapEarnRule;
 use app\models\Company;
+use app\models\LoyaltyPointHistory;
+use app\components\helpers\General;
+
 
 /**
  * Default controller for the `snapearn` module
@@ -95,6 +98,12 @@ class DefaultController extends BaseController
         // get old point
         $oldPoint = $model->sna_point;
 
+        // ajax validation
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()))  {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
+
         // get post request form
         if($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
@@ -148,7 +157,6 @@ class DefaultController extends BaseController
                     $model->sna_point = 0;
                     $model->sna_receipt_amount = 0;
                 }
-
                 // execution save to snapearn
                 $snap_type = '';
                 if($model->save()) {
@@ -260,6 +268,8 @@ class DefaultController extends BaseController
                         $snap_type = 'rejected';
                     }
                     // Yii::$app->workingTime->end($id);
+                }else{
+                    var_dump($model->getErrors());exit;
                 }
 
                 // $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
@@ -297,9 +307,9 @@ class DefaultController extends BaseController
             if(!empty($config)) {
                 if($business->com_premium == 1) {
                     $point *= 2;
-                    $point_cap = $config->snc_premium;
+                    $point_cap = $config->ser_premium;
                 } else
-                    $point_cap = $config->snc_point_cap;
+                    $point_cap = $config->ser_point_cap;
                 if($point > $point_cap)
                     return $point_cap;
             }
@@ -314,5 +324,45 @@ class DefaultController extends BaseController
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    protected function savePoint($params, $type = 'C')
+    {
+        $valid = 365;
+        $time = time();
+        if($type == 'C')
+            $total_point = $params['current_point'] + $params['sna_point'];
+        else
+            $total_point = $params['current_point'] - $params['sna_point'];
+        $history = new LoyaltyPointHistory();
+        $history->setScenario('snapEarnUpdate');
+        $history->lph_acc_id = $params['sna_acc_id'];
+        $history->lph_com_id = $params['sna_com_id'];
+        $history->lph_lpt_id = 56;
+        $history->lph_amount = $params['sna_point'];
+        $history->lph_param =  (string)$params['sna_id'];
+        $history->lph_type = $type;
+        $history->lph_datetime = $time;
+        $history->lph_total_point = $total_point;
+        $history->lph_expired = $time + $valid * 86400;
+        $history->lph_current_point = $params['sna_point'];
+        if($history->save())
+            $this->setMessage('save', 'error', $history->getErrors());
+        // return $history;
+    }
+
+    protected function merchantPoint($params, $type = true)
+    {
+        // update merchant point
+        if($type == true)
+            $com_point = $params['com_point'] + $params['sna_point'];
+        else
+            $com_point = $params['com_point'] - $params['sna_point'];
+        $point = Company::findOne($params['sna_com_id']);
+        $point->setScenario('snapEarnUpdate');
+        $point->com_point = $com_point;
+        if($point->save())
+            $this->setMessage('save', 'error', General::extactErrorModel($point->getErrors()));
+        // return $point;
     }
 }

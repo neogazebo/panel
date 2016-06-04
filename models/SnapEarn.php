@@ -52,10 +52,16 @@ class SnapEarn extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sna_acc_id', 'sna_com_id', 'sna_receipt_number', 'sna_receipt_date', 'sna_receipt_amount', 'sna_upload_date', 'sna_cat_id', 'sna_receipt_image', 'sna_com_name'], 'required'],
-            [['sna_acc_id', 'sna_com_id', 'sna_point', 'sna_status', 'sna_upload_date', 'sna_approved_datetime', 'sna_approved_by', 'sna_rejected_datetime', 'sna_rejected_by', 'sna_sem_id', 'sna_cat_id'], 'integer'],
+            [['sna_acc_id', 'sna_com_id', 'sna_receipt_date', 'sna_upload_date', 'sna_cat_id', 'sna_com_name'], 'required'],
+            [['sna_receipt_amount','sna_receipt_number', 'sna_receipt_image'],'required','when' => function($model) {
+                return $model->sna_status == 1;
+            }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }"],
+            [['sna_com_id', 'sna_point', 'sna_status', 'sna_upload_date', 'sna_approved_datetime', 'sna_approved_by', 'sna_rejected_datetime', 'sna_rejected_by', 'sna_sem_id', 'sna_cat_id','sna_receipt_amount'], 'integer'],
             [['sna_receipt_number'], 'string', 'max' => 20],
-            [['sna_receipt_date', 'sna_receipt_amount'], 'string', 'max' => 10],
+            [['sna_receipt_date'], 'string', 'max' => 10],
+            [['sna_receipt_amount'], 'checkPoint', 'when' => function($model) {
+                return $model->sna_status == 1;
+            }],
             [['sna_receipt_image'], 'string', 'max' => 75],
             [['sna_com_name'], 'string', 'max' => 100],
             ['sna_transaction_time', 'safe']
@@ -82,7 +88,7 @@ class SnapEarn extends \yii\db\ActiveRecord
     public function getEmail()
     {
         $model = SnapEarnRemark::find()->all();
-        return Html::listData($model, 'sem_id', 'sem_name');
+        return Html::listData($model, 'sem_id', 'sem_remark');
     }
 
     public function getCompany()
@@ -98,6 +104,17 @@ class SnapEarn extends \yii\db\ActiveRecord
             ->where('cos_sna_id = :id', [':id' => $this->sna_id])
             ->one();
         return $model;
+    }
+
+    public function checkPoint($data)
+    {
+        $model = Company::findOne($this->sna_com_id);
+        $merchant_point = $model->com_point;
+        if (($merchant_point - $this->sna_point) < 0 || $this->sna_point > $merchant_point) {
+            $this->addError($data, Yii::t('app', 'Points merchant is Not Enough !'));
+        } elseif(empty($merchant_point)) {
+            $this->addError($data, Yii::t('app', 'This merchant point must be greater than zero !'));
+        }
     }
 
     public function getMember()

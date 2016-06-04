@@ -51,6 +51,7 @@ class LoyaltyPointHistory extends \yii\db\ActiveRecord
             [['lph_parent', 'lph_acc_id', 'lph_com_id', 'lph_cus_id', 'lph_lpe_id', 'lph_amount', 'lph_datetime', 'lph_total_point', 'lph_expired', 'lph_current_point', 'lph_approve', 'lph_lpt_id'], 'integer'],
             [['lph_param'], 'required'],
             [['lph_type', 'lph_free'], 'string'],
+            [['lph_cus_id','lph_free'],'safe','on'=>'snapEarnUpdate'],
             [['lph_param'], 'string', 'max' => 20],
         ];
     }

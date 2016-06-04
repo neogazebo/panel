@@ -781,4 +781,9 @@ class Company extends EbizuActiveRecord
         ];
     }
 
+    public static function find()
+    {
+        return new CompanyQuery(get_called_class());
+    }
+
 }
