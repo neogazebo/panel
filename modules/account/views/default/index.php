@@ -35,6 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'acc_facebook_email'
                                 ],
                                 [
+                                    'label' => 'Facebook Id',
+                                    'attribute' => 'acc_facebook_id'
+                                ],
+                                [
                                     'label' => 'Registered Date',
                                     'attribute' => 'acc_created_datetime',
                                     'value' => function($data){

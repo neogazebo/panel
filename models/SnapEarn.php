@@ -64,7 +64,8 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_receipt_image',
                 'sna_transaction_time'], 'required', 'when' => function($model) {
                 return $model->sna_status == 1;
-            }],
+            }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }"],
+            // [['sna_transaction_time'],'date', 'format' => 'Y-m-d H:m:s'],
             [['sna_com_id', 
                 'sna_point', 
                 'sna_status', 
