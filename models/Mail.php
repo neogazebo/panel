@@ -46,6 +46,8 @@ class Mail
     CONST BODY_WELCOME_ADMIN = '//mail/content/welcome';
     CONST SUBJECT_ACTIVAION_MASTER = 'Youre registered to Ebizu Admin Centre';
     CONST BODY_ACTIVAION_MASTER = '//mail/content/activation';
+    CONST SUBJECT_SNAPEARN_REJECTED = 'Youre snap & earn rejected';
+    CONST BODY_SNAPEARN_REJECTED = '//mail/content/snapearn-rejected';
 
     //RHB
     CONST SUBJECT_REGISTER_RHB_INVOICE = 'RECEIPT RHB SUBSCRIPTION';
@@ -105,7 +107,7 @@ class Mail
 
         if ($mail->send()) {
             $this->saveTemplateContentAsLog();
-            if (KemailQueue::logSave($this->from, $this->to, $this->subject, Yii::$app->controller->renderPartial($this->template, ['content' => $this->body, 'params' => $this->params])))
+            if (EmailQueue::logSave($this->from, $this->to, $this->subject, Yii::$app->controller->renderPartial($this->template, ['content' => $this->body, 'params' => $this->params])))
                 return true;
         }
         return false;
@@ -131,7 +133,7 @@ class Mail
         }        
         
         $mailBody = Yii::$app->controller->renderPartial($this->template, ['content' => $this->body, 'params' => $this->params]);
-        if (KemailQueue::insertToSendingMail($this->from, $this->to, $this->cc, $this->bcc, $this->subject, $mailBody, $mailBody, $attachJson)) {
+        if (EmailQueue::insertToSendingMail($this->from, $this->to, $this->cc, $this->bcc, $this->subject, $mailBody, $mailBody, $attachJson)) {
             return true;
         }
         return false;

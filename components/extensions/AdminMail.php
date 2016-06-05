@@ -80,6 +80,14 @@ class TBackend extends TMail
         $this->body = Mail::BODY_EMPLOYEE_REGISTER;
         return $this;
     }
+
+    public function snapearnRejected($type, $name)
+    {
+        $this->template = '//mail/template/template-snapearn';
+        $this->subject = Mail::SUBJECT_SNAPEARN_REJECTED;
+        $this->body = Mail::BODY_SNAPEARN_REJECTED;
+        return $this;
+    }
     
     public function resetPasswordEmployee()
     {
@@ -91,7 +99,7 @@ class TBackend extends TMail
 
     public function registerTmInvoice()
     {
-        $this->from = 'finance@ebizu.com';
+        $this->from = 'Ebizu Finance <finance@ebizu.com>';
         $this->template = '//mail/template/template-invoice';
         $this->subject = Mail::SUBJECT_REGISTER_TM_INVOICE;
         $this->body = Mail::BODY_REGISTER_TM_INVOICE;
@@ -105,7 +113,7 @@ class TBackend extends TMail
     
     public function registerTmReceipt()
     {
-        $this->from = 'finance@ebizu.com';
+        $this->from = 'Ebizu Finance <finance@ebizu.com>';
         $this->template = '//mail/template/template-invoice';
         $this->subject = Mail::SUBJECT_REGISTER_TM_RECEIPT;
         $this->body = Mail::BODY_REGISTER_TM_RECEIPT;

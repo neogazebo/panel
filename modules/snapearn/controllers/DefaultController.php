@@ -4,6 +4,7 @@ namespace app\modules\snapearn\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\web\NotFoundHttpException;
 use app\controllers\BaseController;
 use app\components\helpers\Utc;
 use app\components\helpers\General;
@@ -11,8 +12,8 @@ use app\models\Account;
 use app\models\SnapEarn;
 use app\models\SnapEarnRule;
 use app\models\Company;
+use app\models\Activity;
 use app\models\LoyaltyPointHistory;
-use yii\web\NotFoundHttpException;
 
 /**
  * Default controller for the `snapearn` module
@@ -175,10 +176,9 @@ class DefaultController extends BaseController
                         $point = $this->merchantPoint($merchantParams, false);
 
                         if ($model->sna_push == 1) {
-                            $usr_id = Account::findOne($model->sna_acc_id)->mem_usr_id;
                             $params = [$model->sna_acc_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
                             $customData = ['type' => 'snapearn'];
-                            Activity::insertAct($usr_id, 31, $params, $customData);
+                            Activity::insertAct($model->sna_acc_id, 31, $params, $customData);
                         }
     
                         // create snapearn point detail
@@ -201,7 +201,7 @@ class DefaultController extends BaseController
                         if (!empty($model->sna_sem_id)) {
                             $type = 0;
                             $name = '';
-                            $parsers = [];
+                            $params = [];
                             $picture = Yii::$app->params['businessUrl'] . 'receipt/receipt_sample.jpg';
     
                             // $message = new SystemMessage;
@@ -209,46 +209,51 @@ class DefaultController extends BaseController
                                 case 1:
                                     $type = 36;
                                     $name = 'snapearn_receipt_blur';
-                                    $parsers[0] = ['[username]', $username];
-                                    $parsers[1] = ['[picture]', $picture];
+                                    $params[0] = ['[username]', $username];
+                                    $params[1] = ['[picture]', $picture];
                                     break;
                                 case 2:
                                     $type = 37;
                                     $name = 'snapearn_receipt_dark';
-                                    $parsers[] = ['[username]', $username];
-                                    $parsers[] = ['[picture]', $picture];
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[picture]', $picture];
                                     break;
                                 case 3:
                                     $type = 38;
                                     $name = 'snapearn_receipt_incomplete';
-                                    $parsers[] = ['[username]', $username];
-                                    $parsers[] = ['[picture]', $picture];
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[picture]', $picture];
                                     break;
                                 case 4:
                                     $type = 39;
                                     $name = 'snapearn_receipt_suspicious';
-                                    $parsers[0] = ['[username]', $username];
-                                    $parsers[1] = ['[business]', $business];
+                                    $params[0] = ['[username]', $username];
+                                    $params[1] = ['[business]', $business];
                                     break;
                                 case 5:
                                     $type = 44;
                                     $name = 'snapearn_duplicate';
-                                    $parsers[] = ['[username]', $username];
+                                    $params[] = ['[username]', $username];
                                     break;
                                 case 6:
                                     $type = 45;
                                     $name = 'snapearn_invalid';
-                                    $parsers[] = ['[username]', $username];
-                                    $parsers[] = ['[business]', $business];
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[business]', $business];
                                     break;
                                 case 7:
                                     $type = 49;
                                     $name = 'snapearn_receipt_violates';
-                                    $parsers[] = ['[username]', $username];
-                                    $parsers[] = ['[business]', $business];
-                                    $parsers[] = ['[location]', $location];
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[business]', $business];
+                                    $params[] = ['[location]', $location];
                                     break;
                             }
+                            Yii::$app->->AdminMail
+                                ->backend($to, $params)
+                                ->snapearnRejected($type, $name)
+                                ->send()
+                                ->view();
                             // $message->parser($type, $name, $email, $parsers);
                         }
                         //if push notification checked then send to activity

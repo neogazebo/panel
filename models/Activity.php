@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\components\helpers\Utc;
 
 /**
  * This is the model class for table "tbl_activity".
@@ -49,35 +50,38 @@ class Activity extends \yii\db\ActiveRecord
     {
         $fields = [];
         for ($i = 0; $i < count($params); $i++) {
-            $fields[] = 'col' . ($i + 1) . ' = "' . $params[$i] . '"';
+            $fields[] = '`acv_col' . ($i + 1) . '` = "' . $params[$i] . '"';
         }
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $query = "
-                INSERT INTO tbl_activity 
-                SET 
-                    acv_acc_id = ".$usrid.", 
-                    acv_act_id = ".$type.", 
-                    acv_datetime = UNIX_TIMESTAMP(), 
-                ".implode(',' , $fields);
-            Yii::$app->db->createCommand($query)->execute();
+            $model = new Activity;
+            $model->acv_acc_id = $usrid;
+            $model->acv_act_id = $type;
+            $model->acv_datetime = Utc::getNow();
 
-            $acvId = Yii::$app->db->getLastInsertId();
-
-            if (empty($customData)) {
-                $customData = NULL;
-            } else {
-                $customData = json_encode($customData);
+            $count = 1;
+            foreach ($params as $k => $v) {
+                $field = 'acv_col' . $count;
+                $model->$field = $v;
+                $count++;
             }
+            $model->save();
 
-            $actSent = new ActivitySent();
+            $acvId = Yii::$app->db->getLastInsertID();
+
+            if (empty($customData))
+                $customData = NULL;
+            else
+                $customData = json_encode($customData);
+
+            $actSent = new ActivitySent;
             $actSent->acs_acv_id = $acvId;
-            $actSent->acs_usr_id = $usrid;
-            $actSent->acs_datetime = time();
+            $actSent->acs_acc_id = $usrid;
+            $actSent->acs_datetime = Utc::getNow();
             $actSent->acs_android_pushed = 0;
             $actSent->acs_custom_data = $customData;
-            $actSent->save(false);
+            $actSent->save();
             $transaction->commit();
         } catch(Exception $e) {
             $transaction->rollBack();
