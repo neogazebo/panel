@@ -52,8 +52,8 @@ $this->registerCss("
                         <div class="col-sm-6">
                             <?php if(empty($model->business)): ?>
                                 <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_name')->textInput(['readonly' => true])->label('Sugest Merchant'); ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_mall')->textInput(['readonly' => true])->label('Sugest Mall'); ?>
+                                    <?= $form->field($model->newSuggestion, 'cos_name')->textInput(['readonly' => true])->label('Suggest Merchant'); ?>
+                                    <?= $form->field($model->newSuggestion, 'cos_mall')->textInput(['readonly' => true])->label('Suggest Mall'); ?>
                                     <?= $form->field($model->newSuggestion, 'cos_location')->textInput(['readonly' => true]); ?>
                                 <?php endif ?>
                             <div class="form-group">
@@ -104,9 +104,8 @@ $this->registerCss("
                             <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                             <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                             <div class="point-form">
-                                <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
-                                <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
-                                <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
+                                <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control']) ?>
+                                <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control']) ?>
                             </div>
                             <div class="reject-form">
                                 <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control']) ?>
@@ -198,20 +197,5 @@ $this->registerJs("
             $('#snapearn-sna_receipt_amount, #snapearn-sna_point').val('');
         }
     }).trigger('change');
-
-    $('#snapearn-sna_receipt_amount').blur(function() {
-        var point = Math.floor($('#snapearn-sna_receipt_amount').val());
-        // $('#snapearn-sna_point').val(point);
-        $.ajax({
-            type: 'POST',
-            url: baseUrl + 'snapearn/default/ajax-snapearn-point',
-            data: { id: id, com_id: com_id, point: point },
-            dataType: 'json',
-            success: function(result) {
-                $('#snapearn-sna_point').val(result);
-            }
-        });
-    });
-
 ", yii\web\View::POS_END, 'snapearn-form');
 ?>

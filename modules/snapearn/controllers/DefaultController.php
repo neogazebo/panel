@@ -12,7 +12,7 @@ use app\models\SnapEarn;
 use app\models\SnapEarnRule;
 use app\models\Company;
 use app\models\LoyaltyPointHistory;
-
+use yii\web\NotFoundHttpException;
 
 /**
  * Default controller for the `snapearn` module
@@ -268,7 +268,7 @@ class DefaultController extends BaseController
                         $snap_type = 'rejected';
                     }
                     // Yii::$app->workingTime->end($id);
-                }else{
+                } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
 
@@ -281,7 +281,7 @@ class DefaultController extends BaseController
             if($_POST['saveNext'] == 1) {
                 $nextUrl = SnapEarn::find()->saveNext($id, $ctr);
                 if(!empty($nextUrl))
-                    return $this->redirect(['/loyaltypoint/snapearntoupdate/' . $nextUrl->sna_id]);
+                    return $this->redirect(['to-update/' . $nextUrl->sna_id]);
             }
             return $this->redirect([$this->getRememberUrl()]);
         }
