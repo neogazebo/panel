@@ -119,7 +119,7 @@ $this->registerCss("
                                     <input id="saveNext" type="hidden" name="saveNext" value="">
                                 </div>
                                 <div class="button-left pull-left">
-                                    <?= Html::a('<i class="fa fa-times"></i> Cancel', ['cancel'], ['class' => 'btn btn-default']) ?>
+                                    <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel/?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
                                 </div>
                             </div>
                         </div>
@@ -211,6 +211,13 @@ $this->registerJs("
                 $('#snapearn-sna_point').val(result);
             }
         });
+    });
+
+    $('.saveNext').click(function(){
+        $('#saveNext').val(1);
+    });
+    $('.submit-button, .reset-button').click(function(){
+        $('#saveNext').val(0);
     });
 
 ", yii\web\View::POS_END, 'snapearn-form');
