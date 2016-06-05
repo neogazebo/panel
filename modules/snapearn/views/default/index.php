@@ -36,14 +36,14 @@ $this->title = 'Snap & Earn List';
                                 [
                                     'label' => 'Merchant',
                                     'attribute' => 'sna_com_id',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         return $data->merchant['com_name'];
                                     }
                                 ],
                                 [
                                     'label' => 'Member',
                                     'attribute' => 'sna_acc_id',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         return $data->member->acc_screen_name;
                                     }
                                 ],
@@ -84,7 +84,7 @@ $this->title = 'Snap & Earn List';
                                 [
                                     'label' => 'Operator',
                                     'attribute' => 'sna_status',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         if (!empty($data->adminRejected['username'])) {
                                             return $data->adminRejected['username'];
                                         } elseif (!empty($data->adminApproved['username'])) {
@@ -96,7 +96,7 @@ $this->title = 'Snap & Earn List';
                                     'label' => 'Status',
                                     'attribute' => 'sna_status',
                                     'format' => 'html',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         if ($data->sna_status == 1) {
                                             return "<i class='fa fa-check approved-status'></i>";
                                         } elseif ($data->sna_status == 2) {
@@ -123,7 +123,3 @@ $this->title = 'Snap & Earn List';
         </div>
     </div>
 </section>
-
-<?php
-
-?>

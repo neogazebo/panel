@@ -95,6 +95,7 @@ class DefaultController extends BaseController
         // get old point
         $oldPoint = $model->sna_point;
         $ctr = $model->member->acc_cty_id;
+
         // ajax validation
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()))  {
             Yii::$app->response->format = 'json';
@@ -173,12 +174,12 @@ class DefaultController extends BaseController
                         $history = $this->savePoint($params);
                         $point = $this->merchantPoint($merchantParams, false);
 
-                        // if ($model->sna_push == 1) {
-                        //     $usr_id = Account::findOne($model->sna_acc_id)->mem_usr_id;
-                        //     $params = [$model->sna_acc_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
-                        //     $customData = ['type' => 'snapearn'];
-                        //     Activity::insertAct($usr_id, 31, $params, $customData);
-                        // }
+                        if ($model->sna_push == 1) {
+                            $usr_id = Account::findOne($model->sna_acc_id)->mem_usr_id;
+                            $params = [$model->sna_acc_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
+                            $customData = ['type' => 'snapearn'];
+                            Activity::insertAct($usr_id, 31, $params, $customData);
+                        }
     
                         // create snapearn point detail
                         // SnapEarnPointDetail::savePoint($id, 7);
@@ -251,12 +252,11 @@ class DefaultController extends BaseController
                             // $message->parser($type, $name, $email, $parsers);
                         }
                         //if push notification checked then send to activity
-                        // if ($model->sna_push == 1) {
-                        //     $usr_id = Member::findOne($model->sna_acc_id)->mem_usr_id;
-                        //     $params = [$model->sna_acc_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
-                        //     $customData = ['type' => 'snapearn'];
-                        //     Activity::insertAct($usr_id, 30, $params, $customData);
-                        // }
+                        if ($model->sna_push == 1) {
+                            $params = [$model->sna_acc_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
+                            $customData = ['type' => 'snapearn'];
+                            Activity::insertAct($model->sna_acc_id, 30, $params, $customData);
+                        }
     
                         // create snapearn point detail
                         // SnapEarnPointDetail::savePoint($id, $model->sna_sem_id);
@@ -281,6 +281,8 @@ class DefaultController extends BaseController
                     return $this->redirect(['to-update/' . $nextUrl->sna_id]);
             }
             return $this->redirect([$this->getRememberUrl()]);
+        } else {
+            $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
         }
 
         $model->sna_transaction_time = date('Y-m-d H:i:s', Utc::convert($model->sna_upload_date));
@@ -294,11 +296,12 @@ class DefaultController extends BaseController
 
     public function actionAjaxSnapearnPoint()
     {
-        if(Yii::$app->request->isAjax) {
+        if (Yii::$app->request->isAjax) {
             $id = Yii::$app->request->post('id');
             $point = Yii::$app->request->post('point');
             $com_id = Yii::$app->request->post('com_id');
             $business = Company::findOne($com_id);
+
             $config = SnapEarnRule::find()->where(['ser_country' => $business->com_currency])->one();
             if(!empty($config)) {
                 if($business->com_premium == 1) {
@@ -310,15 +313,6 @@ class DefaultController extends BaseController
                     return $point_cap;
             }
             return $point;
-        }
-    }
-
-    protected function findModel($id)
-    {
-    	if (($model = SnapEarn::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
@@ -344,7 +338,6 @@ class DefaultController extends BaseController
         $history->lph_current_point = $params['sna_point'];
         if($history->save())
             $this->setMessage('save', 'error', General::extractErrorModel($history->getErrors()));
-        // return $history;
     }
 
     protected function merchantPoint($params, $type = true)
@@ -359,6 +352,15 @@ class DefaultController extends BaseController
         $point->com_point = $com_point;
         if($point->save())
             $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
-        // return $point;
     }
+
+    protected function findModel($id)
+    {
+        if (($model = SnapEarn::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
 }
