@@ -52,22 +52,54 @@ class SnapEarn extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sna_acc_id', 'sna_com_id', 'sna_receipt_date', 'sna_upload_date', 'sna_cat_id', 'sna_com_name'], 'required'],
-            [['sna_receipt_amount', 'sna_receipt_number', 'sna_receipt_image'], 'required', 'when' => function($model) {
+            [['sna_acc_id', 
+                'sna_com_id', 
+                'sna_receipt_date', 
+                'sna_upload_date', 
+                'sna_cat_id', 
+                'sna_com_name'], 
+            'required'],
+            [['sna_receipt_amount', 
+                'sna_receipt_number', 
+                'sna_receipt_image',
+                'sna_transaction_time'], 'required', 'when' => function($model) {
                 return $model->sna_status == 1;
             }],
-            [['sna_com_id', 'sna_point', 'sna_status', 'sna_upload_date', 'sna_approved_datetime', 'sna_approved_by', 'sna_rejected_datetime', 'sna_rejected_by', 'sna_sem_id', 'sna_cat_id', 'sna_receipt_amount'], 'integer'],
-            [['sna_receipt_number'], 'string', 'max' => 20],
-            [['sna_receipt_number'], 'approvePerday', 'when' => function($model) {
-                return $model->sna_status == 1;
-            }],
-            [['sna_receipt_date'], 'string', 'max' => 10],
-            [['sna_receipt_amount'], 'checkPoint', 'when' => function($model) {
-                return $model->sna_status == 1;
-            }],
+            [['sna_com_id', 
+                'sna_point', 
+                'sna_status', 
+                'sna_upload_date', 
+                'sna_approved_datetime', 
+                'sna_approved_by', 
+                'sna_rejected_datetime', 
+                'sna_rejected_by', 
+                'sna_sem_id', 
+                'sna_cat_id', 
+                'sna_receipt_amount'], 
+            'integer'],
+            [['sna_receipt_number'], 
+                'string', 
+                'max' => 20],
+            [['sna_receipt_number'], 
+                'approvePerday', 
+                'when' => function($model) {
+                    return $model->sna_status == 1;
+                }],
+            [['sna_receipt_date'], 
+                'string', 
+                'max' => 10],
+            [['sna_receipt_amount'], 
+                'checkPoint', 
+                'when' => function($model) {
+                    return $model->sna_status == 1;
+                }],
             ['sna_com_id', 'checkMerchant'],
-            [['sna_receipt_image'], 'string', 'max' => 75],
-            [['sna_com_name'], 'string', 'max' => 100],
+            [['sna_receipt_image'], 
+                'string', 
+                'max' => 75],
+            [['sna_com_name'], 
+                'string', 
+                'max' => 100],
             ['sna_transaction_time', 'safe']
         ];
     }
