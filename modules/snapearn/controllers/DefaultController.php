@@ -278,7 +278,7 @@ class DefaultController extends BaseController
             if($_POST['saveNext'] == 1) {
                 $nextUrl = SnapEarn::find()->saveNext($id, $ctr);
                 if(!empty($nextUrl))
-                    return $this->redirect(['to-update/' . $nextUrl->sna_id]);
+                    return $this->redirect(['/default/snapearntoupdate/' . $nextUrl->sna_id]);
             }
             return $this->redirect([$this->getRememberUrl()]);
         } else {

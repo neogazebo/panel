@@ -99,6 +99,12 @@ class Account extends \yii\db\ActiveRecord
         return $upload;
     }
 
+    public function activeDevice()
+    {
+        $model = AccountDevice::find()->getActiveDevice($this->acc_id);
+        return $model->dvc_model;
+    }
+
     /**
      * @inheritdoc
      */

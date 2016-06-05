@@ -87,7 +87,13 @@ $this->registerCss("
                       <b>Last Login </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->lastLogin()) ?></a>
                     </li>
                     <li class="list-group-item">
+                      <b>Facebook Link </b> <a href="https://www.facebook.com/<?= $model->acc_facebook_id ?>" target="blank_" class="pull-right"> Link</a>
+                    </li>
+                    <li class="list-group-item">
                       <b>Registered From  </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->acc_created_datetime) ?></a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Device Active  </b> <a class="pull-right"><?= $model->activeDevice() ?></a>
                     </li>
                   </ul>
                 </div>
