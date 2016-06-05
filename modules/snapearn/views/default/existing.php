@@ -16,32 +16,38 @@ $form = ActiveForm::begin([
         'labelOptions' => ['class' => 'col-lg-3 control-label'],
     ]
 ]);
+
+$url = Url::to(['merchant/default/list']);
+$com_id = Yii::$app->request->getQueryParam('com_id');
+$initScript = <<< SCRIPT
+    function (element, callback) {
+        var id = "{$com_id}";
+        if (id !== "") {
+            \$.ajax("{$url}?id=" + id, {
+                dataType: "json"
+            }).done(function(data) { callback(data.results);});
+        }
+    }
+SCRIPT;
 ?>
 <div class="modal-body">
-	<?php
-	$url = Url::to(['merchant/default/list']);
-	// $business = empty($model->company->com_id) ? '' : Company::findOne($model->company->com_id)->com_name;
-	echo Select2::widget([
-        // 'initValueText' => $business, // set the initial display text
-        'data' => $model,
-	    'options' => ['placeholder' => 'Search for a merchant ...'],
-	    'pluginOptions' => [
-	        'allowClear' => true,
-	        'minimumInputLength' => 3,
-	        'language' => [
-	            'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
-	        ],
-	        'ajax' => [
-	            'url' => $url,
-	            'dataType' => 'json',
-	            'data' => new JsExpression('function(params) { return { q: params.term }; }')
-	        ],
-	        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-	        'templateResult' => new JsExpression('function (business) { return business.text; }'),
-	        'templateSelection' => new JsExpression('function (business) { return business.text; }'),
-	    ],
+	<?= Select2::widget([
+        'name' => 'business',
+        'options' => ['placeholder' => 'Choose a Business ...'],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' => 3,
+            'ajax' => [
+                'url' => $url,
+                'dataType' => 'json',
+                'data' => new yii\web\JsExpression("function(term,page) { return {search:term}; }"),
+                'results' => new yii\web\JsExpression('function(data,page) { return {results:data.results}; }'),
+            ],
+            'initSelection' => new yii\web\JsExpression($initScript)
+        ],
     ]);
     ?>
+    <?= $form->field($model, 'sna_id')->hiddenInput()->label('') ?>
 </div>
 <div class="modal-footer">
     <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>

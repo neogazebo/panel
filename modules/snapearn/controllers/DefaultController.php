@@ -71,15 +71,12 @@ class DefaultController extends BaseController
     public function actionAjaxExisting($id)
     {
         $model = $this->findModel($id);
-        if (Yii::$app->request->isAjax) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = 'json';
             return \yii\widgets\ActiveForm::validate($model);
         }
 
         if ($model->load(Yii::$app->request->post())) {
-            echo '<pre>';
-            var_dump($model->attributes);
-            exit;
             if ($model->save()) {
                 $this->setMessage('save', 'success', 'Merchant created successfully!');
                 return $this->redirect($this->getRememberUrl());
