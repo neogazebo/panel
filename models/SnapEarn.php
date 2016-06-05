@@ -28,7 +28,7 @@ use app\components\helpers\Html;
  */
 class SnapEarn extends \yii\db\ActiveRecord
 {
-    public $sna_push;
+    public $sna_push = true;
 
     /**
      * @inheritdoc
@@ -55,7 +55,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             [['sna_acc_id', 'sna_com_id', 'sna_receipt_date', 'sna_upload_date', 'sna_cat_id', 'sna_com_name'], 'required'],
             [['sna_receipt_amount', 'sna_receipt_number', 'sna_receipt_image'], 'required', 'when' => function($model) {
                 return $model->sna_status == 1;
-            }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }"],
+            }],
             [['sna_com_id', 'sna_point', 'sna_status', 'sna_upload_date', 'sna_approved_datetime', 'sna_approved_by', 'sna_rejected_datetime', 'sna_rejected_by', 'sna_sem_id', 'sna_cat_id', 'sna_receipt_amount'], 'integer'],
             [['sna_receipt_number'], 'string', 'max' => 20],
             [['sna_receipt_number'], 'approvePerday', 'when' => function($model) {
