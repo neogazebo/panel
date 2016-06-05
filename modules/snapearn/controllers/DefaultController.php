@@ -249,7 +249,7 @@ class DefaultController extends BaseController
                                     $params[] = ['[location]', $location];
                                     break;
                             }
-                            Yii::$app->->AdminMail
+                            Yii::$app->AdminMail
                                 ->backend($to, $params)
                                 ->snapearnRejected($type, $name)
                                 ->send()
