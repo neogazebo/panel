@@ -283,7 +283,7 @@ class DefaultController extends BaseController
             if($_POST['saveNext'] == 1) {
                 $nextUrl = SnapEarn::find()->saveNext($id, $ctr);
                 if(!empty($nextUrl))
-                    return $this->redirect(['/default/snapearntoupdate/' . $nextUrl->sna_id]);
+                    return $this->redirect(['default/to-update?id=' . $nextUrl->sna_id]);
             }
             return $this->redirect([$this->getRememberUrl()]);
         } else {
@@ -318,6 +318,21 @@ class DefaultController extends BaseController
                     return $point_cap;
             }
             return $point;
+        }
+    }
+
+    public function actionCancel($id)
+    {
+        // Yii::$app->workingTime->cancel($id); 
+        return $this->redirect([$this->getRememberUrl()]);
+    } 
+
+    protected function findModel($id)
+    {
+    	if (($model = SnapEarn::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
@@ -357,15 +372,6 @@ class DefaultController extends BaseController
         $point->com_point = $com_point;
         if($point->save())
             $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
-    }
-
-    protected function findModel($id)
-    {
-        if (($model = SnapEarn::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
     }
 
 }
