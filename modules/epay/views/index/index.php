@@ -53,7 +53,7 @@ $this->registerCss("
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <p>Please select reconciliation process below</p>
-                    <table class="table table-hover table-bordered">
+                    <table class="table table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -71,12 +71,12 @@ $this->registerCss("
                             ]);
                             ?>                                
                             <tr>
-                                <td>Recon Data Specific Date & Download to local</td>
+                                <td>Recon Data Specific Date &amp; Download to local</td>
                                 <td><?= Html::textInput('date', '', ['class' => 'datepicker form-control']) ?></td>
                                 <td>
                                     <button type="submit" class="btn btn-xs btn-midnightblue DTTT_button_text"><i class="fa fa-external-link-square"></i> <span> Process</button>
                                 </td>
-                            </tr>                                                                
+                            </tr>
                             <?php ActiveForm::end(); ?>
                             <?php
                             $form = ActiveForm::begin([

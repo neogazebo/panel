@@ -18,8 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
-                <div class="box-header with-border">
-                                </div><!-- /.box-header -->
+                <div class="box-header with-border"></div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
@@ -60,6 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ],
                                 ],
                             ],
+                            'tableOptions' => ['class' => 'table table-striped table-hover']
                         ]); ?>
                     </div>
                 </div>

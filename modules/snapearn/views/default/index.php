@@ -47,13 +47,6 @@ $this->title = 'Snap & Earn List';
                                         return $data->member->acc_screen_name;
                                     }
                                 ],
-                                // [
-                                //     'label' => 'Category Mechant',
-                                //     'attribute' => 'sna_cat_id',
-                                //     'value' => function($data){
-                                //         return $data->category['cat_name'];
-                                //     }
-                                // ],
                                 'sna_receipt_number',
                                 'sna_receipt_date',
                                 [
@@ -76,14 +69,13 @@ $this->title = 'Snap & Earn List';
                                         return Yii::$app->formatter->asDateTime($data->sna_upload_date);
                                     }
                                 ],
-                                // 'adminApproved.username',
                                 [
                                     'label' => 'Date Review',
                                     'attribute' => 'sna_approved_datetime',
                                     'value' => function($data) {
                                         if (!empty($data->sna_approved_datetime)) {
                                             return Yii::$app->formatter->asDateTime($data->sna_approved_datetime);
-                                        }elseif (!empty($data->sna_rejected_datetime)) {
+                                        } elseif (!empty($data->sna_rejected_datetime)) {
                                             return Yii::$app->formatter->asDateTime($data->sna_rejected_datetime);
                                         }
                                         
@@ -95,18 +87,11 @@ $this->title = 'Snap & Earn List';
                                     'value' => function($data){
                                         if (!empty($data->adminRejected['username'])) {
                                             return $data->adminRejected['username'];
-                                        }elseif (!empty($data->adminApproved['username'])) {
+                                        } elseif (!empty($data->adminApproved['username'])) {
                                             return $data->adminApproved['username'];
                                         }
                                     }
                                 ],
-                                // 'adminRejected.username',
-                                // [
-                                //     'attribute' => 'sna_rejected_datetime',
-                                //     'value' => function($data) {
-                                //         return Yii::$app->formatter->asDateTime($data->sna_rejected_datetime);
-                                //     }
-                                // ],
                                 [
                                     'label' => 'Status',
                                     'attribute' => 'sna_status',
@@ -114,21 +99,18 @@ $this->title = 'Snap & Earn List';
                                     'value' => function($data){
                                         if ($data->sna_status == 1) {
                                             return "<i class='fa fa-check approved-status'></i>";
-                                        }elseif ($data->sna_status == 2) {
+                                        } elseif ($data->sna_status == 2) {
                                             return "<i class='fa fa-close rejected-status'></i>";
                                         }
                                     }
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right actionColumn">{update} {delete}</span>',
+                                    'template' => '<span class="pull-right actionColumn">{update}</span>',
                                     'buttons' => [
                                         'update' => function($url,$model) {
                                             return Html::a('<i class="fa fa-pencil-square-o"></i>', ['to-update', 'id' => $model->sna_id]);
                                         },
-                                        'delete' => function($url,$model) {
-                                            return Html::a('<i class="fa fa-times-circle-o"></i>', ['delete', 'id' => $model->sna_id]);
-                                        }
                                     ],
                                 ],
                             ],
