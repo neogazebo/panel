@@ -106,14 +106,11 @@ $this->title = 'Snap & Earn List';
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right actionColumn">{update} {delete}</span>',
+                                    'template' => '<span class="pull-right actionColumn">{update}</span>',
                                     'buttons' => [
                                         'update' => function($url,$model) {
                                             return Html::a('<i class="fa fa-pencil-square-o"></i>', ['to-update', 'id' => $model->sna_id]);
                                         },
-                                        'delete' => function($url,$model) {
-                                            return Html::a('<i class="fa fa-times-circle-o"></i>', ['delete', 'id' => $model->sna_id]);
-                                        }
                                     ],
                                 ],
                             ],
