@@ -369,13 +369,4 @@ class DefaultController extends BaseController
             $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
     }
 
-    protected function findModel($id)
-    {
-        if (($model = SnapEarn::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-
 }
