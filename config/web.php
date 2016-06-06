@@ -54,7 +54,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'AdminMail' => [
-            'class' => 'common\components\extensions\AdminMail',
+            'class' => 'app\components\extensions\AdminMail',
             'template' => '//mail/template/template',
         ],
         'user' => [

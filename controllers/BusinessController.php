@@ -10,45 +10,45 @@ use Aws\S3\S3Client;
 use yii\web\Response;
 use yii\web\HttpException;
 use app\controllers\BaseController;
-use common\components\helpers\General;
-use common\models\Company;
-use common\models\CompanyCategory;
-use common\models\Deal;
-use common\models\Tag;
-use common\models\Event;
-use common\models\Customer;
-use common\models\Follow;
-use common\models\Module;
-use common\models\ModuleInstalled;
-use common\models\Principal;
-use common\models\FeatureSubscription;
-use common\models\FeatureSubscriptionCompany;
-use common\models\FeatureSubscriptionCompanyFree;
-use common\models\FeatureSubscriptionCompanyFreeProgram;
-use common\models\FeatureSubscriptionDetail;
-use common\models\FeatureSubscriptionCompanyDetail;
-use common\models\Appointment;
-use common\models\HardwareCompany;
-use common\models\Checkin;
-use common\models\User;
-use common\models\City;
-use common\models\Region;
-use common\models\Country;
-use common\models\Mall;
-use common\models\MallMerchant;
-use common\models\LoyaltyPointMerchant;
-use common\models\LoyaltyPointReward;
-use common\models\LoyaltyPointRate;
-use common\models\ChangeRequest;
-use common\models\NotificationCompany;
-use common\models\SystemMessage;
-use common\models\SegmentCompany;
-use common\models\AuditReport;
-use common\components\helpers\Identity;
-use common\models\FloorPlanMall;
-use common\models\FloorPlanUnit;
-use common\models\FloorPlanMallMerchant;
-use common\models\InitialRegisterSetup;
+use app\components\helpers\General;
+use app\models\Company;
+use app\models\CompanyCategory;
+use app\models\Deal;
+use app\models\Tag;
+use app\models\Event;
+use app\models\Customer;
+use app\models\Follow;
+use app\models\Module;
+use app\models\ModuleInstalled;
+use app\models\Principal;
+use app\models\FeatureSubscription;
+use app\models\FeatureSubscriptionCompany;
+use app\models\FeatureSubscriptionCompanyFree;
+use app\models\FeatureSubscriptionCompanyFreeProgram;
+use app\models\FeatureSubscriptionDetail;
+use app\models\FeatureSubscriptionCompanyDetail;
+use app\models\Appointment;
+use app\models\HardwareCompany;
+use app\models\Checkin;
+use app\models\User;
+use app\models\City;
+use app\models\Region;
+use app\models\Country;
+use app\models\Mall;
+use app\models\MallMerchant;
+use app\models\LoyaltyPointMerchant;
+use app\models\LoyaltyPointReward;
+use app\models\LoyaltyPointRate;
+use app\models\ChangeRequest;
+use app\models\NotificationCompany;
+use app\models\SystemMessage;
+use app\models\SegmentCompany;
+use app\models\AuditReport;
+use app\components\helpers\Identity;
+use app\models\FloorPlanMall;
+use app\models\FloorPlanUnit;
+use app\models\FloorPlanMallMerchant;
+use app\models\InitialRegisterSetup;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -202,7 +202,7 @@ class BusinessController extends BaseController {
             Yii::$app->response->format = Response::FORMAT_JSON;
             $tag_id = \Yii::$app->request->post('tag_id');
             if (!empty($tag_id)) {
-                $value = \common\models\Tag::findOne($tag_id)->tag_name;
+                $value = \app\models\Tag::findOne($tag_id)->tag_name;
                 $response = ['success' => 1, 'data' => $tag_id, 'value' => $value];
             } else {
                 $response = ['success' => 0];
@@ -1019,7 +1019,7 @@ class BusinessController extends BaseController {
 
     public function actionActivate($key = null)
     {
-        $url = \common\components\helpers\URL::getFrontendURL() . '/activation/register-merchant?activation=' . $key;
+        $url = \app\components\helpers\URL::getFrontendURL() . '/activation/register-merchant?activation=' . $key;
         return $this->redirect($url);
     }
 
@@ -2197,7 +2197,7 @@ class BusinessController extends BaseController {
     }
 
     public function actionMallcategory($id) {
-        $model = \common\models\MallCategory::find()
+        $model = \app\models\MallCategory::find()
                 ->select('mac_id, mac_name')
                 ->where('mac_mal_id = :mal_id', [':mal_id' => $id])
                 ->orderBy('mac_name')
@@ -2628,9 +2628,9 @@ class BusinessController extends BaseController {
             // delete menu transaction
             // delete on all related table
             $file = Yii::$app->params['businessUrl'] . $model->com_photo;
-            \common\components\helpers\S3::Delete($file);
+            \app\components\helpers\S3::Delete($file);
             $file = Yii::$app->params['businessUrl'] . $model->com_banner_photo;
-            \common\components\helpers\S3::Delete($file);
+            \app\components\helpers\S3::Delete($file);
             if ($model->delete()) {
                 $audit = AuditReport::setAuditReport('delete business : ' . $model->com_name, Yii::$app->user->id, Company::className(), $model->com_id)->save();
                 $transaction->commit();

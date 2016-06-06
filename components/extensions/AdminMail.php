@@ -1,10 +1,9 @@
 <?php
-
-namespace common\components\extentions;
+namespace app\components\extensions;
 
 use Yii;
 use yii\base\Component;
-use common\models\Mail;
+use app\models\Mail;
 use HTML2PDF;
 
 class AdminMail extends Component
@@ -83,9 +82,12 @@ class TBackend extends TMail
 
     public function snapearnRejected($type, $name)
     {
-        $this->template = '//mail/template/template-snapearn';
-        $this->subject = Mail::SUBJECT_SNAPEARN_REJECTED;
-        $this->body = Mail::BODY_SNAPEARN_REJECTED;
+        // $this->template = '//mail/template/template-snapearn';
+        $this->template = '//mail/template/template';
+        // $this->subject = Mail::SUBJECT_SNAPEARN_REJECTED;
+        $this->subject = Mail::SUBJECT_WELCOME;
+        // $this->body = Mail::BODY_SNAPEARN_REJECTED;
+        $this->body = Mail::BODY_WELCOME;
         return $this;
     }
     

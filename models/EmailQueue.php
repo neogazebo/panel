@@ -100,7 +100,7 @@ class EmailQueue extends \yii\db\ActiveRecord
             $model->emq_bcc = $bcc;
             $model->emq_body = $body;
             $model->emq_body_plain = $body_plain;
-            $model->emq_attachment = $attachment;
+            // $model->emq_attachment = $attachment;
             $model->save();
             $transaction->commit();
         } catch (Exception $e) {
