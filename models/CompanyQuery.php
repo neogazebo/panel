@@ -39,4 +39,16 @@ class CompanyQuery extends \yii\db\ActiveQuery
         ]);
         return $this->one();
     }
+
+    public function searchExistingMerchant()
+    {
+        $search = $_GET['q'];
+        $keyword = preg_split("/[\s,]+/",$search);
+        $this->select('com_id, com_name');
+        foreach($keyword as $key){
+            $this->andWhere('com_name LIKE "%'.$key.'%" ');
+        }
+        $this->andWhere('com_status != 2');
+        return $this->all();
+    }
 }

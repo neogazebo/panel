@@ -4,7 +4,7 @@ use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use yii\helpers\Url;
-use kartik\widgets\Select2;
+use kartik\widgets\Typeahead;
 use app\models\Company;
 
 $form = ActiveForm::begin([
@@ -31,21 +31,23 @@ $initScript = <<< SCRIPT
 SCRIPT;
 ?>
 <div class="modal-body">
-	<?= Select2::widget([
-        'name' => 'business',
-        'options' => ['placeholder' => 'Choose a Business ...'],
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' => 3,
-            'ajax' => [
-                'url' => $url,
-                'dataType' => 'json',
-                'data' => new yii\web\JsExpression("function(term,page) { return {search:term}; }"),
-                'results' => new yii\web\JsExpression('function(data,page) { return {results:data.results}; }'),
-            ],
-            'initSelection' => new yii\web\JsExpression($initScript)
-        ],
-    ]);
+	<?= 
+        Typeahead::widget([
+            'name' => 'merchant',
+            'options' => ['placeholder' => 'Filter as you type ...'],
+            'pluginOptions' => ['highlight'=>true],
+            'dataset' => [
+                [
+                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                    'display' => 'value',
+                    'remote' => [
+                        'url' => Url::to(['/merchant/default/list']) . '?q=%QUERY',
+                        'wildcard' => '%QUERY'
+                    ],
+                    'limit' => 20
+                ]
+            ]
+        ]);
     ?>
     <?= $form->field($model, 'sna_id')->hiddenInput()->label('') ?>
 </div>

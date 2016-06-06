@@ -9,6 +9,7 @@ use yii\helpers\Json;
 use Aws\S3\S3Client;
 use yii\web\Response;
 use yii\web\HttpException;
+use app\controllers\BaseController;
 use common\components\helpers\General;
 use common\models\Company;
 use common\models\CompanyCategory;

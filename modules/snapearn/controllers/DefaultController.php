@@ -78,10 +78,13 @@ class DefaultController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                $this->setMessage('save', 'success', 'Merchant created successfully!');
-                return $this->redirect($this->getRememberUrl());
-            }
+            $model->sna_com_id = (int)Yii::$app->request->post('merchant');
+            echo "<pre>";
+            var_dump($model);
+            // if ($model->save()) {
+            //     $this->setMessage('save', 'success', 'Merchant created successfully!');
+            //     return $this->redirect($this->getRememberUrl());
+            // }
         } else {
             return $this->renderAjax('existing', [
                 'model' => $model,
