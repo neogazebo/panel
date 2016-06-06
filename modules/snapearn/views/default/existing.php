@@ -19,17 +19,6 @@ $form = ActiveForm::begin([
 ]);
 
 $url = Url::to(['merchant/default/list']);
-$com_id = Yii::$app->request->getQueryParam('com_id');
-$initScript = <<< SCRIPT
-    function (element, callback) {
-        var id = "{$com_id}";
-        if (id !== "") {
-            \$.ajax("{$url}?id=" + id, {
-                dataType: "json"
-            }).done(function(data) { callback(data.results);});
-        }
-    }
-SCRIPT;
 ?>
 <div class="modal-body">
 	<?= 
