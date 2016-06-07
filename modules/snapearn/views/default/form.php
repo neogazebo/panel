@@ -134,7 +134,7 @@ $this->registerCss("
 <!-- widget to create render modal -->
 <?php
     Modal::begin([
-        'header' => '</button><h4 class="modal-title">New Merchant</h4>',
+        'header' => '</button><h4 class="modal-title"></h4>',
         'id' => 'modal',
         'size' => 'modal-md',
     ]);

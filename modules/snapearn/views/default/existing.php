@@ -54,3 +54,8 @@ $url = Url::to(['merchant/default/list']);
 </div>
 
 <?php ActiveForm::end(); ?>
+<?php
+$this->registerJs("
+    $('.modal-title').text('Existing Merchant');
+");
+?>
