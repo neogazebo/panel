@@ -100,7 +100,7 @@ class DefaultController extends BaseController
         }
 
         // get post request form
-        if($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
@@ -110,7 +110,7 @@ class DefaultController extends BaseController
                 $set_operator = Yii::$app->user->id;
     
                 $limitPoint = 0;
-                if($model->merchant->com_premium == 1) {
+                if ($model->merchant->com_premium == 1) {
                     $model->sna_point = $model->sna_point * 2;
                     $limit = SnapEarnRule::find()->where('ser_country = :cny', [':cny' => $model->merchant->com_currency])->one()->ser_premium;
                     if (!empty($limit)) {
@@ -125,15 +125,15 @@ class DefaultController extends BaseController
 
                 $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                 $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                if($point_history !== NULL) {
+                if ($point_history !== NULL) {
                     $current_point = $point_history->lph_total_point;
                 } else {
                     $current_point = 0;
                 }
 
                 // if approved action
-                if($model->sna_status == 1) {
-                    if($model->sna_point > $limitPoint) {
+                if ($model->sna_status == 1) {
+                    if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
                     }
                     $model->sna_approved_datetime = $set_time;
@@ -142,7 +142,7 @@ class DefaultController extends BaseController
                     $model->sna_rejected_by = NULL;
                     $model->sna_sem_id = '';
                     // if rejected action
-                } elseif($model->sna_status == 2) {
+                } elseif ($model->sna_status == 2) {
                     $username = $model->member->acc_screen_name;
                     $email = $model->member->acc_facebook_email;
                     $model->sna_approved_datetime = NULL;
@@ -152,10 +152,11 @@ class DefaultController extends BaseController
                     $model->sna_point = 0;
                     $model->sna_receipt_amount = 0;
                 }
+
                 // execution save to snapearn
                 $snap_type = '';
-                if($model->save()) {
-                    if($model->sna_status == 1) {
+                if ($model->save()) {
+                    if ($model->sna_status == 1) {
                         $params = [
                             'current_point' => $current_point,
                             'sna_point' => $model->sna_point,
@@ -182,76 +183,59 @@ class DefaultController extends BaseController
     
                         $this->setMessage('save', 'success', 'Snap and Earn successfully approved!');
                         $snap_type = 'approved';
-                    } elseif($model->sna_status == 2) {
+                    } elseif ($model->sna_status == 2) {
                         // send email to member
                         $business = '';
                         $location = '';
-                        if(empty($model->sna_com_id)) {
+                        if (empty($model->sna_com_id)) {
                             $business = $model->newSuggestion->cos_name;
                             $location = $model->newSuggestion->cos_location;
                         } else {
                             $business = Company::findOne($model->sna_com_id)->com_name;
                             $location = Company::findOne($model->sna_com_id)->com_address;
                         }
-    
+
                         if (!empty($model->sna_sem_id)) {
-                            $type = 0;
-                            $name = '';
                             $params = [];
                             $picture = Yii::$app->params['businessUrl'] . 'receipt/receipt_sample.jpg';
     
-                            // $message = new SystemMessage;
                             switch ($model->sna_sem_id) {
                                 case 1:
-                                    $type = 36;
-                                    $name = 'snapearn_receipt_blur';
                                     $params[0] = ['[username]', $username];
                                     $params[1] = ['[picture]', $picture];
                                     break;
                                 case 2:
-                                    $type = 37;
-                                    $name = 'snapearn_receipt_dark';
                                     $params[] = ['[username]', $username];
                                     $params[] = ['[picture]', $picture];
                                     break;
                                 case 3:
-                                    $type = 38;
-                                    $name = 'snapearn_receipt_incomplete';
                                     $params[] = ['[username]', $username];
                                     $params[] = ['[picture]', $picture];
                                     break;
                                 case 4:
-                                    $type = 39;
-                                    $name = 'snapearn_receipt_suspicious';
                                     $params[0] = ['[username]', $username];
                                     $params[1] = ['[business]', $business];
                                     break;
                                 case 5:
-                                    $type = 44;
-                                    $name = 'snapearn_duplicate';
                                     $params[] = ['[username]', $username];
                                     break;
                                 case 6:
-                                    $type = 45;
-                                    $name = 'snapearn_invalid';
                                     $params[] = ['[username]', $username];
                                     $params[] = ['[business]', $business];
                                     break;
                                 case 7:
-                                    $type = 49;
-                                    $name = 'snapearn_receipt_violates';
                                     $params[] = ['[username]', $username];
                                     $params[] = ['[business]', $business];
                                     $params[] = ['[location]', $location];
                                     break;
                             }
-                            $to = $email;
-                            Yii::$app->AdminMail
-                                ->backend($to, $params)
-                                ->snapearnRejected($type, $name)
+
+                            Yii::$app
+                                ->AdminMail
+                                ->backend($model->member->acc_facebook_email, $params)
+                                ->snapearnRejected($model->sna_sem_id)
                                 ->send()
                                 ->view();
-                            // $message->parser($type, $name, $email, $parsers);
                         }
                         //if push notification checked then send to activity
                         if ($model->sna_push == 1) {
@@ -273,13 +257,13 @@ class DefaultController extends BaseController
 
                 // $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
                 $transaction->commit();
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $transaction->rollBack();
             }
 
-            if($_POST['saveNext'] == 1) {
+            if ($_POST['saveNext'] == 1) {
                 $nextUrl = SnapEarn::find()->saveNext($id, $ctr);
-                if(!empty($nextUrl))
+                if (!empty($nextUrl))
                     return $this->redirect(['default/to-update?id=' . $nextUrl->sna_id]);
             }
             return $this->redirect([$this->getRememberUrl()]);

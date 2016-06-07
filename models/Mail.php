@@ -46,10 +46,9 @@ class Mail
     CONST BODY_WELCOME_ADMIN = '//mail/content/welcome';
     CONST SUBJECT_ACTIVAION_MASTER = 'Youre registered to Ebizu Admin Centre';
     CONST BODY_ACTIVAION_MASTER = '//mail/content/activation';
-    CONST SUBJECT_SNAPEARN_REJECTED = 'Youre snap & earn rejected';
     CONST BODY_SNAPEARN_REJECTED = '//mail/content/snapearn-rejected';
 
-    //RHB
+    // RHB
     CONST SUBJECT_REGISTER_RHB_INVOICE = 'RECEIPT RHB SUBSCRIPTION';
     CONST BODY_REGISTER_INVOICE_RHB = '//mail/content/register-invoice-rhb';
     CONST SUBJECT_EMPLOYEE_REGISTER_RHB = 'WELCOME TO RHB';
@@ -96,7 +95,10 @@ class Mail
             $to[] = $this->cc;
             $to[] = $this->cc2;
         }
-        $mail = Yii::$app->mail->compose($this->template, ['content' => $this->body, 'params' => $this->params])
+        $mail = Yii::$app->mail->compose($this->template, [
+                'content' => $this->body,
+                'params' => $this->params
+            ])
             ->setFrom($this->from)
             ->setTo($to)
             ->setSubject($this->subject);
@@ -107,7 +109,10 @@ class Mail
 
         if ($mail->send()) {
             $this->saveTemplateContentAsLog();
-            if (EmailQueue::logSave($this->from, $this->to, $this->subject, Yii::$app->controller->renderPartial($this->template, ['content' => $this->body, 'params' => $this->params])))
+            if (EmailQueue::logSave($this->from, $this->to, $this->subject, Yii::$app->controller->renderPartial($this->template, [
+                'content' => $this->body,
+                'params' => $this->params
+            ])))
                 return true;
         }
         return false;
@@ -127,12 +132,20 @@ class Mail
         } else {
             if ($this->attach && !empty($this->attachParams['attachment_url'])) {
                 $contentType = 'application/pdf';
-                $info = ['filename' => $this->attachParams['filename'], 'path' => $this->attachParams['attachment_url'], 'contentType' => $contentType];
+                $info = [
+                    'filename' => $this->attachParams['filename'],
+                    'path' => $this->attachParams['attachment_url'],
+                    'contentType' => $contentType
+                ];
                 $attachJson =  json_encode($info);
             }
         }        
         
-        $mailBody = Yii::$app->controller->renderPartial($this->template, ['content' => $this->body, 'params' => $this->params]);
+        $mailBody = Yii::$app->controller->renderPartial($this->template, [
+            'content' => $this->body,
+            'params' => $this->params
+        ]);
+
         if (EmailQueue::insertToSendingMail($this->from, $this->to, $this->cc, $this->bcc, $this->subject, $mailBody, $mailBody, $attachJson)) {
             return true;
         }

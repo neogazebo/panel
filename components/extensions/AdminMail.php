@@ -80,14 +80,39 @@ class TBackend extends TMail
         return $this;
     }
 
-    public function snapearnRejected($type, $name)
+    public function snapearnRejected($type)
     {
-        // $this->template = '//mail/template/template-snapearn';
-        $this->template = '//mail/template/template';
-        // $this->subject = Mail::SUBJECT_SNAPEARN_REJECTED;
-        $this->subject = Mail::SUBJECT_WELCOME;
-        // $this->body = Mail::BODY_SNAPEARN_REJECTED;
-        $this->body = Mail::BODY_WELCOME;
+        switch ($type) {
+            case 1:
+                $this->template = '//mail/template/snapearn/blurry';
+                $this->subject = 'Receipt photo is blurry';
+                break;
+            case 2:
+                $this->template = '//mail/template/snapearn/dark';
+                $this->subject = 'Receipt photo is too dark';
+                break;
+            case 3:
+                $this->template = '//mail/template/snapearn/incomplete';
+                $this->subject = 'Receipt photo is incomplete';
+                break;
+            case 4:
+                $this->template = '//mail/template/snapearn/suspicious';
+                $this->subject = 'Claim under investigation';
+                break;
+            case 5:
+                $this->template = '//mail/template/snapearn/duplicate';
+                $this->subject = 'Receipt Already Uploaded';
+                break;
+            case 6:
+                $this->template = '//mail/template/snapearn/invalid';
+                $this->subject = 'Invalid Receipt Uploaded';
+                break;
+            case 7:
+                $this->template = '//mail/template/snapearn/violates';
+                $this->subject = 'Receipt violates Manis T&Cs';
+                break;
+        }
+        $this->body = Mail::BODY_SNAPEARN_REJECTED;
         return $this;
     }
     
