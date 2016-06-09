@@ -73,13 +73,13 @@ $this->registerCss("
                                 <td>Recon Data Today & Download to local</td>
                                 <td></td>
                                 <td>
-                                    <?= Html::a('<i class="fa fa-external-link-square"></i> <span>' . Yii::t('app', 'Process') . '</span>', ['recon/manual-recon/?data=today'], ['id' => 'rec-today', 'class' => 'btn btn-xs btn-midnightblue DTTT_button_text']); ?>                                    
+                                    <?= Html::a('<i class="fa fa-external-link-square"></i> <span>' . Yii::t('app', 'Process') . '</span>', ['report/manual-recon/?data=today'], ['id' => 'rec-today', 'class' => 'btn btn-xs btn-midnightblue DTTT_button_text']); ?>                                    
                                 </td>
                             </tr>  -->   
                             <?php
                             $form = ActiveForm::begin([
                                 'id' => 'category-form',
-                                'action' => Yii::$app->urlManager->createUrl(['epay/recon/manual-recon/?data=specific']),
+                                'action' => Yii::$app->urlManager->createUrl(['epay/report/manual-recon/?data=specific']),
                                 'options' => ['class' => 'form-horizontal', 'target' => ''],
                                 'fieldConfig' => [],
                             ]);
@@ -102,7 +102,7 @@ $this->registerCss("
                             <?php
                             $form = ActiveForm::begin([
                                 'id' => 'ftp-form',
-                                'action' => Yii::$app->urlManager->createUrl(['epay/recon/ftp']),
+                                'action' => Yii::$app->urlManager->createUrl(['epay/report/ftp']),
                                 'options' => ['class' => 'form-horizontal', 'target' => ''],
                                 'fieldConfig' => [
                                 'template' => "{input}\n{error}",

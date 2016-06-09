@@ -40,88 +40,6 @@ class ReconController extends Controller
     {
         return $this->render('index');
     }
-
-    /*
-     * Epay Manual Recon
-     */
-    public function actionManualRecon($data = 'today')
-    {
-        $model = new EpayDetail();
-        $date = null;
-        $recapType = rtrim($data, '/');
-        // echo $recapType;exit;
-        $filename = null;
-        $date = date('Ymd', (strtotime('-1 day', strtotime(date('Ymd')))));
-        if ($recapType == 'today') {
-            $date = date('Ymd', (strtotime(date('Ymd'))));
-            $fileName = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
-        } else if ($recapType == 'specific') {
-            $postDate = $_POST['date'];
-            $formatDate = str_replace('/','',strtotime($postDate));
-            $fileDate = date('ymd',$formatDate);
-            $date = date('Ymd',$formatDate);
-            $filename = EpayDetail::CLIENT_SHORTNAME . $fileDate . '.csv';
-        }
-        header("Content-type: text/csv");
-        header("Content-Disposition: attachment; filename=" . $filename);
-        header("Pragma: no-cache");
-        header("Expires: 0");
-        self::_out($model->getReconciliationData($recapType, $date));
-    }
-
-    /*
-     * Rekonsiliasi yg langsung di upload ke server ftp epay
-     */
-    public function actionFtp()
-    {
-        $model = new EpayDetail();
-        $recapType = 'today';
-        $date = null;
-        $return = array();
-        $filename = null;
-
-        if (isset($_POST['date'])) {
-            $recapType = 'specific';
-            $postDate = $_POST['date'];
-            $formatDate = str_replace('/','',strtotime($postDate));
-            $fileDate = date('ymd',$formatDate);
-            $date = date('Ymd',$formatDate);
-            $filename = EpayDetail::CLIENT_SHORTNAME . $fileDate . '.csv';
-        }else{
-            $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
-        }
-
-        // get data from table EpayDetail
-        $data = $model->getReconciliationData($recapType, $date);
-
-        // create local directory
-        $dir = Yii::$app->basePath."/runtime/sFTp/";
-
-        if(!is_dir($dir)){
-            $create = BaseFileHelper::createDirectory ( $dir, $mode = 509, $recursive = true );
-        }
-
-        // create filename on local directory
-        $output = fopen(Yii::$app->basePath."/runtime/sFTp/$filename", 'w');
-        if ($output === false) {
-            Yii::$app->session->setFlash('error','Unable to write file on remote server.', 'attachment'.null);
-        } else {
-
-            // write value of csv file
-            foreach ($data as $row) {
-                fputcsv($output, $row);
-            }
-
-            // upload to server epay
-            $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
-            Yii::$app->session->setFlash('success','Recon file successfully uploaded with name : ' . $filename, 'attachment'.$filename);
-        }
-
-        // delete local dir
-        $delete = BaseFileHelper::removeDirectory(Yii::$app->basePath."/runtime/sFTp",$options = false);
-
-        return $this->redirect(Yii::$app->urlManager->createUrl(['epay/index/']));
-    }
     
     public function actionCronService()
     {
@@ -140,7 +58,8 @@ class ReconController extends Controller
             $date = $postDate[2] . $postDate[1] . $postDate[0];
             $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', strtotime($date)) . '.csv';
         }else{
-            $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
+            // $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
+            $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime(date('Ymd')))) . '.csv';
         }
 
         // get data from table EpayDetail
@@ -167,22 +86,13 @@ class ReconController extends Controller
             // upload to server epay
             $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
 
-            $return['data'] = array('code' => 200, 'message' => 'Recon file successfully uploaded with name : ' . $filename, 'attachment' => $filename,'date' => date('Y-m-d H:i:s'),'execute' => $elapsed);
+            $return['data'] = array('code' => 200 .PHP_EOL, 'message' => 'Recon file successfully uploaded with name : ' . $filename.PHP_EOL, 'attachment' => $filename.PHP_EOL,'date' => date('Y-m-d H:i:s').PHP_EOL,'execute' => $elapsed.PHP_EOL);
         }
 
         // delete local dir
         $delete = BaseFileHelper::removeDirectory(Yii::$app->basePath."/runtime/sFTp",$options = false);
 
         echo json_encode($return);
-    }
-    
-    private static function _out($data)
-    {
-        $output = fopen("php://output", "w");
-        foreach ($data as $row) {
-            fputcsv($output, $row);
-        }
-        fclose($output);
     }
       
 
