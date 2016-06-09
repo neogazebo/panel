@@ -49,11 +49,6 @@ class DefaultController extends BaseController
     public function actionAjaxNew($id)
     {
         $model = $this->findModel($id);
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = 'json';
-            return \yii\widgets\ActiveForm::validate($model);
-        }
-
         if ($model->load(Yii::$app->request->post())) {
             echo '<pre>';
             var_dump($model->attributes);
@@ -63,6 +58,7 @@ class DefaultController extends BaseController
                 return $this->redirect($this->getRememberUrl());
             }
         } else {
+            $model->company->com_point = 0;
             return $this->renderAjax('new', [
                 'model' => $model,
             ]);

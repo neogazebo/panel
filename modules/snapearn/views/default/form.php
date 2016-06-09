@@ -52,8 +52,8 @@ $this->registerCss("
                         <div class="col-sm-6">
                             <?php if(empty($model->business)): ?>
                                 <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_name')->textInput(['readonly' => true])->label('Sugest Merchant'); ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_mall')->textInput(['readonly' => true])->label('Sugest Mall'); ?>
+                                    <?= $form->field($model->newSuggestion, 'cos_name')->textInput(['readonly' => true])->label('Suggest Merchant'); ?>
+                                    <?= $form->field($model->newSuggestion, 'cos_mall')->textInput(['readonly' => true])->label('Suggest Mall'); ?>
                                     <?= $form->field($model->newSuggestion, 'cos_location')->textInput(['readonly' => true]); ?>
                                 <?php endif ?>
                             <div class="form-group">
@@ -100,7 +100,6 @@ $this->registerCss("
                                 ]);
                             ?>
                             <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control']) ?>
-
                             <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                             <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                             <div class="point-form">

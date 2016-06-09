@@ -29,6 +29,9 @@ $config = [
         'merchant' => [
             'class' => 'app\modules\merchant\Merchant',
         ],
+        'mall' => [
+            'class' => 'app\modules\mall\Mall',
+        ],
         'merchant-signup' => [
             'class' => 'app\modules\merchant_signup\MerchantSignup',
         ],

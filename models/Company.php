@@ -735,28 +735,36 @@ class Company extends EbizuActiveRecord
         $categori = CompanyCategory::findAll([
             'com_parent_category_id' => '0'
         ]);
-        foreach ($categori as $row)
-        {
+
+        foreach ($categori as $row) {
             if($row->com_category_type == $type) {
                 $subCategory = CompanyCategory::findAll([
                     'com_parent_category_id' => $row->com_category_id
                 ]);
 
                 $dataSub = [];
-
                 foreach ($subCategory as $sub)
-                {
-                    //echo 'parent = '.$row->com_category_id .' - chile = '. $sub->com_parent_category_id.'<br/>';
                     if ($sub->com_parent_category_id == $row->com_category_id)
-                    {
                         $dataSub[$sub->com_category_id] = $sub->com_category;
-                    }
-                }
 
                 $data[$row->com_category] = $dataSub;
             }
         }
         return $data;
+    }
+
+    public function getModelMallMerchant()
+    {
+        $model = MallMerchant::findOne(['mam_com_id' => $this->com_id]);
+        if ($model)
+            return $model;
+        return new MallMerchant();
+    }
+
+    public function getFeatureSubscription()
+    {
+        $model = FeatureSubscription::find()->all();
+        return \app\components\helpers\Html::listData($model, 'fes_id', 'fes_name');
     }
 
     public function getCompanySizeListData()

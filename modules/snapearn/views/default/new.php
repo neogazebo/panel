@@ -1,7 +1,15 @@
 <?php
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
+use yii\web\JsExpression;
+
+$this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$latitude = ($model->company->com_latitude ? $model->company->com_latitude : 3.139003);
+$longitude = ($model->company->com_longitude ? $model->company->com_longitude : 101.686855);
+$urlCity = \yii\helpers\Url::to(['city/list']);
 
 $form = ActiveForm::begin([
     'id' => 'create-form',
@@ -17,26 +25,32 @@ $form = ActiveForm::begin([
     <?= $form->field($model->company, 'com_name')->textInput() ?>
     <?= $form->field($model->company, 'com_business_name')->textInput() ?>
     <?= $form->field($model->company, 'com_email')->textInput() ?>
-    <?= $form->field($model->company, 'com_subcategory_id')->dropDownList($model->company->categoryList); ?>
+    <?= $form->field($model->company, 'com_subcategory_id')->dropDownList($model->company->categoryListData); ?>
     <?= $form->field($model->company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
-    <?= $form->field($model->company, 'com_city')->widget(kartik\widgets\Typeahead::classname(), [
-        'options' => ['placeholder' => 'City, Region, Country', 'id' => 'location'],
-        'pluginOptions' => ['highlight' => true],
-        'dataset' => [
-            [
-                'remote' => yii\helpers\Url::to(['city/list']) . '?q=%QUERY',
-                'limit' => 10
-            ]
-        ],
-        'pluginEvents' => [
-            'typeahead:selected' => 'function(evt,data) {}',
-        ]
-    ])->hint(Html::a(Html::img(Yii::$app->homeUrl . 'img/btn-plus.png', ['data-action' => 'destination', 'class' => 'find-address-book'])));
+    <?= $form->field($model->company, 'com_city')->widget(kartik\widgets\Select2::classname(), [
+        'options' => ['placeholder' => 'Search for a city ...'],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' => 1,
+            'language' => [
+                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+            ],
+            'ajax' => [
+                'url' => $urlCity,
+                'dataType' => 'json',
+                'data' => new JsExpression('function(params) { return { q: params.term }; }')
+            ],
+            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+            'templateResult' => new JsExpression('function(city) { return city.text; }'),
+            'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+        ], 
+    ]);
     ?>
+
     <?= $form->field($model->company, 'com_postcode')->textInput(); ?>
     <?= $form->field($model->company, 'com_address')->textInput(); ?>
     <?php
-    $url = \yii\helpers\Url::to(['/mall/select2']);
+    $url = \yii\helpers\Url::to(['/merchant/mall/select2']);
     $mal_id = $model->company->modelMallMerchant->mam_mal_id;
     $initScript = <<< SCRIPT
         function (element, callback) {
@@ -85,7 +99,7 @@ SCRIPT;
     <?= $form->field($model->company, 'com_mac_id')->dropDownList([]) ?>
     <div class="form-group" id="businessMap">
         <label class="col-sm-3 control-label">Map</label>
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <div id="map" style="height:300px"></div>
         </div>
     </div>
@@ -121,60 +135,14 @@ SCRIPT;
         </div>
     </div>
     <?= $form->field($model->company, 'com_phone')->textInput(); ?>
-    <?= $form->field($model->company, 'com_fax')->textInput(); ?>
-    <?= $form->field($model->company, 'com_website')->textInput(); ?>
-    <?= $form->field($model->company, 'com_size')->dropDownList($model->company->companySizeListData); ?>
-    <?= $form->field($model->company, 'com_nbrs_employees')->dropDownList($model->company->numberEmployeeListData); ?>
-    <?= $form->field($model->company, 'com_fb')->textInput(); ?>
-    <?= $form->field($model->company, 'com_twitter')->textInput(); ?>
-    <?= $form->field($model->company, 'com_timezone')->dropDownList($model->company->timeZoneListData) ?>
-    <?= $form->field($model->company, 'com_reg_num')->textInput() ?>
     <?= $form->field($model->company, 'com_gst_enabled')->checkBox(['style' => 'margin-top:10px;'], false)->label('Gst?') ?>
     <?= $form->field($model->company, 'com_gst_id')->textInput() ?>
-    <?= $form->field($model->company, 'fes_id')->dropDownList([]) ?>
-    <?= $form->field($model->company, 'com_point')->textInput(); ?>
+    <?= $form->field($model->company, 'fes_id')->dropDownList($model->company->featureSubscription) ?>
+    <?= $form->field($model->company, 'com_point')->textInput(['value' => 0]); ?>
     <?= $form->field($model->company, 'com_latitude')->hiddenInput()->label('') ?>
     <?= $form->field($model->company, 'com_longitude')->hiddenInput()->label('') ?>
-    <?= $form->field($model->company, 'com_sales_id')->widget(kartik\widgets\Select2::classname(), [
-        'data' => yii\helpers\ArrayHelper::map(common\models\AdminUser::find()
-            ->where('type = :type', [':type' => 4])
-            ->all(), 'id', 'username'),
-        'options' => [
-            'placeholder' => 'Choose a Sales ...',
-        ],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ]); ?>
-    <?= $form->field($model->company, 'com_sales_order')->textInput(['class' => 'form-control datepicker']) ?>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Photo</label>
-        <div class="col-xs-8">
-            <input type="hidden" id="com_photo" name="Company[com_photo]">
-            <a data-toggle="modal" data-image="com_logo" data-field="com_photo" href="#" class="eb-cropper">
-                <?php $image = isset($model->com_photo) ? Yii::$app->params['businessUrl'] . $model->com_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
-                <img src="<?= $image ?>" id="com_logo" class="img-responsive" width="240">
-            </a>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">Banner</label>
-        <div class="col-xs-8">
-            <input type="hidden" id="com_banner" name="Company[com_banner_photo]">
-            <a data-toggle="modal" data-image="com_banner_photo" data-field="com_banner" href="#" class="eb-cropper">
-                <?php $image = isset($model->com_banner_photo) ? Yii::$app->params['businessUrl'] . $model->com_banner_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
-                <img src="<?= $image ?>" id="com_banner_photo" class="img-responsive" width="240">
-            </a>
-        </div>
-    </div>
-    <div class="panel-footer">
-        <div class="row">
-            <div class="col-sm-12">
-                <button type="submit" class="pull-right btn-primary btn"><i class="fa fa-check"></i> Save</button>
-            </div>
-        </div>
-    </div>
 </div>
+
 <div class="modal-footer">
     <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>
     <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'pull-right btn btn-info pull-right']) ?>
@@ -183,11 +151,6 @@ SCRIPT;
 
 <?php
 $this->registerJs("
-    //triger modal for image-croper
-    $('.eb-cropper').on('click',function(){
-        $('#cropper-modal').modal({show: true});
-    });
-
     var mall_checked = 0;
     $('#create-business').hide();
     $('#company-com_point').popover();
@@ -235,40 +198,11 @@ $this->registerJs("
         });
     };
 
-    $('#create').click(function() {
-        $('#create-business').show();
-        $.ajax({
-            type: 'GET',
-            url: baseUrl + 'business/register',
-            data: { reg: 'EBC' },
-            cache: false,
-            success: function(result) {
-                $('#company-fes_id').empty().append(result);
-            }
-        });
-
-        var com_name = $('#companysuggestion-cos_name').val();
-        $('#company-com_name').val(com_name);
-        $('#company-com_business_name').val(com_name);
-        loadMap();
-        if($('#companysuggestion-cos_mall').val() != '') {
-            $('#company-com_in_mall').attr('checked', true);
-            mall_checked = 1;
-            loadMall();
-        } else {
-            unloadMall();
-        }
-
-        $('html, body').animate({
-            scrollTop: $('#create-business').offset().top
-        }, 1000);
-        return false;
-    });
-
     $('#existing').click(function() {
          $('#business_exist').modal({ show: true });
          return false;
     });
+
     $('.datepicker').datepicker();
     var loadMall = function() {
         $('#businessMap').css('display','none');
@@ -305,11 +239,6 @@ $this->registerJs("
                 loadMap();
         });
     });
-    // if($('.status').val() == 1) {
-    //     $('.point-form').css('display', 'block');
-    // } else if($('.status').val() == 2) {
-    //     $('.reject-form').css('display', 'block');
-    // }
 
     $('.status').change(function() {
         if($(this).val() == 1) {
@@ -328,7 +257,6 @@ $this->registerJs("
 
     $('#snapearn-sna_amount').blur(function() {
         var point = Math.floor($('#snapearn-sna_amount').val());
-        // $('#snapearn-sna_point').val(point);
         $.ajax({
             type: 'POST',
             url: baseUrl + 'loyaltypoint/ajax-snapearn-point',
@@ -340,9 +268,6 @@ $this->registerJs("
         });
     });
 
-    // $('.saveNext').click(function(){
-    //     $('#saveNext').val(1);
-    // });
     $('.submit-button, .reset-button').click(function(){
         $('#saveNext').val(0);
     });
