@@ -56,6 +56,7 @@ config/web-local.php
 config/console-local.php
 config/params-local.php
 config/db.php
+config/db2.php
 web/index-test.php
 web/index.php
 # Elastic Beanstalk Files

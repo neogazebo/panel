@@ -14,12 +14,12 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <div class="modal-body">
-    <?= $form->field($model->company, 'com_name')->textInput() ?>
-    <?= $form->field($model->company, 'com_business_name')->textInput() ?>
-    <?= $form->field($model->company, 'com_email')->textInput() ?>
-    <?= $form->field($model->company, 'com_subcategory_id')->dropDownList($model->company->categoryList); ?>
-    <?= $form->field($model->company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
-    <?= $form->field($model->company, 'com_city')->widget(kartik\widgets\Typeahead::classname(), [
+    <?= $form->field($model, 'com_name')->textInput() ?>
+    <?= $form->field($model, 'com_business_name')->textInput() ?>
+    <?= $form->field($model, 'com_email')->textInput() ?>
+    <?= $form->field($model, 'com_subcategory_id')->dropDownList($model->categoryList); ?>
+    <?= $form->field($model, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
+    <?= $form->field($model, 'com_city')->widget(kartik\widgets\Typeahead::classname(), [
         'options' => ['placeholder' => 'City, Region, Country', 'id' => 'location'],
         'pluginOptions' => ['highlight' => true],
         'dataset' => [
@@ -33,11 +33,11 @@ $form = ActiveForm::begin([
         ]
     ])->hint(Html::a(Html::img(Yii::$app->homeUrl . 'img/btn-plus.png', ['data-action' => 'destination', 'class' => 'find-address-book'])));
     ?>
-    <?= $form->field($model->company, 'com_postcode')->textInput(); ?>
-    <?= $form->field($model->company, 'com_address')->textInput(); ?>
+    <?= $form->field($model, 'com_postcode')->textInput(); ?>
+    <?= $form->field($model, 'com_address')->textInput(); ?>
     <?php
     $url = \yii\helpers\Url::to(['/mall/select2']);
-    $mal_id = $model->company->modelMallMerchant->mam_mal_id;
+    $mal_id = $model->modelMallMerchant->mam_mal_id;
     $initScript = <<< SCRIPT
         function (element, callback) {
             var id = "{$mal_id}";
@@ -48,7 +48,7 @@ $form = ActiveForm::begin([
             }
         }
 SCRIPT;
-    echo $form->field($model->company, 'mall_id')->widget(kartik\widgets\Select2::classname(), [
+    echo $form->field($model, 'mall_id')->widget(kartik\widgets\Select2::classname(), [
         'options' => ['placeholder' => 'Choose a Mall ...'],
         'pluginOptions' => [
             'allowClear' => true,
@@ -82,7 +82,7 @@ SCRIPT;
         ],
     ]);
     ?>
-    <?= $form->field($model->company, 'com_mac_id')->dropDownList([]) ?>
+    <?= $form->field($model, 'com_mac_id')->dropDownList([]) ?>
     <div class="form-group" id="businessMap">
         <label class="col-sm-3 control-label">Map</label>
         <div class="col-sm-6">
@@ -116,26 +116,26 @@ SCRIPT;
         </div>
 
         <div id="nomallkey" class="hide">
-            <?= $form->field($model->company->modelMallMerchant, 'mam_floor')->textInput() ?>
-            <?= $form->field($model->company->modelMallMerchant, 'mam_unit_number')->textInput() ?>
+            <?= $form->field($model->modelMallMerchant, 'mam_floor')->textInput() ?>
+            <?= $form->field($model->modelMallMerchant, 'mam_unit_number')->textInput() ?>
         </div>
     </div>
-    <?= $form->field($model->company, 'com_phone')->textInput(); ?>
-    <?= $form->field($model->company, 'com_fax')->textInput(); ?>
-    <?= $form->field($model->company, 'com_website')->textInput(); ?>
-    <?= $form->field($model->company, 'com_size')->dropDownList($model->company->companySizeListData); ?>
-    <?= $form->field($model->company, 'com_nbrs_employees')->dropDownList($model->company->numberEmployeeListData); ?>
-    <?= $form->field($model->company, 'com_fb')->textInput(); ?>
-    <?= $form->field($model->company, 'com_twitter')->textInput(); ?>
-    <?= $form->field($model->company, 'com_timezone')->dropDownList($model->company->timeZoneListData) ?>
-    <?= $form->field($model->company, 'com_reg_num')->textInput() ?>
-    <?= $form->field($model->company, 'com_gst_enabled')->checkBox(['style' => 'margin-top:10px;'], false)->label('Gst?') ?>
-    <?= $form->field($model->company, 'com_gst_id')->textInput() ?>
-    <?= $form->field($model->company, 'fes_id')->dropDownList([]) ?>
-    <?= $form->field($model->company, 'com_point')->textInput(); ?>
-    <?= $form->field($model->company, 'com_latitude')->hiddenInput()->label('') ?>
-    <?= $form->field($model->company, 'com_longitude')->hiddenInput()->label('') ?>
-    <?= $form->field($model->company, 'com_sales_id')->widget(kartik\widgets\Select2::classname(), [
+    <?= $form->field($model, 'com_phone')->textInput(); ?>
+    <?= $form->field($model, 'com_fax')->textInput(); ?>
+    <?= $form->field($model, 'com_website')->textInput(); ?>
+    <?= $form->field($model, 'com_size')->dropDownList($modelSizeListData); ?>
+    <?= $form->field($model, 'com_nbrs_employees')->dropDownList($model->numberEmployeeListData); ?>
+    <?= $form->field($model, 'com_fb')->textInput(); ?>
+    <?= $form->field($model, 'com_twitter')->textInput(); ?>
+    <?= $form->field($model, 'com_timezone')->dropDownList($model->timeZoneListData) ?>
+    <?= $form->field($model, 'com_reg_num')->textInput() ?>
+    <?= $form->field($model, 'com_gst_enabled')->checkBox(['style' => 'margin-top:10px;'], false)->label('Gst?') ?>
+    <?= $form->field($model, 'com_gst_id')->textInput() ?>
+    <?= $form->field($model, 'fes_id')->dropDownList([]) ?>
+    <?= $form->field($model, 'com_point')->textInput(); ?>
+    <?= $form->field($model, 'com_latitude')->hiddenInput()->label('') ?>
+    <?= $form->field($model, 'com_longitude')->hiddenInput()->label('') ?>
+    <?= $form->field($model, 'com_sales_id')->widget(kartik\widgets\Select2::classname(), [
         'data' => yii\helpers\ArrayHelper::map(common\models\AdminUser::find()
             ->where('type = :type', [':type' => 4])
             ->all(), 'id', 'username'),
@@ -146,7 +146,7 @@ SCRIPT;
             'allowClear' => true
         ],
     ]); ?>
-    <?= $form->field($model->company, 'com_sales_order')->textInput(['class' => 'form-control datepicker']) ?>
+    <?= $form->field($model, 'com_sales_order')->textInput(['class' => 'form-control datepicker']) ?>
     <div class="form-group">
         <label class="col-sm-3 control-label">Photo</label>
         <div class="col-xs-8">
@@ -346,5 +346,7 @@ $this->registerJs("
     $('.submit-button, .reset-button').click(function(){
         $('#saveNext').val(0);
     });
+    $('.modal-title').text('New Merchant');
+    $('#modal>size').val('modal-lg');
 ",yii\web\View::POS_END, 'snapearn-form');
 ?>
