@@ -123,7 +123,7 @@ SCRIPT;
     <?= $form->field($model, 'com_phone')->textInput(); ?>
     <?= $form->field($model, 'com_fax')->textInput(); ?>
     <?= $form->field($model, 'com_website')->textInput(); ?>
-    <?= $form->field($model, 'com_size')->dropDownList($modelSizeListData); ?>
+    <?= $form->field($model, 'com_size')->dropDownList($model->companySizeListData); ?>
     <?= $form->field($model, 'com_nbrs_employees')->dropDownList($model->numberEmployeeListData); ?>
     <?= $form->field($model, 'com_fb')->textInput(); ?>
     <?= $form->field($model, 'com_twitter')->textInput(); ?>
@@ -136,7 +136,7 @@ SCRIPT;
     <?= $form->field($model, 'com_latitude')->hiddenInput()->label('') ?>
     <?= $form->field($model, 'com_longitude')->hiddenInput()->label('') ?>
     <?= $form->field($model, 'com_sales_id')->widget(kartik\widgets\Select2::classname(), [
-        'data' => yii\helpers\ArrayHelper::map(common\models\AdminUser::find()
+        'data' => yii\helpers\ArrayHelper::map(app\models\AdminUser::find()
             ->where('type = :type', [':type' => 4])
             ->all(), 'id', 'username'),
         'options' => [
@@ -182,6 +182,8 @@ SCRIPT;
 <?php ActiveForm::end(); ?>
 
 <?php
+$latitude = ($model->com_latitude ? $model->com_latitude : 3.139003);
+$longitude = ($model->com_longitude ? $model->com_longitude : 101.686855);
 $this->registerJs("
     //triger modal for image-croper
     $('.eb-cropper').on('click',function(){
@@ -347,6 +349,5 @@ $this->registerJs("
         $('#saveNext').val(0);
     });
     $('.modal-title').text('New Merchant');
-    $('#modal>size').val('modal-lg');
 ",yii\web\View::POS_END, 'snapearn-form');
 ?>

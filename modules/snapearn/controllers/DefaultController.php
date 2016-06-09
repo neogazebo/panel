@@ -14,6 +14,7 @@ use app\models\SnapEarnRule;
 use app\models\Company;
 use app\models\Activity;
 use app\models\LoyaltyPointHistory;
+use app\models\MerchantUser;
 
 /**
  * Default controller for the `snapearn` module
@@ -46,27 +47,85 @@ class DefaultController extends BaseController
         return $this->redirect(['update', 'id' => $id]);
     }
 
-    public function actionAjaxNew($id)
+    public function actionAjaxNew($reg = 'EBC')
     {
-        $model = new Company();
-        if ($model->load(Yii::$app->request->post())) {
+        // $model = new Company();
+        // if ($model->load(Yii::$app->request->post())) {
             
-        }
-
-        return $this->render('new',[
-                'model' => $model
-            ]);
-
-        // if ($company->load(Yii::$app->request->post())) {
-        //     if ($company->save()) {
-        //         $this->setMessage('save', 'success', 'Merchant created successfully!');
-        //         return $this->redirect($this->getRememberUrl());
-        //     }
         // }
 
-        // return $this->renderAjax('new', [
-        //     'model' => $company,
-        // ]);
+        // return $this->render('new',[
+        //         'model' => $model
+        //     ]);
+        $model = new MerchantUser();
+        $model->scenario = 'signup';
+        $model->usr_password = md5('123456');
+        $model->usr_type_id = 2;
+        $model->usr_approved = 0;
+
+        $company = new Company();
+
+        // ajax validation
+        if (Yii::$app->request->isAjax && $company->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($company);
+        }
+
+        if ($company->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+
+            $model->usr_email = $company->com_email;
+            try {
+                if ($model->save()) {
+                    $company->com_usr_id = $model->usr_id;
+                    $company->com_email = $model->usr_email;
+
+                    if ($company->save()) {
+                        $audit = AuditReport::setAuditReport('create business : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
+                        if ($audit->save()) {
+                            \Yii::$app->session->set('company', '');
+                            $com_id = $company->com_id;
+                            $company->setTag();
+                            $fsc = new FeatureSubscriptionCompany();
+                            $this->assignFcs($fsc, $com_id, $company, $company->fes_id);
+                            if ($fsc->save()) {
+                                $this->assignModule($com_id, $company);
+                                $this->assignEmail($com_id, $company);
+                                $transaction->commit();
+                                $this->setMessage('save','success', 'Business created successfully!');
+                                return $this->redirect([$this->getRememberUrl()]);
+                            } else {
+                                $transaction->rollback();
+                                $this->setMessage('save','error', 'Something wrong while subscription business. Please try again!');
+                                return $this->redirect(['index']);
+                            }
+                        }else{
+                            $transaction->rollback();
+                            $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
+                            return $this->redirect(['index']);
+                        }
+                    }else{
+                        $transaction->rollback();
+                        $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
+                        return $this->redirect(['index']);
+                    }
+                } else {
+                    $transaction->rollback();
+                    $this->setMessage('save','error', 'Something wrong while create member. Please try again!');
+                    return $this->redirect(['index']);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                throw $e;
+            }
+        }
+
+        $company->com_registered_to = strtoupper($reg);
+        return $this->renderAjax('new', [
+            'model' => $company,
+        ]);
+
+
     }
 
     public function actionAjaxExisting($id)

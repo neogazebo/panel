@@ -15,24 +15,6 @@ use yii\filters\VerbFilter;
 class DefaultController extends BaseController
 {
     /**
-     * @inheritdoc
-     */
-    // public function behaviors()
-    // {
-    //     return [
-    //         'verbs' => [
-    //             'class' => VerbFilter::className(),
-    //             'actions' => [
-    //                 'delete' => ['POST'],
-    //             ],
-    //         ],
-    //         'permission' => [
-    //             'class' => \app\components\filters\AccessFilters::className(),
-    //         ],
-    //     ];
-    // }
-
-    /**
      * Lists all Account models.
      * @return mixed
      */

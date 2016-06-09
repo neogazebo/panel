@@ -24,22 +24,13 @@ class BaseController extends Controller
 		return true;
     }
 
-    public function init()
-    {
-    	return [
-            'permission' => [
-                'class' => \app\components\filters\AccessFilters::className(),
-            ]
-    	];
-    }
-
     public function behaviors()
     {
 		return [
 		    'https' => [
 				'class' => \app\components\filters\Https::className(),
 		    ],
-            'permission' => [
+            'access' => [
                 'class' => \app\components\filters\AccessFilters::className(),
             ],
 		];
