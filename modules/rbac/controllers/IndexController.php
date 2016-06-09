@@ -54,7 +54,6 @@ class IndexController extends BaseController
         }
 
     	if ($model->load(Yii::$app->request->post())) {
-            exit('oke');
             $auth = $this->_role();
             $role = $auth->createRole($model->name);
             $role->description = $model->description;
