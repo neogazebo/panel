@@ -296,12 +296,12 @@ class Company extends EbizuActiveRecord
     {
         // if the photo has been changed
         if ($this->old_photo !== null && ($this->old_photo != $this->com_photo)) {
-            \common\components\helpers\Image::DeleteS3($this->old_photo);
+            \app\components\helpers\Image::DeleteS3($this->old_photo);
         }
 
         // if the banner photo has been changed
         if ($this->old_banner !== null && ($this->old_banner != $this->com_banner_photo)) {
-            \common\components\helpers\Image::DeleteS3($this->old_banner);
+            \app\components\helpers\Image::DeleteS3($this->old_banner);
         }
     }
 
@@ -788,6 +788,22 @@ class Company extends EbizuActiveRecord
             '500+' => '500+',
         ];
     }
+
+    public function getCategoryList()
+    {
+        $model = (new yii\db\Query())
+            ->select('com_category_id AS cat_id, com_category AS category, (
+                    SELECT com_category FROM tbl_company_category WHERE com_category_id = com_parent_category_id
+                ) AS parent_id
+            ')
+            ->from('tbl_company_category')
+            ->where('com_category_type = :type AND com_parent_category_id > :parent', [
+                ':type' => 1,
+                ':parent' => 0
+            ])
+            ->all();
+        return \app\components\helpers\Html::listData($model, 'cat_id', 'category', 'parent_id');
+    }    
 
     public static function find()
     {

@@ -59,8 +59,8 @@ $this->registerCss("
                             <div class="form-group">
                                 <label for="" class="col-lg-3 control-label">Merchant</label>
                                 <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= Html::button('<i class="fa fa-plus-square"></i> Add New Merchant', ['value' => Url::to(['ajax-new?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-primary btn-sm']); ?>
-                                <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-success btn-sm']); ?>
+                                    <?= Html::button('<i class="fa fa-plus-square"></i> Add New Merchant', ['type' => 'button','value' => Url::to(['ajax-new?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-primary btn-sm']); ?>
+                                <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-success btn-sm']); ?>
                                 <?php endif ?>
                             </div>
                             <?php else : ?>
@@ -133,7 +133,7 @@ $this->registerCss("
 <!-- widget to create render modal -->
 <?php
     Modal::begin([
-        'header' => '</button><h4 class="modal-title">New Merchant</h4>',
+        'header' => '</button><h4 class="modal-title"></h4>',
         'id' => 'modal',
         'size' => 'modal-md',
     ]);

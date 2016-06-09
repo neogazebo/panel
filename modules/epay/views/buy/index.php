@@ -55,6 +55,13 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                 [
                                     'attribute' => 'reward.vou_reward_name',
                                     'header' => 'Voucher'
+                                    'label' => 'Reward',
+                                    'format' => 'html',
+                                    'value' => function($model, $url){
+                                        $vbought = $model->rewardBought->voucher;
+                                        if(!empty($vbought))
+                                            return $vbought->vou_reward_name;
+                                    }
                                 ],
                                 [
                                     'attribute' => 'epa_datetime',

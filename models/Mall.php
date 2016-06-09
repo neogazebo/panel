@@ -133,7 +133,7 @@ class Mall extends EbizuActiveRecord
     {
         $model = MallCategory::find()->where('mac_mal_id='.$id)->all();
         // return \yii\helpers\ArrayHelper::map($model, 'mac_id', 'mac_name');
-        return \common\components\helpers\Html::listData($model, 'mac_id', 'mac_name');
+        return \app\components\helpers\Html::listData($model, 'mac_id', 'mac_name');
     }
 
     public static function topCategories($date)

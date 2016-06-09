@@ -271,5 +271,7 @@ $this->registerJs("
     $('.submit-button, .reset-button').click(function(){
         $('#saveNext').val(0);
     });
+    $('.modal-title').text('New Merchant');
+    $('#modal>size').val('modal-lg');
 ",yii\web\View::POS_END, 'snapearn-form');
 ?>
