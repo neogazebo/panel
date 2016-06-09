@@ -9,8 +9,11 @@ $config = [
     'id' => 'ebizu-bs',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'defaultRoute' => 'epay/index',
+    'defaultRoute' => 'snapearn/default',
     'modules' => [
+        'snapearn' => [
+            'class' => 'app\modules\snapearn\Snapearn',
+        ],
         'epay' => [
             'class' => 'app\modules\epay\Module'
         ],
@@ -34,9 +37,6 @@ $config = [
         ],
         'account' => [
             'class' => 'app\modules\account\Account',
-        ],
-        'snapearn' => [
-            'class' => 'app\modules\snapearn\Snapearn',
         ],
         'users' => [
             'class' => 'app\modules\users\Users',
@@ -116,10 +116,6 @@ $config = [
         ],
         'access' => [
             'class' => 'app\components\filters\AccessFilters',
-            'allowActions' => [
-                'site/*',
-                'site/logout'
-            ]
         ],
         'getRoutes' => [
             'class' => 'app\components\helpers\GetRoutes',

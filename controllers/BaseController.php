@@ -24,6 +24,15 @@ class BaseController extends Controller
 		return true;
     }
 
+    public function init()
+    {
+    	return [
+            'permission' => [
+                'class' => \app\components\filters\AccessFilters::className(),
+            ]
+    	];
+    }
+
     public function behaviors()
     {
 		return [

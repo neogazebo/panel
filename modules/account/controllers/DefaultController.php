@@ -1,33 +1,36 @@
 <?php
-
 namespace app\modules\account\controllers;
 
 use Yii;
+use yii\web\Controller;
+use app\controllers\BaseController;
 use app\models\Account;
 use app\models\AccountSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * IndexController implements the CRUD actions for Account model.
  */
-class DefaultController extends Controller
+class DefaultController extends BaseController
 {
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+    // public function behaviors()
+    // {
+    //     return [
+    //         'verbs' => [
+    //             'class' => VerbFilter::className(),
+    //             'actions' => [
+    //                 'delete' => ['POST'],
+    //             ],
+    //         ],
+    //         'permission' => [
+    //             'class' => \app\components\filters\AccessFilters::className(),
+    //         ],
+    //     ];
+    // }
 
     /**
      * Lists all Account models.
