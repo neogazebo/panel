@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 $this->title = 'Snap & Earn List';
+$search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
 ?>
 <section class="content-header ">
     <h1><?= $this->title?></h1>
@@ -16,7 +17,15 @@ $this->title = 'Snap & Earn List';
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
-                <div class="box-header with-border">&nbsp;</div>
+                <div class="box-header with-border">
+                    <!-- &nbsp;
+                    <div class="box-tools pull-right">
+                        <div class="has-feedback">
+                            <input type="text" id="filtersearch" value="<?= $search ?>" class="form-control input-sm" placeholder="Search Snap">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                    </div> -->
+                </div>
                 <div class="box-body">
                     <div class="table-responsive">
                         <?= 
@@ -123,3 +132,14 @@ $this->title = 'Snap & Earn List';
         </div>
     </div>
 </section>
+
+<?php
+$this->registerJs("
+    // $('#filtersearch').popover();
+    // $('#filtersearch').on('keypress', function(ev) {
+    //     if(ev.which == 13) {
+    //         window.location = baseUrl + 'snapearn/default?search=' + encodeURIComponent($(this).val());
+    //     }
+    // });
+", yii\web\View::POS_END, 'snapearn-list');
+?>

@@ -29,7 +29,9 @@ class DefaultController extends BaseController
     public function actionIndex()
     {
         $this->setRememberUrl();
-        $model = SnapEarn::find()->orderBy('sna_upload_date DESC');
+        $model = SnapEarn::find();
+        $model->orderBy('sna_upload_date DESC');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
