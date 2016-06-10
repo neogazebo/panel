@@ -52,13 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return $data->lastPointMember();
                                     }
                                 ],
-
                                 [
                                     'class' => 'yii\grid\ActionColumn',
                                     'template' => '<span class="pull-right actionColumn">{summary}</span>',
                                     'buttons' => [
                                         'summary' => function($url,$model){
-                                            return Html::a('<i class="fa fa-pencil-square-o"></i>', ['view', 'id' => $model->acc_id]);
+                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model->acc_id]);
                                         }
                                     ],
                                 ],
