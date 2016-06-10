@@ -47,7 +47,7 @@ class DefaultController extends BaseController
         return $this->redirect(['update', 'id' => $id]);
     }
 
-    public function actionAjaxNew($reg = 'EBC')
+    public function actionNewMerchant($reg = 'EBC')
     {
         // $model = new Company();
         // if ($model->load(Yii::$app->request->post())) {
@@ -121,7 +121,7 @@ class DefaultController extends BaseController
         }
 
         $company->com_registered_to = strtoupper($reg);
-        return $this->renderAjax('new', [
+        return $this->render('new', [
             'company' => $company,
         ]);
 

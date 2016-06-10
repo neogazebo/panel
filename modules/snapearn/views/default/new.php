@@ -2,7 +2,25 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
+$this->title = "New Merchant";
+?>
 
+<section class="content-header">
+    <h1><?= $this->title ?></h1>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?= $this->title ?></h3>
+                    <div class="box-tools">
+
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+<?php
 $form = ActiveForm::begin([
     'id' => 'create-form',
     'options' => ['class' => 'form-group'],
@@ -13,7 +31,7 @@ $form = ActiveForm::begin([
     ]
 ]);
 ?>
-<div class="modal-body">
+<div class="panel-body">
     <?= $form->field($company, 'com_name')->textInput() ?>
     <?= $form->field($company, 'com_business_name')->textInput() ?>
     <?= $form->field($company, 'com_email')->textInput() ?>
@@ -35,91 +53,7 @@ $form = ActiveForm::begin([
     ?>
     <?= $form->field($company, 'com_postcode')->textInput(); ?>
     <?= $form->field($company, 'com_address')->textInput(); ?>
-    <?php
-    $url = \yii\helpers\Url::to(['/mall/select2']);
-    $mal_id = $company->modelMallMerchant->mam_mal_id;
-    $initScript = <<< SCRIPT
-        function (element, callback) {
-            var id = "{$mal_id}";
-            if (id !== "") {
-                \$.ajax("{$url}?id=" + id, {
-                    dataType: "json"
-                }).done(function(data) { callback(data.results); });
-            }
-        }
-SCRIPT;
-    echo $form->field($company, 'mall_id')->widget(kartik\widgets\Select2::classname(), [
-        'options' => ['placeholder' => 'Choose a Mall ...'],
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' => 1,
-            'ajax' => [
-                'url' => $url,
-                'dataType' => 'json',
-                'data' => new yii\web\JsExpression("function(term,page) { return { search:term }; }"),
-                'results' => new yii\web\JsExpression('function(data,page) { return { results:data.results }; }'),
-            ],
-            'initSelection' => new yii\web\JsExpression($initScript)
-        ],
-        'pluginEvents' => [
-            'select2-focus' => "function() {
-                var baseUrl = '" . Yii::$app->homeUrl . "',
-                    id = $(this).val();
-                $('#company-com_mac_id').html('');
-                $.ajax({
-                    type: 'GET',
-                    url: baseUrl + 'business/mallcategory/?id=' + id,
-                    dataType: 'json',
-                    success: function(result) {
-                        var options = '';
-                        for(var i = 0; i < result.length; i++) {
-                            options += '<option value=' + result[i].mac_id + '>' + result[i].mac_name + '</option>';
-                        }
-                        $('#company-com_mac_id').html(options);
-                    }
-                });
-            }",
-        ],
-    ]);
-    ?>
-    <?= $form->field($company, 'com_mac_id')->dropDownList([]) ?>
-    <div class="form-group" id="businessMap">
-        <label class="col-sm-3 control-label">Map</label>
-        <div class="col-sm-6">
-            <div id="map" style="height:300px"></div>
-        </div>
-    </div>
-    <div id="floor-unit">
-        <div class="form-group hide" id="hasmallkey">
-            <label class="col-sm-3 control-label">&nbsp;</label>
-            <div class="col-lg-6">
-                <span class="btn btn-sm btn-primary" id="add_floor" data-mall="">Add Floor / Unit</span>
-                <br />
-                <table class="table" id="tbl_list_floor">
-                    <thead>
-                        <tr>
-                            <th>
-                                Floor
-                            </th>
-                            <th>
-                                Unit
-                            </th>
-                            <th width="5%">
-                                &nbsp;
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
-        <div id="nomallkey" class="hide">
-            <?= $form->field($company->modelMallMerchant, 'mam_floor')->textInput() ?>
-            <?= $form->field($company->modelMallMerchant, 'mam_unit_number')->textInput() ?>
-        </div>
-    </div>
     <?= $form->field($company, 'com_phone')->textInput(); ?>
     <?= $form->field($company, 'com_fax')->textInput(); ?>
     <?= $form->field($company, 'com_website')->textInput(); ?>
@@ -135,18 +69,7 @@ SCRIPT;
     <?= $form->field($company, 'com_point')->textInput(); ?>
     <?= $form->field($company, 'com_latitude')->hiddenInput()->label('') ?>
     <?= $form->field($company, 'com_longitude')->hiddenInput()->label('') ?>
-    <?= $form->field($company, 'com_sales_id')->widget(kartik\widgets\Select2::classname(), [
-        'data' => yii\helpers\ArrayHelper::map(app\models\AdminUser::find()
-            ->where('type = :type', [':type' => 4])
-            ->all(), 'id', 'username'),
-        'options' => [
-            'placeholder' => 'Choose a Sales ...',
-        ],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ]); ?>
-    <?= $form->field($company, 'com_sales_order')->textInput(['class' => 'form-control datepicker']) ?>
+
     <div class="form-group">
         <label class="col-sm-3 control-label">Photo</label>
         <div class="col-xs-8">
@@ -167,20 +90,17 @@ SCRIPT;
             </a>
         </div>
     </div>
-    <div class="panel-footer">
-        <div class="row">
-            <div class="col-sm-12">
-                <button type="submit" class="pull-right btn-primary btn"><i class="fa fa-check"></i> Save</button>
+    </div>
+<div class="box-footer">
+    <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning refreshParent', 'data-dismiss' => 'modal']) ?>
+    <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'pull-right btn btn-info pull-right']) ?>
+</div>
+<?php ActiveForm::end(); ?>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal-footer">
-    <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>
-    <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'pull-right btn btn-info pull-right']) ?>
-</div>
-<?php ActiveForm::end(); ?>
-
 <?php
 $latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
 $longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
@@ -349,5 +269,12 @@ $this->registerJs("
         $('#saveNext').val(0);
     });
     $('.modal-title').text('New Merchant');
+
+function refreshOpenerTopFrameset(){
+    var f = window.opener.top.frames;
+    for (var i = f.length - 1; i > -1; --i)
+    f[i].location.reload();
+}
+
 ",yii\web\View::POS_END, 'snapearn-form');
 ?>

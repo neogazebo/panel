@@ -147,4 +147,9 @@ $(function() {
 		alert('oke');
 	})
 
+	$('.refreshParent').on('click',function(){
+		window.opener.location.reload(true);
+		window.close();
+	});
+
 });

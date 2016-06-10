@@ -45,4 +45,20 @@ class MallQuery extends ActiveQuery {
         return $this;
     }
 
+    public function getMallList()
+    {
+        $search = $_GET['q'];
+        $keyword = preg_split("/[\s,]+/",$search);
+        $this->select('mal_id, mal_name');
+        foreach($keyword as $key){
+            $this->andWhere('mal_name LIKE "%:key%" ',[
+                    ':key' => $key
+                ]);
+        }
+        $this->andWhere('mal_status = :status',[
+                ':status' => 1
+            ]);
+        return $this;
+    }
+
 }

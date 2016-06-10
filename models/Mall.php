@@ -72,26 +72,26 @@ class Mall extends EbizuActiveRecord
     }
     
     public function behaviors() {
-        return [
-            'img-web-header' => [
-                'class' => 'common\components\behaviors\S3Behavior',
-                'field' => 'mal_web_img_header',
-                'path' => 'images/media/web/business',
-                'size' => [
-                    'width' => '1024',
-                    'height' => '600'
-                ]
-            ],
-            'Location' => [
-                'class' => 'common\components\behaviors\ExplodeLocation',
-                'location' => 'mal_city',
-                'attributes' => [
-                    'city' => 'mal_city_id',
-                    'region' => 'mal_region_id',
-                    'country' => 'mal_country_id'
-                ]
-            ],
-        ];
+        // return [
+        //     'img-web-header' => [
+        //         'class' => 'app\components\behaviors\S3Behavior',
+        //         'field' => 'mal_web_img_header',
+        //         'path' => 'images/media/web/business',
+        //         'size' => [
+        //             'width' => '1024',
+        //             'height' => '600'
+        //         ]
+        //     ],
+        //     'Location' => [
+        //         'class' => 'app\components\behaviors\ExplodeLocation',
+        //         'location' => 'mal_city',
+        //         'attributes' => [
+        //             'city' => 'mal_city_id',
+        //             'region' => 'mal_region_id',
+        //             'country' => 'mal_country_id'
+        //         ]
+        //     ],
+        // ];
     }
 
     public function getCity()

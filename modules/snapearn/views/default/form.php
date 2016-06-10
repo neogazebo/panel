@@ -59,7 +59,7 @@ $this->registerCss("
                             <div class="form-group">
                                 <label for="" class="col-lg-3 control-label">Merchant</label>
                                 <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= Html::button('<i class="fa fa-plus-square"></i> Add New Merchant', ['type' => 'button','value' => Url::to(['ajax-new?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-primary btn-sm new_m']); ?>
+                                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-primary btn-sm','target' => '_blank']) ?>
                                 <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-success btn-sm exs_m']); ?>
                                 <?php endif ?>
                             </div>
