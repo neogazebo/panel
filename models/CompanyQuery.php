@@ -56,7 +56,7 @@ class CompanyQuery extends \yii\db\ActiveQuery
         }
         $this->andWhere('com_status != 2');
         $this->orderBy('com_name');
-        $this->limit(10);
+        $this->limit(20);
         return $this->all();
     }
 }

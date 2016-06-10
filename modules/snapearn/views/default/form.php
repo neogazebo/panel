@@ -114,7 +114,7 @@ $this->registerCss("
                             <div class="row">
                                 <div class="button-right pull-right">
                                     <button type="submit" class="btn-primary btn submit-button"><i class="fa fa-check"></i> Save</button>
-                                    <button class="btn btn-primary saveNext" type="submit" name="save-next">Save &amp; Next</button>
+                                    <button class="btn btn-success saveNext" type="submit" name="save-next"><i class="fa fa-arrow-right"></i> Save &amp; Next</button>
                                     <input id="saveNext" type="hidden" name="saveNext" value="">
                                 </div>
                                 <div class="button-left pull-left">

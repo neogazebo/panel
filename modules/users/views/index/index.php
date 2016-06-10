@@ -6,6 +6,7 @@ use yii\bootstrap\modal;
 use yii\helpers\Url;
 
 $this->title = 'User Management';
+$search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
@@ -17,6 +18,12 @@ $this->title = 'User Management';
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <?= Html::a('<i class="fa fa-plus-square"></i> New User', ['create'], ['class' => 'btn btn-primary btn-sm']) ?>
+                    <div class="box-tools pull-right">
+                        <div class="has-feedback">
+                            <input type="text" id="filtersearch" value="<?= $search ?>" class="form-control input-sm" placeholder="Search User">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                    </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
@@ -66,3 +73,14 @@ $this->title = 'User Management';
         </div>
     </div>
 </section>
+
+<?php
+$this->registerJs("
+    $('#filtersearch').popover();
+    $('#filtersearch').on('keypress', function(ev) {
+        if(ev.which == 13) {
+            window.location = baseUrl + 'users/index?search=' + encodeURIComponent($(this).val());
+        }
+    });
+", yii\web\View::POS_END, 'user-' . time());
+?>

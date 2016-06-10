@@ -5,6 +5,7 @@ namespace app\modules\snapearn\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
+use linslin\yii2\curl;
 use app\controllers\BaseController;
 use app\components\helpers\Utc;
 use app\components\helpers\General;
@@ -302,7 +303,8 @@ class DefaultController extends BaseController
 
                     // webhook for manis v3
                     // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
-                    
+                    $curl = new curl\Curl();
+                    $response = $curl->get('https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":' . $model->sna_acc_id . ',"sna_id":' . $model->sna_id . ',"sna_status":' . $model->sna_status . '}');
 
                     // Yii::$app->workingTime->end($id);
                 } else {
