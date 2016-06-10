@@ -59,8 +59,8 @@ $this->registerCss("
                             <div class="form-group">
                                 <label for="" class="col-lg-3 control-label">Merchant</label>
                                 <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= Html::button('<i class="fa fa-plus-square"></i> Add New Merchant', ['type' => 'button','value' => Url::to(['ajax-new?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-primary btn-sm']); ?>
-                                <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-success btn-sm']); ?>
+                                    <?= Html::button('<i class="fa fa-plus-square"></i> Add New Merchant', ['type' => 'button','value' => Url::to(['ajax-new?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-primary btn-sm new_m']); ?>
+                                <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-success btn-sm exs_m']); ?>
                                 <?php endif ?>
                             </div>
                             <?php else : ?>
@@ -129,7 +129,6 @@ $this->registerCss("
         </div>
     </div>
 </div>
-
 <!-- widget to create render modal -->
 <?php
     Modal::begin([
@@ -217,6 +216,14 @@ $this->registerJs("
     });
     $('.submit-button, .reset-button').click(function(){
         $('#saveNext').val(0);
+    });
+    
+    $('.new_m').on('click',function(){
+        $('.modal-dialog').switchClass( 'modal-md', 'modal-lg');
+    });
+
+    $('.exs_m').on('click',function(){
+        $('.modal-dialog').switchClass( 'modal-lg','modal-md');
     });
 
 ", yii\web\View::POS_END, 'snapearn-form');

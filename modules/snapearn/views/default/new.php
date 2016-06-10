@@ -5,12 +5,6 @@ use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 
-$this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-$this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-$latitude = ($model->company->com_latitude ? $model->company->com_latitude : 3.139003);
-$longitude = ($model->company->com_longitude ? $model->company->com_longitude : 101.686855);
-$urlCity = \yii\helpers\Url::to(['city/list']);
-
 $form = ActiveForm::begin([
     'id' => 'create-form',
     'options' => ['class' => 'form-group'],
@@ -22,36 +16,30 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <div class="modal-body">
-    <?= $form->field($model->company, 'com_name')->textInput() ?>
-    <?= $form->field($model->company, 'com_business_name')->textInput() ?>
-    <?= $form->field($model->company, 'com_email')->textInput() ?>
-    <?= $form->field($model->company, 'com_subcategory_id')->dropDownList($model->company->categoryListData); ?>
-    <?= $form->field($model->company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
-    <?= $form->field($model->company, 'com_city')->widget(kartik\widgets\Select2::classname(), [
-        'options' => ['placeholder' => 'Search for a city ...'],
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' => 1,
-            'language' => [
-                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
-            ],
-            'ajax' => [
-                'url' => $urlCity,
-                'dataType' => 'json',
-                'data' => new JsExpression('function(params) { return { q: params.term }; }')
-            ],
-            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-            'templateResult' => new JsExpression('function(city) { return city.text; }'),
-            'templateSelection' => new JsExpression('function (city) { return city.text; }'),
-        ], 
-    ]);
+    <?= $form->field($company, 'com_name')->textInput() ?>
+    <?= $form->field($company, 'com_business_name')->textInput() ?>
+    <?= $form->field($company, 'com_email')->textInput() ?>
+    <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList); ?>
+    <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
+    <?= $form->field($company, 'com_city')->widget(kartik\widgets\Typeahead::classname(), [
+        'options' => ['placeholder' => 'City, Region, Country', 'id' => 'location'],
+        'pluginOptions' => ['highlight' => true],
+        'dataset' => [
+            [
+                'remote' => yii\helpers\Url::to(['city/list']) . '?q=%QUERY',
+                'limit' => 10
+            ]
+        ],
+        'pluginEvents' => [
+            'typeahead:selected' => 'function(evt,data) {}',
+        ]
+    ])->hint(Html::a(Html::img(Yii::$app->homeUrl . 'img/btn-plus.png', ['data-action' => 'destination', 'class' => 'find-address-book'])));
     ?>
-
-    <?= $form->field($model->company, 'com_postcode')->textInput(); ?>
-    <?= $form->field($model->company, 'com_address')->textInput(); ?>
+    <?= $form->field($company, 'com_postcode')->textInput(); ?>
+    <?= $form->field($company, 'com_address')->textInput(); ?>
     <?php
-    $url = \yii\helpers\Url::to(['/merchant/mall/select2']);
-    $mal_id = $model->company->modelMallMerchant->mam_mal_id;
+    $url = \yii\helpers\Url::to(['/mall/select2']);
+    $mal_id = $company->modelMallMerchant->mam_mal_id;
     $initScript = <<< SCRIPT
         function (element, callback) {
             var id = "{$mal_id}";
@@ -62,7 +50,7 @@ $form = ActiveForm::begin([
             }
         }
 SCRIPT;
-    echo $form->field($model->company, 'mall_id')->widget(kartik\widgets\Select2::classname(), [
+    echo $form->field($company, 'mall_id')->widget(kartik\widgets\Select2::classname(), [
         'options' => ['placeholder' => 'Choose a Mall ...'],
         'pluginOptions' => [
             'allowClear' => true,
@@ -96,7 +84,7 @@ SCRIPT;
         ],
     ]);
     ?>
-    <?= $form->field($model->company, 'com_mac_id')->dropDownList([]) ?>
+    <?= $form->field($company, 'com_mac_id')->dropDownList([]) ?>
     <div class="form-group" id="businessMap">
         <label class="col-sm-3 control-label">Map</label>
         <div class="col-sm-12">
@@ -130,17 +118,64 @@ SCRIPT;
         </div>
 
         <div id="nomallkey" class="hide">
-            <?= $form->field($model->company->modelMallMerchant, 'mam_floor')->textInput() ?>
-            <?= $form->field($model->company->modelMallMerchant, 'mam_unit_number')->textInput() ?>
+            <?= $form->field($company->modelMallMerchant, 'mam_floor')->textInput() ?>
+            <?= $form->field($company->modelMallMerchant, 'mam_unit_number')->textInput() ?>
         </div>
     </div>
-    <?= $form->field($model->company, 'com_phone')->textInput(); ?>
-    <?= $form->field($model->company, 'com_gst_enabled')->checkBox(['style' => 'margin-top:10px;'], false)->label('Gst?') ?>
-    <?= $form->field($model->company, 'com_gst_id')->textInput() ?>
-    <?= $form->field($model->company, 'fes_id')->dropDownList($model->company->featureSubscription) ?>
-    <?= $form->field($model->company, 'com_point')->textInput(['value' => 0]); ?>
-    <?= $form->field($model->company, 'com_latitude')->hiddenInput()->label('') ?>
-    <?= $form->field($model->company, 'com_longitude')->hiddenInput()->label('') ?>
+    <?= $form->field($company, 'com_phone')->textInput(); ?>
+    <?= $form->field($company, 'com_fax')->textInput(); ?>
+    <?= $form->field($company, 'com_website')->textInput(); ?>
+    <?= $form->field($company, 'com_size')->dropDownList($company->companySizeListData); ?>
+    <?= $form->field($company, 'com_nbrs_employees')->dropDownList($company->numberEmployeeListData); ?>
+    <?= $form->field($company, 'com_fb')->textInput(); ?>
+    <?= $form->field($company, 'com_twitter')->textInput(); ?>
+    <?= $form->field($company, 'com_timezone')->dropDownList($company->timeZoneListData) ?>
+    <?= $form->field($company, 'com_reg_num')->textInput() ?>
+    <?= $form->field($company, 'com_gst_enabled')->checkBox(['style' => 'margin-top:10px;'], false)->label('Gst?') ?>
+    <?= $form->field($company, 'com_gst_id')->textInput() ?>
+    <?= $form->field($company, 'fes_id')->dropDownList([]) ?>
+    <?= $form->field($company, 'com_point')->textInput(); ?>
+    <?= $form->field($company, 'com_latitude')->hiddenInput()->label('') ?>
+    <?= $form->field($company, 'com_longitude')->hiddenInput()->label('') ?>
+    <?= $form->field($company, 'com_sales_id')->widget(kartik\widgets\Select2::classname(), [
+        'data' => yii\helpers\ArrayHelper::map(app\models\AdminUser::find()
+            ->where('type = :type', [':type' => 4])
+            ->all(), 'id', 'username'),
+        'options' => [
+            'placeholder' => 'Choose a Sales ...',
+        ],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); ?>
+    <?= $form->field($company, 'com_sales_order')->textInput(['class' => 'form-control datepicker']) ?>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Photo</label>
+        <div class="col-xs-8">
+            <input type="hidden" id="com_photo" name="Company[com_photo]">
+            <a data-toggle="modal" data-image="com_logo" data-field="com_photo" href="#" class="eb-cropper">
+                <?php $image = isset($company->com_photo) ? Yii::$app->params['businessUrl'] . $company->com_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
+                <img src="<?= $image ?>" id="com_logo" class="img-responsive" width="240">
+            </a>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Banner</label>
+        <div class="col-xs-8">
+            <input type="hidden" id="com_banner" name="Company[com_banner_photo]">
+            <a data-toggle="modal" data-image="com_banner_photo" data-field="com_banner" href="#" class="eb-cropper">
+                <?php $image = isset($company->com_banner_photo) ? Yii::$app->params['businessUrl'] . $company->com_banner_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
+                <img src="<?= $image ?>" id="com_banner_photo" class="img-responsive" width="240">
+            </a>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-12">
+                <button type="submit" class="pull-right btn-primary btn"><i class="fa fa-check"></i> Save</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal-footer">
@@ -150,6 +185,8 @@ SCRIPT;
 <?php ActiveForm::end(); ?>
 
 <?php
+$latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
+$longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
 $this->registerJs("
     var mall_checked = 0;
     $('#create-business').hide();
@@ -197,6 +234,36 @@ $this->registerJs("
             });
         });
     };
+
+    $('#create').click(function() {
+        $('#create-business').show();
+        $.ajax({
+            type: 'GET',
+            url: baseUrl + 'business/register',
+            data: { reg: 'EBC' },
+            cache: false,
+            success: function(result) {
+                $('#company-fes_id').empty().append(result);
+            }
+        });
+
+        var com_name = $('#companysuggestion-cos_name').val();
+        $('#company-com_name').val(com_name);
+        $('#company-com_business_name').val(com_name);
+        loadMap();
+        if($('#companysuggestion-cos_mall').val() != '') {
+            $('#company-com_in_mall').attr('checked', true);
+            mall_checked = 1;
+            loadMall();
+        } else {
+            unloadMall();
+        }
+
+        $('html, body').animate({
+            scrollTop: $('#create-business').offset().top
+        }, 1000);
+        return false;
+    });
 
     $('#existing').click(function() {
          $('#business_exist').modal({ show: true });
@@ -272,6 +339,5 @@ $this->registerJs("
         $('#saveNext').val(0);
     });
     $('.modal-title').text('New Merchant');
-    $('#modal>size').val('modal-lg');
 ",yii\web\View::POS_END, 'snapearn-form');
 ?>

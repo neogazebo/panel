@@ -3,6 +3,7 @@
 namespace app\modules\epay\controllers;
 
 use Yii;
+use yii\web\Controller;
 use app\models\EpayDetail;
 use yii\helpers\BaseFileHelper;
 
@@ -11,13 +12,23 @@ use yii\helpers\BaseFileHelper;
 */
 class ReportController extends EpaybaseController
 {
-	
+    private $ftpEpayServer = 'sftp.e-pay.com.my';
+    private $ftpEpayServerPort = 22;
+    private $ftpEpayServerUsername = 'ebizu';
+    private $ftpEpayServerPassword = 'Mbr6khXJ79kAY';
+
+    public function init()
+    {
+        parent::init();
+        date_default_timezone_set('Etc/UTC');
+    }
+
 	public function actionIndex()
 	{
 		return $this->render('index');
 	}
 
-   /*
+    /*
      * Epay Manual Recon
      */
     public function actionManualRecon($data = 'today')
@@ -107,5 +118,4 @@ class ReportController extends EpaybaseController
         }
         fclose($output);
     }
-    
 }
