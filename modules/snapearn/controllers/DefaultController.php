@@ -49,14 +49,6 @@ class DefaultController extends BaseController
 
     public function actionAjaxNew($reg = 'EBC')
     {
-        // $model = new Company();
-        // if ($model->load(Yii::$app->request->post())) {
-            
-        // }
-
-        // return $this->render('new',[
-        //         'model' => $model
-        //     ]);
         $model = new MerchantUser();
         $model->scenario = 'signup';
         $model->usr_password = md5('123456');
@@ -124,8 +116,6 @@ class DefaultController extends BaseController
         return $this->renderAjax('new', [
             'company' => $company,
         ]);
-
-
     }
 
     public function actionAjaxExisting($id)
@@ -309,6 +299,11 @@ class DefaultController extends BaseController
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
                     }
+
+                    // webhook for manis v3
+                    // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
+                    
+
                     // Yii::$app->workingTime->end($id);
                 } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
