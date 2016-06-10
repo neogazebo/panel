@@ -122,7 +122,7 @@ class DefaultController extends BaseController
 
         $company->com_registered_to = strtoupper($reg);
         return $this->renderAjax('new', [
-            'model' => $company,
+            'company' => $company,
         ]);
 
 

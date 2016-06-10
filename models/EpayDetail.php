@@ -96,7 +96,8 @@ class EpayDetail extends \yii\db\ActiveRecord {
         $stringdate = date('Ymd', (strtotime('-1 day', strtotime(date('Ymd')))));
         $epay_detail = EpayDetail::find()->where('epd_response_code="00"');
         if ($recap == 'today') {
-            $stringdate = date('Ymd', (strtotime('-1 day', strtotime(date('Ymd')))));
+            // $stringdate = date('Ymd', (strtotime('-1 day', strtotime(date('Ymd')))));
+            $stringdate = date('Ymd', (strtotime(date('Ymd'))));
         } else if ($recap == 'specific') {
             $stringdate = $date;
         }

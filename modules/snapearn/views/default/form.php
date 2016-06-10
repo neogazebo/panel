@@ -130,7 +130,6 @@ $this->registerCss("
         </div>
     </div>
 </div>
-
 <!-- widget to create render modal -->
 <?php
     Modal::begin([

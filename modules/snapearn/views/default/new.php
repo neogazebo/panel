@@ -14,12 +14,12 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <div class="modal-body">
-    <?= $form->field($model, 'com_name')->textInput() ?>
-    <?= $form->field($model, 'com_business_name')->textInput() ?>
-    <?= $form->field($model, 'com_email')->textInput() ?>
-    <?= $form->field($model, 'com_subcategory_id')->dropDownList($model->categoryList); ?>
-    <?= $form->field($model, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
-    <?= $form->field($model, 'com_city')->widget(kartik\widgets\Typeahead::classname(), [
+    <?= $form->field($company, 'com_name')->textInput() ?>
+    <?= $form->field($company, 'com_business_name')->textInput() ?>
+    <?= $form->field($company, 'com_email')->textInput() ?>
+    <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList); ?>
+    <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
+    <?= $form->field($company, 'com_city')->widget(kartik\widgets\Typeahead::classname(), [
         'options' => ['placeholder' => 'City, Region, Country', 'id' => 'location'],
         'pluginOptions' => ['highlight' => true],
         'dataset' => [
@@ -33,11 +33,11 @@ $form = ActiveForm::begin([
         ]
     ])->hint(Html::a(Html::img(Yii::$app->homeUrl . 'img/btn-plus.png', ['data-action' => 'destination', 'class' => 'find-address-book'])));
     ?>
-    <?= $form->field($model, 'com_postcode')->textInput(); ?>
-    <?= $form->field($model, 'com_address')->textInput(); ?>
+    <?= $form->field($company, 'com_postcode')->textInput(); ?>
+    <?= $form->field($company, 'com_address')->textInput(); ?>
     <?php
     $url = \yii\helpers\Url::to(['/mall/select2']);
-    $mal_id = $model->modelMallMerchant->mam_mal_id;
+    $mal_id = $company->modelMallMerchant->mam_mal_id;
     $initScript = <<< SCRIPT
         function (element, callback) {
             var id = "{$mal_id}";
@@ -48,7 +48,7 @@ $form = ActiveForm::begin([
             }
         }
 SCRIPT;
-    echo $form->field($model, 'mall_id')->widget(kartik\widgets\Select2::classname(), [
+    echo $form->field($company, 'mall_id')->widget(kartik\widgets\Select2::classname(), [
         'options' => ['placeholder' => 'Choose a Mall ...'],
         'pluginOptions' => [
             'allowClear' => true,
@@ -82,7 +82,7 @@ SCRIPT;
         ],
     ]);
     ?>
-    <?= $form->field($model, 'com_mac_id')->dropDownList([]) ?>
+    <?= $form->field($company, 'com_mac_id')->dropDownList([]) ?>
     <div class="form-group" id="businessMap">
         <label class="col-sm-3 control-label">Map</label>
         <div class="col-sm-6">
@@ -116,26 +116,26 @@ SCRIPT;
         </div>
 
         <div id="nomallkey" class="hide">
-            <?= $form->field($model->modelMallMerchant, 'mam_floor')->textInput() ?>
-            <?= $form->field($model->modelMallMerchant, 'mam_unit_number')->textInput() ?>
+            <?= $form->field($company->modelMallMerchant, 'mam_floor')->textInput() ?>
+            <?= $form->field($company->modelMallMerchant, 'mam_unit_number')->textInput() ?>
         </div>
     </div>
-    <?= $form->field($model, 'com_phone')->textInput(); ?>
-    <?= $form->field($model, 'com_fax')->textInput(); ?>
-    <?= $form->field($model, 'com_website')->textInput(); ?>
-    <?= $form->field($model, 'com_size')->dropDownList($model->companySizeListData); ?>
-    <?= $form->field($model, 'com_nbrs_employees')->dropDownList($model->numberEmployeeListData); ?>
-    <?= $form->field($model, 'com_fb')->textInput(); ?>
-    <?= $form->field($model, 'com_twitter')->textInput(); ?>
-    <?= $form->field($model, 'com_timezone')->dropDownList($model->timeZoneListData) ?>
-    <?= $form->field($model, 'com_reg_num')->textInput() ?>
-    <?= $form->field($model, 'com_gst_enabled')->checkBox(['style' => 'margin-top:10px;'], false)->label('Gst?') ?>
-    <?= $form->field($model, 'com_gst_id')->textInput() ?>
-    <?= $form->field($model, 'fes_id')->dropDownList([]) ?>
-    <?= $form->field($model, 'com_point')->textInput(); ?>
-    <?= $form->field($model, 'com_latitude')->hiddenInput()->label('') ?>
-    <?= $form->field($model, 'com_longitude')->hiddenInput()->label('') ?>
-    <?= $form->field($model, 'com_sales_id')->widget(kartik\widgets\Select2::classname(), [
+    <?= $form->field($company, 'com_phone')->textInput(); ?>
+    <?= $form->field($company, 'com_fax')->textInput(); ?>
+    <?= $form->field($company, 'com_website')->textInput(); ?>
+    <?= $form->field($company, 'com_size')->dropDownList($company->companySizeListData); ?>
+    <?= $form->field($company, 'com_nbrs_employees')->dropDownList($company->numberEmployeeListData); ?>
+    <?= $form->field($company, 'com_fb')->textInput(); ?>
+    <?= $form->field($company, 'com_twitter')->textInput(); ?>
+    <?= $form->field($company, 'com_timezone')->dropDownList($company->timeZoneListData) ?>
+    <?= $form->field($company, 'com_reg_num')->textInput() ?>
+    <?= $form->field($company, 'com_gst_enabled')->checkBox(['style' => 'margin-top:10px;'], false)->label('Gst?') ?>
+    <?= $form->field($company, 'com_gst_id')->textInput() ?>
+    <?= $form->field($company, 'fes_id')->dropDownList([]) ?>
+    <?= $form->field($company, 'com_point')->textInput(); ?>
+    <?= $form->field($company, 'com_latitude')->hiddenInput()->label('') ?>
+    <?= $form->field($company, 'com_longitude')->hiddenInput()->label('') ?>
+    <?= $form->field($company, 'com_sales_id')->widget(kartik\widgets\Select2::classname(), [
         'data' => yii\helpers\ArrayHelper::map(app\models\AdminUser::find()
             ->where('type = :type', [':type' => 4])
             ->all(), 'id', 'username'),
@@ -146,13 +146,13 @@ SCRIPT;
             'allowClear' => true
         ],
     ]); ?>
-    <?= $form->field($model, 'com_sales_order')->textInput(['class' => 'form-control datepicker']) ?>
+    <?= $form->field($company, 'com_sales_order')->textInput(['class' => 'form-control datepicker']) ?>
     <div class="form-group">
         <label class="col-sm-3 control-label">Photo</label>
         <div class="col-xs-8">
             <input type="hidden" id="com_photo" name="Company[com_photo]">
             <a data-toggle="modal" data-image="com_logo" data-field="com_photo" href="#" class="eb-cropper">
-                <?php $image = isset($model->com_photo) ? Yii::$app->params['businessUrl'] . $model->com_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
+                <?php $image = isset($company->com_photo) ? Yii::$app->params['businessUrl'] . $company->com_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
                 <img src="<?= $image ?>" id="com_logo" class="img-responsive" width="240">
             </a>
         </div>
@@ -162,7 +162,7 @@ SCRIPT;
         <div class="col-xs-8">
             <input type="hidden" id="com_banner" name="Company[com_banner_photo]">
             <a data-toggle="modal" data-image="com_banner_photo" data-field="com_banner" href="#" class="eb-cropper">
-                <?php $image = isset($model->com_banner_photo) ? Yii::$app->params['businessUrl'] . $model->com_banner_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
+                <?php $image = isset($company->com_banner_photo) ? Yii::$app->params['businessUrl'] . $company->com_banner_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
                 <img src="<?= $image ?>" id="com_banner_photo" class="img-responsive" width="240">
             </a>
         </div>
@@ -182,8 +182,8 @@ SCRIPT;
 <?php ActiveForm::end(); ?>
 
 <?php
-$latitude = ($model->com_latitude ? $model->com_latitude : 3.139003);
-$longitude = ($model->com_longitude ? $model->com_longitude : 101.686855);
+$latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
+$longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
 $this->registerJs("
     //triger modal for image-croper
     $('.eb-cropper').on('click',function(){

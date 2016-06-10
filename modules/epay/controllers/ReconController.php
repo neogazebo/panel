@@ -58,7 +58,8 @@ class ReconController extends Controller
             $date = $postDate[2] . $postDate[1] . $postDate[0];
             $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', strtotime($date)) . '.csv';
         }else{
-            $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
+            // $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime('-1 day', strtotime(date('Ymd'))))) . '.csv';
+            $filename = EpayDetail::CLIENT_SHORTNAME . date('ymd', (strtotime(date('Ymd')))) . '.csv';
         }
 
         // get data from table EpayDetail
@@ -85,7 +86,7 @@ class ReconController extends Controller
             // upload to server epay
             $upload = Yii::$app->ftp->put(Yii::$app->basePath."/runtime/sFTp/$filename","/recon/$filename");
 
-            $return['data'] = array('code' => 200, 'message' => 'Recon file successfully uploaded with name : ' . $filename, 'attachment' => $filename,'date' => date('Y-m-d H:i:s'),'execute' => $elapsed);
+            $return['data'] = array('code' => 200 .PHP_EOL, 'message' => 'Recon file successfully uploaded with name : ' . $filename.PHP_EOL, 'attachment' => $filename.PHP_EOL,'date' => date('Y-m-d H:i:s').PHP_EOL,'execute' => $elapsed.PHP_EOL);
         }
 
         // delete local dir
