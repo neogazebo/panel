@@ -24,7 +24,7 @@ class CityController extends BaseController
 		    foreach ($model as $d) {
 		        $out[] = [
 		        	'id' => $d->com_id,
-		        	'value' => $d->cit_name . ', ' . $d->region->reg_name . ', ' . $d->country->cny_name
+		        	'text' => $d->cit_name . ', ' . $d->region->reg_name . ', ' . $d->country->cny_name
 		        ];
 		    }
 		    echo \yii\helpers\Json::encode($out);
