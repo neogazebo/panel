@@ -76,10 +76,10 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                                 '/merchant-signup/default/review/?id=' . $model->id
                                             ], ['class' => 'btn btn-info btn-xs']);
                                         },
-                                        'xreview' => function($url, $model) {
+                                        /* 'xreview' => function($url, $model) {
                                             if($model->mer_reviewed == 0)
                                                 return Html::a('<i class="fa fa-pencil"></i> Edit', ['/merchant-signup/default/xreview/?id=' . $model->id], ['class' => 'btn btn-success btn-xs']);
-                                        }
+                                        } */
                                     ]
                                 ],
                             ],
