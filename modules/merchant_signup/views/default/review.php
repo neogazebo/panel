@@ -27,9 +27,6 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h4><i class="fa fa-briefcase"></i> <?= Yii::t('app', $this->title); ?></h4>
-                    </div>
                     <?php
                     $form = ActiveForm::begin([
                         'options' => ['enctype' => 'multipart/form-data', 'class' => 'form-horizontal'],
@@ -51,81 +48,65 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                                 <label class="col-sm-3 control-label">Tags</label>
                                 <div class="col-lg-8">
                                     <span class="btn btn-sm btn-primary" id="add_tag" data-tag=""><i class="fa fa-plus"></i> Add Tag</span>
-                                    <?php
-                                    $tagged = $model_company->getTag($model_company->com_id);
-                                    $tags = '';
-                                    foreach($tagged as $tag)
-                                        $tags .= $tag->tag_id . ',';
-                                    ?>
-                                    <input type="hidden" id="company-tag" name="Company[tag]" value="<?= $tags ?>">
-                                    <div id="tagging-list">
-                                        <?php
-                                        foreach($tagged as $tag):
-                                        ?>
-                                        <div style="background: #ececec; border: 1px solid #ccc; margin: 3px 0; padding: 5px">
-                                            <?= $tag->tag_name ?>
-                                            <a href="javascript:;" data-id="<?= $tag->tag_id ?>" class="pull-right remove-tag"><i class="fa fa-times"></i></a>
-                                        </div>
-                                        <?php endforeach; ?>
-                                    </div>
+                                    <input type="hidden" id="company-tag" name="Company[tag]" value="">
+                                    <div id="tagging-list"></div>
                                 </div>
                             </div>
                         </div>
                         <?= $form->field($model_company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
                         <?= $form->field($model, 'mer_address')->textInput(); ?>
                         <?= $form->field($model, 'mer_post_code')->textInput(); ?>
-<?= 
-        $form->field($model_company, 'mall_name')->widget(Typeahead::classname(),[
-            'name' => 'merchant',
-            'options' => [
-                'placeholder' => 'Mall Name'
-            ],
-            'pluginOptions' => [
-                'highlight'=>true,
-                'minLength' => 3
-            ],
-            'pluginEvents' => [
-                "typeahead:select" => "function(ev, suggestion) { $('#company-mall_id').val(suggestion.id); }",
-            ],
-            'dataset' => [
-                [
-                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                    'display' => 'value',
-                    'remote' => [
-                        'url' => Url::to(['mall-list']) . '?q=%QUERY',
-                        'wildcard' => '%QUERY'
-                    ],
-                    'limit' => 20
-                ]
-            ]
-        ])->label('Select Mall');
-    ?>
-    <?= $form->field($model_company, 'mall_id')->hiddenInput()->label('') ?>
-
-   <?= 
-        $form->field($model_company, 'com_city')->widget(Typeahead::classname(),[
-            'name' => 'merchant',
-            'options' => ['placeholder' => 'City, Region, Country'],
-            'pluginOptions' => [
-                'highlight'=>true,
-                'minLength' => 3
-            ],
-            'pluginEvents' => [
-                "typeahead:select" => "function(ev, suggestion) { $(this).val(suggestion.id); }",
-            ],
-            'dataset' => [
-                [
-                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                    'display' => 'value',
-                    'remote' => [
-                        'url' => Url::to(['city-list']) . '?q=%QUERY',
-                        'wildcard' => '%QUERY'
-                    ],
-                    'limit' => 20
-                ]
-            ]
-        ]);
-    ?>
+						<?= 
+					        $form->field($model_company, 'mall_name')->widget(Typeahead::classname(),[
+					            'name' => 'merchant',
+					            'options' => [
+					                'placeholder' => 'Mall Name'
+					            ],
+					            'pluginOptions' => [
+					                'highlight'=>true,
+					                'minLength' => 3
+					            ],
+					            'pluginEvents' => [
+					                "typeahead:select" => "function(ev, suggestion) { $('#company-mall_id').val(suggestion.id); }",
+					            ],
+					            'dataset' => [
+					                [
+					                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+					                    'display' => 'value',
+					                    'remote' => [
+					                        'url' => Url::to(['mall-list']) . '?q=%QUERY',
+					                        'wildcard' => '%QUERY'
+					                    ],
+					                    'limit' => 20
+					                ]
+					            ]
+					        ])->label('Mall Name');
+						?>
+					
+						<?= 
+					        $form->field($model_company, 'com_city')->widget(Typeahead::classname(),[
+					            'name' => 'merchant',
+					            'options' => ['placeholder' => 'City, Region, Country'],
+					            'pluginOptions' => [
+					                'highlight'=>true,
+					                'minLength' => 3
+					            ],
+					            'pluginEvents' => [
+					                "typeahead:select" => "function(ev, suggestion) { $(this).val(suggestion.id); }",
+					            ],
+					            'dataset' => [
+					                [
+					                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+					                    'display' => 'value',
+					                    'remote' => [
+					                        'url' => Url::to(['city-list']) . '?q=%QUERY',
+					                        'wildcard' => '%QUERY'
+					                    ],
+					                    'limit' => 20
+					                ]
+					            ]
+					        ]);
+						?>
 
                         <div class="form-group" id="merchantsignup-map">
                             <label class="col-sm-3 control-label">Map</label>
@@ -178,7 +159,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary pull-right', 'disabled' => true]) ?>
+                                    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary pull-right']) ?>
                                     <button type="reset" class="pull-left btn" onclick="window.location = '<?= Yii::$app->urlManager->createUrl('business/index') ?>'"><i class="fa fa-times"></i> Cancel</button>
                                 </div>
                             </div>
@@ -192,51 +173,88 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 </div>
 
 <?php
-$hiddenTag = '';
-foreach($model_company->getTag($model_company->com_id) as $tag) {
-    $hiddenTag .= $tag->tag_id.',';
-}
+$this->registerCssFile("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/minified/jquery-ui.min.css");
 
 $this->registerJs("
-    var hiddenTag = '".$hiddenTag."',
-        isUpdate = 1;
+    var isUpdate = 0;
 
-    $('.datepicker').datepicker();
-    $(document).ready(function () {
-        var baseUrl = '" . Yii::$app->homeUrl . "',
-            mall = " . $inMall . ",
-            type = " . Yii::$app->user->identity->type . ",
-            mal_id = " . (!empty($model_company->modelMallMerchant->mam_mal_id) ? $model_company->modelMallMerchant->mam_mal_id : 0) . ";
+    var PostCodeid = '#merchantsignup-mer_address';
+    var longval = '#company-com_longitude';
+    var latval = '#company-com_latitude';
+    var geocoder;
+    var map;
+    var marker;
+    
+    function initialize() {
+        // init map
+        var initialLat = $(latval).val();
+        var initialLong = $(longval).val();
+        if (initialLat == '') {
+            initialLat = ".$latitude.";
+            initialLong = " . $longitude . ";
+        }
+        var latlng = new google.maps.LatLng(initialLat, initialLong);
+        var options = {
+            zoom: 16,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            heading: 90,
+            tilt: 45
+        };   
+    
+        map = new google.maps.Map(document.getElementById('map'), options);
+    
+        geocoder = new google.maps.Geocoder();    
+    
+        marker = new google.maps.Marker({
+            map: map,
+            draggable: true,
+            position: latlng
+        });
+    
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            var point = marker.getPosition();
+            map.panTo(point);
+        });
         
+    };
 
-        $('.field-company-com_mac_id').hide();
+    function loadRegister(reg)
+    {
+        $('select#company-fes_id').empty();
+        $.ajax({
+            type: 'GET',
+            url: baseUrl + 'merchant-signup/default/register',
+            data: { reg: reg },
+            success: function(result) {
+                var comfes = $('select#company-fes_id');
+                comfes.empty();
+                comfes.append(result);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        var baseUrl = '" . Yii::$app->homeUrl . "';
+
         $('.field-company-com_latitude').hide();
         $('.field-company-com_longitude').hide();
-        if(type == 1)
-            $('.field-company-com_registered_to').show();
-        else
-            $('.field-company-com_registered_to').hide();
 
+        mall = " . $inMall . ";
         mall_checked = (mall == 1 ? true : false);
         function loadMall() {
-            $('#businessMap').slideUp();
-            $('.field-company-com_mac_id').show();
-            $('.field-company-com_address').hide();
-            $('.field-company-com_postcode').hide();
+            $('#merchantsignup-map').hide();
+            $('.field-merchantsignup-mer_address').hide();
+            $('.field-merchantsignup-mer_post_code').hide();
             $('.field-company-com_city').hide();
-            $('.field-company-mall_id').show();
-            $('#floor-unit').show();
+            $('.field-company-mall_name').show();
         }
         function unloadMall() {
-            $('#businessMap').slideDown();
-            $('.field-company-com_mac_id').hide();
-            $('.field-company-com_address').show();
-            $('.field-company-com_postcode').show();
+            $('#merchantsignup-map').show();
+            $('.field-merchantsignup-mer_address').show();
+            $('.field-merchantsignup-mer_post_code').show();
             $('.field-company-com_city').show();
-            $('.field-company-mall_id').hide();
-            $('.field-mallmerchant-mam_floor').hide();
-            $('.field-mallmerchant-mam_unit_number').hide();
-            $('#floor-unit').hide();
+            $('.field-company-mall_name').hide();
         }
         function checkOrNot(mall_checked) {
             if(mall_checked)
@@ -252,111 +270,20 @@ $this->registerJs("
             });
         });
 
-        var item = [];
-        function updateCategory() {
-            var id = $('#company-com_id').val() == undefined ? 0 : $('#company-com_id').val();
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: baseUrl + 'business/getcategory/' + id,
-                success: function(result) {
-                    $('#list-category').append('<li class=\'category-data\'>' + result.mac_name + ' <a href=\'javascript:;\'><i class=\'fa fa-times\'></i></a></li>');
-                }
-            });
-        }
-        // add a category
-        $('#save').click(function() {
-            if($('#category').val() != '' ) {
-                $('#list-category').append('<li class=\'category-data\'>' + $('#category').val() + ' <a href=\'javascript:;\'><i class=\'fa fa-times\'></i></a></li>');
-                $('#category').val('');
-                item.push($('#category').val());
-            }
-            return false;
+        $('.datepicker').datepicker({
+          autoclose: true
         });
 
-        // remove a category
-        $(document).on('click', 'ul#list-category li a', function() {
-            $(this).parent().remove();
-        });
-
-        //set the mall id on button add floor and to determine whether to show the multifloor or single floor field
-        $('#company-mall_id').on('change',function(){
-            $('#add_floor').attr('data-mall',$(this).val());
-            $.ajax({
-                type : 'POST',
-                dataType: 'json',
-                url: baseUrl + 'business/ismallmanaged/',
-                data: {mall_id: $(this).val()},
-                success: function (res) {
-                    if (res == 1)
-                    {
-                        $('#nomallkey').addClass('hide');
-                        $('#hasmallkey').removeClass('hide');
-                    }
-                    else if (res == 0)
-                    {
-                        $('#nomallkey').removeClass('hide');
-                        $('#hasmallkey').addClass('hide');
-                    }
-                }
-            });
-        });
+        initialize();
 
         //triger modal for image-croper
         $('.eb-cropper').on('click',function(){
             $('#cropper-modal').modal({show: true});
         });
-    }
-    
 
-// setup map autocomplete and dragable
+        loadRegister('EBC');
 
-var PostCodeid = '#company-com_address';
-        var longval = '#company-com_longitude';
-        var latval = '#company-com_latitude';
-        var geocoder;
-        var map;
-        var marker;
-        
-        function initialize() {
-            // init map
-            var initialLat = $(latval).val();
-            var initialLong = $(longval).val();
-            if (initialLat == '') {
-                initialLat = ".$latitude.";
-                initialLong = " . $longitude . ";
-            }
-            var latlng = new google.maps.LatLng(initialLat, initialLong);
-            var options = {
-                zoom: 16,
-                center: latlng,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                heading: 90,
-                tilt: 45
-            };   
-        
-            map = new google.maps.Map(document.getElementById('map'), options);
-        
-            geocoder = new google.maps.Geocoder();    
-        
-            marker = new google.maps.Marker({
-                map: map,
-                draggable: true,
-                position: latlng
-            });
-        
-            google.maps.event.addListener(marker, 'dragend', function (event) {
-                var point = marker.getPosition();
-                map.panTo(point);
-            });
-            
-        };
-        
-        $(document).ready(function () {
-        
-            initialize();
-
-            $(function () {
+        $(function () {
                 $(PostCodeid).autocomplete({
                     //This bit uses the geocoder to fetch address values
                     source: function (request, response) {
@@ -382,9 +309,7 @@ var PostCodeid = '#company-com_address';
                         $(latval).val(marker.getPosition().lat());
                         $(longval).val(marker.getPosition().lng());
                     }
-//                    else {
-//                        alert('Geocode was not successful for the following reason: ' + status);
-//                    }
+
                 });
                 e.preventDefault();
             });
@@ -401,41 +326,10 @@ var PostCodeid = '#company-com_address';
                 });
             });
             
-//            function rotate90() {
-//                var heading = map.getHeading() || 0;
-//                map.setHeading(heading + 90);
-//            }
-//
-//            function autoRotate() {
-//            alert(map.getTilt())
-//                // Determine if we're showing aerial imagery.
-//                if (map.getTilt() !== 0) {
-//                  window.setInterval(rotate90, 3000);
-//              }
-//            }
-        });
-", yii\web\View::POS_END, "company-update");
 
-
-Modal::begin([
-    'header' => '<h4>Add Floor / Unit</h4>',
-    'id' => 'modal-add-floor'
-]);
-?>
-<div class="form-group" id="floor-select">
-    <select class="form-control" id="floor">
-    </select>
-    <br />
-    <select class="form-control" id="unit"></select>
-    <div>
-        <div class="help-block"></div>
-    </div>
-</div>
-<div class="form-group">
-    <?= Html::submitButton('Save', ['id' => 'save-floor', 'class' => 'btn btn-success']) ?>
-</div>
-<?php
-Modal::end();
+        //});
+    });
+", \yii\web\View::POS_END, 'merchantsignup-review');
 
 Modal::begin([
     'header' => '<h4>Add Business Tagging</h4>',
@@ -454,15 +348,21 @@ Modal::begin([
 <?php
 Modal::end();
 
-Modal::begin([
-    'header' => '<h4>Unit list</h4>',
-    'id' => 'modal-unit'
-]);
-
-echo '<div id="grid-container"></div>';
-
-Modal::end();
 ?>
+
+<?php $this->registerJsFile($this->theme->baseUrl . '/js/business-tag.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
+
+<?php
+// start the widget
+echo \app\components\widgets\ImageCropper::widget([
+    'wsmall' => 200, // width small
+    'hsmall' => 134, // height small
+    'wbig' => 600, // width big
+    'hbig' => 400, // height big
+    'ratio' => 1.5, // ratio dimension crop box
+    'skipAndResize' => true, // true or false, if false => original image will be duplicated, if true original image will be resized to wbig x hbig
+    'prefix' => 'img-', // for file name prepix
+]);
 
 
 
