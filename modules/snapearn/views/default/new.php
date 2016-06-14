@@ -40,8 +40,8 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <div class="panel-body">
-    <?= $form->field($company, 'com_name')->textInput() ?>
-    <?= $form->field($company, 'com_business_name')->textInput() ?>
+    <?= $form->field($company, 'com_name')->textInput(['value' => $suggest->cos_name]) ?>
+    <?= $form->field($company, 'com_business_name')->textInput(['value' => $suggest->cos_name]) ?>
     <?= $form->field($company, 'com_email')->textInput() ?>
     <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList); ?>
     <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
@@ -76,7 +76,10 @@ $form = ActiveForm::begin([
     <?= 
         $form->field($company, 'mall_name')->widget(Typeahead::classname(),[
             'name' => 'merchant',
-            'options' => ['placeholder' => 'Mall Name'],
+            'options' => [
+                'placeholder' => 'Mall Name',
+                'value' => $suggest->cos_mall
+            ],
             'pluginOptions' => [
                 'highlight'=>true,
                 'minLength' => 3
@@ -97,7 +100,7 @@ $form = ActiveForm::begin([
             ]
         ])->label('Select Mall');
     ?>
-    <?= $form->field($company, 'mall_id')->hiddenInput()->label('') ?>
+    <?= $form->field($company, 'mall_id')->hiddenInput(['value' => $suggest->cos_mall_id])->label('') ?>
     <?= $form->field($company, 'com_mac_id')->dropDownList([]) ?>
     <div class="form-group" id="businessMap">
         <label class="col-lg-3 control-label">Map</label>
@@ -308,6 +311,7 @@ $this->registerJs("
         $('.field-company-com_postcode').hide();
         $('.field-company-com_city').hide();
         $('.field-mallmerchant-mam_mal_id').show();
+        $('.field-company-mall_name').show();
         $('#floor-unit').show();
     };
     var unloadMall = function() {
@@ -318,6 +322,7 @@ $this->registerJs("
         $('.field-company-com_postcode').show();
         $('.field-company-com_city').show();
         $('.field-mallmerchant-mam_mal_id').hide();
+        $('.field-company-mall_name').hide();
         $('#floor-unit').hide();
     };
     var checkOrNot = function(mall_checked) {

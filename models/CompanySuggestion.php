@@ -17,6 +17,7 @@ use Yii;
  */
 class CompanySuggestion extends \yii\db\ActiveRecord
 {
+    public $cos_mall_id;
     /**
      * @inheritdoc
      */

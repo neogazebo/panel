@@ -76,6 +76,24 @@ class DefaultController extends BaseController
 
         $company = new Company();
 
+        // get merchant suggestion
+        $suggest = CompanySuggestion::find()
+                                    ->where('cos_sna_id = :id',[
+                                        ':id' => $id
+                                    ])
+                                    ->one();
+        // create id mall sugestion default = empty
+        $suggest->cos_mall_id = '';
+        // if mall name not empty getting id mall
+        if (!empty($suggest->cos_mall)) {
+            $suggest->cos_mall_id = Mall::find()
+                                    ->where('mal_name = :mal',[
+                                        ':mal' => $suggest->cos_mall
+                                    ])
+                                    ->one()
+                                    ->mal_id;
+        }
+
         // ajax validation
         if (Yii::$app->request->isAjax && $company->load(Yii::$app->request->post())) {
             Yii::$app->response->format = 'json';
@@ -133,59 +151,9 @@ class DefaultController extends BaseController
                 throw $e;
             }
         }
-
-
-
-        // if ($company->load(Yii::$app->request->post())) {
-        //     $transaction = Yii::$app->db->beginTransaction();
-
-        //     $model->usr_email = $company->com_email;
-        //     try {
-        //         if ($model->save()) {
-        //             $company->com_usr_id = $model->usr_id;
-        //             $company->com_email = $model->usr_email;
-
-        //             if ($company->save()) {
-        //                 $audit = AuditReport::setAuditReport('create business : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
-        //                 if ($audit->save()) {
-        //                     \Yii::$app->session->set('company', '');
-        //                     $com_id = $company->com_id;
-        //                     $company->setTag();
-        //                     $fsc = new FeatureSubscriptionCompany();
-        //                     $this->assignFcs($fsc, $com_id, $company, $company->fes_id);
-        //                     if ($fsc->save()) {
-        //                         $this->assignModule($com_id, $company);
-        //                         $this->assignEmail($com_id, $company);
-        //                         $transaction->commit();
-        //                         $this->setMessage('save','success', 'Business created successfully!');
-        //                         return $this->render('success');
-        //                     } else {
-        //                         $transaction->rollback();
-        //                         $this->setMessage('save','error', 'Something wrong while subscription business. Please try again!');
-        //                         return $this->redirect(['index']);
-        //                     }
-        //                 }else{
-        //                     $transaction->rollback();
-        //                     $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
-        //                     return $this->redirect(['index']);
-        //                 }
-        //             }else{
-        //                 $transaction->rollback();
-        //                 $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
-        //                 return $this->redirect(['index']);
-        //             }
-        //         } else {
-        //             $transaction->rollback();
-        //             $this->setMessage('save','error', 'Something wrong while create member. Please try again!');
-        //             return $this->redirect(['index']);
-        //         }
-        //     } catch (Exception $ex) {
-        //         $transaction->rollback();
-        //         throw $e;
-        //     }
-        // }
         return $this->render('new', [
-            'company' => $company
+            'company' => $company,
+            'suggest' => $suggest
         ]);
     }
 
