@@ -25,11 +25,22 @@ class DefaultController extends BaseController
 
     public function actionList()
     {
+<<<<<<< HEAD
     	if (Yii::$app->request->isAjax){
 			$model = Company::find()->searchExistingMerchant();
     	    $out = [];
 		    foreach ($model as $d) {
 		        $out[] = ['id' => $d->com_id,'value' => $d->com_name];
+=======
+    	if (Yii::$app->request->isAjax) {
+			$model = Company::find()->searchExistingMerchant();
+    	    $out = [];
+		    foreach ($model as $d) {
+		        $out[] = [
+		        	'id' => $d->com_id,
+		        	'value' => $d->com_name
+		        ];
+>>>>>>> 311ddebe6502863d8d4b03e15f73685234553a75
 		    }
 		    echo \yii\helpers\Json::encode($out);
     	}

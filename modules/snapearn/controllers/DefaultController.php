@@ -5,6 +5,7 @@ namespace app\modules\snapearn\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
+use linslin\yii2\curl;
 use app\controllers\BaseController;
 use app\components\helpers\Utc;
 use app\components\helpers\General;
@@ -35,7 +36,6 @@ class DefaultController extends BaseController
     public function actionIndex()
     {
         $this->setRememberUrl();
-        // $model = SnapEarn::find()->orderBy('sna_upload_date DESC');
         $model = SnapEarn::find()->findCustome();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
@@ -183,8 +183,6 @@ class DefaultController extends BaseController
             'company' => $company,
             'merchantSugest' => $sugest
         ]);
-
-
     }
 
     public function actionAjaxExisting($id)
@@ -368,6 +366,12 @@ class DefaultController extends BaseController
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
                     }
+
+                    // webhook for manis v3
+                    // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
+                    $curl = new curl\Curl();
+                    $response = $curl->get('https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":' . $model->sna_acc_id . ',"sna_id":' . $model->sna_id . ',"sna_status":' . $model->sna_status . '}');
+
                     // Yii::$app->workingTime->end($id);
                 } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));

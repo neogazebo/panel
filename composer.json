@@ -27,7 +27,8 @@
         "kartik-v/yii2-widgets": "*",
         "fedemotta/yii2-cronjob": "*",
         "hguenot/yii2-gsftp": "*",
-        "aws/aws-sdk-php": "2.*"
+        "aws/aws-sdk-php": "2.*",
+        "linslin/yii2-curl": "*"
     },
     "config": {
         "process-timeout": 1800

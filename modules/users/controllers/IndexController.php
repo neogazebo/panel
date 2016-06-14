@@ -26,7 +26,11 @@ class IndexController extends BaseController
     public function actionIndex()
     {
         $this->setRememberUrl();
-    	$model = User::find()->where("type = 1")->orderBy('id DESC');
+    	$model = User::find()->where("type = 1");
+        if (Yii::$app->request->get('search')) {
+            $model->where('username LIKE :get', [':get' => '%' . Yii::$app->request->get('search') . '%']);
+        }
+        $model->orderBy('id DESC');
     	$dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
