@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
+use app\models\WorkingTime;
 
 class BaseController extends Controller
 {
@@ -59,6 +60,26 @@ class BaseController extends Controller
 				Yii::$app->session->setFlash($type, $customText !== null ? Yii::t('app', $customText) : Yii::$app->params['flashmsg']['delete'][$type]);
 				break;
 		}
+    }
+
+    public function startWorking($user,$type,$param)
+    {
+    	$model = new WorkingTime();
+    	$model->wrk_type = $type;
+    	$model->wrk_by = $user;
+    	$model->wrk_param_id = $param;
+    	$model->wrk_start = time();
+    	if ($model->save()) {
+    		return $model->wrk_id;
+    	}
+    }
+
+    public function endWorking($id,$desc)
+    {
+    	$model = WorkingTime::findOne($id);
+    	$model->wrk_description = $desc;
+    	$model->wrk_end = time();
+    	$model->save();
     }
 
 }

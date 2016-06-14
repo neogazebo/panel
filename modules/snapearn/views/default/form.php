@@ -17,6 +17,7 @@ $this->registerCss("
         right: 200px;
     }
 ");
+
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>

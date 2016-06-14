@@ -23,45 +23,6 @@ $this->registerCss("
     }
 ");
 ?>
-<!-- <div class="account-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->acc_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->acc_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'acc_id',
-            'acc_facebook_id',
-            'acc_facebook_email:email',
-            'acc_facebook_graph:ntext',
-            'acc_google_id',
-            'acc_google_email:email',
-            'acc_google_token',
-            'acc_screen_name',
-            'acc_cty_id',
-            'acc_photo',
-            'acc_created_datetime:datetime',
-            'acc_updated_datetime:datetime',
-            'acc_status',
-            'acc_tmz_id',
-            'acc_birthdate',
-            'acc_address',
-            'acc_gender',
-        ],
-    ]) ?>
-
-</div> -->
 
 <section class="content">
 
@@ -71,29 +32,29 @@ $this->registerCss("
                 <div class="box-body box-profile">
                   <img class="profile-user-img img-responsive img-circle" src="<?= (!empty($model->acc_photo)) ? Yii::$app->params['memberUrl'].$model->acc_photo : $this->theme->baseUrl.'/dist/img/manis.png'?>" alt="<?= $model->acc_screen_name ?>">
                   <h3 class="profile-username text-center"><?= $model->acc_screen_name ?></h3>
-                  <p class="text-muted text-center"><?= date('Y') - date('Y', strtotime($model->acc_birthdate)).' , '.$model->acc_gender  ?></p>
+                  <p class="text-muted text-center"><?= (!empty($model->acc_birthdate)) ? date('Y') - date('Y', $model->acc_birthdate) .' , ' : ' ' ?> <?= $model->acc_gender  ?></p>
 
                   <ul class="list-group list-group-unbordered">
-                    <li class="list-group-item">
-                      <b>Status </b> <a class="pull-right"><?= ($model->acc_status == 1) ? 'Verified' : '' ?></a>
-                    </li>
                     <li class="list-group-item">
                       <b>Country </b> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Last Point </b> <a class="pull-right"><?= $model->lastPointMember() ?></a>
+                      <b>Current Point </b> <a class="pull-right"><?= $model->lastPointMember() ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Last Login </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->lastLogin()) ?></a>
+                      <b>Last Activity </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->lastLogin()) ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Facebook Link </b> <a href="https://www.facebook.com/<?= $model->acc_facebook_id ?>" target="blank_" class="pull-right"> Link</a>
+                      <b>Facebook Id </b> <a href="https://www.facebook.com/<?= $model->acc_facebook_id ?>" target="blank_" class="pull-right"> <?= $model->acc_facebook_id ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Registered From  </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->acc_created_datetime) ?></a>
+                      <b>Registered Since  </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->acc_created_datetime) ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Device Active  </b> <a class="pull-right"><?= $model->activeDevice() ?></a>
+                      <b>Device Active  </b> <a class="pull-right"><?= $model->activeDevice()->dvc_model ?></a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>OS Version  </b> <a class="pull-right"><?= $model->activeDevice()->dvc_os_version ?></a>
                     </li>
                   </ul>
                 </div>

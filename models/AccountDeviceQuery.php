@@ -44,7 +44,7 @@ class AccountDeviceQuery extends \yii\db\ActiveQuery
 
     public function getActiveDevice($id)
     {
-        $dvc_id = $this->andWhere('adv_id = :id ',[':id'=>$id])->one();
+        $dvc_id = $this->andWhere('adv_id = :id ',[':id'=>$id])->orderBy('adv_last_access DESC')->limit(1)->one();
         $model = Device::find()->where('dvc_id = :did',[':did' => $dvc_id->adv_dvc_id]);
         return $model->one();
     }
