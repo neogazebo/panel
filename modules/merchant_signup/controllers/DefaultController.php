@@ -11,9 +11,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use app\controllers\BaseController;
 use app\components\helpers\S3;
+use app\models\MallMerchant;
 use app\models\MerchantSignup;
 use app\models\MerchantSignupSearch;
 use app\models\Company;
+use app\models\User;
 use app\models\Tag;
 use app\models\FeatureSubscription;
 
@@ -83,9 +85,9 @@ class DefaultController extends BaseController
 
     public function actionReview($id)
     {
-        $model_merchant_signup = $this->findModel($id);
+        //$model_merchant_signup = $this->findModel($id);
 
-        $model_company = new Company();
+        /*$model_company = new Company();
         $model_company->com_name = 'Yoolan';
 
         if ($model_merchant_signup->load(Yii::$app->request->post()) && $post_data_company) {
@@ -133,7 +135,61 @@ class DefaultController extends BaseController
             return $this->render('create', [
                 'model_company' => $model_company,
             ]);
-        }*/
+        }*/ 
+
+        $model = $this->findModel($id);
+        $model_company = new Company();
+        $user = User::findOne($model->mer_login_email);
+       //$model->scenario = 'update-profile';
+        $model->mer_bussiness_description = \yii\helpers\Html::decode($model->mer_bussiness_description);
+       //$model->com_sales_order = date('d/m/Y', $model->com_sales_order);
+        $model_company->tag = $model_company->getTag($id);
+        $unit_merchant = [];
+        \Yii::$app->session->set('company', serialize($model));
+
+        // ajax validation
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
+
+        if ($model_company->com_in_mall == 1) {
+            if ($model_company->marchant instanceof MallMerchant) {
+                $mall = Mall::findOne($model_company->marchant->mam_mal_id);
+                if ($mall instanceof Mall) {
+                    $model_company->isMallManaged = $mall->mal_key == true;
+                    $unit_merchant = FloorPlanMallMerchant::listunit($model_company->marchant->mam_id);
+                }
+            }
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            if(!empty($model->com_sales_order))
+                $model->com_sales_order = strtotime($model->com_sales_order);
+            $changed_attributes = $model_company->getChangedAttribute(['com_timezone', 'com_in_mall', 'com_mac_id']);
+            $user->usr_email = $model->com_email;
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                if ($model->save() && $user->save(false)) {
+                //    $audit = AuditReport::setAuditReport('update business : ' . $model->com_name, Yii::$app->user->id, Company::className(), $model->com_id, $changed_attributes);
+                    if ($audit->save()) {
+                        \Yii::$app->session->set('company', '');
+                        $model->setTag();
+                        $transaction->commit();
+                        $this->setMessage('save','success', 'Business updated successfully!');
+                    }
+                    return $this->redirect([$this->getRememberUrl()]);
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                throw $e;
+            }
+        }
+        return $this->render('review', [
+            'model' => $model,
+            'model_company' => $model_company,
+            'unit_merchant' => $unit_merchant
+        ]);
     }
 
     public function actionXreview($id)

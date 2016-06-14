@@ -808,6 +808,20 @@ class Company extends EbizuActiveRecord
         return \app\components\helpers\Html::listData($model, 'cat_id', 'category', 'parent_id');
     }    
 
+    public function getTag($id)
+    {
+        return Tag::find()->select('tag_id, tag_name')
+        ->innerJoin('tbl_company_tag b', 'b.cot_tag_id = tag_id')
+        ->leftJoin('tbl_company c', 'c.com_id = b.cot_com_id')
+        ->where(['c.com_id' => $id])
+        ->all();
+    }
+
+    public function getMarchant()
+    {
+        return $this->hasOne(MallMerchant::className(), ['mam_com_id' => 'com_id']);
+    }
+
     public static function find()
     {
         return new CompanyQuery(get_called_class());

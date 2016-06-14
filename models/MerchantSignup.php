@@ -124,7 +124,7 @@ class MerchantSignup extends EbizuActiveRecord
             $this->addError($attribute, 'Email Already Exist!');
         }
     }
-
+    
     public function getFile()
     {
         if (!empty($this->mer_multichain_file))
