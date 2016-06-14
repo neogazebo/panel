@@ -7,14 +7,10 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 $this->title = 'Snap & Earn List';
-<<<<<<< HEAD
-
 $country = curl_init('ipinfo.io/country');
 curl_setopt($country, CURLOPT_RETURNTRANSFER, 1);
 $cty = curl_exec($country);
-=======
 $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
->>>>>>> 311ddebe6502863d8d4b03e15f73685234553a75
 ?>
 <section class="content-header ">
     <h1><?= $this->title?><?= $cty  ?></h1>
@@ -25,7 +21,6 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-<<<<<<< HEAD
                     <form class="form-inline" role="form" method="get" action="/snapearn">
                         <div class="form-group">
                         <label>Country</label>
@@ -70,15 +65,6 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                             <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                         </div>
                     </form>
-=======
-                    <!-- &nbsp;
-                    <div class="box-tools pull-right">
-                        <div class="has-feedback">
-                            <input type="text" id="filtersearch" value="<?= $search ?>" class="form-control input-sm" placeholder="Search Snap">
-                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                        </div>
-                    </div> -->
->>>>>>> 311ddebe6502863d8d4b03e15f73685234553a75
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">

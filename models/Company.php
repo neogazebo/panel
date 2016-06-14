@@ -27,6 +27,7 @@ class Company extends EbizuActiveRecord
     public $totalBiz;
     public $id;
     public $text;
+    public $mall_name;
     public $com_in_mall = true;
 
     CONST COM_STATUS_NOT_ACTIVE = 0;
@@ -309,7 +310,7 @@ class Company extends EbizuActiveRecord
     public function getModelMallMerchant()
     {
         $model = MallMerchant::findOne(['mam_com_id' => $this->com_id]);
-        $model->setSecenario('newMerchant');
+        $model->scenario= 'newMerchant';
         if ($model)
             return $model;
         return new MallMerchant();
@@ -761,14 +762,6 @@ class Company extends EbizuActiveRecord
             }
         }
         return $data;
-    }
-
-    public function getModelMallMerchant()
-    {
-        $model = MallMerchant::findOne(['mam_com_id' => $this->com_id]);
-        if ($model)
-            return $model;
-        return new MallMerchant();
     }
 
     public function getFeatureSubscription()

@@ -62,7 +62,7 @@ $form = ActiveForm::begin([
                     'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
                     'display' => 'value',
                     'remote' => [
-                        'url' => Url::to(['/merchant/default/city-list']) . '?q=%QUERY',
+                        'url' => Url::to(['city-list']) . '?q=%QUERY',
                         'wildcard' => '%QUERY'
                     ],
                     'limit' => 20
@@ -74,7 +74,7 @@ $form = ActiveForm::begin([
     <?= $form->field($company, 'com_postcode')->textInput(); ?>
     <?= $form->field($company, 'com_address')->textInput(); ?>
     <?= 
-        $form->field($company->modelMallMerchant, 'mam_mal_id')->widget(Typeahead::classname(),[
+        $form->field($company, 'mall_name')->widget(Typeahead::classname(),[
             'name' => 'merchant',
             'options' => ['placeholder' => 'Mall Name'],
             'pluginOptions' => [
@@ -89,13 +89,13 @@ $form = ActiveForm::begin([
                     'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
                     'display' => 'value',
                     'remote' => [
-                        'url' => Url::to(['/merchant/default/mall-list']) . '?q=%QUERY',
+                        'url' => Url::to(['mall-list']) . '?q=%QUERY',
                         'wildcard' => '%QUERY'
                     ],
                     'limit' => 20
                 ]
             ]
-        ]);
+        ])->label('Select Mall');
     ?>
     <?= $form->field($company, 'mall_id')->hiddenInput()->label('') ?>
     <?= $form->field($company, 'com_mac_id')->dropDownList([]) ?>
@@ -105,7 +105,7 @@ $form = ActiveForm::begin([
             <div id="map" style="height:300px"></div>
         </div>
     </div>
-    <div id="floor-unit">
+    <div id="floor-unit" class="form-group">
         <div class="form-group hide" id="hasmallkey">
             <label class="col-lg-3 control-label">&nbsp;</label>
             <div class="col-lg-8">
@@ -147,7 +147,7 @@ $form = ActiveForm::begin([
     <?= $form->field($company, 'com_reg_num')->textInput() ?>
     <?= $form->field($company, 'com_gst_enabled')->checkBox(['style' => 'margin-top:10px;'], false)->label('Gst?') ?>
     <?= $form->field($company, 'com_gst_id')->textInput() ?>
-    <?= $form->field($company, 'fes_id')->dropDownList([]) ?>
+    <?= $form->field($company, 'fes_id')->dropDownList(ArrayHelper::map(app\models\FeatureSubscription::find()->all(),'fes_code','fes_name')) ?>
     <?= $form->field($company, 'com_point')->textInput(); ?>
     <?= $form->field($company, 'com_latitude')->hiddenInput()->label('') ?>
     <?= $form->field($company, 'com_longitude')->hiddenInput()->label('') ?>

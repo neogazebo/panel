@@ -10,12 +10,23 @@ use app\controllers\BaseController;
 use app\components\helpers\Utc;
 use app\components\helpers\General;
 use app\models\Account;
+use app\models\City;
+use app\models\Mall;
 use app\models\Snapearn;
 use app\models\SnapEarnRule;
 use app\models\Company;
 use app\models\Activity;
 use app\models\LoyaltyPointHistory;
 use app\models\MerchantUser;
+use app\models\CompanySuggestion;
+use app\models\SnapEarnPointDetail;
+use app\models\FeatureSubscription;
+use app\models\FeatureSubscriptionCompany;
+use app\models\AuditReport;
+use app\models\Module;
+use app\models\ModuleInstalled;
+use app\models\SystemMessage;
+use yii\web\HttpException;
 
 /**
  * Default controller for the `snapearn` module
@@ -55,7 +66,7 @@ class DefaultController extends BaseController
         return $this->redirect(['update', 'id' => $id]);
     }
 
-    public function actionNewMerchant($reg = 'EBC')
+    public function actionNewMerchant($id)
     {
         $model = new MerchantUser();
         $model->scenario = 'signup';
@@ -64,10 +75,6 @@ class DefaultController extends BaseController
         $model->usr_approved = 0;
 
         $company = new Company();
-
-        // get merchant sugestion
-        $idse = $_GET['id'];
-        $sugest = SnapEarn::findOne($idse);
 
         // ajax validation
         if (Yii::$app->request->isAjax && $company->load(Yii::$app->request->post())) {
@@ -97,7 +104,7 @@ class DefaultController extends BaseController
                         $suggestion->cos_com_id = $com_id;
                         $suggestion->save(false);
 
-                        SnapEarnPointDetail::savePoint($id, 8);
+                        // SnapEarnPointDetail::savePoint($id, 8);
 
                         $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
                         if ($audit->save()) {
@@ -177,11 +184,8 @@ class DefaultController extends BaseController
         //         throw $e;
         //     }
         // }
-
-        $company->com_registered_to = strtoupper($reg);
         return $this->render('new', [
-            'company' => $company,
-            'merchantSugest' => $sugest
+            'company' => $company
         ]);
     }
 
@@ -486,6 +490,89 @@ class DefaultController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('mycropper');
+        }
+    }
+
+    protected function assignFcs($fsc, $com_id, $company, $fes_code)
+    {
+        $subscription = FeatureSubscription::getTmPackage($fes_code);
+        $fsc->fsc_com_id = $com_id;
+        $fsc->fsc_fes_id = $subscription->fes_id;
+        $fsc->fsc_datetime = time();
+        $fsc->fsc_valid_start = time();
+        $fsc->fsc_valid_end = strtotime('+30 day', time());
+        $fsc->fsc_status = 1;
+        $fsc->fsc_free = 1;
+        $fsc->fsc_status_datetime = time();
+        $fsc->fsc_payment_amount = $subscription->fes_price;
+        $fsc->fsc_payment_currency = $subscription->fes_currency;
+        $fsc->fsc_payment_type = 1;
+        $fsc->fsc_payment_datetime = time();
+        $fsc->fsc_payment_received_datetime = time();
+        $fsc->fsc_payment_received_by = 1;
+    }
+
+    protected function assignModule($com_id, $company)
+    {
+        $modulInstall = Module::find()->where('mod_id IN (12,19,15)')->All();
+        foreach ($modulInstall as $module)
+        {
+            $moduleInstalled = new ModuleInstalled();
+            $moduleInstalled->mos_mod_id = $module->mod_id;
+            $moduleInstalled->mos_com_id = $com_id;
+            $moduleInstalled->mos_datetime = time();
+            $moduleInstalled->mos_active = 'Y';
+            $moduleInstalled->mos_key = str_replace('-', '', crc32($com_id));
+            $moduleInstalled->mos_secret = md5($com_id);
+            $moduleInstalled->mos_page_builder = 1;
+            $moduleInstalled->mos_delete = 0;
+            $moduleInstalled->save();
+        }
+    }
+
+    protected function assignEmail($com_id, $company)
+    {
+        $systemMessage = new SystemMessage;
+        $typeMessage = 17;
+        $categoryMessage = 'business_signup';
+        $email = $company->com_email;
+        $com_name = $company->com_name;
+        $parsersData[] = array('[name]', htmlspecialchars_decode($com_name, ENT_QUOTES));
+        $systemMessage->Parser($typeMessage, $categoryMessage, $email, $parsersData);
+    }
+
+    public function actionList()
+    {
+        if (Yii::$app->request->isAjax) {
+            $model = Company::find()->searchExistingMerchant();
+            $out = [];
+            foreach ($model as $d) {
+                $out[] = [
+                    'id' => $d->com_id,
+                    'value' => $d->com_name
+                ];
+            }
+            echo \yii\helpers\Json::encode($out);
+        }
+    }
+
+    public function actionCityList()
+    {
+        if (Yii::$app->request->isAjax){
+            $model = City::find()->SearchCityList();
+            echo \yii\helpers\Json::encode($model);
+        }
+    }
+
+    public function actionMallList()
+    {
+        if (Yii::$app->request->isAjax){
+            $model = Mall::find()->SearchMallList();
+            $out = [];
+            foreach ($model as $d) {
+                $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
+            }
+            echo \yii\helpers\Json::encode($out);
         }
     }
 
