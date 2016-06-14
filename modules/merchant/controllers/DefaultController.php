@@ -7,6 +7,7 @@ use yii\web\Controller;
 use app\controllers\BaseController;
 use app\models\Company;
 use app\models\Mall;
+use app\models\City;
 
 /**
  * Default controller for the `merchant` module
@@ -34,17 +35,23 @@ class DefaultController extends BaseController
     	}
 	}
 
-	public function actionSelect2()
+    public function actionCityList()
     {
     	if (Yii::$app->request->isAjax){
-    		$model = Mall::find()->getMallList();
-    		exit($model);
-    		// var_dump($model);exit;
-    		// $out = [];
-		    // foreach ($model as $d) {
-		    //     $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
-		    // }
-		    // echo \yii\helpers\Json::encode($out);
+			$model = City::find()->SearchCityList();
+		    echo \yii\helpers\Json::encode($model);
+    	}
+    }
+
+    public function actionMallList()
+    {
+    	if (Yii::$app->request->isAjax){
+			$model = Mall::find()->SearchMallList();
+    		$out = [];
+		    foreach ($model as $d) {
+		        $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
+		    }
+		    echo \yii\helpers\Json::encode($out);
     	}
     }
 }

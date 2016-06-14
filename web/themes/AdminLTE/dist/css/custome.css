@@ -29,3 +29,25 @@
 .rejected-status{
     color: #DC0309;
 }
+
+.select2-container .select2-selection--single {
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    height: 34px;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 0px;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    display: block;
+    overflow: hidden;
+    padding-left: 0px;
+    padding-right: 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

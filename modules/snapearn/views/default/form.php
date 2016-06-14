@@ -190,11 +190,9 @@ $this->registerJs("
         } else if($(this).val() == 2) {
             $('.point-form').css('display', 'none');
             $('.reject-form').css('display', 'block');
-            $('#snapearn-sna_receipt_amount, #snapearn-sna_point').val('');
         } else {
             $('.reject-form').css('display', 'none');
             $('.point-form').css('display', 'none');
-            $('#snapearn-sna_receipt_amount, #snapearn-sna_point').val('');
         }
     }).trigger('change');
 

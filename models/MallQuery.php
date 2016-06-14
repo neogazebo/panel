@@ -2,14 +2,39 @@
 
 namespace app\models;
 
-use Yii;
-use yii\db\ActiveQuery;
+/**
+ * This is the ActiveQuery class for [[Mall]].
+ *
+ * @see Mall
+ */
+class MallQuery extends \yii\db\ActiveQuery
+{
+    /*public function active()
+    {
+        return $this->andWhere('[[status]]=1');
+    }*/
 
-class MallQuery extends ActiveQuery {
+    /**
+     * @inheritdoc
+     * @return Mall[]|array
+     */
+    public function all($db = null)
+    {
+        return parent::all($db);
+    }
+
+    /**
+     * @inheritdoc
+     * @return Mall|array|null
+     */
+    public function one($db = null)
+    {
+        return parent::one($db);
+    }
 
     public function getList()
     {
-    	if(isset($_GET['search'])) {
+        if(isset($_GET['search'])) {
             $this->andWhere('
                 mal_name LIKE :get OR 
                 mal_description LIKE :get OR 
@@ -18,14 +43,14 @@ class MallQuery extends ActiveQuery {
                 mal_city LIKE :get OR 
                 mal_building_id LIKE :get 
             ', [':get' => '%'.$_GET['search'].'%']);
-    	}
+        }
         if(isset($_GET['country'])) {
             if($_GET['country'] == 'MY')
                 $this->andWhere('mal_country_id = :cny', [':cny' => 128]);
             elseif($_GET['country'] == 'ID')
                 $this->andWhere('mal_country_id = :cny', [':cny' => 90]);
         }
-    	return $this;
+        return $this;
     }
 
     public function getBeacon()
@@ -43,22 +68,19 @@ class MallQuery extends ActiveQuery {
                 $this->andWhere('mal_country_id = :cny', [':cny' => 90]);
         }
         return $this;
-    }
+    }    
 
-    public function getMallList()
+    public function SearchMallList()
     {
         $search = $_GET['q'];
         $keyword = preg_split("/[\s,]+/",$search);
         $this->select('mal_id, mal_name');
         foreach($keyword as $key){
-            $this->andWhere('mal_name LIKE "%:key%" ',[
-                    ':key' => $key
-                ]);
+            $this->andWhere('mal_name LIKE "%'.$key.'%" ');
         }
         $this->andWhere('mal_status = :status',[
                 ':status' => 1
             ]);
-        return $this;
+        return $this->all();
     }
-
 }

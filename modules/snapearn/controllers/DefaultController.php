@@ -9,7 +9,7 @@ use app\controllers\BaseController;
 use app\components\helpers\Utc;
 use app\components\helpers\General;
 use app\models\Account;
-use app\models\SnapEarn;
+use app\models\Snapearn;
 use app\models\SnapEarnRule;
 use app\models\Company;
 use app\models\Activity;
@@ -25,10 +25,18 @@ class DefaultController extends BaseController
      * Renders the index view for the module
      * @return string
      */
+
+    public function init()
+    {
+        $timezone = date_default_timezone_get();
+        date_default_timezone_set($timezone);
+    }
+
     public function actionIndex()
     {
         $this->setRememberUrl();
-        $model = SnapEarn::find()->orderBy('sna_upload_date DESC');
+        // $model = SnapEarn::find()->orderBy('sna_upload_date DESC');
+        $model = SnapEarn::find()->findCustome();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
@@ -49,14 +57,6 @@ class DefaultController extends BaseController
 
     public function actionNewMerchant($reg = 'EBC')
     {
-        // $model = new Company();
-        // if ($model->load(Yii::$app->request->post())) {
-            
-        // }
-
-        // return $this->render('new',[
-        //         'model' => $model
-        //     ]);
         $model = new MerchantUser();
         $model->scenario = 'signup';
         $model->usr_password = md5('123456');
@@ -64,6 +64,10 @@ class DefaultController extends BaseController
         $model->usr_approved = 0;
 
         $company = new Company();
+
+        // get merchant sugestion
+        $idse = $_GET['id'];
+        $sugest = SnapEarn::findOne($idse);
 
         // ajax validation
         if (Yii::$app->request->isAjax && $company->load(Yii::$app->request->post())) {
@@ -73,56 +77,111 @@ class DefaultController extends BaseController
 
         if ($company->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
-
             $model->usr_email = $company->com_email;
             try {
                 if ($model->save()) {
                     $company->com_usr_id = $model->usr_id;
                     $company->com_email = $model->usr_email;
+                    $company->com_status = 1;
+                    $company->com_snapearn = 1;
+                    $company->com_snapearn_checkin = 1;
+                    $company->com_registered_to = 'EBC';
 
                     if ($company->save()) {
-                        $audit = AuditReport::setAuditReport('create business : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
+                        $com_id = $company->com_id;
+                        $snapearn = SnapEarn::findOne($id);
+                        $snapearn->sna_com_id = $com_id;
+                        $snapearn->save(false);
+
+                        $suggestion = CompanySuggestion::find()->where('cos_sna_id = :id', [':id' => $id])->one();
+                        $suggestion->cos_com_id = $com_id;
+                        $suggestion->save(false);
+
+                        SnapEarnPointDetail::savePoint($id, 8);
+
+                        $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
                         if ($audit->save()) {
-                            \Yii::$app->session->set('company', '');
                             $com_id = $company->com_id;
-                            $company->setTag();
+                            // $company->setTag();
                             $fsc = new FeatureSubscriptionCompany();
                             $this->assignFcs($fsc, $com_id, $company, $company->fes_id);
                             if ($fsc->save()) {
                                 $this->assignModule($com_id, $company);
                                 $this->assignEmail($com_id, $company);
                                 $transaction->commit();
-                                $this->setMessage('save','success', 'Business created successfully!');
-                                return $this->redirect([$this->getRememberUrl()]);
+                                $this->setMessage('save', 'success', 'Your company has been registered!');
+                                return $this->render('success');
                             } else {
-                                $transaction->rollback();
-                                $this->setMessage('save','error', 'Something wrong while subscription business. Please try again!');
-                                return $this->redirect(['index']);
+                                throw new HttpException(404, 'Cant insert to subscription');
                             }
-                        }else{
-                            $transaction->rollback();
-                            $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
-                            return $this->redirect(['index']);
                         }
-                    }else{
-                        $transaction->rollback();
-                        $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
-                        return $this->redirect(['index']);
+                    } else {
+                        $this->setMessage('save', 'error', General::extactErrorModel($model->getErrors()));
                     }
                 } else {
-                    $transaction->rollback();
-                    $this->setMessage('save','error', 'Something wrong while create member. Please try again!');
-                    return $this->redirect(['index']);
+                    $this->setMessage('save', 'error', General::extactErrorModel($model->getErrors()));
                 }
-            } catch (Exception $ex) {
+            } catch (Exception $e) {
                 $transaction->rollback();
                 throw $e;
             }
         }
 
+
+
+        // if ($company->load(Yii::$app->request->post())) {
+        //     $transaction = Yii::$app->db->beginTransaction();
+
+        //     $model->usr_email = $company->com_email;
+        //     try {
+        //         if ($model->save()) {
+        //             $company->com_usr_id = $model->usr_id;
+        //             $company->com_email = $model->usr_email;
+
+        //             if ($company->save()) {
+        //                 $audit = AuditReport::setAuditReport('create business : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
+        //                 if ($audit->save()) {
+        //                     \Yii::$app->session->set('company', '');
+        //                     $com_id = $company->com_id;
+        //                     $company->setTag();
+        //                     $fsc = new FeatureSubscriptionCompany();
+        //                     $this->assignFcs($fsc, $com_id, $company, $company->fes_id);
+        //                     if ($fsc->save()) {
+        //                         $this->assignModule($com_id, $company);
+        //                         $this->assignEmail($com_id, $company);
+        //                         $transaction->commit();
+        //                         $this->setMessage('save','success', 'Business created successfully!');
+        //                         return $this->render('success');
+        //                     } else {
+        //                         $transaction->rollback();
+        //                         $this->setMessage('save','error', 'Something wrong while subscription business. Please try again!');
+        //                         return $this->redirect(['index']);
+        //                     }
+        //                 }else{
+        //                     $transaction->rollback();
+        //                     $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
+        //                     return $this->redirect(['index']);
+        //                 }
+        //             }else{
+        //                 $transaction->rollback();
+        //                 $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
+        //                 return $this->redirect(['index']);
+        //             }
+        //         } else {
+        //             $transaction->rollback();
+        //             $this->setMessage('save','error', 'Something wrong while create member. Please try again!');
+        //             return $this->redirect(['index']);
+        //         }
+        //     } catch (Exception $ex) {
+        //         $transaction->rollback();
+        //         throw $e;
+        //     }
+        // }
+
         $company->com_registered_to = strtoupper($reg);
         return $this->render('new', [
             'company' => $company,
+            'merchantSugest' => $sugest
         ]);
 
 
@@ -412,6 +471,18 @@ class DefaultController extends BaseController
         $point->com_point = $com_point;
         if($point->save())
             $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
+    }
+
+    public function actionSearch()
+    {
+        $model = SnapEarn::find()->listFilter();
+    }
+
+    public function actionMycropper()
+    {
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('mycropper');
+        }
     }
 
 }

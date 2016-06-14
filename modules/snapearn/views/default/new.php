@@ -2,7 +2,15 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+use kartik\widgets\Typeahead;
+use kartik\widgets\TypeaheadBasic;
+use yii\helpers\ArrayHelper;
+use yii\bootstrap\Modal;
+
+
 $this->title = "New Merchant";
+// echo Yii::$app->urlManager->hostInfo;exit;
 ?>
 
 <section class="content-header">
@@ -36,24 +44,98 @@ $form = ActiveForm::begin([
     <?= $form->field($company, 'com_business_name')->textInput() ?>
     <?= $form->field($company, 'com_email')->textInput() ?>
     <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList); ?>
-    <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
-    <?= $form->field($company, 'com_city')->widget(kartik\widgets\Typeahead::classname(), [
-        'options' => ['placeholder' => 'City, Region, Country', 'id' => 'location'],
-        'pluginOptions' => ['highlight' => true],
-        'dataset' => [
-            [
-                'remote' => yii\helpers\Url::to(['city/list']) . '?q=%QUERY',
-                'limit' => 10
+    <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
+   
+    <?= 
+        $form->field($company, 'com_city')->widget(Typeahead::classname(),[
+            'name' => 'merchant',
+            'options' => ['placeholder' => 'City, Region, Country'],
+            'pluginOptions' => [
+                'highlight'=>true,
+                'minLength' => 3
+            ],
+            'pluginEvents' => [
+                "typeahead:select" => "function(ev, suggestion) { $(this).val(suggestion.id); }",
+            ],
+            'dataset' => [
+                [
+                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                    'display' => 'value',
+                    'remote' => [
+                        'url' => Url::to(['/merchant/default/city-list']) . '?q=%QUERY',
+                        'wildcard' => '%QUERY'
+                    ],
+                    'limit' => 20
+                ]
             ]
-        ],
-        'pluginEvents' => [
-            'typeahead:selected' => 'function(evt,data) {}',
-        ]
-    ])->hint(Html::a(Html::img(Yii::$app->homeUrl . 'img/btn-plus.png', ['data-action' => 'destination', 'class' => 'find-address-book'])));
+        ]);
     ?>
+    <input id="com_city" type="hidden" name="com_city" value="">
     <?= $form->field($company, 'com_postcode')->textInput(); ?>
     <?= $form->field($company, 'com_address')->textInput(); ?>
+    <?= 
+        $form->field($company->modelMallMerchant, 'mam_mal_id')->widget(Typeahead::classname(),[
+            'name' => 'merchant',
+            'options' => ['placeholder' => 'Mall Name'],
+            'pluginOptions' => [
+                'highlight'=>true,
+                'minLength' => 3
+            ],
+            'pluginEvents' => [
+                "typeahead:select" => "function(ev, suggestion) { $('#company-mall_id').val(suggestion.id); }",
+            ],
+            'dataset' => [
+                [
+                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                    'display' => 'value',
+                    'remote' => [
+                        'url' => Url::to(['/merchant/default/mall-list']) . '?q=%QUERY',
+                        'wildcard' => '%QUERY'
+                    ],
+                    'limit' => 20
+                ]
+            ]
+        ]);
+    ?>
+    <?= $form->field($company, 'mall_id')->hiddenInput()->label('') ?>
+    <?= $form->field($company, 'com_mac_id')->dropDownList([]) ?>
+    <div class="form-group" id="businessMap">
+        <label class="col-lg-3 control-label">Map</label>
+        <div class="col-lg-8">
+            <div id="map" style="height:300px"></div>
+        </div>
+    </div>
+    <div id="floor-unit">
+        <div class="form-group hide" id="hasmallkey">
+            <label class="col-lg-3 control-label">&nbsp;</label>
+            <div class="col-lg-8">
+                <span class="btn btn-sm btn-primary" id="add_floor" data-mall="">Add Floor / Unit</span>
+                <br />
+                <table class="table" id="tbl_list_floor">
+                    <thead>
+                        <tr>
+                            <th>
+                                Floor
+                            </th>
+                            <th>
+                                Unit
+                            </th>
+                            <th width="5%">
+                                &nbsp;
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
+        <div id="nomallkey" class="hide">
+            <?= $form->field($company->modelMallMerchant, 'mam_floor')->textInput() ?>
+            <?= $form->field($company->modelMallMerchant, 'mam_unit_number')->textInput() ?>
+        </div>
+    </div>
     <?= $form->field($company, 'com_phone')->textInput(); ?>
     <?= $form->field($company, 'com_fax')->textInput(); ?>
     <?= $form->field($company, 'com_website')->textInput(); ?>
@@ -76,7 +158,7 @@ $form = ActiveForm::begin([
             <input type="hidden" id="com_photo" name="Company[com_photo]">
             <a data-toggle="modal" data-image="com_logo" data-field="com_photo" href="#" class="eb-cropper">
                 <?php $image = isset($company->com_photo) ? Yii::$app->params['businessUrl'] . $company->com_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
-                <img src="<?= $image ?>" id="com_logo" class="img-responsive" width="240">
+                <img src="<?= $image ?>" id="com_logo" class="img-responsive thumbnail" width="240">
             </a>
         </div>
     </div>
@@ -86,7 +168,7 @@ $form = ActiveForm::begin([
             <input type="hidden" id="com_banner" name="Company[com_banner_photo]">
             <a data-toggle="modal" data-image="com_banner_photo" data-field="com_banner" href="#" class="eb-cropper">
                 <?php $image = isset($company->com_banner_photo) ? Yii::$app->params['businessUrl'] . $company->com_banner_photo : Yii::$app->params['imageUrl'] . 'default-image.jpg' ?>
-                <img src="<?= $image ?>" id="com_banner_photo" class="img-responsive" width="240">
+                <img src="<?= $image ?>" id="com_banner_photo" class="img-responsive thumbnail" width="240">
             </a>
         </div>
     </div>
@@ -100,17 +182,43 @@ $form = ActiveForm::begin([
             </div>
         </div>
     </div>
-</div>
+</section>
+<!-- widget to create render modal -->
 <?php
+    Modal::begin([
+        'header' => '</button><h4 class="modal-title"></h4>',
+        'id' => 'modal',
+        'size' => 'modal-md',
+    ]);
+?>
+<div id="modalContent"></div>
+<?php Modal::end(); ?>
+<?= \app\components\widgets\ImageCropper::widget([
+    'wsmall' => 200, // width small
+    'hsmall' => 134, // height small
+    'wbig' => 600, // width big
+    'hbig' => 400, // height big
+    'ratio' => 1.5, // ratio dimension crop box
+    'skipAndResize' => true, // true or false, if false => original image will be duplicated, if true original image will be resized to wbig x hbig
+    'prefix' => 'img-', // for file name prepix
+]); ?>
+<?php
+$this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
 $longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
+$this->registerCss("
+    .datetimepicker-dropdown-bottom-right {
+        right: 200px;
+    }
+");
 $this->registerJs("
     //triger modal for image-croper
     $('.eb-cropper').on('click',function(){
         $('#cropper-modal').modal({show: true});
     });
 
-    var mall_checked = 0;
+    var mall_checked = 1;
     $('#create-business').hide();
     $('#company-com_point').popover();
     $('.field-company-com_latitude').hide();
@@ -199,7 +307,7 @@ $this->registerJs("
         $('.field-company-com_address').hide();
         $('.field-company-com_postcode').hide();
         $('.field-company-com_city').hide();
-        $('.field-company-mall_id').show();
+        $('.field-mallmerchant-mam_mal_id').show();
         $('#floor-unit').show();
     };
     var unloadMall = function() {
@@ -209,7 +317,7 @@ $this->registerJs("
         $('.field-company-com_address').show();
         $('.field-company-com_postcode').show();
         $('.field-company-com_city').show();
-        $('.field-company-mall_id').hide();
+        $('.field-mallmerchant-mam_mal_id').hide();
         $('#floor-unit').hide();
     };
     var checkOrNot = function(mall_checked) {
@@ -223,8 +331,12 @@ $this->registerJs("
         $(this).click(function() {
             var checked = $(this).is(':checked');
             checkOrNot(checked);
-            if(checked == false)
+            if(checked == false){
+                $(this).val(0);
                 loadMap();
+            }else{
+                $(this).val(1);
+            }
         });
     });
     // if($('.status').val() == 1) {
@@ -268,7 +380,6 @@ $this->registerJs("
     $('.submit-button, .reset-button').click(function(){
         $('#saveNext').val(0);
     });
-    $('.modal-title').text('New Merchant');
 
 function refreshOpenerTopFrameset(){
     var f = window.opener.top.frames;

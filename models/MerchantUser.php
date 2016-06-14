@@ -53,14 +53,29 @@ class MerchantUser extends \yii\db\ActiveRecord
      */
     public function rules()
     {
+        // return [
+        //     [['usr_type_id', 'usr_createdate', 'usr_updated', 'usr_last_login', 'usr_last_logout', 'usr_last_sync', 'usr_last_login_old', 'usr_last_ip_numeric', 'usr_com_id', 'usr_approved', 'usr_approved_datetime', 'usr_approved_admin_id', 'usr_approved_confirm', 'usr_rejected', 'usr_rejected_datetime', 'usr_rejected_admin_id', 'usr_tablet_role', 'usr_ref_usr_id', 'usr_mal_id', 'usr_superuser'], 'integer'],
+        //     [['usr_username', 'usr_approved_url_activation'], 'string', 'max' => 200],
+        //     [['usr_email', 'usr_password'], 'string', 'max' => 128],
+        //     [['usr_last_ip'], 'string', 'max' => 30],
+        //     [['usr_rights'], 'string', 'max' => 7],
+        //     [['usr_tablet_name', 'usr_auth_key', 'usr_device_id'], 'string', 'max' => 255],
+        //     [['usr_username'], 'unique'],
+        // ];
         return [
-            [['usr_type_id', 'usr_createdate', 'usr_updated', 'usr_last_login', 'usr_last_logout', 'usr_last_sync', 'usr_last_login_old', 'usr_last_ip_numeric', 'usr_com_id', 'usr_approved', 'usr_approved_datetime', 'usr_approved_admin_id', 'usr_approved_confirm', 'usr_rejected', 'usr_rejected_datetime', 'usr_rejected_admin_id', 'usr_tablet_role', 'usr_ref_usr_id', 'usr_mal_id', 'usr_superuser'], 'integer'],
-            [['usr_username', 'usr_approved_url_activation'], 'string', 'max' => 200],
-            [['usr_email', 'usr_password'], 'string', 'max' => 128],
-            [['usr_last_ip'], 'string', 'max' => 30],
-            [['usr_rights'], 'string', 'max' => 7],
-            [['usr_tablet_name', 'usr_auth_key', 'usr_device_id'], 'string', 'max' => 255],
-            [['usr_username'], 'unique'],
+            [['usr_email'], 'required', 'on' => 'signup'],
+            ['usr_email', 'unique', 'on' => 'signup'],
+            [['old_password', 'new_password', 'new_password_repeat'], 'required', 'on' => 'changepassword'],
+            ['new_password', 'compare', 'compareAttribute' => 'new_password_repeat', 'on' => 'changepassword'],
+            ['new_password', 'compare', 'compareAttribute' => 'old_password', 'operator' => '!=', 'on' => 'changepassword'],
+            [['usr_email', 'new_password', 'new_password_repeat'], 'required', 'on' => 'rtm-step1'],
+            ['new_password_repeat', 'compare', 'compareAttribute' => 'new_password', 'on' => 'rtm-step1'],
+            [['usr_password'], 'required', 'on' => 'change_password'],
+            [['usr_username'], 'required', 'on' => 'default'],
+            [['usr_approved', 'usr_approved_datetime', 'usr_approved_admin_id', 'usr_approved_url_activation', 'usr_approved_confirm'], 'required', 'on' => 'approved'],
+            [['usr_rejected', 'usr_rejected_datetime', 'usr_rejected_admin_id'], 'required', 'on' => 'rejected'],
+            [['change_password'], 'safe'],
+            ['usr_email', 'validateEmailRegisteredAsCustomer', 'on' => 'register-member'],
         ];
     }
 

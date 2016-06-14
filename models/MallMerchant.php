@@ -29,6 +29,7 @@ class MallMerchant extends EbizuActiveRecord
     {
         return [
             [['mam_mal_id', 'mam_com_id'], 'required'],
+            [['mam_mal_id', 'mam_com_id'], 'safe','on' => 'newMerchant'],
             [['mam_floor', 'mam_unit_number', 'mam_category'], 'safe'],
         ];
     }
