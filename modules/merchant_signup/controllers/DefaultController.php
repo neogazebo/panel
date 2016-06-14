@@ -15,6 +15,8 @@ use app\models\MallMerchant;
 use app\models\MerchantSignup;
 use app\models\MerchantSignupSearch;
 use app\models\Company;
+use app\models\City;
+use app\models\Mall;
 use app\models\User;
 use app\models\Tag;
 use app\models\FeatureSubscription;
@@ -248,27 +250,6 @@ class DefaultController extends BaseController
         }
     }
 
-    public function actionCityList($q = null)
-    {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $query = "
-            SELECT a.cit_id, a.cit_name, b.reg_id, b.reg_name, c.cny_id, c.cny_name
-            FROM tbl_city a, tbl_region b, tbl_country c
-            WHERE a.cit_region_id = b.reg_id
-                AND b.reg_country_id = c.cny_id
-                AND a.cit_name LIKE '%" . $q . "%'
-            ORDER BY a.cit_name
-            LIMIT 10";
-        $connection = Yii::$app->db;
-        $query = $connection->createCommand($query)->queryAll();
-        $return = [];
-        foreach ($query as $row) {
-            $return[]['value'] = $row['cit_name'] . ', ' . $row['reg_name'] . ', ' . $row['cny_name'];
-        }
-        // the output will automaticaly convert to JSON
-        return $return;
-    }
-
     public function actionRegister() {
         $fes_code = isset($_GET['reg']) ? $_GET['reg'] : 'EBC';
         return FeatureSubscription::packageList($fes_code);
@@ -280,6 +261,27 @@ class DefaultController extends BaseController
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+
+    public function actionCityList()
+    {
+        if (Yii::$app->request->isAjax){
+            $model = City::find()->SearchCityList();
+            echo \yii\helpers\Json::encode($model);
+        }
+    }
+
+    public function actionMallList()
+    {
+        if (Yii::$app->request->isAjax){
+            $model = Mall::find()->SearchMallList();
+            $out = [];
+            foreach ($model as $d) {
+                $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
+            }
+            echo \yii\helpers\Json::encode($out);
         }
     }
 }

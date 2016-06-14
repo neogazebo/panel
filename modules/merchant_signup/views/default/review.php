@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\widgets\Typeahead;
+use kartik\widgets\TypeaheadBasic;
 use kartik\widgets\DatePicker;
 use yii\bootstrap\Modal;
 use yii\web\JsExpression;
@@ -73,50 +74,58 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                         <?= $form->field($model_company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
                         <?= $form->field($model, 'mer_address')->textInput(); ?>
                         <?= $form->field($model, 'mer_post_code')->textInput(); ?>
-                        <?php
-                        $url = \yii\helpers\Url::to(['/merchant-signup/default/select2']);
+<?= 
+        $form->field($model_company, 'mall_name')->widget(Typeahead::classname(),[
+            'name' => 'merchant',
+            'options' => [
+                'placeholder' => 'Mall Name'
+            ],
+            'pluginOptions' => [
+                'highlight'=>true,
+                'minLength' => 3
+            ],
+            'pluginEvents' => [
+                "typeahead:select" => "function(ev, suggestion) { $('#company-mall_id').val(suggestion.id); }",
+            ],
+            'dataset' => [
+                [
+                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                    'display' => 'value',
+                    'remote' => [
+                        'url' => Url::to(['mall-list']) . '?q=%QUERY',
+                        'wildcard' => '%QUERY'
+                    ],
+                    'limit' => 20
+                ]
+            ]
+        ])->label('Select Mall');
+    ?>
+    <?= $form->field($model_company, 'mall_id')->hiddenInput()->label('') ?>
 
-                        $initScript = <<< SCRIPT
-                            function (element, callback) {
-                                id = $('#company-mall_id').val();
-                                if (id !== "") {
-                                    $.ajax("{$url}?id=" + id, {
-                                        dataType: "json",
-                                    }).done(function(data) { callback(data.results); });
-                                }
-                            }
-SCRIPT;
-                        echo $form->field($model_company, 'mall_id')->widget(kartik\widgets\Select2::classname(), [
-                            'options' => ['placeholder' => 'Choose a Mall ...'],
-                            'pluginOptions' => [
-                                'allowClear' => true,
-                                'minimumInputLength' => 1,
-                                'ajax' => [
-                                    'url' => $url,
-                                    'dataType' => 'json',
-                                    'data' => new yii\web\JsExpression("function(term,page) { return { search: term }; }"),
-                                    'results' => new yii\web\JsExpression('function(data,page) { return { results:data.results }; }'),
-                                ],
-                                'initSelection' => new yii\web\JsExpression($initScript)
-                            	],
-                        ]);
-                        ?>
-
-                        <?=
-                        $form->field($model_company, 'com_city')->widget(kartik\widgets\Typeahead::classname(), [
-                            'options' => ['placeholder' => 'City, Region, Country', 'id' => 'location'],
-                            'pluginOptions' => ['highlight' => true],
-                            'dataset' => [
-                                [
-                                    'remote' => yii\helpers\Url::to(['city/list']) . '?q=%QUERY',
-                                    'limit' => 10
-                                ]
-                            ],
-                            'pluginEvents' => [
-                                'typeahead:selected' => 'function(evt,data) {}',
-                            ]
-                        ])->hint(Html::a(Html::img(Yii::$app->homeUrl . 'img/btn-plus.png', ['data-action' => 'destination', 'class' => 'find-address-book'])));
-                        ?>
+   <?= 
+        $form->field($model_company, 'com_city')->widget(Typeahead::classname(),[
+            'name' => 'merchant',
+            'options' => ['placeholder' => 'City, Region, Country'],
+            'pluginOptions' => [
+                'highlight'=>true,
+                'minLength' => 3
+            ],
+            'pluginEvents' => [
+                "typeahead:select" => "function(ev, suggestion) { $(this).val(suggestion.id); }",
+            ],
+            'dataset' => [
+                [
+                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                    'display' => 'value',
+                    'remote' => [
+                        'url' => Url::to(['city-list']) . '?q=%QUERY',
+                        'wildcard' => '%QUERY'
+                    ],
+                    'limit' => 20
+                ]
+            ]
+        ]);
+    ?>
 
                         <div class="form-group" id="merchantsignup-map">
                             <label class="col-sm-3 control-label">Map</label>

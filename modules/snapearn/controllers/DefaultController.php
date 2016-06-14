@@ -349,7 +349,7 @@ class DefaultController extends BaseController
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
 
-                // $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
+                $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
                 $transaction->commit();
             } catch (Exception $e) {
                 $transaction->rollBack();
