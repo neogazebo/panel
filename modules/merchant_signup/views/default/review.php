@@ -38,9 +38,9 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                     ]);
                     ?>
                     <div class="panel-body" style="border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;">
-                        <?= $form->field($model, 'mer_login_email')->textInput(); ?>
-                        <?= $form->field($model, 'mer_company_name')->textInput(); ?>
-                        <?= $form->field($model, 'mer_bussines_name')->textInput(); ?>
+                        <?= $form->field($model_company, 'com_email')->textInput(['value' => $model->mer_login_email]); ?>
+                        <?= $form->field($model_company, 'com_name')->textInput(['value' => $model->mer_company_name]); ?>
+                        <?= $form->field($model_company, 'com_business_name')->textInput(['value' => $model->mer_bussines_name]); ?>
                         <?= $form->field($model, 'mer_bussiness_description')->textArea(); ?>
                         <?= $form->field($model_company, 'com_subcategory_id')->dropDownList($model_company->categoryListData); ?>
                         <div id="tagging">
@@ -117,7 +117,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 
                         <?= $form->field($model, 'mer_contact_phone')->textInput(); ?>
                         <?= $form->field($model, 'mer_office_fax')->textInput(); ?>
-                        <?= $form->field($model, 'mer_website')->textInput(); ?>
+                        <?= $form->field($model_company, 'com_website')->textInput([$model->mer_website]); ?>
                         <?= $form->field($model_company, 'com_size')->dropDownList($model_company->companySizeListData); ?>
                         <?= $form->field($model_company, 'com_nbrs_employees')->dropDownList($model_company->numberEmployeeListData); ?>
                         <?= $form->field($model_company, 'com_fb')->textInput(); ?>
@@ -159,7 +159,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary pull-right' , 'disabled' => true]) ?>
+                                    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary pull-right']) ?>
                                     <button type="reset" class="pull-left btn" onclick="window.location = '<?= Yii::$app->urlManager->createUrl('business/index') ?>'"><i class="fa fa-times"></i> Cancel</button>
                                 </div>
                             </div>
