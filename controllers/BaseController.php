@@ -72,7 +72,6 @@ class BaseController extends Controller
         $this->centralTimeZone();
         // checking existing worktime with this user and param id
     	$model = WorkingTime::find()->findWorkExist($user,$param);
-        // var_dump($model);exit;
         // if there is no exists worktime create this one
         if (empty($model)) {
             $model = new WorkingTime();
@@ -81,9 +80,10 @@ class BaseController extends Controller
             $model->wrk_param_id = $param;
             $model->wrk_start = microtime(true);
             if ($model->save(false)) {
-                return microtime(true);
+                return $model->wrk_id;
             }
         }
+        return $model->wrk_id;
     }
 
     public function endWorking($id,$desc)
@@ -92,8 +92,8 @@ class BaseController extends Controller
     	$model = WorkingTime::findOne($id);
     	$model->wrk_description = $desc;
     	$model->wrk_end = microtime(true);
-        $model->wrk_time = ($model->wrk_end - $model->wrk_end);
-    	$model->save();
+        $model->wrk_time = ($model->wrk_end - $model->wrk_start);
+    	$model->save(false);
     }
 
 }

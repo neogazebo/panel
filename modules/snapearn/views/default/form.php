@@ -194,6 +194,7 @@ $this->registerJs("
 
     $('#snapearn-sna_status').change(function() {
         if($(this).val() == 1) {
+            $('.snapearn-sna_transaction_time').focus();
             $('.reject-form').css('display', 'none');
             $('.point-form').css('display', 'block');
         } else if($(this).val() == 2) {
@@ -211,7 +212,7 @@ $this->registerJs("
         $.ajax({
             type: 'POST',
             url: baseUrl + 'snapearn/default/ajax-snapearn-point',
-            data: { id: id, com_id: com_id, point: point },
+            data: { id: id, com_id: com_id, amount: amount },
             dataType: 'json',
             success: function(result) {
                 $('#snapearn-sna_point').val(result);

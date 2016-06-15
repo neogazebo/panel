@@ -36,6 +36,6 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
     {
         $this->andWhere("wrk_by = $user");
         $this->andWhere("wrk_param_id = $param ");
-        return $this->all();
+        return $this->one();
     }
 }

@@ -63,7 +63,7 @@ class Account extends \yii\db\ActiveRecord
 
     public function getCountry()
     {
-        return $this->hasOne(Country::className(), ['acc_cty_id' => 'cty_id']);
+        return $this->hasOne(Country::className(), ['cty_short_code' => 'acc_cty_id']);
     }
 
     public function getTimezone()

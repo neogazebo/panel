@@ -207,17 +207,17 @@ class DefaultController extends BaseController
                 $limitPoint = 0;
                 if ($model->merchant->com_premium == 1) {
                     $model->sna_point = $model->sna_point * 2;
-                    $limit = SnapEarnRule::find()->where('ser_country = :cny', [':cny' => $model->merchant->com_currency])->one()->ser_premium;
+                    $limit = SnapEarnRule::find()->where('ser_country = :cny', [':cny' => $model->member->country])->one()->ser_premium;
                     if (!empty($limit)) {
                         $limitPoint = $limit;
                     }
                 } else {
-                    $limit = SnapEarnRule::find()->where('ser_country = :cny', [':cny' => $model->merchant->com_currency])->one()->ser_point_cap;
+                    $limit = SnapEarnRule::find()->where('ser_country = :cny', [':cny' => $model->member->country->cty_currency_name_iso3])->one()->ser_point_cap;
+                    // var_dump($model->member->country->);exit;
                     if (!empty($limit)) {
                         $limitPoint = $limit;
                     }
                 }
-
                 $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                 $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
                 if ($point_history !== NULL) {
@@ -350,7 +350,7 @@ class DefaultController extends BaseController
                     // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
                     $curl = new curl\Curl();
                     $response = $curl->get('https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":' . $model->sna_acc_id . ',"sna_id":' . $model->sna_id . ',"sna_status":' . $model->sna_status . '}');
-                    $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
+                    $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
 
                     // end working time
                     $desc = "Snapearn $snap_type";
