@@ -169,11 +169,12 @@ class DefaultController extends BaseController
             if(!empty($model->com_sales_order))
                 $model->com_sales_order = strtotime($model->com_sales_order);
             $changed_attributes = $model_company->getChangedAttribute(['com_timezone', 'com_in_mall', 'com_mac_id']);
-            $user->usr_email = $model->com_email;
+            $user->usr_email = $model->mer_email_login;
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                if ($model->save() && $user->save(false)) {
+                if ($model->save() && $user->save(false) && $model_company->save()) {
                 //    $audit = AuditReport::setAuditReport('update business : ' . $model->com_name, Yii::$app->user->id, Company::className(), $model->com_id, $changed_attributes);
+
                     if ($audit->save()) {
                         \Yii::$app->session->set('company', '');
                         $model->setTag();
