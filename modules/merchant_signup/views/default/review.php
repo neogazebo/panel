@@ -11,8 +11,8 @@ use yii\web\JsExpression;
 use yii\helpers\Json;
 
 $this->title = 'Review Merchant Signup: ' . $model->mer_bussines_name;
-$this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true');
-$this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js');
+$this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $latitude = ($model_company->com_latitude ? $model_company->com_latitude : 3.139003);
 $longitude = ($model_company->com_longitude ? $model_company->com_longitude : 101.686855);
 $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 1 ? 1 : 0);
@@ -159,7 +159,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary pull-right']) ?>
+                                    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary pull-right' , 'disabled' => true]) ?>
                                     <button type="reset" class="pull-left btn" onclick="window.location = '<?= Yii::$app->urlManager->createUrl('business/index') ?>'"><i class="fa fa-times"></i> Cancel</button>
                                 </div>
                             </div>
