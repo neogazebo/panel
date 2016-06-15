@@ -77,7 +77,15 @@ $this->registerCss("
                                 <?= $form->field($model, 'sna_acc_id')->textInput(['value' => is_object($model->member) ? $model->member->acc_screen_name : '', 'readonly' => true]) ?>
                             <?php endif;?>
                             <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                                <?= $form->field($model->member, 'acc_facebook_email')->textInput(['value' => is_object($model->member) ? $model->member->acc_facebook_email : '', 'readonly' => true]) ?>
+                                <div class="form-group field-snapearn-sna_upload_date">
+                                <label class="col-lg-3 control-label" >Facebook Email</label>
+                                <div class="col-lg-6">
+                                    <div class="form-control" readonly="true"><?= !empty($model->member) ? $model->member->acc_facebook_email : '' ?></div>
+                                    <div>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
                             <?php endif ?>
 
                             <div class="form-group field-snapearn-sna_upload_date">
@@ -90,20 +98,21 @@ $this->registerCss("
                                 </div>
                             </div>
 
-                            <?=
-                                $form->field($model, 'sna_transaction_time')->widget(kartik\widgets\DateTimePicker::classname(), [
-                                    'options' => ['placeholder' => 'Transaction Time ...'],
-                                    'convertFormat' => true,
-                                    'value' => $model->sna_upload_date,
-                                    'pluginOptions' => [
-                                        'format' => 'Y-m-d H:i:s'
-                                    ]
-                                ]);
-                            ?>
                             <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control']) ?>
+
                             <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                             <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                             <div class="point-form">
+                                <?=
+                                    $form->field($model, 'sna_transaction_time')->widget(kartik\widgets\DateTimePicker::classname(), [
+                                        'options' => ['placeholder' => 'Transaction Time ...'],
+                                        'convertFormat' => true,
+                                        'value' => $model->sna_upload_date,
+                                        'pluginOptions' => [
+                                            'format' => 'Y-m-d H:i:s'
+                                        ]
+                                    ]);
+                                ?>                
                                 <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                                 <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
                                 <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>

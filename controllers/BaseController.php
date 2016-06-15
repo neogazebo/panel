@@ -62,23 +62,37 @@ class BaseController extends Controller
 		}
     }
 
+    protected function centralTimeZone()
+    {
+        return date_default_timezone_set('UTC');
+    }
+
     public function startWorking($user,$type,$param)
     {
-    	$model = new WorkingTime();
-    	$model->wrk_type = $type;
-    	$model->wrk_by = $user;
-    	$model->wrk_param_id = $param;
-    	$model->wrk_start = time();
-    	if ($model->save()) {
-    		return $model->wrk_id;
-    	}
+        $this->centralTimeZone();
+        // checking existing worktime with this user and param id
+    	$model = WorkingTime::find()->findWorkExist($user,$param);
+        // var_dump($model);exit;
+        // if there is no exists worktime create this one
+        if (empty($model)) {
+            $model = new WorkingTime();
+            $model->wrk_type = (int)$type;
+            $model->wrk_by = $user;
+            $model->wrk_param_id = $param;
+            $model->wrk_start = microtime(true);
+            if ($model->save(false)) {
+                return microtime(true);
+            }
+        }
     }
 
     public function endWorking($id,$desc)
     {
+        $this->centralTimeZone();
     	$model = WorkingTime::findOne($id);
     	$model->wrk_description = $desc;
-    	$model->wrk_end = time();
+    	$model->wrk_end = microtime(true);
+        $model->wrk_time = ($model->wrk_end - $model->wrk_end);
     	$model->save();
     }
 

@@ -26,6 +26,7 @@ use app\models\AuditReport;
 use app\models\Module;
 use app\models\ModuleInstalled;
 use app\models\SystemMessage;
+use app\models\WorkingTime;
 use yii\web\HttpException;
 
 /**
@@ -62,7 +63,9 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
-        // Yii::$app->workingTime->start($id);
+        $this->startWorking(
+            Yii::$app->user->id, 
+            1, $id);
         return $this->redirect(['update', 'id' => $id]);
     }
 
@@ -175,8 +178,12 @@ class DefaultController extends BaseController
 
     public function actionUpdate($id)
     {
+        // working time start
+        $user = Yii::$app->user->id;
+        $type = WorkingTime::SNAPEARN_TYPE;
+        $param = $id;
+        $wrk_id = $this->startWorking($user, $type, $param);
     	$model = $this->findModel($id);
-
         // get old point
         $oldPoint = $model->sna_point;
         $ctr = $model->member->acc_cty_id;
@@ -343,14 +350,16 @@ class DefaultController extends BaseController
                     // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
                     $curl = new curl\Curl();
                     $response = $curl->get('https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":' . $model->sna_acc_id . ',"sna_id":' . $model->sna_id . ',"sna_status":' . $model->sna_status . '}');
+                    $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
 
-                    // Yii::$app->workingTime->end($id);
+                    // end working time
+                    $desc = "Snapearn $snap_type";
+                    $this->endWorking($wrk_id, $desc);
+
+                    $transaction->commit();
                 } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
-
-                $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->mem_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
-                $transaction->commit();
             } catch (Exception $e) {
                 $transaction->rollBack();
             }

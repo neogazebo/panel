@@ -31,4 +31,11 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
     {
         return parent::one($db);
     }
+
+    public function findWorkExist($user,$param)
+    {
+        $this->andWhere("wrk_by = $user");
+        $this->andWhere("wrk_param_id = $param ");
+        return $this->all();
+    }
 }

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "tbl_working_time".
@@ -67,6 +68,19 @@ class WorkingTime extends \yii\db\ActiveRecord
             'wrk_description' => 'Description',
             'wrk_created' => 'Created',
             'wrk_updated' => 'Updated',
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['wrk_created'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['wrk_updated'],
+                ],
+            ],
         ];
     }
 

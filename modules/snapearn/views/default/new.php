@@ -8,9 +8,9 @@ use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Modal;
 
-
 $this->title = "New Merchant";
-// echo Yii::$app->urlManager->hostInfo;exit;
+
+// echo date("H:i:s",$endtime-$starttime);
 ?>
 
 <section class="content-header">
@@ -178,7 +178,7 @@ $form = ActiveForm::begin([
     </div>
 <div class="box-footer">
     <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning refreshParent', 'data-dismiss' => 'modal']) ?>
-    <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'pull-right btn btn-info pull-right']) ?>
+    <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'pull-right btn btn-info pull-right submitBtn']) ?>
 </div>
 <?php ActiveForm::end(); ?>
                 </div>
@@ -219,6 +219,10 @@ $this->registerJs("
     //triger modal for image-croper
     $('.eb-cropper').on('click',function(){
         $('#cropper-modal').modal({show: true});
+    });
+
+    $('.submitBtn').click(function(){
+        $(this).addClass('disabled');
     });
 
     var mall_checked = 1;
