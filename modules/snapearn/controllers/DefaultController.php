@@ -94,12 +94,12 @@ class DefaultController extends BaseController
                                 $this->setMessage('save','error', 'Something wrong while subscription business. Please try again!');
                                 return $this->redirect(['index']);
                             }
-                        }else{
+                        } else {
                             $transaction->rollback();
                             $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
                             return $this->redirect(['index']);
                         }
-                    }else{
+                    } else {
                         $transaction->rollback();
                         $this->setMessage('save','error', 'Something wrong while create business. Please try again!');
                         return $this->redirect(['index']);
@@ -306,7 +306,7 @@ class DefaultController extends BaseController
                     // webhook for manis v3
                     // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
                     $curl = new curl\Curl();
-                    $response = $curl->get('https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":' . $model->sna_acc_id . ',"sna_id":' . $model->sna_id . ',"sna_status":' . $model->sna_status . '}');
+                    $response = $curl->get('https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":' . intval($model->sna_acc_id) . ',"sna_id":' . intval($model->sna_id) . ',"sna_status":' . intval($model->sna_status) . '}');
 
                     // Yii::$app->workingTime->end($id);
                 } else {
