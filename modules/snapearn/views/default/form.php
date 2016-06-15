@@ -38,6 +38,7 @@ $this->registerCss("
                         $form = ActiveForm::begin([
                             'id'=>'snapearn-form',
                             'options' => ['class' => 'form-horizontal'],
+                            'enableClientValidation'=>true,
                             'enableAjaxValidation'=>true,
                             'fieldConfig' => [
                                 'template' => "{label}\n<div class=\"col-lg-6\">{input}\n<div>{error}</div></div>",
@@ -98,7 +99,7 @@ $this->registerCss("
                                 </div>
                             </div>
 
-                            <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control']) ?>
+                            <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
 
                             <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                             <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
@@ -128,7 +129,7 @@ $this->registerCss("
                                     <input id="saveNext" type="hidden" name="saveNext" value="">
                                 </div>
                                 <div class="button-left pull-left">
-                                    <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel/?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
+                                    <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
                                 </div>
                             </div>
                         </div>
@@ -191,10 +192,10 @@ $this->registerJs("
     $('#sna_image').iviewer({
         src: '".$imageSource."'
     });
-
+$('#snapearn-sna_transaction_time').attr('autofocus');
     $('#snapearn-sna_status').change(function() {
         if($(this).val() == 1) {
-            $('.snapearn-sna_transaction_time').focus();
+            $('#snapearn-sna_transaction_time').attr('autofocus');
             $('.reject-form').css('display', 'none');
             $('.point-form').css('display', 'block');
         } else if($(this).val() == 2) {
@@ -207,7 +208,7 @@ $this->registerJs("
     }).trigger('change');
 
     $('#snapearn-sna_receipt_amount').blur(function() {
-        var point = Math.floor($('#snapearn-sna_receipt_amount').val());
+        var amount = Math.floor($('#snapearn-sna_receipt_amount').val());
         // $('#snapearn-sna_point').val(point);
         $.ajax({
             type: 'POST',

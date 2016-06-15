@@ -28,6 +28,9 @@ use app\components\helpers\Html;
  */
 class SnapEarn extends \yii\db\ActiveRecord
 {
+    const STATUS_REJECTED = 2;
+    const STATUS_APPROVED = 1;
+    const LIMIT_RECEIPT = 2;
     public $sna_push = true;
 
     /**
@@ -84,7 +87,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'approvePerday', 
                 'when' => function($model) {
                     return $model->sna_status == 1;
-                }],
+                }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }"],
             [['sna_receipt_date'], 
                 'string', 
                 'max' => 10],

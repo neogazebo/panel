@@ -104,4 +104,20 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->limit(1);
         return $this->one();
     }
+
+    public function maxDuplicateReceipt($t,$u,$c)
+    {
+        $this->andWhere('date(from_unixtime(sna_transaction_time)) = :time',[
+                ':time' => date('Y-m-d', strtotime($t))
+            ]);
+        $this->andWhere('sna_acc_id = :acc',[
+                ':acc' => $u
+            ]);
+        $this->andWhere('sna_com_id = :com',[
+                ':com' => $c
+            ]);
+        $this->all();
+
+        return $this;
+    }
 }

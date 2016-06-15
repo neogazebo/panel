@@ -7,13 +7,11 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 $this->title = 'Snap & Earn List';
-$country = curl_init('ipinfo.io/country');
-curl_setopt($country, CURLOPT_RETURNTRANSFER, 1);
-$cty = curl_exec($country);
+
 $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
 ?>
 <section class="content-header ">
-    <h1><?= $this->title?><?= $cty  ?></h1>
+    <h1><?= $this->title?></h1>
 </section>
 
 <section class="content">

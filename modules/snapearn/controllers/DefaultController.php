@@ -203,21 +203,30 @@ class DefaultController extends BaseController
 
                 $set_time = Utc::getNow();
                 $set_operator = Yii::$app->user->id;
-    
-                $limitPoint = 0;
-                if ($model->merchant->com_premium == 1) {
-                    $model->sna_point = $model->sna_point * 2;
-                    $limit = SnapEarnRule::find()->where('ser_country = :cny', [':cny' => $model->member->country])->one()->ser_premium;
-                    if (!empty($limit)) {
-                        $limitPoint = $limit;
-                    }
-                } else {
-                    $limit = SnapEarnRule::find()->where('ser_country = :cny', [':cny' => $model->member->country->cty_currency_name_iso3])->one()->ser_point_cap;
-                    // var_dump($model->member->country->);exit;
-                    if (!empty($limit)) {
-                        $limitPoint = $limit;
+
+                // limited transaction point per-user per-merchant per-day
+                $t = $model->sna_transaction_time;
+                $u = $model->sna_acc_id;
+                $c = $model->sna_com_id;
+                $model->sna_status = $this->approvedReceiptPerday($t,$u,$c);
+
+                // get limited point per country 
+                $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
+
+                // setup devision point per country
+                $model->sna_point = (int) ($model->sna_receipt_amount / $config->ser_point_provision);
+                // var_dump($model->sna_point);exit;
+                // optional point for premium or default merchant
+                if(!empty($config)) {
+                    if($model->merchant->com_premium == 1) {
+                        $model->sna_point *= 2;
+                        $limitPoint = $config->ser_premium;
+                    } else {
+                        $limitPoint = $config->ser_point_cap;
                     }
                 }
+
+                // get current point merchant
                 $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                 $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
                 if ($point_history !== NULL) {
@@ -390,15 +399,19 @@ class DefaultController extends BaseController
             $amount = Yii::$app->request->post('amount');
             $com_id = Yii::$app->request->post('com_id');
             $business = Company::findOne($com_id);
+            $se = $this->findModel($id);
 
-            $config = SnapEarnRule::find()->where(['ser_country' => $business->com_currency])->one();
-            
+            $config = SnapEarnRule::find()->where(['ser_country' => $se->member->country->cty_currency_name_iso3])->one();
+            $point = (int) ($amount / $config->ser_point_provision);
+
             if(!empty($config)) {
                 if($business->com_premium == 1) {
                     $point *= 2;
                     $point_cap = $config->ser_premium;
-                } else
+                } else {
                     $point_cap = $config->ser_point_cap;
+                }
+
                 if($point > $point_cap)
                     return $point_cap;
             }
@@ -408,7 +421,7 @@ class DefaultController extends BaseController
 
     public function actionCancel($id)
     {
-        // Yii::$app->workingTime->cancel($id); 
+        $this->cancelWorking($id);
         return $this->redirect([$this->getRememberUrl()]);
     } 
 
@@ -419,6 +432,18 @@ class DefaultController extends BaseController
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    protected function approvedReceiptPerday($t,$u,$c)
+    {
+        $model = SnapEarn::find()->maxDuplicateReceipt($t,$u,$c);
+
+        if ($model->count() >= SnapEarn::LIMIT_RECEIPT) {
+            $sna_status = SnapEarn::STATUS_REJECTED;
+        } else {
+            $sna_status = SnapEarn::STATUS_APPROVED;
+        }
+        return $sna_status;
     }
 
     protected function savePoint($params, $type = 'C')
