@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use app\models\CompanyTag;
 use app\models\EbizuActiveRecord;
 
 class Company extends EbizuActiveRecord
@@ -27,7 +28,7 @@ class Company extends EbizuActiveRecord
     public $totalBiz;
     public $id;
     public $text;
-    public $mall_name;
+    public $mall_name = null;
     public $com_in_mall = true;
 
     CONST COM_STATUS_NOT_ACTIVE = 0;
@@ -808,6 +809,41 @@ class Company extends EbizuActiveRecord
         return \app\components\helpers\Html::listData($model, 'cat_id', 'category', 'parent_id');
     }    
 
+    public function getMarchant()
+    {
+        return $this->hasOne(MallMerchant::className(), ['mam_com_id' => 'com_id']);
+    }
+
+
+    public function setTag()
+    {
+        $tags = CompanyTag::deleteAll('cot_com_id = :com_id', [':com_id' => $this->com_id]);
+        $tag = explode(',', trim($this->tag));
+        $unique = [];
+        foreach ($tag as $value)
+        {
+            if (!in_array($value, $unique, true))
+            {
+                array_push($unique, $value);
+            }
+        }
+        sort($unique);
+        if (!empty($unique))
+        {
+            for ($i = 1; $i < count($unique); $i++)
+            {
+                if (!empty($unique[$i]))
+                {
+                    $tags = new CompanyTag();
+                    $tags->cot_com_id = $this->com_id;
+                    $tags->cot_tag_id = $unique[$i];
+                    $tags->cot_datetime_create = time();
+                    $tags->save();
+                }
+            }
+        }
+    }
+
     public function getTag($id)
     {
         return Tag::find()->select('tag_id, tag_name')
@@ -815,12 +851,7 @@ class Company extends EbizuActiveRecord
         ->leftJoin('tbl_company c', 'c.com_id = b.cot_com_id')
         ->where(['c.com_id' => $id])
         ->all();
-    }
-
-    public function getMarchant()
-    {
-        return $this->hasOne(MallMerchant::className(), ['mam_com_id' => 'com_id']);
-    }
+    }    
 
     public static function find()
     {

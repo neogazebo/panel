@@ -387,11 +387,12 @@ class DefaultController extends BaseController
     {
         if (Yii::$app->request->isAjax) {
             $id = Yii::$app->request->post('id');
-            $point = Yii::$app->request->post('point');
+            $amount = Yii::$app->request->post('amount');
             $com_id = Yii::$app->request->post('com_id');
             $business = Company::findOne($com_id);
 
             $config = SnapEarnRule::find()->where(['ser_country' => $business->com_currency])->one();
+            
             if(!empty($config)) {
                 if($business->com_premium == 1) {
                     $point *= 2;

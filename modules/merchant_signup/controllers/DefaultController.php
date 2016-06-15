@@ -18,6 +18,8 @@ use app\models\Company;
 use app\models\City;
 use app\models\Mall;
 use app\models\User;
+use app\models\MerchantUser;
+use app\models\AuditReport;
 use app\models\Tag;
 use app\models\FeatureSubscription;
 
@@ -89,6 +91,11 @@ class DefaultController extends BaseController
     {
         $model = $this->findModel($id);
         $model_company = new Company();
+        $user = new MerchantUser();
+        $user->scenario = 'signup';
+        $user->usr_password = md5('123456');
+        $user->usr_type_id = 2;
+        $user->usr_approved = 0;
 
         $model->mer_bussiness_description = \yii\helpers\Html::decode($model->mer_bussiness_description);
         $model_company->tag = $model_company->getTag($id);
@@ -109,23 +116,38 @@ class DefaultController extends BaseController
             }
         }
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model_company->load(Yii::$app->request->post())) {
             $changed_attributes = $model_company->getChangedAttribute(['com_timezone', 'com_in_mall', 'com_mac_id']);
+            $user->usr_email = $model_company->com_email;
+
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                if ($model_company->save() && $user->save(false)) {
-                    $audit = AuditReport::setAuditReport('update business : ' . $model->mer_company_name, Yii::$app->user->id, MerchantSignup::className(), $model->id, $changed_attributes);
-                    if ($audit->save()) {
-                       // \Yii::$app->session->set('company', '');
-                        $model_company->setTag();
-                        $transaction->commit();
-                        $this->setMessage('save','success', 'Business updated successfully!');
+                if ($user->save(false)) {
+                    $model_company->com_usr_id = $user->usr_id;
+                    $model_company->com_email = $user->usr_email;
+                    $model_company->com_status = 1;
+                    $model_company->com_snapearn = 1;
+                    $model_company->com_snapearn_checkin = 1;
+                    $model_company->com_registered_to = 'EBC';
+                    if ($model_company->save()) {
+                        $audit = AuditReport::setAuditReport('update business : ' . $model->mer_company_name, Yii::$app->user->id, MerchantSignup::className(), $model->id, $changed_attributes);
+                        if ($audit->save()) {
+                           // \Yii::$app->session->set('company', '');
+                            $model_company->setTag();
+                            $transaction->commit();
+                            $this->setMessage('save','success', 'Business updated successfully!');
+                        }
+                        return $this->redirect([$this->getRememberUrl()]);
                     }
-                    return $this->redirect([$this->getRememberUrl()]);
+                } else {
+                    $error = $model_company->getErrors();
+                    foreach ($error as $value) {
+                        $this->setMessage('save','error', $value);
+                    }
                 }
             } catch (Exception $ex) {
                 $transaction->rollback();
-                throw $e;
+                throw $ex;
             }
         }
         return $this->render('review', [

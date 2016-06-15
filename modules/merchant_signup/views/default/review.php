@@ -82,7 +82,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 					            ]
 					        ])->label('Mall Name');
 						?>
-					
+					<?= $form->field($model_company, 'mall_id')->hiddenInput()->label('') ?>
 						<?= 
 					        $form->field($model_company, 'com_city')->widget(Typeahead::classname(),[
 					            'name' => 'merchant',
@@ -107,7 +107,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 					            ]
 					        ]);
 						?>
-
+                        
                         <div class="form-group" id="merchantsignup-map">
                             <label class="col-sm-3 control-label">Map</label>
                             <div class="col-sm-8">
