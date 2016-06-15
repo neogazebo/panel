@@ -11,9 +11,15 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use app\controllers\BaseController;
 use app\components\helpers\S3;
+use app\models\MallMerchant;
 use app\models\MerchantSignup;
 use app\models\MerchantSignupSearch;
 use app\models\Company;
+use app\models\City;
+use app\models\Mall;
+use app\models\User;
+use app\models\MerchantUser;
+use app\models\AuditReport;
 use app\models\Tag;
 use app\models\FeatureSubscription;
 
@@ -83,16 +89,129 @@ class DefaultController extends BaseController
 
     public function actionReview($id)
     {
+        $model = $this->findModel($id);
+        $model_company = new Company();
+        $user = new MerchantUser();
+        $user->scenario = 'signup';
+        $user->usr_password = md5('123456');
+        $user->usr_type_id = 2;
+        $user->usr_approved = 0;
+
+        $model->mer_bussiness_description = \yii\helpers\Html::decode($model->mer_bussiness_description);
+        $model_company->tag = $model_company->getTag($id);
+
+        // ajax validation
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
+
+        if ($model_company->com_in_mall == 1) {
+            if ($model_company->marchant instanceof MallMerchant) {
+                $mall = Mall::findOne($model_company->marchant->mam_mal_id);
+                if ($mall instanceof Mall) {
+                    $model_company->isMallManaged = $mall->mal_key == true;
+                    $unit_merchant = FloorPlanMallMerchant::listunit($model->marchant->mam_id);
+                }
+            }
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model_company->load(Yii::$app->request->post())) {
+            $changed_attributes = $model_company->getChangedAttribute(['com_timezone', 'com_in_mall', 'com_mac_id']);
+            $user->usr_email = $model_company->com_email;
+
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                if ($user->save(false)) {
+                    $model_company->com_usr_id = $user->usr_id;
+                    $model_company->com_email = $user->usr_email;
+                    $model_company->com_status = 1;
+                    $model_company->com_snapearn = 1;
+                    $model_company->com_snapearn_checkin = 1;
+                    $model_company->com_registered_to = 'EBC';
+                    if ($model_company->save()) {
+                        $audit = AuditReport::setAuditReport('update business : ' . $model->mer_company_name, Yii::$app->user->id, MerchantSignup::className(), $model->id, $changed_attributes);
+                        if ($audit->save()) {
+                           // \Yii::$app->session->set('company', '');
+                            $model_company->setTag();
+                            $transaction->commit();
+                            $this->setMessage('save','success', 'Business updated successfully!');
+                        }
+                        return $this->redirect([$this->getRememberUrl()]);
+                    }
+                } else {
+                    $error = $model_company->getErrors();
+                    foreach ($error as $value) {
+                        $this->setMessage('save','error', $value);
+                    }
+                }
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                throw $ex;
+            }
+        }
+        return $this->render('review', [
+            'model' => $model,
+            'model_company' => $model_company,
+        ]);
+        /*$model_company = new Company();
+        $model_mall_merchant = new MallMerchant();
+        $model_user = new User();
+
         $model_merchant_signup = $this->findModel($id);
 
-        $model_company = new Company();
-        $model_company->com_name = 'Yoolan';
-
-        if ($model_merchant_signup->load(Yii::$app->request->post()) && $post_data_company) {
+        if ($model->load(Yii::$app->request->post()) && $post_data_company) {
             $post_data_company = Yii::$app->request->post();
             // TODO: isi post data company dari form merchant signup
             $model_company->load($post_data_company);
-            if ($model_merchant_signup->validate() && $model_company->validate()) {
+            if ($model->validate() && $model_company->validate() && $model_mall_merchant->validate() && $model_user->validate()) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($model_company->save() && $model_mall_merchant->save() && $model_user->save()) {
+                        return $this->redirect(['index']);
+                    } else {
+                        $transaction->rollback();
+                        $this->setMessage('save','error', 'Something wrong while submit review. Please try again!');
+                        return $this->redirect(['index']);
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollback();
+                    throw $e;
+                }
+            } else {
+                // error validation
+                $this->setMessage('save','error', 'Something wrong while submit review. Please try again!');
+                return $this->redirect(['index']);
+            }
+        } else {
+            return $this->render('review', [
+                'model' => $model,
+                'model_company' => $model_company,
+                'model_mall_merchant' => $model_mall_merchant,
+                'model_user' => $model_user,
+            ]);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('review', [
+                'model' => $model,
+                'model_company' => $model_company,
+                'model_mall_merchant' => $model_mall_merchant,
+                'model_user' => $model_user,
+            ]);
+        }
+        /*$model = $this->findModel($id);
+        $model_company = new Company();
+
+        $model_merchant_signup = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $post_data_company) {
+            $post_data_company = Yii::$app->request->post();
+            // TODO: isi post data company dari form merchant signup
+            $model_company->load($post_data_company);
+            if ($model->validate() && $model_company->validate()) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
                     if ($model_company->save()) {
@@ -113,27 +232,19 @@ class DefaultController extends BaseController
             }
         } else {
             return $this->render('review', [
-                'model_merchant_signup' => $model_merchant_signup,
+                'model' => $model,
                 'model_company' => $model_company,
             ]);
         }
 
-        if ($model_merchant_signup->load(Yii::$app->request->post()) && $model_merchant_signup->save()) {
-            return $this->redirect(['view', 'id' => $model_merchant_signup->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('review', [
-                'model_merchant_signup' => $model_merchant_signup,
+                'model' => $model,
                 'model_company' => $model_company,
             ]);
-        }
-
-        /*if ($model_company->load(Yii::$app->request->post()) && $model_company->save()) {
-            return $this->redirect(['view', 'id' => $model_company->id]);
-        } else {
-            return $this->render('create', [
-                'model_company' => $model_company,
-            ]);
-        }*/
+        } */
     }
 
     public function actionXreview($id)
@@ -192,27 +303,6 @@ class DefaultController extends BaseController
         }
     }
 
-    public function actionCityList($q = null)
-    {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $query = "
-            SELECT a.cit_id, a.cit_name, b.reg_id, b.reg_name, c.cny_id, c.cny_name
-            FROM tbl_city a, tbl_region b, tbl_country c
-            WHERE a.cit_region_id = b.reg_id
-                AND b.reg_country_id = c.cny_id
-                AND a.cit_name LIKE '%" . $q . "%'
-            ORDER BY a.cit_name
-            LIMIT 10";
-        $connection = Yii::$app->db;
-        $query = $connection->createCommand($query)->queryAll();
-        $return = [];
-        foreach ($query as $row) {
-            $return[]['value'] = $row['cit_name'] . ', ' . $row['reg_name'] . ', ' . $row['cny_name'];
-        }
-        // the output will automaticaly convert to JSON
-        return $return;
-    }
-
     public function actionRegister() {
         $fes_code = isset($_GET['reg']) ? $_GET['reg'] : 'EBC';
         return FeatureSubscription::packageList($fes_code);
@@ -224,6 +314,27 @@ class DefaultController extends BaseController
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+
+    public function actionCityList()
+    {
+        if (Yii::$app->request->isAjax){
+            $model = City::find()->SearchCityList();
+            echo \yii\helpers\Json::encode($model);
+        }
+    }
+
+    public function actionMallList()
+    {
+        if (Yii::$app->request->isAjax){
+            $model = Mall::find()->SearchMallList();
+            $out = [];
+            foreach ($model as $d) {
+                $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
+            }
+            echo \yii\helpers\Json::encode($out);
         }
     }
 }

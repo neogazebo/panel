@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use app\models\CompanyTag;
 use app\models\EbizuActiveRecord;
 
 class Company extends EbizuActiveRecord
@@ -27,6 +28,8 @@ class Company extends EbizuActiveRecord
     public $totalBiz;
     public $id;
     public $text;
+    public $mall_name = null;
+    public $com_in_mall = true;
 
     CONST COM_STATUS_NOT_ACTIVE = 0;
     CONST COM_STATUS_ACTIVE = 1;
@@ -95,7 +98,7 @@ class Company extends EbizuActiveRecord
                 'com_reg_num',
                 'com_description',
                 'com_subcategory_id',
-                // 'com_in_mall',
+                'com_in_mall',
                 'com_address',
                 'com_city',
                 'com_postcode',
@@ -147,9 +150,9 @@ class Company extends EbizuActiveRecord
                 'tag',
             ], 'safe'],
             [['mall_id'], 'required', 'when' => function($model) {
-                return $model->com_in_mall == 1;
+                return $this ->com_in_mall == 1;
             }, 'whenClient' => "function (attribute, value) {
-                return $('#company-com_in_mall').prop('checked') == true;
+                return $('#company-com_in_mall').val() == 1;
             }"],
         ];
     }
@@ -304,6 +307,15 @@ class Company extends EbizuActiveRecord
             \app\components\helpers\Image::DeleteS3($this->old_banner);
         }
     }
+
+    public function getModelMallMerchant()
+    {
+        $model = MallMerchant::findOne(['mam_com_id' => $this->com_id]);
+        $model->scenario= 'newMerchant';
+        if ($model)
+            return $model;
+        return new MallMerchant();
+    } 
 
     public function getTimeZoneListData()
     {
@@ -753,14 +765,6 @@ class Company extends EbizuActiveRecord
         return $data;
     }
 
-    public function getModelMallMerchant()
-    {
-        $model = MallMerchant::findOne(['mam_com_id' => $this->com_id]);
-        if ($model)
-            return $model;
-        return new MallMerchant();
-    }
-
     public function getFeatureSubscription()
     {
         $model = FeatureSubscription::find()->all();
@@ -803,6 +807,50 @@ class Company extends EbizuActiveRecord
             ])
             ->all();
         return \app\components\helpers\Html::listData($model, 'cat_id', 'category', 'parent_id');
+    }    
+
+    public function getMarchant()
+    {
+        return $this->hasOne(MallMerchant::className(), ['mam_com_id' => 'com_id']);
+    }
+
+
+    public function setTag()
+    {
+        $tags = CompanyTag::deleteAll('cot_com_id = :com_id', [':com_id' => $this->com_id]);
+        $tag = explode(',', trim($this->tag));
+        $unique = [];
+        foreach ($tag as $value)
+        {
+            if (!in_array($value, $unique, true))
+            {
+                array_push($unique, $value);
+            }
+        }
+        sort($unique);
+        if (!empty($unique))
+        {
+            for ($i = 1; $i < count($unique); $i++)
+            {
+                if (!empty($unique[$i]))
+                {
+                    $tags = new CompanyTag();
+                    $tags->cot_com_id = $this->com_id;
+                    $tags->cot_tag_id = $unique[$i];
+                    $tags->cot_datetime_create = time();
+                    $tags->save();
+                }
+            }
+        }
+    }
+
+    public function getTag($id)
+    {
+        return Tag::find()->select('tag_id, tag_name')
+        ->innerJoin('tbl_company_tag b', 'b.cot_tag_id = tag_id')
+        ->leftJoin('tbl_company c', 'c.com_id = b.cot_com_id')
+        ->where(['c.com_id' => $id])
+        ->all();
     }    
 
     public static function find()

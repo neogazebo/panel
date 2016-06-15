@@ -18,7 +18,6 @@ $form = ActiveForm::begin([
     ]
 ]);
 
-$url = Url::to(['merchant/default/list']);
 ?>
 <div class="modal-body">
 	<?= 

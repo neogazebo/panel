@@ -9,7 +9,7 @@
             <div class="modal-body" style="margin-bottom: 10px;">
 
                 <div class="col-xs-12 col-sm-12 col-lg-12 no-padding" style="margin-top: 10px;margin-bottom: 10px;">
-                    <form id="imageform" action="<?= Yii::$app->params['frontendUrl'] . 'cropper/upload'; ?>" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <form id="imageform" action="/cropper/upload" method="post" enctype="multipart/form-data" class="form-horizontal">
                         <input type="file" name="photoimg" id="photoimg" />
                         <span><small>(Maximum image size is 2MB, and supported format are : "jpg", "jpeg", "png", "gif", "bmp".)</small></span>
                         <br />
@@ -24,11 +24,11 @@
                     <tbody>
                     <tr class="no-padding">
                         <td id="block-src" class="td-crop" align="center">
-                            <img class="img-responsive image-loader" src="<?=Yii::$app->params['frontendUrl']?>img/loading_white.gif">
+                            <img class="img-responsive image-loader" src="<?=$this->theme->baseUrl?>/img/loading_white.gif">
                             <img class="img-responsive image-to-crop center-block" src="">
                         </td>
                         <td id="block-dst" class="td-crop" align="center">
-                            <img class="img-responsive image-loader" src="<?=Yii::$app->params['frontendUrl']?>img/loading_white.gif">
+                            <img class="img-responsive image-loader" src="<?=$this->theme->baseUrl?>/img/loading_white.gif">
                             <img class="img-responsive image-result-crop center-block" src="">
                         </td>
                     </tr>
@@ -36,7 +36,7 @@
                 </table>
 
                 <div class="col-xs-12 col-sm-6 col-lg-6 no-padding" style="margin-top: 10px;margin-bottom: 10px;">
-                    <form id="form-crop" action="<?= Yii::$app->params['frontendUrl'] . 'cropper/process'; ?>" method="post" class="form-horizontal">
+                    <form id="form-crop" action="/cropper/process" method="post" class="form-horizontal">
                         <input type="hidden" name="x" id="x" size="4"/>
                         <input type="hidden" name="y" id="y" size="4"/>
                         <input type="hidden" name="w" id="w" size="4"/>
@@ -59,17 +59,17 @@
             <div class="modal-footer" style="clear: both;">
                 <div class="col-md-8 no-padding">
                     <div class="crop-loader" style="">
-                        <img class="img-responsive pull-left" src="<?=Yii::$app->homeUrl?>img/loader.gif">
+                        <img class="img-responsive pull-left" src="<?=$this->theme->baseUrl?>/img/loader.gif">
                         <span class="pull-left">Processing data, please wait ...</span>
                     </div>
                 </div>
                 <div class="col-md-4 no-padding">
-                    <form id="form-publish-crop" action="<?= Yii::$app->params['frontendUrl'] . 'cropper/publish'; ?>" method="post" class="form-horizontal">
+                    <form id="form-publish-crop" action="/cropper/publish" method="post" class="form-horizontal">
                         <input type="hidden" id="final-file" name="name" value="" />
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button id="save-button" type="button" class="btn btn-primary">Save changes</button>
                     </form>
-                    <form id="form-clearance" action="<?= Yii::$app->params['frontendUrl'] . 'cropper/clear'; ?>" method="post" class="form-horizontal">
+                    <form id="form-clearance" action="/cropper/clear" method="post" class="form-horizontal">
                     </form>
                 </div>
             </div>
@@ -94,8 +94,8 @@ table .td-crop{width: 50%;vertical-align: middle !important;border: 1px solid #c
 ");
 ?>
 <?php $this->registerJs("var baseURL = '" . \yii\helpers\BaseUrl::base(true) . "';", \yii\web\View::POS_BEGIN, 'init-opt-begin'.time());?>
-<?php $this->registerCssFile(Yii::$app->params['frontendUrl'] . 'themes/avant/css/jcrop/jquery.Jcrop.css');?>
-<?php // $this->registerCssFile(Yii::$app->params['frontendUrl'] . 'themes/avant/css/styles.css');?>
-<?php $this->registerJsFile(Yii::$app->params['frontendUrl'] . 'themes/avant/js/jcrop/jquery.Jcrop.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
-<?php $this->registerJsFile(Yii::$app->params['frontendUrl'] . 'themes/avant/js/jquery.form.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
-<?php $this->registerJsFile(Yii::$app->params['frontendUrl'] . 'themes/avant/js/custom/image-cropper.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
+<?php $this->registerCssFile($this->theme->baseUrl.'/dist/css/jcrop/jquery.Jcrop.css');?>
+<?php // $this->registerCssFile($this->theme->baseUrl.'themes/AdminLTE/css/styles.css');?>
+<?php $this->registerJsFile($this->theme->baseUrl.'/dist/js/jcrop/jquery.Jcrop.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
+<?php $this->registerJsFile($this->theme->baseUrl.'/dist/js/jquery.form.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>
+<?php $this->registerJsFile($this->theme->baseUrl.'/dist/js/image-cropper.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]); ?>

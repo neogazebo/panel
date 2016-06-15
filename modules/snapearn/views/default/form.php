@@ -17,6 +17,7 @@ $this->registerCss("
         right: 200px;
     }
 ");
+
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -37,6 +38,7 @@ $this->registerCss("
                         $form = ActiveForm::begin([
                             'id'=>'snapearn-form',
                             'options' => ['class' => 'form-horizontal'],
+                            'enableClientValidation'=>true,
                             'enableAjaxValidation'=>true,
                             'fieldConfig' => [
                                 'template' => "{label}\n<div class=\"col-lg-6\">{input}\n<div>{error}</div></div>",
@@ -59,7 +61,7 @@ $this->registerCss("
                             <div class="form-group">
                                 <label for="" class="col-lg-3 control-label">Merchant</label>
                                 <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= Html::button('<i class="fa fa-plus-square"></i> Add New Merchant', ['type' => 'button','value' => Url::to(['ajax-new?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-primary btn-sm new_m']); ?>
+                                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-primary btn-sm','target' => '_blank']) ?>
                                 <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-success btn-sm exs_m']); ?>
                                 <?php endif ?>
                             </div>
@@ -76,7 +78,15 @@ $this->registerCss("
                                 <?= $form->field($model, 'sna_acc_id')->textInput(['value' => is_object($model->member) ? $model->member->acc_screen_name : '', 'readonly' => true]) ?>
                             <?php endif;?>
                             <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                                <?= $form->field($model->member, 'acc_facebook_email')->textInput(['value' => is_object($model->member) ? $model->member->acc_facebook_email : '', 'readonly' => true]) ?>
+                                <div class="form-group field-snapearn-sna_upload_date">
+                                <label class="col-lg-3 control-label" >Facebook Email</label>
+                                <div class="col-lg-6">
+                                    <div class="form-control" readonly="true"><?= !empty($model->member) ? $model->member->acc_facebook_email : '' ?></div>
+                                    <div>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
                             <?php endif ?>
 
                             <div class="form-group field-snapearn-sna_upload_date">
@@ -89,20 +99,21 @@ $this->registerCss("
                                 </div>
                             </div>
 
-                            <?=
-                                $form->field($model, 'sna_transaction_time')->widget(kartik\widgets\DateTimePicker::classname(), [
-                                    'options' => ['placeholder' => 'Transaction Time ...'],
-                                    'convertFormat' => true,
-                                    'value' => $model->sna_upload_date,
-                                    'pluginOptions' => [
-                                        'format' => 'Y-m-d H:i:s'
-                                    ]
-                                ]);
-                            ?>
-                            <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control']) ?>
+                            <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
+
                             <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                             <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                             <div class="point-form">
+                                <?=
+                                    $form->field($model, 'sna_transaction_time')->widget(kartik\widgets\DateTimePicker::classname(), [
+                                        'options' => ['placeholder' => 'Transaction Time ...'],
+                                        'convertFormat' => true,
+                                        'value' => $model->sna_upload_date,
+                                        'pluginOptions' => [
+                                            'format' => 'Y-m-d H:i:s'
+                                        ]
+                                    ]);
+                                ?>                
                                 <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                                 <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
                                 <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
@@ -118,7 +129,7 @@ $this->registerCss("
                                     <input id="saveNext" type="hidden" name="saveNext" value="">
                                 </div>
                                 <div class="button-left pull-left">
-                                    <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel/?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
+                                    <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
                                 </div>
                             </div>
                         </div>
@@ -181,29 +192,28 @@ $this->registerJs("
     $('#sna_image').iviewer({
         src: '".$imageSource."'
     });
-
+$('#snapearn-sna_transaction_time').attr('autofocus');
     $('#snapearn-sna_status').change(function() {
         if($(this).val() == 1) {
+            $('#snapearn-sna_transaction_time').attr('autofocus');
             $('.reject-form').css('display', 'none');
             $('.point-form').css('display', 'block');
         } else if($(this).val() == 2) {
             $('.point-form').css('display', 'none');
             $('.reject-form').css('display', 'block');
-            $('#snapearn-sna_receipt_amount, #snapearn-sna_point').val('');
         } else {
             $('.reject-form').css('display', 'none');
             $('.point-form').css('display', 'none');
-            $('#snapearn-sna_receipt_amount, #snapearn-sna_point').val('');
         }
     }).trigger('change');
 
     $('#snapearn-sna_receipt_amount').blur(function() {
-        var point = Math.floor($('#snapearn-sna_receipt_amount').val());
+        var amount = Math.floor($('#snapearn-sna_receipt_amount').val());
         // $('#snapearn-sna_point').val(point);
         $.ajax({
             type: 'POST',
             url: baseUrl + 'snapearn/default/ajax-snapearn-point',
-            data: { id: id, com_id: com_id, point: point },
+            data: { id: id, com_id: com_id, amount: amount },
             dataType: 'json',
             success: function(result) {
                 $('#snapearn-sna_point').val(result);

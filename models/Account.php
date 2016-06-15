@@ -63,7 +63,7 @@ class Account extends \yii\db\ActiveRecord
 
     public function getCountry()
     {
-        return $this->hasOne(Country::className(), ['acc_cty_id' => 'cty_id']);
+        return $this->hasOne(Country::className(), ['cty_short_code' => 'acc_cty_id']);
     }
 
     public function getTimezone()
@@ -89,7 +89,7 @@ class Account extends \yii\db\ActiveRecord
     {
         $model = AccountDevice::find()->getLastLocatione($this->acc_id);
         $location = (!empty($model->one())) ? $model->one() : '0';
-        return $location->adv_last_login;
+        return $location->adv_last_access;
     }
 
     public function lastSnapUpload()
@@ -102,7 +102,7 @@ class Account extends \yii\db\ActiveRecord
     public function activeDevice()
     {
         $model = AccountDevice::find()->getActiveDevice($this->acc_id);
-        return $model->dvc_model;
+        return $model;
     }
 
     /**

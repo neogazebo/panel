@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 $this->title = 'Snap & Earn List';
+
 $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
 ?>
 <section class="content-header ">
@@ -18,13 +19,50 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <!-- &nbsp;
-                    <div class="box-tools pull-right">
-                        <div class="has-feedback">
-                            <input type="text" id="filtersearch" value="<?= $search ?>" class="form-control input-sm" placeholder="Search Snap">
-                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                    <form class="form-inline" role="form" method="get" action="/snapearn">
+                        <div class="form-group">
+                        <label>Country</label>
+                        <select name="sna_cty" class="form-control select2" style="width: 100%;">
+                              <option value="" <?= (!empty($_GET['sna_cty']) == '' || empty($_GET['sna_cty'])) ? 'selected' : '' ?>>All</option>
+                              <option value="ID" <?= (!empty($_GET['sna_cty']) == 'ID') ? 'selected' : '' ?>>Indonesia</option>
+                              <option value="MY" <?= (!empty($_GET['sna_cty']) == 'MY') ? 'selected' : '' ?>>Malaysia</option>
+                        </select>
                         </div>
-                    </div> -->
+                        <div class="form-group">
+                        <label>Receipt Status</label>
+                        <select name="sna_status" class="form-control select2" style="width: 100%;">
+                              <option value="" <?= (!empty($_GET['sna_status']) == '' || empty($_GET['sna_status'])) ? 'selected' : '' ?>>All</option>
+                              <option value="NEW" <?= (!empty($_GET['sna_status']) == 'NEW') ? 'selected' : '' ?>>New</option>
+                              <option value="APP" <?= (!empty($_GET['sna_status']) == 'APP') ? 'selected' : '' ?>>Approved</option>
+                              <option value="REJ" <?= (!empty($_GET['sna_status']) == 'REJ') ? 'selected' : '' ?>>Rejected</option>
+                        </select>
+                        </div>
+                        <!-- <div class="form-group">
+                        <label>Join Status</label>
+                        <select name="sna_join" class="form-control select2" style="width: 100%;">
+                              <option value="" <?php // (!empty($_GET['sna_join']) == '' || empty($_GET['sna_join'])) ? 'selected' : '' ?>>All</option>
+                              <option value="1" <?php // ($_GET['sna_join'] == '1') ? 'selected' : '' ?>>Joined</option>
+                              <option value="2" <?php // ($_GET['sna_join'] == '2') ? 'selected' : '' ?>>UnJoined</option>
+                        </select>
+                        </div> -->
+                        <div class="form-group">
+                        <label>Date range</label><br>
+                        <div class="input-group">
+                            <div class="input-group-addon" for="reservation">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" name="sna_daterange" class="form-control pull-right" id="sna_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
+                        </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="member">Member</label><br>
+                            <input name="sna_member" class="form-control" id="member" placeholder="Enter name" type="text" value="<?= (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '' ?>">
+                        </div>    
+                        <div class="form-group">
+                            <label>&nbsp;</label><br>
+                            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">

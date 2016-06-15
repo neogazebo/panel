@@ -60,7 +60,7 @@ class MerchantSignup extends EbizuActiveRecord
             [['mer_website'], 'url'],
             [['mer_bussiness_description', 'mer_address'], 'string'],
             [['mer_bussines_type_retail', 'mer_bussines_type_service', 'mer_bussines_type_franchise', 'mer_bussines_type_pro_services', 'mer_office_phone', 'mer_office_fax', 'mer_multichain', 'mer_preferr_comm_mail', 'mer_preferr_comm_email', 'mer_preferr_comm_mobile_phone', 'mer_applicant_acknowledge', 'created_date', 'updated_date', 'mer_reviewed'], 'integer'],
-            [['mer_bussines_name', 'mer_company_name', 'mer_website', 'mer_login_email', 'mer_pic_name', 'mer_contact_phone', 'mer_contact_mobile', 'mer_contact_email', 'mer_agent_code'], 'string', 'max' => 255],
+            [['mer_bussines_name', 'mer_company_name', 'mer_website', 'mer_login_email', 'mer_pic_name', 'mer_contact_phone', 'mer_contact_mobile', 'mer_contact_email'], 'string', 'max' => 255],
             [['mer_post_code'], 'string', 'max' => 10],
             [['mer_multichain_file'], 'file', 'extensions' => 'xls, xlsx, csv'],
             [['mer_bussines_name', 'mer_company_name', 'mer_login_email'], 'safe', 'on' => 'review']
@@ -97,7 +97,6 @@ class MerchantSignup extends EbizuActiveRecord
             'mer_preferr_comm_email' => 'E-Mail',
             'mer_prefer_office_phone' => 'Office Phone',
             'mer_preferr_comm_mobile_phone' => 'Mobile Phone',
-            'mer_agent_code' => 'Agent Code',
             'mer_applicant_acknowledge' => 'Applicant Acknowledgement',
             'created_date' => 'Created At',
             'updated_date' => 'Updated At',
@@ -124,7 +123,7 @@ class MerchantSignup extends EbizuActiveRecord
             $this->addError($attribute, 'Email Already Exist!');
         }
     }
-
+    
     public function getFile()
     {
         if (!empty($this->mer_multichain_file))

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
+use app\models\WorkingTime;
 
 class BaseController extends Controller
 {
@@ -59,6 +60,58 @@ class BaseController extends Controller
 				Yii::$app->session->setFlash($type, $customText !== null ? Yii::t('app', $customText) : Yii::$app->params['flashmsg']['delete'][$type]);
 				break;
 		}
+    }
+
+    protected function centralTimeZone()
+    {
+        return date_default_timezone_set('UTC');
+    }
+
+    public function startWorking($user,$type,$param)
+    {
+        $this->centralTimeZone();
+        // checking existing worktime with this user and param id
+    	$model = WorkingTime::find()->findWorkExist($user,$param)->one();
+        // if there is no exists worktime create this one
+        if (empty($model)) {
+            $model = new WorkingTime();
+            $model->wrk_type = (int)$type;
+            $model->wrk_by = $user;
+            $model->wrk_param_id = $param;
+            $model->wrk_start = microtime(true);
+            if ($model->save(false)) {
+                return $model->wrk_id;
+            }
+        }elseif (empty($model->wrk_end)) {
+            $model->wrk_type = (int)$type;
+            $model->wrk_by = $user;
+            $model->wrk_param_id = $param;
+            $model->wrk_start = microtime(true);
+            if ($model->save(false)) {
+                return $model->wrk_id;
+            }
+        }
+        return $model->wrk_id;
+    }
+
+    public function endWorking($id,$desc)
+    {
+        $this->centralTimeZone();
+    	$model = WorkingTime::findOne($id);
+    	$model->wrk_description = $desc;
+    	$model->wrk_end = microtime(true);
+        $model->wrk_time = ($model->wrk_end - $model->wrk_start);
+    	$model->save(false);
+    }
+
+    public function cancelWorking($id)
+    {
+        $model = WorkingTime::find()->where('wrk_param_id = :id AND wrk_by = :user',[
+                ':id' => $id,
+                ':user' => Yii::$app->user->id
+            ])->one();
+        $model->delete();
+
     }
 
 }

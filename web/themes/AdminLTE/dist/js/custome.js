@@ -147,4 +147,32 @@ $(function() {
 		alert('oke');
 	})
 
+	$('.refreshParent').on('click',function(){
+		window.opener.location.reload(true);
+		window.close();
+	});
+
+	$(".select2").select2();
+
+	//Date range picker
+    $('#sna_daterange').daterangepicker(
+		{	
+			separator : ' to ',
+			format: 'YYYY-MM-DD',
+	      	ranges: {
+	            'Today': [moment(), moment()],
+	            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+	            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+	            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+	            'This Month': [moment().startOf('month'), moment().endOf('month')],
+	            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+	      	},
+	      	startDate: moment().subtract(29, 'days'),
+	      	endDate: moment()
+        },
+	    function (start, end) {
+	      $('#reportrange span').html(start.format('YYYY D, MMMM') + ' to ' + end.format('YYYY D, MMMM'));
+	    }
+	);
+
 });

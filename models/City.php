@@ -93,4 +93,9 @@ class City extends \yii\db\ActiveRecord
             'cit_sights' => 'Cit Sights',
         ];
     }
+
+    public static function find()
+    {
+        return new CityQuery(get_called_class());
+    }
 }
