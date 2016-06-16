@@ -91,6 +91,7 @@ class DefaultController extends BaseController
     {
         $model = $this->findModel($id);
         $model_company = new Company();
+        $model_mall_merchant = new MallMerchant();
         $user = new MerchantUser();
         $user->scenario = 'signup';
         $user->usr_password = md5('123456');
@@ -134,6 +135,13 @@ class DefaultController extends BaseController
                     if ($model_company->save() && $model->save()) {
                         $sql = "update tbl_company set com_in_mall=".$model_company->com_in_mall." where com_id=".$model_company->com_id;
                         Yii::$app->db->createCommand($sql)->execute();
+                        if($model_company->com_in_mall ==1){
+                            $model_mall_merchant->mam_mal_id = Yii::$app->request->post('Company')['mall_id'];
+                            $model_mall_merchant->mam_com_id = $model_company->com_id;
+                            $model_mall_merchant->save();
+
+                            // print_r($_POST);die;
+                        }
                         $audit = AuditReport::setAuditReport('update business : ' . $model->mer_company_name, Yii::$app->user->id, MerchantSignup::className(), $model->id, $changed_attributes);
                         if ($audit->save()) {
                            // \Yii::$app->session->set('company', '');
@@ -142,6 +150,8 @@ class DefaultController extends BaseController
                             $this->setMessage('save','success', 'Business updated successfully!');
                         }
                         return $this->redirect([$this->getRememberUrl()]);
+                    }else{
+                        print_r($model_mall_merchant->getErrors());die;
                     }
                 } else {
                     $error = $model_company->getErrors();
