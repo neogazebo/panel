@@ -218,7 +218,18 @@ $this->registerJs("
     var geocoder;
     var map;
     var marker;
-    
+    // $('#company-com_in_mall').each(function() {
+        $('#company-com_in_mall').click(function() {
+            var checked = $(this).is(':checked');
+            checkOrNot(checked);
+            if(checked == false){
+                $(this).val(0);
+                loadMap();
+            }else{
+                $(this).val(1);
+            }
+        });
+    // });
     function initialize() {
         // init map
         var initialLat = $(latval).val();

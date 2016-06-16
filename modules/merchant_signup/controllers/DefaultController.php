@@ -118,6 +118,7 @@ class DefaultController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model_company->load(Yii::$app->request->post())) {
+            var_dump($model_company);exit;
             $changed_attributes = $model_company->getChangedAttribute(['com_timezone', 'com_in_mall', 'com_mac_id']);
             $user->usr_email = $model_company->com_email;
             $transaction = Yii::$app->db->beginTransaction();
