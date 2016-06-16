@@ -55,7 +55,7 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                     'attribute' => 'mer_reviewed',
                                     'format' => 'html',
                                     'value' => function($data) {
-                                        return $data->mer_reviewed == 1 ? '<i class="fa fa-check"></i>' : '<i class="fa fa-circle-o"></i>';
+                                        return $data->mer_reviewed != 0 ? '<i class="fa fa-check"></i>' : '<i class="fa fa-circle-o"></i>';
                                     }
                                 ],
                                 [
@@ -70,6 +70,7 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                             ], ['class' => 'btn btn-info btn-xs']);
                                         },
                                         'review' => function($url, $model) {
+                                            if($model->mer_reviewed == 0)
                                             return Html::a('
                                                 <i class="fa fa-caret-square-o-down"></i> Review
                                             ', [

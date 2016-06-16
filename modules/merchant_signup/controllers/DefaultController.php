@@ -99,6 +99,7 @@ class DefaultController extends BaseController
 
         $model->mer_bussiness_description = \yii\helpers\Html::decode($model->mer_bussiness_description);
         $model_company->tag = $model_company->getTag($id);
+        $set_reviewed = Yii::$app->user->id;
 
         // ajax validation
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
@@ -119,7 +120,6 @@ class DefaultController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model_company->load(Yii::$app->request->post())) {
             $changed_attributes = $model_company->getChangedAttribute(['com_timezone', 'com_in_mall', 'com_mac_id']);
             $user->usr_email = $model_company->com_email;
-
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 if ($user->save(false)) {
@@ -129,7 +129,8 @@ class DefaultController extends BaseController
                     $model_company->com_snapearn = 1;
                     $model_company->com_snapearn_checkin = 1;
                     $model_company->com_registered_to = 'EBC';
-                    if ($model_company->save()) {
+                    $model->mer_reviewed = $set_reviewed;
+                    if ($model_company->save() && $model->save()) {
                         $audit = AuditReport::setAuditReport('update business : ' . $model->mer_company_name, Yii::$app->user->id, MerchantSignup::className(), $model->id, $changed_attributes);
                         if ($audit->save()) {
                            // \Yii::$app->session->set('company', '');
