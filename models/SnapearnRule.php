@@ -16,7 +16,7 @@ use Yii;
  * @property integer $ser_updated
  * @property integer $ser_by
  */
-class SnapearnRule extends \yii\db\ActiveRecord
+class SnapEarnRule extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

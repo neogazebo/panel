@@ -34,11 +34,27 @@ $dataProvider->sort->attributes['user.username'] = [
                                 'item_name',
                                 'user.username',
                                 [
+                                    'label' => 'Email',
+                                    'attribute' => 'item_name',
+                                    'value' => 'user.email'
+                                ],
+                                [
                                     'attribute' => 'created_at',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asDateTime($data->created_at);
                                     }
                                 ],
+                                // [
+                                //     'class' => 'yii\grid\ActionColumn',
+                                //     'template' => '<span class="pull-right actionColumn">{revoke}</span>',
+                                //     'buttons' => [
+                                //         'revoke' => function($url, $model) {
+                                //             return Html::button('<i class="fa fa-times-circle-o"></i>', 
+                                //                 ['value' => 'revoke?role='.$model->item_name.'&&userId='.$model->user->id.'&&name='.$model->user->username,'class' => 'deleteBtn'
+                                //                 ]);
+                                //         },
+                                //     ]
+                                // ]
                             ],
                             'tableOptions' => ['class' => 'table table-striped table-hover']
                         ]);

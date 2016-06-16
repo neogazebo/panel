@@ -33,6 +33,7 @@ class AccessFilters extends ActionFilter
 			if ($user->can('/'.$actionId)) {
 				return true;
 		}
+
 		do {
 			if ($user->can('/'. ltrim($obj->getUniqueId() . '/*', '/'))) {
 			return true;
@@ -44,6 +45,21 @@ class AccessFilters extends ActionFilter
 	        return false;
  		}
   
+	}
+
+	public static function checkRoute()
+	{
+		$auth = Yii::$app->authManager;
+		$user = Yii::$app->user;
+		$roles = $auth->getRolesByUser($user->id);
+		if (!empty($roles)) {
+			foreach ($roles as $role) {
+				return $role->name;exit;
+			}
+		}
+		$this->denyAccess($user);
+		return false;
+
 	}
 
 	protected function denyAccess($user)

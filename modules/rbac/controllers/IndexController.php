@@ -207,6 +207,14 @@ class IndexController extends BaseController
         ]);
     }
 
+    public function actionRevoke($role,$userId,$name)
+    {
+        $auth = $this->_role();
+        if ($auth->revoke($role,$userId)) {
+            $this->setMessage('save', 'success', 'User '.$name.' success revoked from this role');
+        }
+    }
+
     private function _role()
     {
         return Yii::$app->authManager;

@@ -64,7 +64,18 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect(Yii::$app->urlManager->createUrl(['epay/index/']));
+
+            $checkRoute = \app\components\filters\AccessFilters::checkRoute();
+            if ($checkRoute == 'merchantSG') {
+                $defaultRoute = Yii::$app->urlManager->createUrl(['merchant-signup']);
+            }elseif($checkRoute == 'snapearn') {
+                $defaultRoute = Yii::$app->urlManager->createUrl(['snapearn']);
+            }else {
+                $defaultRoute = Yii::$app->urlManager->createUrl(['epay/index']);
+            }
+
+            return $this->redirect($defaultRoute);
+
         } else {
             return $this->render('login', [
                 'model' => $model,
