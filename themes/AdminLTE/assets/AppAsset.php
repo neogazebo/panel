@@ -19,6 +19,8 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         // 'css/site.css',
+        'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600',
+        'themes/AdminLTE/dist/plugins/jQueryui/jquery-ui.min.css',
         'themes/AdminLTE/bootstrap/css/bootstrap.min.css',
         'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css',
         'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css',
@@ -35,7 +37,7 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/dist/css/custome.css',
     ];
     public $js = [
-        'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js',
+        'themes/AdminLTE/dist/plugins/jQueryui/jquery-ui.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
         // 'themes/AdminLTE/plugins/morris/morris.min.js',
         'themes/AdminLTE/plugins/iCheck/icheck.min.js',

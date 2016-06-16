@@ -211,59 +211,7 @@ $this->registerCssFile("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/c
 
 $this->registerJs("
     var isUpdate = 0;
-
-    var PostCodeid = '#merchantsignup-mer_address';
-    var longval = '#company-com_longitude';
-    var latval = '#company-com_latitude';
-    var geocoder;
-    var map;
-    var marker;
-    // $('#company-com_in_mall').each(function() {
-        $('#company-com_in_mall').click(function() {
-            var checked = $(this).is(':checked');
-            checkOrNot(checked);
-            if(checked == false){
-                $(this).val(0);
-                loadMap();
-            }else{
-                $(this).val(1);
-            }
-        });
-    // });
-    function initialize() {
-        // init map
-        var initialLat = $(latval).val();
-        var initialLong = $(longval).val();
-        if (initialLat == '') {
-            initialLat = ".$latitude.";
-            initialLong = " . $longitude . ";
-        }
-        var latlng = new google.maps.LatLng(initialLat, initialLong);
-        var options = {
-            zoom: 16,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            heading: 90,
-            tilt: 45
-        };   
     
-        map = new google.maps.Map(document.getElementById('map'), options);
-    
-        geocoder = new google.maps.Geocoder();    
-    
-        marker = new google.maps.Marker({
-            map: map,
-            draggable: true,
-            position: latlng
-        });
-    
-        google.maps.event.addListener(marker, 'dragend', function (event) {
-            var point = marker.getPosition();
-            map.panTo(point);
-        });
-        
-    };
-
     function loadRegister(reg)
     {
         $('select#company-fes_id').empty();
@@ -298,7 +246,54 @@ $this->registerJs("
 
         loadRegister('EBC');
 
-        $(function () {
+ // setup map autocomplete and dragable
+
+var PostCodeid = '#company-com_address';
+        var longval = '#company-com_longitude';
+        var latval = '#company-com_latitude';
+        var geocoder;
+        var map;
+        var marker;
+        
+        function initialize() {
+            // init map
+            var initialLat = $(latval).val();
+            var initialLong = $(longval).val();
+            if (initialLat == '') {
+                initialLat = ".$latitude.";
+                initialLong = " . $longitude . ";
+            }
+            var latlng = new google.maps.LatLng(initialLat, initialLong);
+            var options = {
+                zoom: 16,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                heading: 90,
+                tilt: 45
+            };   
+        
+            map = new google.maps.Map(document.getElementById('map'), options);
+        
+            geocoder = new google.maps.Geocoder();    
+        
+            marker = new google.maps.Marker({
+                map: map,
+                draggable: true,
+                position: latlng
+            });
+        
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                var point = marker.getPosition();
+                map.panTo(point);
+            });
+            
+        };
+        
+        $(document).ready(function () {
+        
+            initialize();
+
+            $(function () {
                 $(PostCodeid).autocomplete({
                     //This bit uses the geocoder to fetch address values
                     source: function (request, response) {
@@ -324,7 +319,6 @@ $this->registerJs("
                         $(latval).val(marker.getPosition().lat());
                         $(longval).val(marker.getPosition().lng());
                     }
-
                 });
                 e.preventDefault();
             });
@@ -340,9 +334,7 @@ $this->registerJs("
                     }
                 });
             });
-            
-
-        //});
+        });
     });
 ", \yii\web\View::POS_END, 'merchantsignup-review');
 

@@ -10,7 +10,10 @@ use yii\bootstrap\Modal;
 
 $this->title = "New Merchant";
 
-// echo date("H:i:s",$endtime-$starttime);
+$this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
+$longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
 ?>
 
 <section class="content-header">
@@ -46,6 +49,7 @@ $form = ActiveForm::begin([
     <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList); ?>
     <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
    
+    <?= $form->field($company, 'com_address')->textInput(); ?>
     <?= 
         $form->field($company, 'com_city')->widget(Typeahead::classname(),[
             'name' => 'merchant',
@@ -72,7 +76,6 @@ $form = ActiveForm::begin([
     ?>
     <input id="com_city" type="hidden" name="com_city" value="">
     <?= $form->field($company, 'com_postcode')->textInput(); ?>
-    <?= $form->field($company, 'com_address')->textInput(); ?>
     <?= 
         $form->field($company, 'mall_name')->widget(Typeahead::classname(),[
             'name' => 'merchant',
@@ -206,14 +209,23 @@ $form = ActiveForm::begin([
     'prefix' => 'img-', // for file name prepix
 ]); ?>
 <?php
-$this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-$this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-$latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
-$longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
 $this->registerCss("
     .datetimepicker-dropdown-bottom-right {
         right: 200px;
     }
+   #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      } 
 ");
 $this->registerJs("
     //triger modal for image-croper
@@ -227,46 +239,46 @@ $this->registerJs("
     $('.field-company-com_latitude').hide();
     $('.field-company-com_longitude').hide();
 
-    var loadMap = function() {
-        map = new GMaps({
-            div: '#map',
-            zoom: 13,
-            lat: " . $latitude . ",
-            lng: " . $longitude . ",
-            click: function(e) {
-                map.removeMarkers();
-                map.addMarker({
-                    lat: e.latLng.lat(),
-                    lng: e.latLng.lng(),
-                });
-                $('#company-com_latitude').val(e.latLng.lat());
-                $('#company-com_longitude').val(e.latLng.lng());
-            },
-        });
-        map.addMarker({
-            lat: " . $latitude . ",
-            lng: " . $longitude . ",
-        });
-        $('#company-com_address').keyup(function(e) {
-            e.preventDefault();
-            GMaps.geocode({
-                address: $('#company-com_address').val().trim(),
-                callback: function(results, status) {
-                    if (status == 'OK') {
-                        map.removeMarkers();
-                        var latLng = results[0].geometry.location;
-                        map.setCenter(latLng.lat(), latLng.lng());
-                        map.addMarker({
-                            lat: latLng.lat(),
-                            lng: latLng.lng()
-                        });
-                        $('#company-com_latitude').val(latLng.lat());
-                        $('#company-com_longitude').val(latLng.lng());
-                    }
-                }
-            });
-        });
-    };
+    // var loadMap = function() {
+    //     map = new GMaps({
+    //         div: '#map',
+    //         zoom: 13,
+    //         lat: " . $latitude . ",
+    //         lng: " . $longitude . ",
+    //         click: function(e) {
+    //             map.removeMarkers();
+    //             map.addMarker({
+    //                 lat: e.latLng.lat(),
+    //                 lng: e.latLng.lng(),
+    //             });
+    //             $('#company-com_latitude').val(e.latLng.lat());
+    //             $('#company-com_longitude').val(e.latLng.lng());
+    //         },
+    //     });
+    //     map.addMarker({
+    //         lat: " . $latitude . ",
+    //         lng: " . $longitude . ",
+    //     });
+    //     $('#company-com_address').keyup(function(e) {
+    //         e.preventDefault();
+    //         GMaps.geocode({
+    //             address: $('#company-com_address').val().trim(),
+    //             callback: function(results, status) {
+    //                 if (status == 'OK') {
+    //                     map.removeMarkers();
+    //                     var latLng = results[0].geometry.location;
+    //                     map.setCenter(latLng.lat(), latLng.lng());
+    //                     map.addMarker({
+    //                         lat: latLng.lat(),
+    //                         lng: latLng.lng()
+    //                     });
+    //                     $('#company-com_latitude').val(latLng.lat());
+    //                     $('#company-com_longitude').val(latLng.lng());
+    //                 }
+    //             }
+    //         });
+    //     });
+    // };
 
     $('#create').click(function() {
         $('#create-business').show();
@@ -338,7 +350,8 @@ $this->registerJs("
             checkOrNot(checked);
             if(checked == false){
                 $(this).val(0);
-                loadMap();
+                // loadMap();
+                initialize();
             }else{
                 $(this).val(1);
             }
@@ -391,6 +404,96 @@ function refreshOpenerTopFrameset(){
     for (var i = f.length - 1; i > -1; --i)
     f[i].location.reload();
 }
+
+// setup map autocomplete and dragable
+
+var PostCodeid = '#company-com_address';
+        var longval = '#company-com_longitude';
+        var latval = '#company-com_latitude';
+        var geocoder;
+        var map;
+        var marker;
+        
+        function initialize() {
+            // init map
+            var initialLat = $(latval).val();
+            var initialLong = $(longval).val();
+            if (initialLat == '') {
+                initialLat = ".$latitude.";
+                initialLong = " . $longitude . ";
+            }
+            var latlng = new google.maps.LatLng(initialLat, initialLong);
+            var options = {
+                zoom: 16,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                heading: 90,
+                tilt: 45
+            };   
+        
+            map = new google.maps.Map(document.getElementById('map'), options);
+        
+            geocoder = new google.maps.Geocoder();    
+        
+            marker = new google.maps.Marker({
+                map: map,
+                draggable: true,
+                position: latlng
+            });
+        
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                var point = marker.getPosition();
+                map.panTo(point);
+            });
+            
+        };
+        
+        $(document).ready(function () {
+        
+            initialize();
+
+            $(function () {
+                $(PostCodeid).autocomplete({
+                    //This bit uses the geocoder to fetch address values
+                    source: function (request, response) {
+                        geocoder.geocode({ 'address': request.term }, function (results, status) {
+                            response($.map(results, function (item) {
+                                return {
+                                    label: item.formatted_address,
+                                    value: item.formatted_address
+                                };
+                                
+                            }));
+                        });
+                    }
+                });
+            });
+        
+            $(PostCodeid).keyup(function (e) {
+                var address = $(PostCodeid).val();
+                geocoder.geocode({ 'address': address }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        marker.setPosition(results[0].geometry.location);
+                        $(latval).val(marker.getPosition().lat());
+                        $(longval).val(marker.getPosition().lng());
+                    }
+                });
+                e.preventDefault();
+            });
+        
+            //Add listener to marker for reverse geocoding
+            google.maps.event.addListener(marker, 'drag', function () {
+                geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[0]) {
+                            $(latval).val(marker.getPosition().lat());
+                            $(longval).val(marker.getPosition().lng());
+                        }
+                    }
+                });
+            });
+        });
 
 ",yii\web\View::POS_END, 'snapearn-form');
 ?>

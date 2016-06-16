@@ -24,17 +24,17 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                         <label>Country</label>
                         <select name="sna_cty" class="form-control select2" style="width: 100%;">
                               <option value="" <?= (!empty($_GET['sna_cty']) == '' || empty($_GET['sna_cty'])) ? 'selected' : '' ?>>All</option>
-                              <option value="ID" <?= (!empty($_GET['sna_cty']) == 'ID') ? 'selected' : '' ?>>Indonesia</option>
-                              <option value="MY" <?= (!empty($_GET['sna_cty']) == 'MY') ? 'selected' : '' ?>>Malaysia</option>
+                              <option value="ID" <?= (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'ID') ? 'selected' : '' ?>>Indonesia</option>
+                              <option value="MY" <?= (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'MY') ? 'selected' : '' ?>>Malaysia</option>
                         </select>
                         </div>
                         <div class="form-group">
                         <label>Receipt Status</label>
                         <select name="sna_status" class="form-control select2" style="width: 100%;">
-                              <option value="" <?= (!empty($_GET['sna_status']) == '' || empty($_GET['sna_status'])) ? 'selected' : '' ?>>All</option>
-                              <option value="NEW" <?= (!empty($_GET['sna_status']) == 'NEW') ? 'selected' : '' ?>>New</option>
-                              <option value="APP" <?= (!empty($_GET['sna_status']) == 'APP') ? 'selected' : '' ?>>Approved</option>
-                              <option value="REJ" <?= (!empty($_GET['sna_status']) == 'REJ') ? 'selected' : '' ?>>Rejected</option>
+                              <option value="" <?= (!empty($_GET['sna_status']) && $_GET['sna_status'] == '' || empty($_GET['sna_status'])) ? 'selected' : '' ?>>All</option>
+                              <option value="NEW" <?= (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'NEW') ? 'selected' : '' ?>>New</option>
+                              <option value="APP" <?= (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'APP') ? 'selected' : '' ?>>Approved</option>
+                              <option value="REJ" <?= (!empty($_GET['sna_status']) && $_GET['sna_status']== 'REJ') ? 'selected' : '' ?>>Rejected</option>
                         </select>
                         </div>
                         <!-- <div class="form-group">
@@ -148,6 +148,8 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                             return "<i class='fa fa-check approved-status'></i>";
                                         } elseif ($data->sna_status == 2) {
                                             return "<i class='fa fa-close rejected-status'></i>";
+                                        } else {
+                                            return "New";
                                         }
                                     }
                                 ],
