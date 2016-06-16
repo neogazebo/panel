@@ -195,6 +195,7 @@ $this->registerJs("
 $('#snapearn-sna_transaction_time').attr('autofocus');
     $('#snapearn-sna_status').change(function() {
         if($(this).val() == 1) {
+            pointConvert();
             $('#snapearn-sna_transaction_time').attr('autofocus');
             $('.reject-form').css('display', 'none');
             $('.point-form').css('display', 'block');
@@ -207,7 +208,7 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
         }
     }).trigger('change');
 
-    $('#snapearn-sna_receipt_amount').blur(function() {
+    function pointConvert(){
         var amount = Math.floor($('#snapearn-sna_receipt_amount').val());
         // $('#snapearn-sna_point').val(point);
         $.ajax({
@@ -219,7 +220,7 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
                 $('#snapearn-sna_point').val(result);
             }
         });
-    });
+    }
 
     $('.saveNext').click(function(){
         $('#saveNext').val(1);

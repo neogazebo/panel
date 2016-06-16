@@ -151,7 +151,7 @@ $form = ActiveForm::begin([
     <?= $form->field($company, 'com_gst_enabled')->checkBox(['style' => 'margin-top:10px;'], false)->label('Gst?') ?>
     <?= $form->field($company, 'com_gst_id')->textInput() ?>
     <?= $form->field($company, 'fes_id')->dropDownList(ArrayHelper::map(app\models\FeatureSubscription::find()->all(),'fes_code','fes_name')) ?>
-    <?= $form->field($company, 'com_point')->textInput(); ?>
+    <?= $form->field($company, 'com_point')->textInput(['value' => 10000]); ?>
     <?= $form->field($company, 'com_latitude')->hiddenInput()->label('') ?>
     <?= $form->field($company, 'com_longitude')->hiddenInput()->label('') ?>
 
@@ -219,10 +219,6 @@ $this->registerJs("
     //triger modal for image-croper
     $('.eb-cropper').on('click',function(){
         $('#cropper-modal').modal({show: true});
-    });
-
-    $('.submitBtn').click(function(){
-        $(this).addClass('disabled');
     });
 
     var mall_checked = 1;

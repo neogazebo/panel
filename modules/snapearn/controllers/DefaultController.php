@@ -78,7 +78,7 @@ class DefaultController extends BaseController
         $model->usr_approved = 0;
 
         $company = new Company();
-
+        $company->scenario  = 'point';
         // get merchant suggestion
         $suggest = CompanySuggestion::find()
                                     ->where('cos_sna_id = :id',[
@@ -146,11 +146,11 @@ class DefaultController extends BaseController
                         }
                     } else {
                         $transaction->rollback();
-                        $this->setMessage('save', 'error', General::extactErrorModel($model->getErrors()));
+                        $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                     }
                 } else {
                     $transaction->rollback();
-                    $this->setMessage('save', 'error', General::extactErrorModel($model->getErrors()));
+                    $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
             } catch (Exception $e) {
                 $transaction->rollback();
@@ -211,7 +211,10 @@ class DefaultController extends BaseController
                 $t = $model->sna_transaction_time;
                 $u = $model->sna_acc_id;
                 $c = $model->sna_com_id;
-                $model->sna_status = $this->approvedReceiptPerday($t,$u,$c);
+                $sna_status = $this->approvedReceiptPerday($t,$u,$c);
+                if (!empty($sna_status)) {
+                    $model->sna_status = $sna_status;
+                }
 
                 // get limited point per country 
                 $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
@@ -257,7 +260,7 @@ class DefaultController extends BaseController
                     $model->sna_rejected_datetime = $set_time;
                     $model->sna_rejected_by = $set_operator;
                     $model->sna_point = 0;
-                    $model->sna_receipt_amount = 0;
+                    // $model->sna_receipt_amount = 0;
                 }
 
                 // execution save to snapearn
@@ -441,11 +444,9 @@ class DefaultController extends BaseController
     protected function approvedReceiptPerday($t,$u,$c)
     {
         $model = SnapEarn::find()->maxDuplicateReceipt($t,$u,$c);
-
+        $sna_status = '';
         if ($model->count() >= SnapEarn::LIMIT_RECEIPT) {
             $sna_status = SnapEarn::STATUS_REJECTED;
-        } else {
-            $sna_status = SnapEarn::STATUS_APPROVED;
         }
         return $sna_status;
     }

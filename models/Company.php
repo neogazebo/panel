@@ -278,19 +278,6 @@ class Company extends EbizuActiveRecord
         ];
     }
 
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['com_created_date'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['com_edited_date'],
-                ],
-            ],
-        ];
-    }
-
     /*
      * this function used to clear cache photo & banner on the S3
      * Author : tajhul <tajhul@ebizu.com>
@@ -738,6 +725,38 @@ class Company extends EbizuActiveRecord
             '283' => 'CHADT (+13:45) Pacific/Chatham',
             '413' => 'WSDT (+14:00) Pacific/Apia',
             '210' => 'LINT (+14:00) Pacific/Kiritimati',
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['com_created_date'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['com_edited_date'],
+                ],
+            ],
+            'company' => [
+                'class' => 'app\components\behaviors\ChangeCompany',
+            ],
+            'Location' => [
+                'class' => 'app\components\behaviors\ExplodeLocation',
+                'location' => 'com_city',
+                'attributes' => [
+                    'city' => 'com_city_id',
+                    'region' => 'com_region_id',
+                    'country' => 'com_country_id'
+                ]
+            ],
+            'getQuery' => [
+                'class' => 'app\components\behaviors\WorkerQueryBehavior',
+                'tableName' => self::tableName(),
+                'fieldIdName' => 'com_id',
+                'version' => 'v1.0',
+                'type' => 'high'
+            ],
         ];
     }
 
