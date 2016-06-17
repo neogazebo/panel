@@ -3,7 +3,6 @@
 namespace app\modules\snapearn\controllers;
 
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use linslin\yii2\curl;
 use app\controllers\BaseController;
@@ -30,163 +29,28 @@ use app\models\WorkingTime;
 use yii\web\HttpException;
 
 /**
- * Default controller for the `snapearn` module
- */
-class DefaultController extends BaseController
+* 
+*/
+class CorrectionController extends BaseController
 {
-    /**
-     * Renders the index view for the module
-     * @return string
-     */
-
-    public function init()
-    {
-        $timezone = date_default_timezone_get();
-        date_default_timezone_set($timezone);
-    }
-
-    public function actionIndex()
-    {
-        $this->setRememberUrl();
-        $model = SnapEarn::find()->findCustome();
-        $dataProvider = new ActiveDataProvider([
-            'query' => $model,
-            'pagination' => [
-                'pageSize' => 20
-            ]
-        ]);
-
-        return $this->render('index', [
-        	'dataProvider' => $dataProvider
-    	]);
-    }
-
-    public function actionNewMerchant($id)
-    {
-        $model = new MerchantUser();
-        $model->scenario = 'signup';
-        $model->usr_password = md5('123456');
-        $model->usr_type_id = 2;
-        $model->usr_approved = 0;
-
-        $company = new Company();
-        $company->scenario  = 'point';
-        // get merchant suggestion
-        $suggest = CompanySuggestion::find()
-                                    ->where('cos_sna_id = :id',[
-                                        ':id' => $id
-                                    ])
-                                    ->one();
-        // create id mall sugestion default = empty
-        $suggest->cos_mall_id = '';
-        // if mall name not empty getting id mall
-        if (!empty($suggest->cos_mall)) {
-            $suggest->cos_mall_id = Mall::find()
-                                    ->where('mal_name = :mal',[
-                                        ':mal' => $suggest->cos_mall
-                                    ])
-                                    ->one()
-                                    ->mal_id;
-        }
-
-        // ajax validation
-        if (Yii::$app->request->isAjax && $company->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = 'json';
-            return \yii\widgets\ActiveForm::validate($company);
-        }
-
-        if ($company->load(Yii::$app->request->post())) {
-            $transaction = Yii::$app->db->beginTransaction();
-            $model->usr_email = $company->com_email;
-            try {
-                if ($model->save()) {
-                    $company->com_usr_id = $model->usr_id;
-                    $company->com_email = $model->usr_email;
-                    $company->com_status = 1;
-                    $company->com_snapearn = 1;
-                    $company->com_snapearn_checkin = 1;
-                    $company->com_registered_to = 'EBC';
-
-                    if ($company->save()) {
-                        $com_id = $company->com_id;
-                        $snapearn = SnapEarn::findOne($id);
-                        $snapearn->sna_com_id = $com_id;
-                        $snapearn->save(false);
-
-                        $suggestion = CompanySuggestion::find()->where('cos_sna_id = :id', [':id' => $id])->one();
-                        $suggestion->cos_com_id = $com_id;
-                        $suggestion->save(false);
-
-                        // SnapEarnPointDetail::savePoint($id, 8);
-
-                        $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
-                        if ($audit->save()) {
-                            $com_id = $company->com_id;
-                            // $company->setTag();
-                            $fsc = new FeatureSubscriptionCompany();
-                            $this->assignFcs($fsc, $com_id, $company, $company->fes_id);
-                            if ($fsc->save()) {
-                                $this->assignModule($com_id, $company);
-                                $this->assignEmail($com_id, $company);
-                                $transaction->commit();
-                                $this->setMessage('save', 'success', 'Your company has been registered!');
-                                return $this->render('success');
-                            } else {
-                                $transaction->rollback();
-                                throw new HttpException(404, 'Cant insert to subscription');
-                            }
-                        }
-                    } else {
-                        $transaction->rollback();
-                        $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
-                    }
-                } else {
-                    $transaction->rollback();
-                    $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
-                }
-            } catch (Exception $e) {
-                $transaction->rollback();
-                throw $e;
-            }
-        }
-        return $this->render('new', [
-            'company' => $company,
-            'suggest' => $suggest
-        ]);
-    }
-
-    public function actionAjaxExisting($id)
-    {
-        $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post())) {
-            $model->sna_com_id = (int)Yii::$app->request->post('com_id');
-            if ($model->save()) {
-                $this->setMessage('save', 'success', 'Merchant created successfully!');
-                return $this->redirect(['update?id='.$id]);
-            }
-        } else {
-            return $this->renderAjax('existing', [
-                'model' => $model,
-            ]);
-        }
-    }
 
 
-    public function actionToUpdate($id)
+    public function actionToCorrection($id)
     {
         // working time start
         $user = Yii::$app->user->id;
         $type = WorkingTime::SNAPEARN_TYPE;
         $param = $id;
         $wrk_id = $this->startWorking($user, $type, $param);
-        return $this->redirect(['update', 'id' => $id,'work_id' => $wrk_id]);
+        return $this->redirect(['correction', 'id' => $id,'wrk_id' => $wrk_id]);
     }
-
-    public function actionUpdate($id,$wrk_id = null)
-    {
+	
+	public function actionCorrection($id,$wrk_id = null)
+	{
     	$model = $this->findModel($id);
-        $model->scenario = 'update';
-        
+    	$model->scenario = 'correction';
+        // get old point
+        $oldPoint = $model->sna_point;
         $ctr = $model->member->acc_cty_id;
 
         // ajax validation
@@ -205,15 +69,6 @@ class DefaultController extends BaseController
                 $set_time = Utc::getNow();
                 $set_operator = Yii::$app->user->id;
 
-                // limited transaction point per-user per-merchant per-day
-                $t = $model->sna_transaction_time;
-                $u = $model->sna_acc_id;
-                $c = $model->sna_com_id;
-                $sna_status = $this->approvedReceiptPerday($t,$u,$c);
-                if (!empty($sna_status)) {
-                    $model->sna_status = $sna_status;
-                }
-
                 // get limited point per country 
                 $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 
@@ -229,6 +84,38 @@ class DefaultController extends BaseController
                         $limitPoint = $config->ser_point_cap;
                     }
                 }
+
+				// get current point merchant
+                $mp = Company::find()->getCurrentPoint($model->sna_com_id);
+                $lph = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
+                
+                if ($lph->lph_total_point > $oldPoint) {
+                    $cp = $lph->lph_total_point;
+                } elseif ($lph <= $oldPoint) {
+                	$cp = $oldPoint;
+                }
+
+
+				// start process rollback
+                // configuration to get real point user before reviews
+                $minusPointUser = [
+                    'current_point' => $cp,
+                    'sna_point' => $oldPoint,
+                    'sna_acc_id' => $model->sna_acc_id,
+                    'sna_com_id' => $model->sna_com_id,
+                    'sna_id' => $model->sna_id,
+                    'desc' => 'Debet from Correction',
+                ];
+                $history = $this->savePoint($minusPointUser,'D');
+                // param to configuration to give back point merchant 
+                $addPointmerchant = [
+                    'com_point' => $mp->com_point,
+                    'sna_point' => $oldPoint,
+                    'sna_com_id' => $model->sna_com_id,
+                ];
+                $point = $this->merchantPoint($addPointmerchant);
+                // end process rollback
+
 
                 // get current point merchant
                 $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
@@ -271,7 +158,7 @@ class DefaultController extends BaseController
                             'sna_acc_id' => $model->sna_acc_id,
                             'sna_com_id' => $model->sna_com_id,
                             'sna_id' => $model->sna_id,
-                            'desc' => 'Credit from Approved',
+                            'desc' => 'Credit from Correction',
                         ];
                         $merchantParams = [
                             'com_point' => $merchant_point->com_point,
@@ -368,7 +255,7 @@ class DefaultController extends BaseController
                     $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
 
                     // end working time
-                    $desc = "Snapearn $snap_type";
+                    $desc = "Correction SE $snap_type";
                     $this->endWorking($wrk_id, $desc);
 
                     $transaction->commit();
@@ -396,45 +283,8 @@ class DefaultController extends BaseController
             'model' => $model,
             'id' => $id
         ]);
-    }
+	}
 
-    public function actionCorrection()
-    {
-
-    }
-
-    public function actionAjaxSnapearnPoint()
-    {
-        if (Yii::$app->request->isAjax) {
-            $id = Yii::$app->request->post('id');
-            $amount = Yii::$app->request->post('amount');
-            $com_id = Yii::$app->request->post('com_id');
-            $business = Company::findOne($com_id);
-            $se = $this->findModel($id);
-
-            $config = SnapEarnRule::find()->where(['ser_country' => $se->member->country->cty_currency_name_iso3])->one();
-            $point = (int) ($amount / $config->ser_point_provision);
-
-            if(!empty($config)) {
-                if($business->com_premium == 1) {
-                    $point *= 2;
-                    $point_cap = $config->ser_premium;
-                } else {
-                    $point_cap = $config->ser_point_cap;
-                }
-
-                if($point > $point_cap)
-                    return $point_cap;
-            }
-            return $point;
-        }
-    }
-
-    public function actionCancel($id)
-    {
-        $this->cancelWorking($id);
-        return $this->redirect([$this->getRememberUrl()]);
-    } 
 
     protected function findModel($id)
     {
@@ -443,16 +293,6 @@ class DefaultController extends BaseController
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-
-    protected function approvedReceiptPerday($t,$u,$c)
-    {
-        $model = SnapEarn::find()->maxDuplicateReceipt($t,$u,$c);
-        $sna_status = '';
-        if ($model->count() >= SnapEarn::LIMIT_RECEIPT) {
-            $sna_status = SnapEarn::STATUS_REJECTED;
-        }
-        return $sna_status;
     }
 
     protected function savePoint($params, $type = 'C')
@@ -492,101 +332,6 @@ class DefaultController extends BaseController
         $point->com_point = $com_point;
         if($point->save())
             $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
-    }
-
-    public function actionSearch()
-    {
-        $model = SnapEarn::find()->listFilter();
-    }
-
-    public function actionMycropper()
-    {
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('mycropper');
-        }
-    }
-
-    protected function assignFcs($fsc, $com_id, $company, $fes_code)
-    {
-        $subscription = FeatureSubscription::getTmPackage($fes_code);
-        $fsc->fsc_com_id = $com_id;
-        $fsc->fsc_fes_id = $subscription->fes_id;
-        $fsc->fsc_datetime = time();
-        $fsc->fsc_valid_start = time();
-        $fsc->fsc_valid_end = strtotime('+30 day', time());
-        $fsc->fsc_status = 1;
-        $fsc->fsc_free = 1;
-        $fsc->fsc_status_datetime = time();
-        $fsc->fsc_payment_amount = $subscription->fes_price;
-        $fsc->fsc_payment_currency = $subscription->fes_currency;
-        $fsc->fsc_payment_type = 1;
-        $fsc->fsc_payment_datetime = time();
-        $fsc->fsc_payment_received_datetime = time();
-        $fsc->fsc_payment_received_by = 1;
-    }
-
-    protected function assignModule($com_id, $company)
-    {
-        $modulInstall = Module::find()->where('mod_id IN (12,19,15)')->All();
-        foreach ($modulInstall as $module)
-        {
-            $moduleInstalled = new ModuleInstalled();
-            $moduleInstalled->mos_mod_id = $module->mod_id;
-            $moduleInstalled->mos_com_id = $com_id;
-            $moduleInstalled->mos_datetime = time();
-            $moduleInstalled->mos_active = 'Y';
-            $moduleInstalled->mos_key = str_replace('-', '', crc32($com_id));
-            $moduleInstalled->mos_secret = md5($com_id);
-            $moduleInstalled->mos_page_builder = 1;
-            $moduleInstalled->mos_delete = 0;
-            $moduleInstalled->save();
-        }
-    }
-
-    protected function assignEmail($com_id, $company)
-    {
-        $systemMessage = new SystemMessage;
-        $typeMessage = 17;
-        $categoryMessage = 'business_signup';
-        $email = $company->com_email;
-        $com_name = $company->com_name;
-        $parsersData[] = array('[name]', htmlspecialchars_decode($com_name, ENT_QUOTES));
-        $systemMessage->Parser($typeMessage, $categoryMessage, $email, $parsersData);
-    }
-
-    public function actionList()
-    {
-        if (Yii::$app->request->isAjax) {
-            $model = Company::find()->searchExistingMerchant();
-            $out = [];
-            foreach ($model as $d) {
-                $out[] = [
-                    'id' => $d->com_id,
-                    'value' => $d->com_name
-                ];
-            }
-            echo \yii\helpers\Json::encode($out);
-        }
-    }
-
-    public function actionCityList()
-    {
-        if (Yii::$app->request->isAjax){
-            $model = City::find()->SearchCityList();
-            echo \yii\helpers\Json::encode($model);
-        }
-    }
-
-    public function actionMallList()
-    {
-        if (Yii::$app->request->isAjax){
-            $model = Mall::find()->SearchMallList();
-            $out = [];
-            foreach ($model as $d) {
-                $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
-            }
-            echo \yii\helpers\Json::encode($out);
-        }
     }
 
 }

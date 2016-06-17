@@ -15,7 +15,7 @@ $this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depen
 $this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $latitude = ($model_company->com_latitude ? $model_company->com_latitude : 3.139003);
 $longitude = ($model_company->com_longitude ? $model_company->com_longitude : 101.686855);
-$inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 1 ? 1 : 0);
+$model_company->com_in_mall = true;
 ?>
 
 <div id="wrap">
@@ -41,7 +41,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                         <?= $form->field($model_company, 'com_email')->textInput(['value' => $model->mer_login_email]); ?>
                         <?= $form->field($model_company, 'com_name')->textInput(['value' => $model->mer_company_name]); ?>
                         <?= $form->field($model_company, 'com_business_name')->textInput(['value' => $model->mer_bussines_name]); ?>
-                        <?= $form->field($model, 'mer_bussiness_description')->textArea(); ?>
+                        <?= $form->field($model_company, 'com_description')->textArea(['value' => $model->mer_bussiness_description]); ?>
                         <?= $form->field($model_company, 'com_subcategory_id')->dropDownList($model_company->categoryListData); ?>
                         <div id="tagging">
                             <div class="form-group" id="business-tag">
@@ -53,9 +53,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                                 </div>
                             </div>
                         </div>
-                        <?= $form->field($model_company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
-                        <?= $form->field($model, 'mer_address')->textInput(); ?>
-                        <?= $form->field($model, 'mer_post_code')->textInput(); ?>
+                        <?= $form->field($model_company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
 						<?= 
 					        $form->field($model_company, 'mall_name')->widget(Typeahead::classname(),[
 					            'name' => 'merchant',
@@ -82,7 +80,8 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 					            ]
 					        ])->label('Mall Name');
 						?>
-					<?= $form->field($model_company, 'mall_id')->hiddenInput()->label('') ?>
+                        <?= $form->field($model_company, 'com_address')->textInput(['value' => $model->mer_address]); ?>
+                        <?= $form->field($model_company, 'com_postcode')->textInput(['value' => $model->mer_post_code]); ?>
 						<?= 
 					        $form->field($model_company, 'com_city')->widget(Typeahead::classname(),[
 					            'name' => 'merchant',
@@ -108,15 +107,15 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 					        ]);
 						?>
                         
-                        <div class="form-group" id="merchantsignup-map">
+                        <div class="form-group" id="businessMap">
                             <label class="col-sm-3 control-label">Map</label>
                             <div class="col-sm-8">
                                 <div id="map" style="height:300px"></div>
                             </div>
                         </div>
 
-                        <?= $form->field($model, 'mer_contact_phone')->textInput(); ?>
-                        <?= $form->field($model, 'mer_office_fax')->textInput(); ?>
+                        <?= $form->field($model_company, 'com_phone')->textInput(['value' => $model->mer_contact_phone]); ?>
+                        <?= $form->field($model_company, 'com_fax')->textInput(['value' => $model->mer_office_fax]); ?>
                         <?= $form->field($model_company, 'com_website')->textInput([$model->mer_website]); ?>
                         <?= $form->field($model_company, 'com_size')->dropDownList($model_company->companySizeListData); ?>
                         <?= $form->field($model_company, 'com_nbrs_employees')->dropDownList($model_company->numberEmployeeListData); ?>
@@ -155,7 +154,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 
                         <?= $form->field($model_company, 'com_latitude')->hiddenInput()->label('') ?>
                         <?= $form->field($model_company, 'com_longitude')->hiddenInput()->label('') ?>
-
+                        <?= $form->field($model_company, 'mall_id')->hiddenInput()->label('') ?>
                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -173,51 +172,8 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 </div>
 
 <?php
-$this->registerCssFile("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/minified/jquery-ui.min.css");
-
 $this->registerJs("
     var isUpdate = 0;
-
-    var PostCodeid = '#merchantsignup-mer_address';
-    var longval = '#company-com_longitude';
-    var latval = '#company-com_latitude';
-    var geocoder;
-    var map;
-    var marker;
-    
-    function initialize() {
-        // init map
-        var initialLat = $(latval).val();
-        var initialLong = $(longval).val();
-        if (initialLat == '') {
-            initialLat = ".$latitude.";
-            initialLong = " . $longitude . ";
-        }
-        var latlng = new google.maps.LatLng(initialLat, initialLong);
-        var options = {
-            zoom: 16,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            heading: 90,
-            tilt: 45
-        };   
-    
-        map = new google.maps.Map(document.getElementById('map'), options);
-    
-        geocoder = new google.maps.Geocoder();    
-    
-        marker = new google.maps.Marker({
-            map: map,
-            draggable: true,
-            position: latlng
-        });
-    
-        google.maps.event.addListener(marker, 'dragend', function (event) {
-            var point = marker.getPosition();
-            map.panTo(point);
-        });
-        
-    };
 
     function loadRegister(reg)
     {
@@ -233,57 +189,205 @@ $this->registerJs("
             }
         });
     }
+    loadRegister('EBC');
+   //triger modal for image-croper
+    $('.eb-cropper').on('click',function(){
+        $('#cropper-modal').modal({show: true});
+    });
 
-    $(document).ready(function () {
-        var baseUrl = '" . Yii::$app->homeUrl . "';
+    var mall_checked = 1;
+    $('#create-business').hide();
+    $('#company-com_point').popover();
+    $('.field-company-com_latitude').hide();
+    $('.field-company-com_longitude').hide();
 
-        $('.field-company-com_latitude').hide();
-        $('.field-company-com_longitude').hide();
+    $('#create').click(function() {
+        $('#create-business').show();
+        $.ajax({
+            type: 'GET',
+            url: baseUrl + 'business/register',
+            data: { reg: 'EBC' },
+            cache: false,
+            success: function(result) {
+                $('#company-fes_id').empty().append(result);
+            }
+        });
 
-        mall = " . $inMall . ";
-        mall_checked = (mall == 1 ? true : false);
-        function loadMall() {
-            $('#merchantsignup-map').hide();
-            $('.field-merchantsignup-mer_address').hide();
-            $('.field-merchantsignup-mer_post_code').hide();
-            $('.field-company-com_city').hide();
-            $('.field-company-mall_name').show();
+        var com_name = $('#companysuggestion-cos_name').val();
+        $('#company-com_name').val(com_name);
+        $('#company-com_business_name').val(com_name);
+        loadMap();
+        if($('#companysuggestion-cos_mall').val() != '') {
+            $('#company-com_in_mall').attr('checked', true);
+            mall_checked = 1;
+            loadMall();
+        } else {
+            unloadMall();
         }
-        function unloadMall() {
-            $('#merchantsignup-map').show();
-            $('.field-merchantsignup-mer_address').show();
-            $('.field-merchantsignup-mer_post_code').show();
-            $('.field-company-com_city').show();
-            $('.field-company-mall_name').hide();
-        }
-        function checkOrNot(mall_checked) {
-            if(mall_checked)
-                loadMall();
-            else
-                unloadMall();
-        }
-        checkOrNot(mall_checked);
-        $('#company-com_in_mall').each(function() {
-            $(this).click(function() {
-                var checked = $(this).is(':checked');
-                checkOrNot(checked);
+
+        $('html, body').animate({
+            scrollTop: $('#create-business').offset().top
+        }, 1000);
+        return false;
+    });
+
+    $('.datepicker').datepicker();
+    var loadMall = function() {
+        $('#businessMap').css('display','none');
+        $('.field-company-com_mac_id').show();
+        // $('.field-company-com_subcategory_id').hide();
+        $('.field-company-com_address').hide();
+        $('.field-company-com_postcode').hide();
+        $('.field-company-com_city').hide();
+        $('.field-mallmerchant-mam_mal_id').show();
+        $('.field-company-mall_name').show();
+        $('#floor-unit').show();
+    };
+    var unloadMall = function() {
+        $('#businessMap').css('display','block');
+        $('.field-company-com_mac_id').hide();
+        // $('.field-company-com_subcategory_id').show();
+        $('.field-company-com_address').show();
+        $('.field-company-com_postcode').show();
+        $('.field-company-com_city').show();
+        $('.field-mallmerchant-mam_mal_id').hide();
+        $('.field-company-mall_name').hide();
+        $('#floor-unit').hide();
+    };
+    var checkOrNot = function(mall_checked) {
+        if(mall_checked)
+            loadMall();
+        else
+            unloadMall();
+    };
+    checkOrNot(mall_checked);
+    $('#company-com_in_mall').each(function() {
+        $(this).click(function() {
+            var checked = $(this).is(':checked');
+            checkOrNot(checked);
+            if(checked == false){
+                $('.field-company-com_in_mall > div').find('input').val(0);
+                $(this).val(0);
+                initialize();
+            }else{
+                $('.field-company-com_in_mall > div').find('input').val(1);
+                $(this).val(1);
+            }
+        });
+    });
+
+
+
+    // $(document).ready(function () {
+    //     var baseUrl = '" . Yii::$app->homeUrl . "';
+
+    //     $('.field-company-com_latitude').hide();
+    //     $('.field-company-com_longitude').hide();
+
+    // var loadMall = function() {
+    //     $('#businessMap').css('display','none');
+    //     $('.field-company-com_mac_id').show();
+    //     // $('.field-company-com_subcategory_id').hide();
+    //     $('.field-company-com_address').hide();
+    //     $('.field-company-com_postcode').hide();
+    //     $('.field-company-com_city').hide();
+    //     $('.field-mallmerchant-mam_mal_id').show();
+    //     $('.field-company-mall_name').show();
+    //     $('#floor-unit').show();
+    // };
+    // var unloadMall = function() {
+    //     $('#businessMap').css('display','block');
+    //     $('.field-company-com_mac_id').hide();
+    //     // $('.field-company-com_subcategory_id').show();
+    //     $('.field-company-com_address').show();
+    //     $('.field-company-com_postcode').show();
+    //     $('.field-company-com_city').show();
+    //     $('.field-mallmerchant-mam_mal_id').hide();
+    //     $('.field-company-mall_name').hide();
+    //     $('#floor-unit').hide();
+    // };
+    //     function checkOrNot(mall_checked) {
+    //         if(mall_checked)
+    //             loadMall();
+    //         else
+    //             unloadMall();
+    //     }
+    //     checkOrNot(mall_checked);
+    //     $('#company-com_in_mall').each(function() {
+    //             $(this).click(function() {
+    //                 var checked = $(this).is(':checked');
+    //                 checkOrNot(checked);
+    //                 if(checked == false){
+    //                     $(this).val(0);
+    //                     initialize();
+    //                 }else{
+    //                     $(this).val(1);
+    //                 }
+    //             });
+    //         });
+
+    //     $('.datepicker').datepicker({
+    //       autoclose: true
+    //     });
+
+    //     initialize();
+
+    //     //triger modal for image-croper
+    //     $('.eb-cropper').on('click',function(){
+    //         $('#cropper-modal').modal({show: true});
+    //     });
+
+    //     loadRegister('EBC');
+    // });
+
+ // setup map autocomplete and dragable
+
+var PostCodeid = '#company-com_address';
+        var longval = '#company-com_longitude';
+        var latval = '#company-com_latitude';
+        var geocoder;
+        var map;
+        var marker;
+        
+        function initialize() {
+            // init map
+            var initialLat = $(latval).val();
+            var initialLong = $(longval).val();
+            if (initialLat == '') {
+                initialLat = ".$latitude.";
+                initialLong = " . $longitude . ";
+            }
+            var latlng = new google.maps.LatLng(initialLat, initialLong);
+            var options = {
+                zoom: 16,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                heading: 90,
+                tilt: 45
+            };   
+        
+            map = new google.maps.Map(document.getElementById('map'), options);
+        
+            geocoder = new google.maps.Geocoder();    
+        
+            marker = new google.maps.Marker({
+                map: map,
+                draggable: true,
+                position: latlng
             });
-        });
+        
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                var point = marker.getPosition();
+                map.panTo(point);
+            });
+            
+        };
+        
+        $(document).ready(function () {
+        
+            initialize();
 
-        $('.datepicker').datepicker({
-          autoclose: true
-        });
-
-        initialize();
-
-        //triger modal for image-croper
-        $('.eb-cropper').on('click',function(){
-            $('#cropper-modal').modal({show: true});
-        });
-
-        loadRegister('EBC');
-
-        $(function () {
+            $(function () {
                 $(PostCodeid).autocomplete({
                     //This bit uses the geocoder to fetch address values
                     source: function (request, response) {
@@ -309,7 +413,6 @@ $this->registerJs("
                         $(latval).val(marker.getPosition().lat());
                         $(longval).val(marker.getPosition().lng());
                     }
-
                 });
                 e.preventDefault();
             });
@@ -325,10 +428,7 @@ $this->registerJs("
                     }
                 });
             });
-            
-
-        //});
-    });
+        });   
 ", \yii\web\View::POS_END, 'merchantsignup-review');
 
 Modal::begin([
