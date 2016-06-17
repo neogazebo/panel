@@ -72,9 +72,10 @@ class CorrectionController extends BaseController
                 // get limited point per country 
                 $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 
-                // setup devision point per country
-                $model->sna_point = (int) ($model->sna_receipt_amount / $config->ser_point_provision);
-                // var_dump($model->sna_point);exit;
+               // setup devision point per country
+                if ($config->ser_point_provision > 0 ) {
+                    $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
+                }
                 // optional point for premium or default merchant
                 if(!empty($config)) {
                     if($model->merchant->com_premium == 1) {
@@ -284,6 +285,38 @@ class CorrectionController extends BaseController
             'id' => $id
         ]);
 	}
+
+    public function actionAjaxSnapearnPoint()
+    {
+        if (Yii::$app->request->isAjax) {
+            $id = Yii::$app->request->post('id');
+            $amount = Yii::$app->request->post('amount');
+            $com_id = Yii::$app->request->post('com_id');
+            $business = Company::findOne($com_id);
+            $se = $this->findModel($id);
+
+            $config = SnapEarnRule::find()->where(['ser_country' => $se->member->country->cty_currency_name_iso3])->one();
+
+            $point = $amount;
+
+            if ($config->ser_point_provision > 0 ) {
+                $point = (int) ($amount / $config->ser_point_provision);
+            }
+
+            if(!empty($config)) {
+                if($business->com_premium == 1) {
+                    $point *= 2;
+                    $point_cap = $config->ser_premium;
+                } else {
+                    $point_cap = $config->ser_point_cap;
+                }
+
+                if($point > $point_cap)
+                    return $point_cap;
+            }
+            return $point;
+        }
+    }
 
 
     protected function findModel($id)

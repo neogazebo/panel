@@ -218,7 +218,9 @@ class DefaultController extends BaseController
                 $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 
                 // setup devision point per country
-                $model->sna_point = (int) ($model->sna_receipt_amount / $config->ser_point_provision);
+                if ($config->ser_point_provision > 0 ) {
+                    $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
+                }
                 // var_dump($model->sna_point);exit;
                 // optional point for premium or default merchant
                 if(!empty($config)) {
@@ -413,7 +415,12 @@ class DefaultController extends BaseController
             $se = $this->findModel($id);
 
             $config = SnapEarnRule::find()->where(['ser_country' => $se->member->country->cty_currency_name_iso3])->one();
-            $point = (int) ($amount / $config->ser_point_provision);
+
+            $point = $amount;
+
+            if ($config->ser_point_provision > 0 ) {
+                $point = (int) ($amount / $config->ser_point_provision);
+            }
 
             if(!empty($config)) {
                 if($business->com_premium == 1) {
