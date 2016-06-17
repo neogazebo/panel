@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 
-$this->title = ($model->isNewRecord ? 'New' : 'Edit') . ' Snap & Earn';
+$this->title = 'Snap & Earn Correction';
 $this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $latitude = ($model->company->com_latitude ? $model->company->com_latitude : 3.139003);
@@ -103,17 +103,39 @@ $this->registerCss("
                             <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                             <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                             <div class="point-form">
-                                <?=
-                                    $form->field($model, 'sna_transaction_time')->widget(kartik\widgets\DateTimePicker::classname(), [
-                                        'options' => ['placeholder' => 'Transaction Time ...'],
-                                        'convertFormat' => true,
-                                        'value' => $model->sna_upload_date,
-                                        'pluginOptions' => [
-                                            'format' => 'Y-m-d H:i:s'
-                                        ]
-                                    ]);
-                                ?>                
-                                <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
+
+                                <!-- uncomment this field if need update transaction time -->
+                                <?php 
+                                    // $form->field($model, 'sna_transaction_time')->widget(kartik\widgets\DateTimePicker::classname(), [
+                                    //     'options' => ['placeholder' => 'Transaction Time ...'],
+                                    //     'convertFormat' => true,
+                                    //     'value' => $model->sna_upload_date,
+                                    //     'pluginOptions' => [
+                                    //         'format' => 'Y-m-d H:i:s'
+                                    //     ]
+                                    // ]);
+                                ?>
+                                <!-- comment this if no needed -->
+                                <div class="form-group field-snapearn-sna_upload_date sna_status">
+                                <label class="col-lg-3 control-label" >Transaction Time</label>
+                                    <div class="col-lg-6">
+                                        <div class="form-control" readonly="true"><?= $model->sna_transaction_time ?></div>
+                                        <div>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="form-group field-snapearn-sna_upload_date sna_status">
+                                <label class="col-lg-3 control-label" >Receipt Number</label>
+                                    <div class="col-lg-6">
+                                        <div class="form-control" readonly="true"><?= $model->sna_receipt_number ?></div>
+                                        <div>
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>   
+
+                                <?php // $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                                 <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
                                 <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                             </div>

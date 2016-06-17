@@ -66,7 +66,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_receipt_image',
                 'sna_transaction_time'], 'required', 'when' => function($model) {
                 return $model->sna_status == 1;
-            }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }"],
+            }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }",'on' => 'update'],
             // [['sna_transaction_time'],'date', 'format' => 'Y-m-d H:m:s'],
             [['sna_com_id', 
                 'sna_point', 
@@ -87,7 +87,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'approvePerday', 
                 'when' => function($model) {
                     return $model->sna_status == 1;
-                }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }"],
+                }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }",'on' => 'update'],
             [['sna_receipt_date'], 
                 'string', 
                 'max' => 10],
@@ -95,15 +95,19 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'checkPoint', 
                 'when' => function($model) {
                     return $model->sna_status == 1;
-                }],
-            ['sna_com_id', 'checkMerchant'],
+                },'on' => 'update'],
+            [['sna_com_id'], 'checkMerchant','on' => 'update'],
             [['sna_receipt_image'], 
                 'string', 
                 'max' => 75],
             [['sna_com_name'], 
                 'string', 
                 'max' => 100],
-            ['sna_transaction_time', 'safe']
+            [['sna_transaction_time',
+                'sna_receipt_number',
+                'sna_receipt_amount',
+                'sna_com_id',
+                'sna_receipt_number'], 'safe','on' => 'correction']
         ];
     }
 

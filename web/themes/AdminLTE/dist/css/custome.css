@@ -30,6 +30,10 @@
     color: #DC0309;
 }
 
+.btn-correction {
+    color: #F39C12;
+}
+
 .select2-container .select2-selection--single {
     box-sizing: border-box;
     cursor: pointer;

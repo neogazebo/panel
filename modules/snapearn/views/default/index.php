@@ -155,10 +155,15 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right actionColumn">{update}</span>',
+                                    'template' => '<span class="pull-right actionColumn">{update} {corection}</span>',
                                     'buttons' => [
                                         'update' => function($url,$model) {
-                                            return Html::a('<i class="fa fa-pencil-square-o"></i>', ['to-update', 'id' => $model->sna_id]);
+                                            $superuser = Yii::$app->user->identity->superuser;
+                                            if ($model->sna_status == 0) {
+                                                return Html::a('<i class="fa fa-pencil-square-o"></i>', ['to-update', 'id' => $model->sna_id]);
+                                            } elseif($model->sna_status != 0 && $superuser == 1) {
+                                                return Html::a('<i class="fa fa-pencil-square-o btn-correction"></i>',['correction/to-correction','id' => $model->sna_id]);
+                                            }
                                         },
                                     ],
                                 ],
