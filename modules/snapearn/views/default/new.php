@@ -14,6 +14,7 @@ $this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depen
 $this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
 $longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
+$company->com_in_mall = true;
 ?>
 
 <section class="content-header">
@@ -270,10 +271,6 @@ $this->registerJs("
         return false;
     });
 
-    $('#existing').click(function() {
-         $('#business_exist').modal({ show: true });
-         return false;
-    });
     $('.datepicker').datepicker();
     var loadMall = function() {
         $('#businessMap').css('display','none');
@@ -315,47 +312,6 @@ $this->registerJs("
                 $(this).val(1);
             }
         });
-    });
-    // if($('.status').val() == 1) {
-    //     $('.point-form').css('display', 'block');
-    // } else if($('.status').val() == 2) {
-    //     $('.reject-form').css('display', 'block');
-    // }
-
-    $('.status').change(function() {
-        if($(this).val() == 1) {
-            $('.reject-form').css('display', 'none');
-            $('.point-form').css('display', 'block');
-        } else if($(this).val() == 2) {
-            $('.point-form').css('display', 'none');
-            $('.reject-form').css('display', 'block');
-            $('.sna_amount, .sna_point, .sna_status').val('');
-        } else {
-            $('.reject-form').css('display', 'none');
-            $('.point-form').css('display', 'none');
-            $('.sna_amount, .sna_point, .sna_status').val('');
-        }
-    }).trigger('change');
-
-    $('#snapearn-sna_amount').blur(function() {
-        var point = Math.floor($('#snapearn-sna_amount').val());
-        // $('#snapearn-sna_point').val(point);
-        $.ajax({
-            type: 'POST',
-            url: baseUrl + 'loyaltypoint/ajax-snapearn-point',
-            data: { id: id, com_id: com_id, point: point },
-            dataType: 'json',
-            success: function(result) {
-                $('#snapearn-sna_point').val(result);
-            }
-        });
-    });
-
-    // $('.saveNext').click(function(){
-    //     $('#saveNext').val(1);
-    // });
-    $('.submit-button, .reset-button').click(function(){
-        $('#saveNext').val(0);
     });
 
 function refreshOpenerTopFrameset(){

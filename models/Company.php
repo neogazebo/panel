@@ -29,7 +29,7 @@ class Company extends EbizuActiveRecord
     public $id;
     public $text;
     public $mall_name = null;
-    public $com_in_mall = true;
+    // public $com_in_mall = true;
 
     CONST COM_STATUS_NOT_ACTIVE = 0;
     CONST COM_STATUS_ACTIVE = 1;
@@ -59,7 +59,7 @@ class Company extends EbizuActiveRecord
             ['com_status', 'required', 'on' => 'change_status'],
             [['com_photo', 'com_banner_photo'], 'validateGif'],
             [['com_joined', 'com_joined_datetime', 'com_joined_by'], 'required', 'on' => 'joined'],
-            [['com_timezone', 'com_mac_id'], 'integer'],
+            [['com_timezone', 'com_mac_id','com_in_mall'], 'integer'],
             [[
                 'com_name',
                 'com_business_name',
@@ -92,13 +92,12 @@ class Company extends EbizuActiveRecord
                 'com_contactp_gender',
                 'com_searchable',
                 'com_show_start_tips',
-                'com_type', 'com_in_mall',
+                'com_type',
                 'com_snapearn',
                 'com_snapearn_checkin',
                 'com_reg_num',
                 'com_description',
                 'com_subcategory_id',
-                'com_in_mall',
                 'com_address',
                 'com_city',
                 'com_postcode',
@@ -758,6 +757,121 @@ class Company extends EbizuActiveRecord
                 'type' => 'high'
             ],
         ];
+    }
+
+
+    public static function colorLegend()
+    {
+        return [
+            'orange',
+            'blue',
+            'green',
+            'red',
+            'black',
+            'yellow',
+            'brown',
+            'magenta',
+            'purple',
+            'pink',
+        ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert))
+        {
+            /*
+             * on update profile, clear old image on S3
+             * Author : tajhul
+             */
+            if ($this->scenario == 'update-profile')
+            {
+                // get old data
+                $model = self::findOne($this->com_id);
+                $this->old_photo = !empty($model->com_photo) ? $model->com_photo : null;
+                $this->old_banner = !empty($model->com_banner_photo) ? $model->com_banner_photo : null;
+            }
+
+            // replace company address with mall address if company in mall
+            if ($this->com_in_mall == 1)
+            {
+                $mall = Mall::findOne($this->mall_id);
+                if ($mall instanceof Mall)
+                {
+                    $name = preg_replace('/ @.*/', '', $this->com_name);
+                    $this->com_name = $name . ' @ ' . $mall->mal_name;
+                    $this->com_address = $mall->mal_address;
+                    $this->com_postcode = $mall->mal_postcode;
+                    $this->com_city = $mall->mal_city;
+                    $this->com_city_id = $mall->mal_city_id;
+                    $this->com_region_id = $mall->mal_region_id;
+                    $this->com_country_id = $mall->mal_country_id;
+                    $this->com_latitude = $mall->mal_lat;
+                    $this->com_longitude = $mall->mal_lng;
+                }
+            }
+
+            $this->com_name = Yii::$app->encode->utf8($this->com_name);
+            $this->com_business_name = Yii::$app->encode->utf8($this->com_business_name);
+            $this->com_description = Yii::$app->encode->utf8($this->com_description);
+            $this->com_address = Yii::$app->encode->utf8($this->com_address);
+
+            return true;
+        }
+        return false;
+    }
+
+    // public function afterSave($insert, $changedAttributes)
+    // {
+    //     if ($this->com_in_mall == 1)
+    //     {
+    //         $malMerchant = $this->modelMallMerchant;
+    //         if ($malMerchant->load(Yii::$app->request->post()))
+    //         {
+    //             if (isset($this->idTemp))
+    //             {
+    //                 $malMerchant->idTemp = $this->idTemp;
+    //             }
+    //             $malMerchant->mam_mal_id = $this->mall_id;
+    //             $malMerchant->mam_com_id = $this->com_id;
+    //             $malMerchant->save();
+    //         }
+    //     }
+
+    //     // clear cache image on S3
+    //     if ($this->scenario == 'update-profile')
+    //     {
+    //         $this->clearCacheImage();
+    //     }
+    //     parent::afterSave($insert,$changedAttributes);
+    // }
+
+    public function afterDelete()
+    {
+        $merchant = MallMerchant::findOne(['mam_com_id' => $this->com_id]);
+        if ($merchant instanceof MallMerchant)
+        {
+            $merchant->resetFloorplan();
+            $merchant->delete();
+        }
+    }
+
+    public function isEmailUsageByOther()
+    {
+        $model = User::find()->where('usr_email=:email AND usr_id!=:id', ['email' => $this->com_email, 'id' => $this->com_usr_id]);
+        return $model->count() > 1 ? true : false;
+    }
+
+    public function floorPlanDataProvider()
+    {
+        $query = FloorPlan::find()->where('flp_mal_id = :mal_id', [':mal_id' => Yii::$app->user->identity->mall]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20
+            ]
+        ]);
+        return $dataProvider;
     }
 
     public function getCategoryListData($type = 1)

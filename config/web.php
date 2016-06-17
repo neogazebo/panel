@@ -53,6 +53,15 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'W2DvT9IrYxWJM7BBJXtPywmjawYB6msU',
         ],
+        'pushNotif' => [
+            'class' => 'app\components\extentions\PushNotif'
+        ],
+        'encode' => [
+            'class' => 'app\components\helpers\Encode'
+        ],
+        'general' => [
+            'class' => 'app\components\helpers\GlobalHelper'
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
