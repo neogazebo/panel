@@ -36,7 +36,7 @@ $form = ActiveForm::begin([
                     'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
                     'display' => 'value',
                     'remote' => [
-                        'url' => Url::to(['/merchant/default/list']) . '?q=%QUERY',
+                        'url' => Url::to(['list']) . '?q=%QUERY',
                         'wildcard' => '%QUERY'
                     ],
                     'limit' => 20
