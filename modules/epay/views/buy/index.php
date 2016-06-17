@@ -58,9 +58,9 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                     'label' => 'Reward',
                                     'format' => 'html',
                                     'value' => function($model, $url){
-                                        $vbought = $model->rewardBought->voucher;
+                                        $vbought = $model->rewardBought;
                                         if(!empty($vbought))
-                                            return $vbought->vou_reward_name;
+                                            return $vbought->voucher->vou_reward_name;
                                     }
                                 ],
                                 [
