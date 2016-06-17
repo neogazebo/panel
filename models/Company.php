@@ -29,7 +29,7 @@ class Company extends EbizuActiveRecord
     public $id;
     public $text;
     public $mall_name = null;
-    // public $com_in_mall = true;
+    // public $com_in_mall = true; don't ever do this
 
     CONST COM_STATUS_NOT_ACTIVE = 0;
     CONST COM_STATUS_ACTIVE = 1;
