@@ -51,3 +51,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.ui-autocomplete {
+    display: block;
+    top: 428px;
+    left: 528px;
+    width: auto;
+    font-size: 13px;
+}

@@ -54,8 +54,8 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                             </div>
                         </div>
                         <?= $form->field($model_company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'], false)->label('In Mall?') ?>
-                        <?= $form->field($model, 'mer_address')->textInput(); ?>
-                        <?= $form->field($model, 'mer_post_code')->textInput(); ?>
+                        <?= $form->field($model_company, 'com_address')->textInput(['value' => $model->mer_address]); ?>
+                        <?= $form->field($model_company, 'com_postcode')->textInput(['value' => $model->mer_post_code]); ?>
 						<?= 
 					        $form->field($model_company, 'mall_name')->widget(Typeahead::classname(),[
 					            'name' => 'merchant',
@@ -82,7 +82,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 					            ]
 					        ])->label('Mall Name');
 						?>
-					<?= $form->field($model_company, 'mall_id')->hiddenInput()->label('') ?>
+					   
 						<?= 
 					        $form->field($model_company, 'com_city')->widget(Typeahead::classname(),[
 					            'name' => 'merchant',
@@ -115,8 +115,8 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
                             </div>
                         </div>
 
-                        <?= $form->field($model, 'mer_contact_phone')->textInput(); ?>
-                        <?= $form->field($model, 'mer_office_fax')->textInput(); ?>
+                        <?= $form->field($model_company, 'com_phone')->textInput(['value' => $model->mer_contact_phone]); ?>
+                        <?= $form->field($model_company, 'com_fax')->textInput(['value' => $model->mer_office_fax]); ?>
                         <?= $form->field($model_company, 'com_website')->textInput([$model->mer_website]); ?>
                         <?= $form->field($model_company, 'com_size')->dropDownList($model_company->companySizeListData); ?>
                         <?= $form->field($model_company, 'com_nbrs_employees')->dropDownList($model_company->numberEmployeeListData); ?>
@@ -155,7 +155,7 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 
                         <?= $form->field($model_company, 'com_latitude')->hiddenInput()->label('') ?>
                         <?= $form->field($model_company, 'com_longitude')->hiddenInput()->label('') ?>
-
+                        <?= $form->field($model_company, 'mall_id')->hiddenInput()->label('') ?>
                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -173,51 +173,8 @@ $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 
 </div>
 
 <?php
-$this->registerCssFile("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/minified/jquery-ui.min.css");
-
 $this->registerJs("
     var isUpdate = 0;
-
-    var PostCodeid = '#merchantsignup-mer_address';
-    var longval = '#company-com_longitude';
-    var latval = '#company-com_latitude';
-    var geocoder;
-    var map;
-    var marker;
-    
-    function initialize() {
-        // init map
-        var initialLat = $(latval).val();
-        var initialLong = $(longval).val();
-        if (initialLat == '') {
-            initialLat = ".$latitude.";
-            initialLong = " . $longitude . ";
-        }
-        var latlng = new google.maps.LatLng(initialLat, initialLong);
-        var options = {
-            zoom: 16,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            heading: 90,
-            tilt: 45
-        };   
-    
-        map = new google.maps.Map(document.getElementById('map'), options);
-    
-        geocoder = new google.maps.Geocoder();    
-    
-        marker = new google.maps.Marker({
-            map: map,
-            draggable: true,
-            position: latlng
-        });
-    
-        google.maps.event.addListener(marker, 'dragend', function (event) {
-            var point = marker.getPosition();
-            map.panTo(point);
-        });
-        
-    };
 
     function loadRegister(reg)
     {
@@ -264,11 +221,17 @@ $this->registerJs("
         }
         checkOrNot(mall_checked);
         $('#company-com_in_mall').each(function() {
-            $(this).click(function() {
-                var checked = $(this).is(':checked');
-                checkOrNot(checked);
+                $(this).click(function() {
+                    var checked = $(this).is(':checked');
+                    checkOrNot(checked);
+                    if(checked == false){
+                        $(this).val(0);
+                        initialize();
+                    }else{
+                        $(this).val(1);
+                    }
+                });
             });
-        });
 
         $('.datepicker').datepicker({
           autoclose: true
@@ -282,8 +245,56 @@ $this->registerJs("
         });
 
         loadRegister('EBC');
+    });
 
-        $(function () {
+ // setup map autocomplete and dragable
+
+var PostCodeid = '#company-com_address';
+        var longval = '#company-com_longitude';
+        var latval = '#company-com_latitude';
+        var geocoder;
+        var map;
+        var marker;
+        
+        function initialize() {
+            // init map
+            var initialLat = $(latval).val();
+            var initialLong = $(longval).val();
+            if (initialLat == '') {
+                initialLat = ".$latitude.";
+                initialLong = " . $longitude . ";
+            }
+            var latlng = new google.maps.LatLng(initialLat, initialLong);
+            var options = {
+                zoom: 16,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                heading: 90,
+                tilt: 45
+            };   
+        
+            map = new google.maps.Map(document.getElementById('map'), options);
+        
+            geocoder = new google.maps.Geocoder();    
+        
+            marker = new google.maps.Marker({
+                map: map,
+                draggable: true,
+                position: latlng
+            });
+        
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                var point = marker.getPosition();
+                map.panTo(point);
+            });
+            
+        };
+        
+        $(document).ready(function () {
+        
+            initialize();
+
+            $(function () {
                 $(PostCodeid).autocomplete({
                     //This bit uses the geocoder to fetch address values
                     source: function (request, response) {
@@ -309,7 +320,6 @@ $this->registerJs("
                         $(latval).val(marker.getPosition().lat());
                         $(longval).val(marker.getPosition().lng());
                     }
-
                 });
                 e.preventDefault();
             });
@@ -325,10 +335,7 @@ $this->registerJs("
                     }
                 });
             });
-            
-
-        //});
-    });
+        });   
 ", \yii\web\View::POS_END, 'merchantsignup-review');
 
 Modal::begin([

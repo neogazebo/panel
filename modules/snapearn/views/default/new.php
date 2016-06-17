@@ -142,6 +142,7 @@ $form = ActiveForm::begin([
             <?= $form->field($company->modelMallMerchant, 'mam_unit_number')->textInput() ?>
         </div>
     </div>
+    <div style="padding: 10px;" class="clearfix"></div>
     <?= $form->field($company, 'com_phone')->textInput(); ?>
     <?= $form->field($company, 'com_fax')->textInput(); ?>
     <?= $form->field($company, 'com_website')->textInput(); ?>
@@ -239,47 +240,6 @@ $this->registerJs("
     $('.field-company-com_latitude').hide();
     $('.field-company-com_longitude').hide();
 
-    // var loadMap = function() {
-    //     map = new GMaps({
-    //         div: '#map',
-    //         zoom: 13,
-    //         lat: " . $latitude . ",
-    //         lng: " . $longitude . ",
-    //         click: function(e) {
-    //             map.removeMarkers();
-    //             map.addMarker({
-    //                 lat: e.latLng.lat(),
-    //                 lng: e.latLng.lng(),
-    //             });
-    //             $('#company-com_latitude').val(e.latLng.lat());
-    //             $('#company-com_longitude').val(e.latLng.lng());
-    //         },
-    //     });
-    //     map.addMarker({
-    //         lat: " . $latitude . ",
-    //         lng: " . $longitude . ",
-    //     });
-    //     $('#company-com_address').keyup(function(e) {
-    //         e.preventDefault();
-    //         GMaps.geocode({
-    //             address: $('#company-com_address').val().trim(),
-    //             callback: function(results, status) {
-    //                 if (status == 'OK') {
-    //                     map.removeMarkers();
-    //                     var latLng = results[0].geometry.location;
-    //                     map.setCenter(latLng.lat(), latLng.lng());
-    //                     map.addMarker({
-    //                         lat: latLng.lat(),
-    //                         lng: latLng.lng()
-    //                     });
-    //                     $('#company-com_latitude').val(latLng.lat());
-    //                     $('#company-com_longitude').val(latLng.lng());
-    //                 }
-    //             }
-    //         });
-    //     });
-    // };
-
     $('#create').click(function() {
         $('#create-business').show();
         $.ajax({
@@ -350,7 +310,6 @@ $this->registerJs("
             checkOrNot(checked);
             if(checked == false){
                 $(this).val(0);
-                // loadMap();
                 initialize();
             }else{
                 $(this).val(1);
