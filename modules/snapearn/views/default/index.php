@@ -46,13 +46,21 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                         </select>
                         </div> -->
                         <div class="form-group">
-                        <label>Date range</label><br>
-                        <div class="input-group">
-                            <div class="input-group-addon" for="reservation">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <input type="text" name="sna_daterange" class="form-control pull-right" id="sna_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
+                            <label>Joined</label>
+                            <select name="com_joined" class="form-control select2" style="width: 100%;">
+                                  <option value="" <?= (!empty($_GET['com_joined']) == '' || empty($_GET['com_joined'])) ? 'selected' : '' ?>>All</option>
+                                  <option value="0" <?= (!empty($_GET['com_joined']) == 0) ? 'selected' : '' ?>>Not Joined</option>
+                                  <option value="1" <?= (!empty($_GET['com_joined']) == 1) ? 'selected' : '' ?>>Joined</option>
+                            </select>
                         </div>
+                        <div class="form-group">
+                            <label>Date range</label><br>
+                            <div class="input-group">
+                                <div class="input-group-addon" for="reservation">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" name="sna_daterange" class="form-control pull-right" id="sna_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="member">Member</label><br>
@@ -83,8 +91,9 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                 [
                                     'label' => 'Merchant',
                                     'attribute' => 'sna_com_id',
+                                    'format' => 'html',
                                     'value' => function($data) {
-                                        return $data->merchant['com_name'];
+                                        return $data->merchant['com_name'] . ($data->merchant['com_joined'] == 1 ? ' <i class="fa fa-check"></i>' : '');
                                     }
                                 ],
                                 [
