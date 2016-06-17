@@ -22,37 +22,37 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                     <form class="form-inline" role="form" method="get" action="/snapearn">
                         <div class="form-group">
                         <label>Country</label>
-                        <select name="sna_cty" class="form-control select2" style="width: 100%;">
-                              <option value="" <?= (!empty($_GET['sna_cty']) == '' || empty($_GET['sna_cty'])) ? 'selected' : '' ?>>All</option>
-                              <option value="ID" <?= (!empty($_GET['sna_cty']) == 'ID') ? 'selected' : '' ?>>Indonesia</option>
-                              <option value="MY" <?= (!empty($_GET['sna_cty']) == 'MY') ? 'selected' : '' ?>>Malaysia</option>
-                        </select>
+                            <select name="sna_cty" class="form-control select2" style="width: 100%;">
+                                  <option value="" <?= (!empty($_GET['sna_cty']) == '' || empty($_GET['sna_cty'])) ? 'selected' : '' ?>>All</option>
+                                  <option value="ID" <?= (!empty($_GET['sna_cty']) == 'ID') ? 'selected' : '' ?>>Indonesia</option>
+                                  <option value="MY" <?= (!empty($_GET['sna_cty']) == 'MY') ? 'selected' : '' ?>>Malaysia</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                        <label>Receipt Status</label>
-                        <select name="sna_status" class="form-control select2" style="width: 100%;">
-                              <option value="" <?= (!empty($_GET['sna_status']) == '' || empty($_GET['sna_status'])) ? 'selected' : '' ?>>All</option>
-                              <option value="NEW" <?= (!empty($_GET['sna_status']) == 'NEW') ? 'selected' : '' ?>>New</option>
-                              <option value="APP" <?= (!empty($_GET['sna_status']) == 'APP') ? 'selected' : '' ?>>Approved</option>
-                              <option value="REJ" <?= (!empty($_GET['sna_status']) == 'REJ') ? 'selected' : '' ?>>Rejected</option>
-                        </select>
+                            <label>Receipt Status</label>
+                            <select name="sna_status" class="form-control select2" style="width: 100%;">
+                                  <option value="" <?= (!empty($_GET['sna_status']) == '' || empty($_GET['sna_status'])) ? 'selected' : '' ?>>All</option>
+                                  <option value="NEW" <?= (!empty($_GET['sna_status']) == 'NEW') ? 'selected' : '' ?>>New</option>
+                                  <option value="APP" <?= (!empty($_GET['sna_status']) == 'APP') ? 'selected' : '' ?>>Approved</option>
+                                  <option value="REJ" <?= (!empty($_GET['sna_status']) == 'REJ') ? 'selected' : '' ?>>Rejected</option>
+                            </select>
                         </div>
-                        <!-- <div class="form-group">
-                        <label>Join Status</label>
-                        <select name="sna_join" class="form-control select2" style="width: 100%;">
-                              <option value="" <?php // (!empty($_GET['sna_join']) == '' || empty($_GET['sna_join'])) ? 'selected' : '' ?>>All</option>
-                              <option value="1" <?php // ($_GET['sna_join'] == '1') ? 'selected' : '' ?>>Joined</option>
-                              <option value="2" <?php // ($_GET['sna_join'] == '2') ? 'selected' : '' ?>>UnJoined</option>
-                        </select>
-                        </div> -->
                         <div class="form-group">
-                        <label>Date range</label><br>
-                        <div class="input-group">
-                            <div class="input-group-addon" for="reservation">
-                                <i class="fa fa-calendar"></i>
+                            <label>Joined</label>
+                            <select name="com_joined" class="form-control select2" style="width: 100%;">
+                                  <option value="" <?= (!empty($_GET['com_joined']) == '' || empty($_GET['com_joined'])) ? 'selected' : '' ?>>All</option>
+                                  <option value="0" <?= (!empty($_GET['com_joined']) == 0) ? 'selected' : '' ?>>Not Joined</option>
+                                  <option value="1" <?= (!empty($_GET['com_joined']) == 1) ? 'selected' : '' ?>>Joined</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date range</label><br>
+                            <div class="input-group">
+                                <div class="input-group-addon" for="reservation">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" name="sna_daterange" class="form-control pull-right" id="sna_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
                             </div>
-                            <input type="text" name="sna_daterange" class="form-control pull-right" id="sna_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
-                        </div>
                         </div>
                         <div class="form-group">
                             <label for="member">Member</label><br>
@@ -83,8 +83,9 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                 [
                                     'label' => 'Merchant',
                                     'attribute' => 'sna_com_id',
+                                    'format' => 'html',
                                     'value' => function($data) {
-                                        return $data->merchant['com_name'];
+                                        return $data->merchant['com_name'] . ($data->merchant['com_joined'] == 1 ? ' <i class="fa fa-check"></i>' : '');
                                     }
                                 ],
                                 [
