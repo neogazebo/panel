@@ -42,10 +42,10 @@ class CorrectionController extends BaseController
         $type = WorkingTime::SNAPEARN_TYPE;
         $param = $id;
         $wrk_id = $this->startWorking($user, $type, $param);
-        return $this->redirect(['correction', 'id' => $id,'wrk_id' => $wrk_id]);
+        return $this->redirect(['correction', 'id' => $id]);
     }
 	
-	public function actionCorrection($id,$wrk_id = null)
+	public function actionCorrection($id)
 	{
     	$model = $this->findModel($id);
     	$model->scenario = 'correction';
@@ -256,8 +256,9 @@ class CorrectionController extends BaseController
                     $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
 
                     // end working time
-                    $desc = "Correction SE $snap_type";
-                    $this->endWorking($wrk_id, $desc);
+                    $wrk = WorkingTime::find()->findWorkExist($model->sna_id)->one();
+                    $desc = "Correction S&E $snap_type";
+                    $this->endWorking($wrk->wrk_id, $desc);
 
                     $transaction->commit();
                 } else {

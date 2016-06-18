@@ -72,7 +72,7 @@ class BaseController extends Controller
     {
         $this->centralTimeZone();
         // checking existing worktime with this user and param id
-    	$model = WorkingTime::find()->findWorkExist($user,$param)->one();
+    	$model = WorkingTime::find()->findWorkExist($param)->one();
         // if there is no exists worktime create this one
         if (empty($model)) {
             $model = new WorkingTime();

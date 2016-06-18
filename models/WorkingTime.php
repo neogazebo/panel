@@ -84,6 +84,11 @@ class WorkingTime extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::ClassName(),['id' => 'wrk_by']);
+    }
+
     /**
      * @inheritdoc
      * @return WorkingTimeQuery the active query used by this AR class.

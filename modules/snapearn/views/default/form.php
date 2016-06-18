@@ -6,6 +6,7 @@ use app\models\SnapEarn;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use kartik\widgets\DateTimePicker;
 
 $this->title = ($model->isNewRecord ? 'New' : 'Edit') . ' Snap & Earn';
 $this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
@@ -104,12 +105,13 @@ $this->registerCss("
                             <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                             <div class="point-form">
                                 <?=
-                                    $form->field($model, 'sna_transaction_time')->widget(kartik\widgets\DateTimePicker::classname(), [
+                                    $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
                                         'options' => ['placeholder' => 'Transaction Time ...'],
-                                        'convertFormat' => true,
+                                        'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
                                         'value' => $model->sna_upload_date,
                                         'pluginOptions' => [
-                                            'format' => 'Y-m-d H:i:s'
+                                            'autoclose'=>true,
+                                            'format' => 'yyyy-mm-dd H:i:s'
                                         ]
                                     ]);
                                 ?>                
@@ -191,10 +193,17 @@ $this->registerJs("
     $('#sna_image').iviewer({
         src: '".$imageSource."'
     });
+
 $('#snapearn-sna_transaction_time').attr('autofocus');
     $('#snapearn-sna_status').change(function() {
         if($(this).val() == 1) {
             pointConvert();
+            
+            if (com_id = 0) {
+                $('.field-snapearn-sna_receipt_amount').addClass('has-error');
+                $('.field-snapearn-sna_receipt_amount').find('.help-block').text('Please create merchant first! Thanks.');
+            }
+
             $('#snapearn-sna_transaction_time').attr('autofocus');
             $('.reject-form').css('display', 'none');
             $('.point-form').css('display', 'block');

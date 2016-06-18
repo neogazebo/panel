@@ -13,6 +13,7 @@ use yii\helpers\Json;
 $this->title = 'Review Merchant Signup: ' . $model->mer_bussines_name;
 $this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerCssFile($this->theme->baseUrl . '/dist/plugins/jQueryui/jquery-ui.min.css');
 $latitude = ($model_company->com_latitude ? $model_company->com_latitude : 3.139003);
 $longitude = ($model_company->com_longitude ? $model_company->com_longitude : 101.686855);
 $model_company->com_in_mall = true;
@@ -65,7 +66,7 @@ $model_company->com_in_mall = true;
 					                'minLength' => 3
 					            ],
 					            'pluginEvents' => [
-					                "typeahead:select" => "function(ev, suggestion) { $('#company-mall_id').val(suggestion.id); }",
+					                "typeahead:select" => "function(ev, suggestion) { $('#mall_id').val(suggestion.id); }",
 					            ],
 					            'dataset' => [
 					                [
@@ -80,6 +81,7 @@ $model_company->com_in_mall = true;
 					            ]
 					        ])->label('Mall Name');
 						?>
+                        <input id="mall_id" type="hidden" name="mall_id" value="">
                         <?= $form->field($model_company, 'com_address')->textInput(['value' => $model->mer_address]); ?>
                         <?= $form->field($model_company, 'com_postcode')->textInput(['value' => $model->mer_post_code]); ?>
 						<?= 
@@ -154,7 +156,6 @@ $model_company->com_in_mall = true;
 
                         <?= $form->field($model_company, 'com_latitude')->hiddenInput()->label('') ?>
                         <?= $form->field($model_company, 'com_longitude')->hiddenInput()->label('') ?>
-                        <?= $form->field($model_company, 'mall_id')->hiddenInput()->label('') ?>
                         <div class="panel-footer">
                             <div class="row">
                                 <div class="col-sm-12">

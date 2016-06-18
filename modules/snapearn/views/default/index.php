@@ -46,14 +46,6 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                         </select>
                         </div> -->
                         <div class="form-group">
-                            <label>Joined</label>
-                            <select name="com_joined" class="form-control select2" style="width: 100%;">
-                                  <option value="" <?= (!empty($_GET['com_joined']) == '' || empty($_GET['com_joined'])) ? 'selected' : '' ?>>All</option>
-                                  <option value="0" <?= (!empty($_GET['com_joined']) == 0) ? 'selected' : '' ?>>Not Joined</option>
-                                  <option value="1" <?= (!empty($_GET['com_joined']) == 1) ? 'selected' : '' ?>>Joined</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <label>Date range</label><br>
                             <div class="input-group">
                                 <div class="input-group-addon" for="reservation">
@@ -80,20 +72,22 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
                             'columns' => [
-                                [
-                                    'label' => 'Receipt',
-                                    'attribute' => 'sna_receipt_image',
-                                    'format' => 'raw',
-                                    'value' => function($data) {
-                                        return Html::img($data->image, ['style' => 'max-width: 70px; height: 32px']);
-                                    }
-                                ],
+                                // [
+                                //     'label' => 'Receipt',
+                                //     'attribute' => 'sna_receipt_image',
+                                //     'format' => 'raw',
+                                //     'value' => function($data) {
+                                //         return Html::img($data->image, ['style' => 'max-width: 70px; height: 32px']);
+                                //     }
+                                // ],
                                 [
                                     'label' => 'Merchant',
                                     'attribute' => 'sna_com_id',
                                     'format' => 'html',
                                     'value' => function($data) {
-                                        return $data->merchant['com_name'] . ($data->merchant['com_joined'] == 1 ? ' <i class="fa fa-check"></i>' : '');
+                                        if (!empty($data->merchant)) {
+                                            return $data->merchant['com_name'] . ($data->merchant['com_joined'] == 1 ? ' <i class="fa fa-check"></i>' : '');
+                                        }
                                     }
                                 ],
                                 [

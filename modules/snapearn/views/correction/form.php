@@ -238,7 +238,7 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
         // $('#snapearn-sna_point').val(point);
         $.ajax({
             type: 'POST',
-            url: baseUrl + 'snapearn/default/ajax-snapearn-point',
+            url: baseUrl + 'snapearn/correction/ajax-snapearn-point',
             data: { id: id, com_id: com_id, amount: amount },
             dataType: 'json',
             success: function(result) {

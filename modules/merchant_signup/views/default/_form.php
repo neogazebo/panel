@@ -8,6 +8,7 @@ use yii\bootstrap\Modal;
 
 $this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerCssFile($this->theme->baseUrl . '/dist/plugins/jQueryui/jquery-ui.min.css');
 $latitude = ($model_company->com_latitude ? $model_company->com_latitude : 3.139003);
 $longitude = ($model_company->com_longitude ? $model_company->com_longitude : 101.686855);
 $inMall = (isset($model_company->com_in_mall) && $model_company->com_in_mall == 1 ? 1 : 0);
@@ -207,8 +208,6 @@ $this->registerJs("var baseUrl = '" . Yii::$app->homeUrl . "';", \yii\web\View::
 
 
 <?php
-$this->registerCssFile("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/minified/jquery-ui.min.css");
-
 $this->registerJs("
     var isUpdate = 0;
     

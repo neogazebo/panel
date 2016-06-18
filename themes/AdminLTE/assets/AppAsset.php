@@ -18,9 +18,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        // 'css/site.css',
-        'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600',
-        'themes/AdminLTE/dist/plugins/jQueryui/jquery-ui.min.css',
+        // 'css/site.css',',
         'themes/AdminLTE/bootstrap/css/bootstrap.min.css',
         'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css',
         'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css',

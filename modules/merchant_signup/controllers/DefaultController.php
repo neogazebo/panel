@@ -125,6 +125,12 @@ class DefaultController extends BaseController
                         $model->mer_office_fax = $model_company->com_fax;
                         $model->mer_reviewed = Yii::$app->user->id;
                         if ($model->save()) {
+                            if ($model_company->com_in_mall = 1) {
+                                    $mam_model = new MallMerchant();
+                                    $mam_model->mam_com_id = $model_company->com_id;
+                                    $mam_model->mam_mal_id = Yii::$app->request->post('mall_id');
+                                    $mam_model->save(false);
+                                }
                             $audit = AuditReport::setAuditReport('Copy Merchant from tbl_signup_merchant : ' . $model->mer_company_name, Yii::$app->user->id, MerchantSignup::className(), $model->id, $changed_attributes);
                             $transaction->commit();
                             $this->setMessage('save','success', 'Business updated successfully!');

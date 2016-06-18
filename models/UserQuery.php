@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 /**
  * This is the ActiveQuery class for [[User]].
  *
@@ -36,5 +37,13 @@ class UserQuery extends \yii\db\ActiveQuery
     public function getCron($date)
     {
         echo $date;
+    }
+
+    public function searchUser()
+    {
+        $search = $_GET['q'];
+        $this->select('id, username');
+        $this->andWhere('username LIKE "%'.$search.'%" ');
+        return $this->all();
     }
 }

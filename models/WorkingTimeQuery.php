@@ -7,6 +7,8 @@ namespace app\models;
  *
  * @see WorkingTime
  */
+use Yii;
+
 class WorkingTimeQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
@@ -32,10 +34,25 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function findWorkExist($user,$param)
+    public function findWorkExist($param)
     {
+        $user = Yii::$app->user->id;
         $this->andWhere("wrk_by = $user");
         $this->andWhere("wrk_param_id = $param ");
+        $this->andWhere("wrk_end IS NULL");
+        return $this;
+    }
+
+    public function getWorker()
+    {
+        $this->where('wrk_end IS NOT NULL');
+        if (!empty($_POST['wrk_by'])) {
+            $this->andWhere('wrk_by = :id',[
+                    ':id' => $_POST['wrk_by']
+                ]);
+        }
+        $this->andWhere('wrk_time IS NOT NULL');
+        $this->groupBy('wrk_by');
         return $this;
     }
 }

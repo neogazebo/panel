@@ -12,6 +12,7 @@ $this->title = "New Merchant";
 
 $this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerCssFile($this->theme->baseUrl . '/dist/plugins/jQueryui/jquery-ui.min.css');
 $latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
 $longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
 $company->com_in_mall = true;
@@ -76,6 +77,7 @@ $form = ActiveForm::begin([
         ]);
     ?>
     <input id="com_city" type="hidden" name="com_city" value="">
+    <input id="mall_id" type="hidden" name="mall_id" value="">
     <?= $form->field($company, 'com_postcode')->textInput(); ?>
     <?= 
         $form->field($company, 'mall_name')->widget(Typeahead::classname(),[
@@ -89,7 +91,7 @@ $form = ActiveForm::begin([
                 'minLength' => 3
             ],
             'pluginEvents' => [
-                "typeahead:select" => "function(ev, suggestion) { $('#company-mall_id').val(suggestion.id); }",
+                "typeahead:select" => "function(ev, suggestion) { $('#mall_id').val(suggestion.id); }",
             ],
             'dataset' => [
                 [
@@ -104,8 +106,6 @@ $form = ActiveForm::begin([
             ]
         ])->label('Select Mall');
     ?>
-    <?= $form->field($company, 'mall_id')->hiddenInput(['value' => $suggest->cos_mall_id])->label('') ?>
-    <?= $form->field($company, 'com_mac_id')->dropDownList([]) ?>
     <div class="form-group" id="businessMap">
         <label class="col-lg-3 control-label">Map</label>
         <div class="col-lg-8">

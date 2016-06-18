@@ -47,6 +47,9 @@ $config = [
         'rbac' => [
             'class' => 'app\modules\rbac\Rbac',
         ],
+        'logwork' => [
+            'class' => 'app\modules\logwork\Logwork',
+        ],
     ],
     'components' => [
         'request' => [
