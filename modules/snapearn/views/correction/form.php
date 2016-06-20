@@ -111,16 +111,16 @@ $this->title = "Update SnapEarn";
                           //     ]
                           // ]);
                       ?>    
-                      <div class="form-group field-snapearn-sna_upload_date sna_status">
+                      <div class="form-group field-snapearn-sna_transaction_time sna_status">
                       <label class="control-label" >Transaction Time</label>
                           <div class="">
-                              <div class="form-control" readonly="true"><?= $model->sna_transaction_time ?></div>
+                              <div class="form-control" readonly="true"><?= Yii::$app->formatter->asDateTime($model->sna_transaction_time,'php: Y-m-d H:i:s') ?></div>
                               <div>
                                   <div class="help-block"></div>
                               </div>
                           </div>
                       </div>  
-                      <div class="form-group field-snapearn-sna_upload_date sna_status">
+                      <div class="form-group field-snapearn-sna_receipt_number sna_status">
                       <label class="control-label" >Receipt Number</label>
                           <div class="">
                               <div class="form-control" readonly="true"><?= $model->sna_receipt_number ?></div>
