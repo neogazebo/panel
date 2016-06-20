@@ -103,21 +103,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 ],
                                 [
-                                    'label' => 'Devision',
-                                    'attribute' => 'wrk_type',
+                                    'label' => 'Total Point',
+                                    'attribute' => 'wrk_point',
                                     'value' => function($data){
-                                        if ($data->wrk_type = 1) {
-                                            return 'Snap & Earn';
-                                        }
+                                        return $data->total_point;
                                     }
                                 ],
                                 [
                                     'label' => 'Record Activity',
                                     'attribute' => 'wrk_time',
                                     'value' => function($data){
-                                        // if (!empty($data->)) {
-                                        //     return date('H:i:s',$data->getTime($data->wrk_by)->total_record);
-                                        // }
                                         date_default_timezone_set('UTC');
                                         return date('H:i:s',$data->total_record);
                                     }

@@ -31,7 +31,7 @@ $this->title = "Update SnapEarn";
         <!-- Box Comment -->
         <div class="box box-widget">
           <div class="box-header with-border">
-            <?php if (Yii::$app->user->identity->level == 1) : ?>
+            <?php if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
             <div class="user-block">
               <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'].$model->member->acc_photo : $this->theme->baseUrl.'/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
               <span class="username">
@@ -49,7 +49,7 @@ $this->title = "Update SnapEarn";
                   Detail Receipt
                 </a>
                 </span>
-                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date) ?></span>
+                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_receipt_date) ?></span>
               </div>
             <?php endif; ?>
             <div class="box-tools">
@@ -72,7 +72,23 @@ $this->title = "Update SnapEarn";
                   <a href="#"><b><?= (empty($model->business)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (!empty($model->newSuggestion)) ? $model->newSuggestion->cos_name : $model->business->com_name ?></span></a>
                 </li>
                 <li class="">
-                  <a href="#"><b><?= (!empty($model->business)) ? 'Merchant Point' : 'Mall Sugest' ?> </b> <span class="pull-right text-light-blue"><?= (!empty($model->business)) ? $model->business->com_point : $model->newSuggestion->cos_mall ?></span></a>
+                  <a href="#"><b>Merchant Point</b>
+                    <?php if ($model->business->com_point < 500) :?> 
+                      <?php if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
+                        <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?> 
+                      <?php else: ?>
+                        <span class="label label-warning add-point">Point is less than 500!</span>
+                      <?php endif; ?>
+                    <?php endif; ?>
+                    <span class="pull-right text-light-blue">
+                      <?= $model->business->com_point ?>
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#"><b>Sugest Merchant</b>
+                    <span class="pull-right text-light-blue"><?= $model->newSuggestion->cos_name ?></span>
+                  </a>
                 </li>
               </ul>
           </div>

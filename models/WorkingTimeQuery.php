@@ -45,7 +45,7 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
 
     public function getWorker()
     {
-        $this->select('wrk_id,wrk_by,wrk_param_id,sum(wrk_time) as total_record');
+        $this->select('wrk_id,wrk_by,wrk_param_id,sum(wrk_time) as total_record,sum(wrk_point) as total_point');
         $this->where('wrk_end IS NOT NULL');
         if (!empty($_POST['wrk_by'])) {
             $this->andWhere('wrk_by = :id',[
@@ -56,4 +56,19 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         $this->groupBy('wrk_by');
         return $this;
     }
+
+    public function detailPoint($id)
+    {
+        $this->where('wrk_by = :user',[
+                ':user' => $id
+            ]);
+        $this->andWhere('wrk_end IS NOT NULL');
+       if (!empty($_GET['wrk_daterange'])){
+            $wrk_daterange = explode(' to ',($_GET['wrk_daterange']));
+            $this->andWhere("FROM_UNIXTIME(wrk_upload_date) BETWEEN '$wrk_daterange[0] 00:00:00' AND '$wrk_daterange[1] 23:59:59'");
+        }
+        $this->andWhere('wrk_time IS NOT NULL');
+        return $this;
+    }
+
 }

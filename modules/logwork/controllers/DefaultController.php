@@ -39,7 +39,8 @@ class DefaultController extends BaseController
 
     public function actionView($id)
     {
-        $model = WorkingTime::find()->where('wrk_by = :user AND wrk_end IS NOT NULL',[':user' => $id]);
+        $model = WorkingTime::find()->detailPoint($id);
+        $username = User::findOne($id)->username;
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
@@ -47,7 +48,8 @@ class DefaultController extends BaseController
             ]
         ]);
         return $this->render('view',[
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'username' => $username
         ]);
     }
 
