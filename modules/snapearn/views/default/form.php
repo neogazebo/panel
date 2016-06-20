@@ -71,9 +71,10 @@ $this->title = "Update SnapEarn";
                 <li class="">
                   <a href="#"><b><?= (empty($model->business)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (!empty($model->newSuggestion)) ? $model->newSuggestion->cos_name : $model->business->com_name ?></span></a>
                 </li>
+                <?php if (!empty($model->business)) : ?>
                 <li class="">
                   <a href="#"><b>Merchant Point</b>
-                    <?php if (!empty($model->business) && $model->business->com_point < 500) :?> 
+                    <?php if ($model->business->com_point < 500) :?> 
                       <?php if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
                         <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?> 
                       <?php else: ?>
@@ -85,11 +86,14 @@ $this->title = "Update SnapEarn";
                     </span>
                   </a>
                 </li>
+                <?php endif; ?>
+                <?php if (empty($model->business)) : ?>
                 <li>
-                  <a href="#"><b>Sugest Merchant</b>
-                    <span class="pull-right text-light-blue"><?= $model->newSuggestion->cos_name ?></span>
+                  <a href="#"><b>Sugest Mall</b>
+                    <span class="pull-right text-light-blue"><?= $model->newSuggestion->cos_mall ?></span>
                   </a>
                 </li>
+              <?php endif; ?>
               </ul>
           </div>
         </div>

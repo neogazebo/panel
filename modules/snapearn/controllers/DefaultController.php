@@ -219,7 +219,7 @@ class DefaultController extends BaseController
                 if (!empty($sna_status)) {
                     $model->sna_status = $sna_status;
                 }
-                var_dump($model->status);exit;
+                // var_dump($model->status);exit;
                 // get limited point per country 
                 $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 
