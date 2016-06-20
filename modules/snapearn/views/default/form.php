@@ -98,16 +98,16 @@ $this->title = "Update SnapEarn";
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                     <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                     <div class="point-form">
-                      <?=
-                          $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
-                              'options' => ['placeholder' => 'Transaction Time ...'],
-                              'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
-                              'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date, "php:Y-m-d  H:i:s"),
-                              'pluginOptions' => [
-                                  'autoclose'=>true,
-                                  'format' => 'yyyy-mm-dd H:i:s'
-                              ]
-                          ]);
+                      <?php
+echo '<label class="control-label">Transaction Time </label>';
+echo DateTimePicker::widget([
+  'name' => 'sna_transaction_time',
+  'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s'),
+  'pluginOptions' => [
+    'autoclose' => true,
+    'format' => 'Y-m-d H:i:s'
+  ]
+]);
                       ?>                
                       <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                       <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
