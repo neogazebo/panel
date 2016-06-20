@@ -230,7 +230,7 @@ class DefaultController extends BaseController
                 // var_dump($model->sna_point);exit;
                 // optional point for premium or default merchant
                 if(!empty($config)) {
-                    if($model->merchant->com_premium == 1) {
+                    if($model->business->com_premium == 1) {
                         $model->sna_point *= 2;
                         $limitPoint = $config->ser_premium;
                     } else {

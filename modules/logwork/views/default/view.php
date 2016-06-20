@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <form class="form-inline" role="form" method="get" action="/logwork">
+                    <form class="form-inline pull-right" role="form" method="get" action="/logwork/view">
                         <div class="form-group">
                             <label>Date range</label><br>
                             <div class="input-group">
