@@ -10,7 +10,7 @@ use yii\bootstrap\Modal;
 use yii\web\JsExpression;
 use yii\helpers\Json;
 
-$this->title = 'Review Merchant Signup: ' . $model->mer_bussines_name;
+$this->title = $model->mer_bussines_name;
 $this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerCssFile($this->theme->baseUrl . '/dist/plugins/jQueryui/jquery-ui.min.css');
@@ -19,15 +19,21 @@ $longitude = ($model_company->com_longitude ? $model_company->com_longitude : 10
 $model_company->com_in_mall = true;
 ?>
 
-<div id="wrap">
-    <div class="container">
-        <div id="page-heading">
-            <h1><i class="fa fa-briefcase"></i> <?= Yii::t('app', $this->title) ?></h1>
-        </div>
+<section class="content-header">
+    <h1>Review Merchant Signup </h1>
+</section>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-primary">
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?= $this->title ?></h3>
+                    <div class="box-tools">
+
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
                     <?php
                     $form = ActiveForm::begin([
                         'options' => ['enctype' => 'multipart/form-data', 'class' => 'form-horizontal'],
@@ -156,7 +162,7 @@ $model_company->com_in_mall = true;
 
                         <?= $form->field($model_company, 'com_latitude')->hiddenInput()->label('') ?>
                         <?= $form->field($model_company, 'com_longitude')->hiddenInput()->label('') ?>
-                        <div class="panel-footer">
+                        <div class="box-footer">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary pull-right']) ?>
@@ -166,7 +172,7 @@ $model_company->com_in_mall = true;
                         </div>
                     </div>
                     <?php ActiveForm::end(); ?>
-                </div>
+               </div>
             </div>
         </div>
     </div>
