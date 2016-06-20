@@ -5,7 +5,6 @@ use app\models\SnapEarn;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
-use app\components\helpers\Utc;
 use kartik\widgets\DateTimePicker;
 
 $this->title = "Update SnapEarn";
@@ -102,7 +101,7 @@ $this->title = "Update SnapEarn";
                       <?=
                           $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
                               'options' => ['placeholder' => 'Transaction Time ...'],
-                              // 'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,  
+                              'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
                               'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date, "php:Y-m-d  H:i:s"),
                               'pluginOptions' => [
                                   'autoclose'=>true,

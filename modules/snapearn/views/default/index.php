@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
+use app\components\helpers\Utc;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 
@@ -12,7 +13,7 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
 $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 ?>
 <section class="content-header ">
-    <h1><?= $this->title?> <?= date_default_timezone_get() ?></h1>
+    <h1><?= $this->title?></h1>
 </section>
 
 <section class="content">
@@ -120,7 +121,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 [
                                     'attribute' => 'sna_upload_date',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDateTime($data->sna_upload_date);
+                                        return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_upload_date));
                                     }
                                 ],
                                 [
@@ -128,9 +129,9 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                     'attribute' => 'sna_approved_datetime',
                                     'value' => function($data) {
                                         if (!empty($data->sna_approved_datetime)) {
-                                            return Yii::$app->formatter->asDateTime($data->sna_approved_datetime);
+                                            return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_approved_datetime));
                                         } elseif (!empty($data->sna_rejected_datetime)) {
-                                            return Yii::$app->formatter->asDateTime($data->sna_rejected_datetime);
+                                            return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_rejected_datetime));
                                         }
                                         
                                     }
