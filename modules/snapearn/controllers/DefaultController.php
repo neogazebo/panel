@@ -42,8 +42,8 @@ class DefaultController extends BaseController
 
     public function init()
     {
-        // $timezone = date_default_timezone_get();
-        // date_default_timezone_set($timezone);
+        $timezone = date_default_timezone_get();
+        date_default_timezone_set($timezone);
     }
 
     public function actionIndex()
@@ -405,7 +405,8 @@ class DefaultController extends BaseController
             $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
         }
 
-        $model->sna_transaction_time = date('Y-m-d H:i:s', Utc::convert($model->sna_upload_date));
+        // $model->sna_transaction_time = date('Y-m-d H:i:s', Utc::convert($model->sna_upload_date));
+        // $model->sna_upload_date = date('d, M Y H:i:s', Utc::convert($model->sna_upload_date));
 
         return $this->render('form', [
             'model' => $model,

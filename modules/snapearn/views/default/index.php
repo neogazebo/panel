@@ -12,7 +12,7 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
 $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 ?>
 <section class="content-header ">
-    <h1><?= $this->title?></h1>
+    <h1><?= $this->title?> <?= date_default_timezone_get() ?></h1>
 </section>
 
 <section class="content">
