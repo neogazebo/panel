@@ -81,7 +81,7 @@ $this->title = "Update SnapEarn";
                       <?php endif; ?>
                     <?php endif; ?>
                     <span class="pull-right text-light-blue">
-                      <?= $model->business->com_point ?>
+                      <?= (!empty($model->business)) ? $model->business->com_point : '' ?>
                     </span>
                   </a>
                 </li>
