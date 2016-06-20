@@ -4,7 +4,7 @@ namespace app\modules\logwork\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\models\WorkingTIme;
+use app\models\WorkingTime;
 use app\models\SearchWorkingTime;
 use app\models\User;
 use app\controllers\BaseController;
