@@ -73,7 +73,7 @@ $this->title = "Update SnapEarn";
                 </li>
                 <li class="">
                   <a href="#"><b>Merchant Point</b>
-                    <?php if ($model->business->com_point < 500) :?> 
+                    <?php if (!empty($model->business) && $model->business->com_point < 500) :?> 
                       <?php if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
                         <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?> 
                       <?php else: ?>
