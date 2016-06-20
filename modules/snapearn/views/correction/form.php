@@ -104,7 +104,7 @@ $this->title = "Update SnapEarn";
                           //     'options' => [
                           //         'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s')
                           //     ],
-                          //     'type' => DateTimePicker::TYPE_COMPONENT_PREPEND
+                          //     'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
                           //     'pluginOptions' => [
                           //         'autoclose'=>true,
                           //         'format' => 'yyyy-mm-dd H:i:s'
