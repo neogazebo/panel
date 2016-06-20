@@ -32,15 +32,27 @@ $this->title = "Update SnapEarn";
         <!-- Box Comment -->
         <div class="box box-widget">
           <div class="box-header with-border">
+            <?php if (Yii::$app->user->identity->level == 1) : ?>
             <div class="user-block">
               <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'].$model->member->acc_photo : $this->theme->baseUrl.'/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
               <span class="username">
                 <a href="#">
-                <?= $model->member->acc_screen_name ?>
+                  <?= $model->member->acc_screen_name ?>
                 </a>
               </span>
-              <span class="description">Receipt Upload : <?= date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)) ?></span>
-            </div><!-- /.user-block -->
+              <span class="description text-green">Receipt Upload : <?= date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)) ?></span>
+            </div>
+            <?php else : ?>
+              <div class="user-block">
+               <img class="img-circle" src="<?= $this->theme->baseUrl.'/dist/img/manis.png'?>" alt="manis receipt">
+              <span class="username">
+                <a href="#">
+                  Detail Receipt
+                </a>
+                </span>
+                <span class="description text-green">Receipt Upload : <?= date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)) ?></span>
+              </div>
+            <?php endif; ?>
             <div class="box-tools">
              <!--  <button data-original-title="Mark as read" class="btn btn-box-tool" data-toggle="tooltip" title=""><i class="fa fa-circle-o"></i></button>
               <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -48,20 +60,20 @@ $this->title = "Update SnapEarn";
             </div><!-- /.box-tools -->
           </div><!-- /.box-header -->
           <div style="display: block;" class="box-body">
-            <!-- <img class="img-responsive pad" src="<?= $this->theme->baseUrl ?>/dist/img/photo2.png" alt="Photo"> -->
               <div id="sna_image" class="img-responsive pad magic-zoom"></div>
-            <!-- <p>I took this photo this morning. What do you guys think?</p> -->
           </div>
-          <div style="display: block;" class="box-footer box-body">
-              <ul class="list-group list-group-unbordered">
-                <li class="list-group-item">
-                  <b>Merchant </b> <a class="pull-right"><?= (!empty($model->newSuggestion)) ? $model->newSuggestion->cos_name : $model->business->com_name ?></a>
+          <div style="display: block;" class="box-footer no-padding">
+              <ul class="nav nav-stacked">
+                <?php if(Yii::$app->user->identity->superuser == 1): ?>
+                <li class="">
+                  <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
                 </li>
-                <li class="list-group-item">
-                  <b>Merchant Point </b> <a class="pull-right"><?= (!empty($model->business)) ? $model->business->com_point : 0 ?></a>
+                <?php endif; ?>
+                <li class="">
+                  <a href="#"><b><?= (empty($model->business)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (!empty($model->newSuggestion)) ? $model->newSuggestion->cos_name : $model->business->com_name ?></span></a>
                 </li>
-                <li class="list-group-item">
-                  <b>Facebook Email </b> <a class="pull-right"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></a>
+                <li class="">
+                  <a href="#"><b><?= (!empty($model->business)) ? 'Merchant Point' : 'Mall Sugest' ?> </b> <span class="pull-right text-light-blue"><?= (!empty($model->business)) ? $model->business->com_point : $model->newSuggestion->cos_mall ?></span></a>
                 </li>
               </ul>
           </div>
@@ -71,10 +83,16 @@ $this->title = "Update SnapEarn";
 
     <div class="col-md-6">
               <!-- general form elements disabled -->
-              <div class="box box-warning">
-                <!-- <div class="box-header with-border">
-                  <h3 class="box-title">General Elements</h3>
-                </div> -->
+              <div class="box box-widget">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Form Approval</h3>
+                  <?php if (empty($model->business)) : ?>
+                  <div class="pull-right">
+                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
+                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?> 
+                  </div>
+                  <?php endif; ?>
+                </div>
                 <div class="box-body">
                   <form role="form">
                     <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
@@ -85,7 +103,7 @@ $this->title = "Update SnapEarn";
                           $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
                               'options' => ['placeholder' => 'Transaction Time ...'],
                               'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
-                              'value' => $model->sna_upload_date,
+                              'value' => date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)),
                               'pluginOptions' => [
                                   'autoclose'=>true,
                                   'format' => 'yyyy-mm-dd H:i:s'
@@ -117,6 +135,18 @@ $this->title = "Update SnapEarn";
     </div>
     <?php ActiveForm::end(); ?>
 </section>
+
+<!-- widget to create render modal -->
+<?php
+    Modal::begin([
+        'header' => '</button><h4 class="modal-title"></h4>',
+        'id' => 'modal',
+        'size' => 'modal-md',
+    ]);
+?>
+<div id="modalContent"></div>
+<?php Modal::end(); ?>
+
 <?php
 $this->registerCss("
     #sna_image {

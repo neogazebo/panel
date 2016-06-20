@@ -1,146 +1,142 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\SnapEarn;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use app\components\helpers\Utc;
 use kartik\widgets\DateTimePicker;
 
-$this->title = ($model->isNewRecord ? 'New' : 'Edit') . ' Snap & Earn';
-$this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-$this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-$latitude = ($model->company->com_latitude ? $model->company->com_latitude : 3.139003);
-$longitude = ($model->company->com_longitude ? $model->company->com_longitude : 101.686855);
-$this->registerCss("
-    .datetimepicker-dropdown-bottom-right {
-        right: 200px;
-    }
-");
+$this->title = "Update SnapEarn";
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
 </section>
 
 <section class="content">
+<?php
+    $form = ActiveForm::begin([
+        'id'=>'snapearn-form',
+        // 'options' => ['class' => 'form-horizontal'],
+        'enableClientValidation'=>true,
+        'enableAjaxValidation'=>true,
+        'fieldConfig' => [
+            'template' => "{label}\n<div class=\"\">{input}\n<div>{error}</div></div>",
+            'labelOptions' => ['class' => 'control-label'],
+        ],
+    ]);
+?>
     <div class="row">
-        <div class="col-xs-12">
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><?= $this->title ?></h3>
-                    <div class="box-tools">
-
-                    </div>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                    <?php
-                        $form = ActiveForm::begin([
-                            'id'=>'snapearn-form',
-                            'options' => ['class' => 'form-horizontal'],
-                            'enableClientValidation'=>true,
-                            'enableAjaxValidation'=>true,
-                            'fieldConfig' => [
-                                'template' => "{label}\n<div class=\"col-lg-6\">{input}\n<div>{error}</div></div>",
-                                'labelOptions' => ['class' => 'col-lg-3 control-label'],
-                            ],
-                        ]);
-                    ?>
-
-                    <div class="panel-body">
-                        <div class="col-sm-6">
-                            <div id="sna_image" class="form-group magic-zoom"></div>
-                        </div>
-                        <div class="col-sm-6">
-                            <?php if(empty($model->business)): ?>
-                                <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_name')->textInput(['readonly' => true])->label('Suggest Merchant'); ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_mall')->textInput(['readonly' => true])->label('Suggest Mall'); ?>
-                                    <?= $form->field($model->newSuggestion, 'cos_location')->textInput(['readonly' => true]); ?>
-                                <?php endif ?>
-                            <div class="form-group">
-                                <label for="" class="col-lg-3 control-label">Merchant</label>
-                                <?php if(!empty($model->newSuggestion)): ?>
-                                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-primary btn-sm','target' => '_blank']) ?>
-                                <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-success btn-sm exs_m']); ?>
-                                <?php endif ?>
-                            </div>
-                            <?php else : ?>
-                                <?= $form->field($model, 'sna_business')->textInput(['value' => is_object($model->business) ? $model->business->com_name : '', 'readonly' => true])->label('Merchant') ?>
-                                <?php if(is_object($model->business) && $model->business->com_premium == 1): ?>
-                                    <?= $form->field($model->business, 'com_premium')->checkBox(['style' => 'margin-top: 10px', 'disabled' => 'disabled'], false)->label('Premium Merchant') ?>
-                                <?php endif ?>
-
-                                <?= $form->field($model->business, 'com_point')->textInput(['value' => is_object($model->business) ? $model->business->com_point : 0, 'readonly' => true, 'data-toggle' => 'popover', 'data-trigger' => 'hover', 'data-placement' => 'right', 'data-content' => 'Business Point'])->label('Point Merchant') ?>
-
-                            <?php endif ?>
-                            <?php if(Yii::$app->user->identity->level == 1): ?>
-                                <?= $form->field($model, 'sna_acc_id')->textInput(['value' => is_object($model->member) ? $model->member->acc_screen_name : '', 'readonly' => true]) ?>
-                            <?php endif;?>
-                            <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                                <div class="form-group field-snapearn-sna_upload_date">
-                                <label class="col-lg-3 control-label" >Facebook Email</label>
-                                <div class="col-lg-6">
-                                    <div class="form-control" readonly="true"><?= !empty($model->member) ? $model->member->acc_facebook_email : '' ?></div>
-                                    <div>
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php endif ?>
-
-                            <div class="form-group field-snapearn-sna_upload_date">
-                                <label class="col-lg-3 control-label" >Upload on</label>
-                                <div class="col-lg-6">
-                                    <div class="form-control" readonly="true"><?= $model->sna_upload_date ?></div>
-                                    <div>
-                                        <div class="help-block"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
-
-                            <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
-                            <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
-                            <div class="point-form">
-                                <?=
-                                    $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
-                                        'options' => ['placeholder' => 'Transaction Time ...'],
-                                        'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
-                                        'value' => $model->sna_upload_date,
-                                        'pluginOptions' => [
-                                            'autoclose'=>true,
-                                            'format' => 'yyyy-mm-dd H:i:s'
-                                        ]
-                                    ]);
-                                ?>                
-                                <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
-                                <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
-                                <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
-                            </div>
-                            <div class="reject-form">
-                                <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control']) ?>
-                            </div>
-                            <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
-                            <div class="row">
-                                <div class="button-right pull-right">
-                                    <button type="submit" class="btn-primary btn submit-button"><i class="fa fa-check"></i> Save</button>
-                                    <button class="btn btn-success saveNext" type="submit" name="save-next"><i class="fa fa-arrow-right"></i> Save &amp; Next</button>
-                                    <input id="saveNext" type="hidden" name="saveNext" value="">
-                                </div>
-                                <div class="button-left pull-left">
-                                    <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php ActiveForm::end(); ?>
-                </div>
+      <div class="col-md-6">
+        <!-- Box Comment -->
+        <div class="box box-widget">
+          <div class="box-header with-border">
+            <?php if (Yii::$app->user->identity->level == 1) : ?>
+            <div class="user-block">
+              <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'].$model->member->acc_photo : $this->theme->baseUrl.'/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
+              <span class="username">
+                <a href="#">
+                  <?= $model->member->acc_screen_name ?>
+                </a>
+              </span>
+              <span class="description text-green">Receipt Upload : <?= date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)) ?></span>
             </div>
+            <?php else : ?>
+              <div class="user-block">
+               <img class="img-circle" src="<?= $this->theme->baseUrl.'/dist/img/manis.png'?>" alt="manis receipt">
+              <span class="username">
+                <a href="#">
+                  Detail Receipt
+                </a>
+                </span>
+                <span class="description text-green">Receipt Upload : <?= date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)) ?></span>
+              </div>
+            <?php endif; ?>
+            <div class="box-tools">
+             <!--  <button data-original-title="Mark as read" class="btn btn-box-tool" data-toggle="tooltip" title=""><i class="fa fa-circle-o"></i></button>
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> -->
+            </div><!-- /.box-tools -->
+          </div><!-- /.box-header -->
+          <div style="display: block;" class="box-body">
+              <div id="sna_image" class="img-responsive pad magic-zoom"></div>
+          </div>
+          <div style="display: block;" class="box-footer no-padding">
+              <ul class="nav nav-stacked">
+                <?php if(Yii::$app->user->identity->superuser == 1): ?>
+                <li class="">
+                  <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
+                </li>
+                <?php endif; ?>
+                <li class="">
+                  <a href="#"><b><?= (empty($model->business)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (!empty($model->newSuggestion)) ? $model->newSuggestion->cos_name : $model->business->com_name ?></span></a>
+                </li>
+                <li class="">
+                  <a href="#"><b><?= (!empty($model->business)) ? 'Merchant Point' : 'Mall Sugest' ?> </b> <span class="pull-right text-light-blue"><?= (!empty($model->business)) ? $model->business->com_point : $model->newSuggestion->cos_mall ?></span></a>
+                </li>
+              </ul>
+          </div>
         </div>
+      </div>
+
+
+    <div class="col-md-6">
+              <!-- general form elements disabled -->
+              <div class="box box-widget">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Form Approval</h3>
+                  <?php if (empty($model->business)) : ?>
+                  <div class="pull-right btn-merchant">
+                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
+                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?> 
+                  </div>
+                  <?php endif; ?>
+                </div>
+                <div class="box-body">
+                  <form role="form">
+                    <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
+                    <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
+                    <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
+                    <div class="point-form">
+                      <?=
+                          $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
+                              'options' => ['placeholder' => 'Transaction Time ...'],
+                              'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
+                              'value' => date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)),
+                              'pluginOptions' => [
+                                  'autoclose'=>true,
+                                  'format' => 'yyyy-mm-dd H:i:s'
+                              ]
+                          ]);
+                      ?>                
+                      <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
+                      <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
+                      <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
+                  </div>
+                  <div class="reject-form">
+                      <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control']) ?>
+                  </div>
+                  <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
+                    <div class="box-footer clearfix">
+                      <div class="button-right pull-right">
+                          <button type="submit" class="btn-primary btn submit-button"><i class="fa fa-check"></i> Save</button>
+                          <button class="btn btn-success saveNext" type="submit" name="save-next"><i class="fa fa-arrow-right"></i> Save &amp; Next</button>
+                          <input id="saveNext" type="hidden" name="saveNext" value="">
+                      </div>
+                      <div class="button-left pull-left">
+                          <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
+                      </div>
+                    </div>
+                  </form>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div>
     </div>
-</div>
+    <?php ActiveForm::end(); ?>
+</section>
+
+
 <!-- widget to create render modal -->
 <?php
     Modal::begin([
@@ -167,9 +163,10 @@ $this->registerCss("
     .magic-zoom {
         position: relative;
         width: 100%;
-        height: 500px;
+        height: 350px;
         overflow: hidden;
         border: 1px solid #ddd;
+        background-color: #ECF0F5;
     }
     .iviewer_common {
         position: absolute;
@@ -178,6 +175,7 @@ $this->registerCss("
         height: 28px;
         z-index: 5000;
     }
+
     .point-form { display: none; }
     .reject-form { display: none; }
 ");
@@ -196,11 +194,23 @@ $this->registerJs("
 
 $('#snapearn-sna_transaction_time').attr('autofocus');
     $('#snapearn-sna_status').change(function() {
+
+        $('.field-snapearn-sna_receipt_amount').removeClass('has-error');
+        $('.btn-merchant').css({
+          'border':'0px',
+          'padding':'0px'
+        });
+        $('.field-snapearn-sna_receipt_amount').find('.help-block').text('');
+
         if($(this).val() == 1) {
             pointConvert();
             
-            if (com_id = 0) {
+            if (com_id == 0) {
                 $('.field-snapearn-sna_receipt_amount').addClass('has-error');
+                $('.btn-merchant').css({
+                  'border':'1px solid #DD4F3E',
+                  'padding':'2px'
+                });
                 $('.field-snapearn-sna_receipt_amount').find('.help-block').text('Please create merchant first! Thanks.');
             }
 
