@@ -101,9 +101,10 @@ $this->title = "Update SnapEarn";
                     <div class="point-form">
                       <?php
                           // $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
-                          //     'options' => ['placeholder' => 'Transaction Time ...'],
-                          //     'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
-                          //     'value' => date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)),
+                          //     'options' => [
+                          //         'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s')
+                          //     ],
+                          //     'type' => DateTimePicker::TYPE_COMPONENT_PREPEND
                           //     'pluginOptions' => [
                           //         'autoclose'=>true,
                           //         'format' => 'yyyy-mm-dd H:i:s'
