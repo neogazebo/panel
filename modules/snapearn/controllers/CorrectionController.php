@@ -42,7 +42,7 @@ class CorrectionController extends BaseController
         $type = WorkingTime::SNAPEARN_TYPE;
         $param = $id;
         $point = WorkingTime::POINT_APPROVAL;
-        $wrk_id = $this->startWorking($user, $type, $param);
+        $wrk_id = $this->startWorking($user, $type, $param,$point);
         return $this->redirect(['correction', 'id' => $id]);
     }
 	

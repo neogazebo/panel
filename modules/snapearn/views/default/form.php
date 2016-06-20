@@ -40,7 +40,7 @@ $this->title = "Update SnapEarn";
                   <?= $model->member->acc_screen_name ?>
                 </a>
               </span>
-              <span class="description text-green">Receipt Upload : <?= date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)) ?></span>
+              <span class="description text-green">Receipt Upload : <?=  Yii::$app->formatter->asDateTime($model->sna_upload_date) ?></span>
             </div>
             <?php else : ?>
               <div class="user-block">
@@ -50,7 +50,7 @@ $this->title = "Update SnapEarn";
                   Detail Receipt
                 </a>
                 </span>
-                <span class="description text-green">Receipt Upload : <?= date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)) ?></span>
+                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date) ?></span>
               </div>
             <?php endif; ?>
             <div class="box-tools">
@@ -102,8 +102,8 @@ $this->title = "Update SnapEarn";
                       <?=
                           $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
                               'options' => ['placeholder' => 'Transaction Time ...'],
-                              'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
-                              'value' => date('d, M Y H:i:s', Utc::convert($model->sna_upload_date)),
+                              // 'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,  
+                              'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date, "php:Y-m-d  H:i:s"),
                               'pluginOptions' => [
                                   'autoclose'=>true,
                                   'format' => 'yyyy-mm-dd H:i:s'
