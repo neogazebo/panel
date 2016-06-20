@@ -9,6 +9,7 @@ use yii\widgets\Pjax;
 $this->title = 'Snap & Earn List';
 
 $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
+$visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 ?>
 <section class="content-header ">
     <h1><?= $this->title?></h1>
@@ -54,10 +55,12 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                 <input type="text" name="sna_daterange" class="form-control pull-right" id="sna_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
                             </div>
                         </div>
+                        <?php if ($visible) : ?>
                         <div class="form-group">
                             <label for="member">Member</label><br>
                             <input name="sna_member" class="form-control" id="member" placeholder="Enter name" type="text" value="<?= (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '' ?>">
-                        </div>    
+                        </div>  
+                        <?php endif; ?>  
                         <div class="form-group">
                             <label>&nbsp;</label><br>
                             <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
@@ -92,6 +95,7 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                 ],
                                 [
                                     'label' => 'Member',
+                                    'visible' => $visible,
                                     'attribute' => 'sna_acc_id',
                                     'value' => function($data) {
                                         return $data->member->acc_screen_name;
