@@ -37,6 +37,20 @@ class DefaultController extends BaseController
         ]);
     }
 
+    public function actionView($id)
+    {
+        $model = WorkingTime::find()->where('wrk_by = :user AND wrk_end IS NOT NULL',[':user' => $id]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $model,
+            'pagination' => [
+                'pageSize' => 20
+            ]
+        ]);
+        return $this->render('view',[
+            'dataProvider' => $dataProvider
+        ]);
+    }
+
     public function actionUserList()
     {
     	if (Yii::$app->request->isAjax) {

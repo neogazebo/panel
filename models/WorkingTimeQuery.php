@@ -45,6 +45,7 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
 
     public function getWorker()
     {
+        $this->select('wrk_id,wrk_by,wrk_param_id,sum(wrk_time) as total_record');
         $this->where('wrk_end IS NOT NULL');
         if (!empty($_POST['wrk_by'])) {
             $this->andWhere('wrk_by = :id',[

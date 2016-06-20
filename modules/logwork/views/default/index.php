@@ -111,13 +111,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     }
                                 ],
-                                // [
-                                //     'label' => 'Record Activity',
-                                //     'attribute' => 'wrk_time',
-                                //     'value' => function($data){
-
-                                //     }
-                                // ],
+                                [
+                                    'label' => 'Record Activity',
+                                    'attribute' => 'wrk_time',
+                                    'value' => function($data){
+                                        // if (!empty($data->)) {
+                                        //     return date('H:i:s',$data->getTime($data->wrk_by)->total_record);
+                                        // }
+                                        date_default_timezone_set('UTC');
+                                        return date('H:i:s',$data->total_record);
+                                    }
+                                ],
+                                [
+                                    'class' => 'yii\grid\ActionColumn',
+                                    'template' => '<span class="pull-right actionColumn">{detail} </span>',
+                                    'buttons' => [
+                                        'detail' => function($url,$model) {
+                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model->wrk_by]);
+                                        },
+                                    ]
+                                ]
 
                             ],
                         ]); ?>

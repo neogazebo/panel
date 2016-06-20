@@ -23,6 +23,10 @@ class WorkingTime extends \yii\db\ActiveRecord
 {
     const SNAPEARN_TYPE = 1;
     const MERCHANT_TYPE = 2;
+    const POINT_APPROVAL = 1;
+    const POINT_ADD_NEW_MERCHANT = 3;
+
+    public $total_record;
 
     /**
      * @inheritdoc
@@ -89,6 +93,22 @@ class WorkingTime extends \yii\db\ActiveRecord
         return $this->hasOne(User::ClassName(),['id' => 'wrk_by']);
     }
 
+    public function getTime($userId)
+    {
+        $query = self::find()
+                ->select('sum(wrk_time) as total_record')
+                ->where('wrk_end IS NOT NULL')
+                ->andWhere('wrk_by = :id',[
+                        ':id' => $userId
+                    ])
+                ->one();
+        // $this->select('sum(wrk_time)');
+        // $this->where('wrk_end IS NOT NULL');
+        // $this->andWhere('wrk_by = :id',[
+        //         ':id' => $userId
+        //     ]);
+        return $query;
+    }
     /**
      * @inheritdoc
      * @return WorkingTimeQuery the active query used by this AR class.

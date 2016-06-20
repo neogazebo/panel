@@ -68,7 +68,7 @@ class BaseController extends Controller
         return date_default_timezone_set('UTC');
     }
 
-    public function startWorking($user,$type,$param)
+    public function startWorking($user,$type,$param,$point)
     {
         $this->centralTimeZone();
         // checking existing worktime with this user and param id
@@ -79,6 +79,7 @@ class BaseController extends Controller
             $model->wrk_type = (int)$type;
             $model->wrk_by = $user;
             $model->wrk_param_id = $param;
+            $model->wrk_point = $point;
             $model->wrk_start = microtime(true);
             if ($model->save(false)) {
                 return $model->wrk_id;
@@ -87,12 +88,23 @@ class BaseController extends Controller
             $model->wrk_type = (int)$type;
             $model->wrk_by = $user;
             $model->wrk_param_id = $param;
+            $model->wrk_point = $point;
             $model->wrk_start = microtime(true);
             if ($model->save(false)) {
                 return $model->wrk_id;
             }
         }
         return $model->wrk_id;
+    }
+
+    public function addWorkPoint($param,$point)
+    {
+        $this->centralTimeZone();
+        $model = WorkingTime::find()->findWorkExist($param)->one();
+        if (!empty($model)) {
+            $model->wrk_point = $model->wrk_point + $point;
+            $model->save(false);
+        }
     }
 
     public function endWorking($id,$desc)

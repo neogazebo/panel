@@ -41,6 +41,7 @@ class CorrectionController extends BaseController
         $user = Yii::$app->user->id;
         $type = WorkingTime::SNAPEARN_TYPE;
         $param = $id;
+        $point = WorkingTime::POINT_APPROVAL;
         $wrk_id = $this->startWorking($user, $type, $param);
         return $this->redirect(['correction', 'id' => $id]);
     }

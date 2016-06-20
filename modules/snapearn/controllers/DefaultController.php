@@ -134,6 +134,12 @@ class DefaultController extends BaseController
 
                                 $this->assignModule($com_id, $company);
                                 $this->assignEmail($com_id, $company);
+
+                                // Additional point to working time
+                                $param = $id;
+                                $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
+                                $this->addWorkPoint($param, $point);
+
                                 $transaction->commit();
                                 $this->setMessage('save', 'success', 'Your company has been registered!');
                                 return $this->render('success');
@@ -185,7 +191,8 @@ class DefaultController extends BaseController
         $user = Yii::$app->user->id;
         $type = WorkingTime::SNAPEARN_TYPE;
         $param = $id;
-        $wrk_id = $this->startWorking($user, $type, $param);
+        $point = WorkingTime::POINT_APPROVAL;
+        $wrk_id = $this->startWorking($user, $type, $param,$point);
         return $this->redirect(['update','id'=> $id]);
     }
 
