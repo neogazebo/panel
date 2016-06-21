@@ -39,7 +39,6 @@ class CorrectionController extends BaseController
     {
         // working time start
         $user = Yii::$app->user->id;
-        $type = WorkingTime::SNAPEARN_TYPE;
         $param = $id;
         $point = WorkingTime::POINT_APPROVAL;
         $wrk_id = $this->startWorking($user, $type, $param,$point);
