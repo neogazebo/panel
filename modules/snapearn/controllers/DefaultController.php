@@ -122,7 +122,7 @@ class DefaultController extends BaseController
                                     $mam_model->save(false);
                                 }
                                 
-                                SnapEarnPointDetail::savePoint($id, 8);
+                                // SnapEarnPointDetail::savePoint($id, 8);
 
                                 $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
 
