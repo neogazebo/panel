@@ -53,7 +53,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 <div class="input-group-addon" for="reservation">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" name="sna_daterange" class="form-control pull-right" id="sna_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
+                                <input type="text" name="sna_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
                             </div>
                         </div>
                         <?php if ($visible) : ?>

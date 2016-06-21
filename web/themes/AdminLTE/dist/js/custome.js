@@ -155,7 +155,7 @@ $(function() {
 	$(".select2").select2();
 
 	//Date range picker
-    $('#sna_daterange').daterangepicker(
+    $('#the_daterange').daterangepicker(
 		{	
 			separator : ' to ',
 			format: 'YYYY-MM-DD',

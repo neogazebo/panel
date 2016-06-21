@@ -219,7 +219,7 @@ class DefaultController extends BaseController
                 if (!empty($sna_status)) {
                     $model->sna_status = $sna_status;
                 }
-
+                // var_dump($model->status);exit;
                 // get limited point per country 
                 $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 
@@ -230,7 +230,7 @@ class DefaultController extends BaseController
                 // var_dump($model->sna_point);exit;
                 // optional point for premium or default merchant
                 if(!empty($config)) {
-                    if($model->merchant->com_premium == 1) {
+                    if($model->business->com_premium == 1) {
                         $model->sna_point *= 2;
                         $limitPoint = $config->ser_premium;
                     } else {
@@ -400,6 +400,7 @@ class DefaultController extends BaseController
         }
 
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
+        $model->sna_receipt_date = Utc::convert($model->sna_receipt_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
 
         return $this->render('form', [
@@ -408,9 +409,20 @@ class DefaultController extends BaseController
         ]);
     }
 
-    public function actionCorrection()
+    public function actionShortPoint($id,$sna_id)
     {
+        if (Yii::$app->request->isAjax) {
+            $model = Company::findOne($id);
+            if ($model->load(Yii::$app->request->post())) {
+                if ($model->save(false)) {
+                    return $this->redirect(['update?id='.$sna_id]);
+                }
+            }
 
+            return $this->renderAjax('point',[
+                    'model' => $model
+                ]);
+        }
     }
 
     public function actionAjaxSnapearnPoint()
@@ -511,18 +523,6 @@ class DefaultController extends BaseController
         $point->com_point = $com_point;
         if($point->save())
             $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
-    }
-
-    public function actionSearch()
-    {
-        $model = SnapEarn::find()->listFilter();
-    }
-
-    public function actionMycropper()
-    {
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('mycropper');
-        }
     }
 
     protected function assignFcs($fsc, $com_id, $company, $fes_code)

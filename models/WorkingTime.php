@@ -27,6 +27,7 @@ class WorkingTime extends \yii\db\ActiveRecord
     const POINT_ADD_NEW_MERCHANT = 3;
 
     public $total_record;
+    public $total_point;
 
     /**
      * @inheritdoc
