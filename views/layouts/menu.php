@@ -59,8 +59,6 @@
         </a>
         <ul class="treeview-menu">
             <li><a href="<?= Yii::$app->urlManager->createUrl('snapearn') ?>"><i class="fa fa-circle-o"></i> List</a></li>
-        </ul>
-        <ul class="treeview-menu">
             <li><a href="<?= Yii::$app->urlManager->createUrl('logwork') ?>"><i class="fa fa-circle-o"></i> Log Work</a></li>
         </ul>
     </li>

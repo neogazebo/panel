@@ -193,6 +193,15 @@ class DefaultController extends BaseController
     public function actionUpdate($id)
     {
     	$model = $this->findModel($id);
+
+        // validation has reviewed
+        $superuser = Yii::$app->user->identity->superuser;
+        if ($model->sna_status !== 0 && $superuser !== 1) {
+            return $this->redirect([$this->getRememberUrl()]);
+        }elseif ($model->sna_status !== 0 && $superuser == 1) {
+            return $this->redirect(['/correction/to-correction?id='.$id]);
+        }
+
         $model->scenario = 'update';
 
         // ajax validation
@@ -608,12 +617,18 @@ class DefaultController extends BaseController
         }
     }
 
-    public function actionTest($id)
+    public function actionTest()
     {
-        $model = $this->findModel($id);
-        return $this->render('test',[
-                'model' => $model
-            ]);
+        $model = SnapEarn::find()
+            ->joinWith(['merchant' => function($query) { 
+                   return $query->from('ebizu_db.'.Company::tableName())
+                          ->andWhere(['com_id' => 1642497]); 
+            }])
+            ->one();
+        var_dump($model);exit;
+        // return $this->render('test',[
+        //         'model' => $model
+        //     ]);
     }
 
 }

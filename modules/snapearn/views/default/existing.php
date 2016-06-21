@@ -23,7 +23,7 @@ $form = ActiveForm::begin([
 	<?= 
         Typeahead::widget([
             'name' => 'merchant',
-            'options' => ['placeholder' => 'Filter as you type ...'],
+            'options' => ['placeholder' => 'Filter as you type ...','required' => 'required'],
             'pluginOptions' => [
                 'highlight'=>true,
                 'minLength' => 3
@@ -56,5 +56,12 @@ $form = ActiveForm::begin([
 <?php
 $this->registerJs("
     $('.modal-title').text('Existing Merchant');
+    function stopRKey(evt) {
+        var evt = (evt) ? evt : ((event) ? event : null);
+        var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+        if ((evt.keyCode == 13) && (node.type=='text'))  {return false;}
+    }
+
+    document.onkeypress = stopRKey; 
 ");
 ?>
