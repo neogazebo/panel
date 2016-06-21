@@ -124,7 +124,7 @@ $model_company->com_in_mall = true;
 
                         <?= $form->field($model_company, 'com_phone')->textInput(['value' => $model->mer_contact_phone]); ?>
                         <?= $form->field($model_company, 'com_fax')->textInput(['value' => $model->mer_office_fax]); ?>
-                        <?= $form->field($model_company, 'com_website')->textInput([$model->mer_website]); ?>
+                        <?= $form->field($model_company, 'com_website')->textInput(['value' => $model->mer_website]); ?>
                         <?= $form->field($model_company, 'com_size')->dropDownList($model_company->companySizeListData); ?>
                         <?= $form->field($model_company, 'com_nbrs_employees')->dropDownList($model_company->numberEmployeeListData); ?>
                         <?= $form->field($model_company, 'com_fb')->textInput(); ?>
