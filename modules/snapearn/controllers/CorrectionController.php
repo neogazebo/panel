@@ -354,6 +354,12 @@ class CorrectionController extends BaseController
             $this->setMessage('save', 'error', General::extractErrorModel($history->getErrors()));
     }
 
+    public function actionCancel($id)
+    {
+        $this->cancelWorking($id);
+        return $this->redirect([$this->getRememberUrl()]);
+    } 
+
     protected function merchantPoint($params, $type = true)
     {
         // update merchant point
