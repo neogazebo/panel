@@ -76,9 +76,10 @@ class CorrectionController extends BaseController
                 if ($config->ser_point_provision > 0 ) {
                     $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
                 }
+                
                 // optional point for premium or default merchant
-                if(!empty($config)) {
-                    if($model->merchant->com_premium == 1) {
+                if(!empty($config) && !empty($model->business)) {
+                    if($model->business->com_premium == 1) {
                         $model->sna_point *= 2;
                         $limitPoint = $config->ser_premium;
                     } else {
@@ -304,7 +305,7 @@ class CorrectionController extends BaseController
                 $point = (int) ($amount / $config->ser_point_provision);
             }
 
-            if(!empty($config)) {
+            if(!empty($config) && !empty($business)) {
                 if($business->com_premium == 1) {
                     $point *= 2;
                     $point_cap = $config->ser_premium;

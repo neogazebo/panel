@@ -237,9 +237,9 @@ class DefaultController extends BaseController
                 if ($config->ser_point_provision > 0 ) {
                     $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
                 }
-                // var_dump($model->sna_point);exit;
+
                 // optional point for premium or default merchant
-                if(!empty($config)) {
+                if(!empty($config) && !empty($model->business)) {
                     if($model->business->com_premium == 1) {
                         $model->sna_point *= 2;
                         $limitPoint = $config->ser_premium;
