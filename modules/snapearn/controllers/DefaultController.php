@@ -183,10 +183,9 @@ class DefaultController extends BaseController
     {
         // working time start
         $user = Yii::$app->user->id;
-        $type = WorkingTime::SNAPEARN_TYPE;
         $param = $id;
         $point = WorkingTime::POINT_APPROVAL;
-        $wrk_id = $this->startWorking($user, $type, $param,$point);
+        $wrk_id = $this->startWorking($user, $param,$point);
         return $this->redirect(['update','id'=> $id]);
     }
 
@@ -203,6 +202,8 @@ class DefaultController extends BaseController
         }
 
         $model->scenario = 'update';
+
+        $ctr = $model->member->acc_cty_id;
 
         // ajax validation
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()))  {
@@ -387,7 +388,12 @@ class DefaultController extends BaseController
                     // end working time
                     $wrk = WorkingTime::find()->findWorkExist($model->sna_id)->one();
                     $desc = "Snapearn $snap_type";
-                    $this->endWorking($wrk->wrk_id, $desc);
+                    if ($snap_type == 'approved') {
+                        $type = 1;
+                    }elseif ($snap_type == 'rejected') {
+                        $type = 2;
+                    }
+                    $this->endWorking($wrk->wrk_id,$type,$desc);
 
                     $transaction->commit();
                 } else {

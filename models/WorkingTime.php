@@ -21,8 +21,8 @@ use yii\db\ActiveRecord;
  */
 class WorkingTime extends \yii\db\ActiveRecord
 {
-    const SNAPEARN_TYPE = 1;
-    const MERCHANT_TYPE = 2;
+    const APPROVED_TYPE = 1;
+    const REJECTED_TYPE = 2;
     const POINT_APPROVAL = 1;
     const POINT_ADD_NEW_MERCHANT = 3;
 
