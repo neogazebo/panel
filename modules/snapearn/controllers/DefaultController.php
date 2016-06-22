@@ -105,7 +105,6 @@ class DefaultController extends BaseController
                     $company->com_registered_to = 'EBC';
                     $mall_id = Yii::$app->request->post('mall_id');
                     if (!empty($mall_id)) {
-                        var_dump($mall_id);exit;
                         $mall = Mall::findOne($mall_id)->mal_name;
                         $company->com_name = $company->com_name .' @ '.$mall;
                     }
