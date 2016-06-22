@@ -85,35 +85,6 @@ class CorrectionController extends BaseController
                 $set_time = Utc::getNow();
                 $set_operator = Yii::$app->user->id;
 
-                // get limited point per country 
-                $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
-
-               // setup devision point per country
-                if ($config->ser_point_provision > 0 ) {
-                    $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
-                }
-                
-                // optional point for premium or default merchant
-                if(!empty($config) && !empty($model->business)) {
-                    if($model->business->com_premium == 1) {
-                        $model->sna_point *= 2;
-                        $limitPoint = $config->ser_premium;
-                    } else {
-                        $limitPoint = $config->ser_point_cap;
-                    }
-                }
-
-				// get current point merchant
-                $mp = Company::find()->getCurrentPoint($model->sna_com_id);
-                $lph = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                
-                if ($lph->lph_total_point > $oldPoint) {
-                    $cp = $lph->lph_total_point;
-                } elseif ($lph <= $oldPoint) {
-                	$cp = $oldPoint;
-                }
-
-
 				// start process rollback
                 // configuration to get real point user before reviews
                 $minusPointUser = [
@@ -146,6 +117,36 @@ class CorrectionController extends BaseController
 
                 // if approved action
                 if ($model->sna_status == 1) {
+                    
+                    // get limited point per country 
+                    $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
+
+                   // setup devision point per country
+                    if ($config->ser_point_provision > 0 ) {
+                        $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
+                    }
+                    
+                    // optional point for premium or default merchant
+                    if(!empty($config) && !empty($model->business)) {
+                        if($model->business->com_premium == 1) {
+                            $model->sna_point *= 2;
+                            $limitPoint = $config->ser_premium;
+                        } else {
+                            $limitPoint = $config->ser_point_cap;
+                        }
+                    }
+
+                    // get current point merchant
+                    $mp = Company::find()->getCurrentPoint($model->sna_com_id);
+                    $lph = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
+                    
+                    if ($lph->lph_total_point > $oldPoint) {
+                        $cp = $lph->lph_total_point;
+                    } elseif ($lph <= $oldPoint) {
+                        $cp = $oldPoint;
+                    }
+
+
                     if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
                     }

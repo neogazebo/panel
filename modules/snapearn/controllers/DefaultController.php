@@ -238,43 +238,45 @@ class DefaultController extends BaseController
                 $u = $model->sna_acc_id;
                 $c = $model->sna_com_id;
                 $sna_status = $this->approvedReceiptPerday($t,$u,$c);
-                if (!empty($sna_status)) {
+                if (!empty($sna_status) && $sna_status != 0) {
                     $model->sna_status = $sna_status;
                     $model->sna_sem_id = SnapEarnRemark::FORCE_REJECTED_MAX_PER_DAY;
-                }
-                // var_dump($model->status);exit;
-                // get limited point per country 
-                $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
-
-                // setup devision point per country
-                if ($config->ser_point_provision > 0 ) {
-                    $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
-                }
-
-                // optional point for premium or default merchant
-                if(!empty($config) && !empty($model->business)) {
-                    if($model->business->com_premium == 1) {
-                        $model->sna_point *= 2;
-                        $limitPoint = $config->ser_premium;
-                    } else {
-                        $limitPoint = $config->ser_point_cap;
-                    }
-                }
-
-                // get current point merchant
-                $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
-                $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                if ($point_history !== NULL) {
-                    $current_point = $point_history->lph_total_point;
-                } else {
-                    $current_point = 0;
                 }
 
                 // if approved action
                 if ($model->sna_status == 1) {
+
+                    // get limited point per country 
+                    $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
+
+                    // setup devision point per country
+                    if ($config->ser_point_provision > 0 ) {
+                        $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
+                    }
+
+                    // optional point for premium or default merchant
+                    if(!empty($config) && !empty($model->business)) {
+                        if($model->business->com_premium == 1) {
+                            $model->sna_point *= 2;
+                            $limitPoint = $config->ser_premium;
+                        } else {
+                            $limitPoint = $config->ser_point_cap;
+                        }
+                    }
+
+                    // get current point merchant
+                    $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
+                    $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
+                    if ($point_history !== NULL) {
+                        $current_point = $point_history->lph_total_point;
+                    } else {
+                        $current_point = 0;
+                    }
+
                     if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
                     }
+                    
                     $model->sna_approved_datetime = $set_time;
                     $model->sna_approved_by = $set_operator;
                     $model->sna_rejected_datetime = NULL;
@@ -507,6 +509,7 @@ class DefaultController extends BaseController
         if ($model->count() >= SnapEarn::LIMIT_RECEIPT) {
             $sna_status = SnapEarn::STATUS_REJECTED;
         }
+        var_dump($sna_status);exit;
         return $sna_status;
     }
 

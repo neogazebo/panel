@@ -191,6 +191,19 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </section>
+
+<div class="bg_load"></div>
+<div class="loader">
+    <div class="inner">
+        <span>L</span>
+        <span>o</span>
+        <span>a</span>
+        <span>d</span>
+        <span>i</span>
+        <span>n</span>
+        <span>g</span>
+    </div>
+</div>
 <!-- widget to create render modal -->
 <?php
     Modal::begin([
@@ -230,6 +243,12 @@ $this->registerCss("
       } 
 ");
 $this->registerJs("
+
+    // $(window).load(function() {
+    //     $('.bg_load').fadeOut('slow');
+    //     $('.loader').fadeOut('slow');
+    // })
+
     //triger modal for image-croper
     $('.eb-cropper').on('click',function(){
         $('#cropper-modal').modal({show: true});
@@ -415,6 +434,9 @@ if (window.opener == null) {
     if (parent != 1) {
         window.location= 'update?id='+id;
     }
+} else {
+    $('.bg_load').fadeOut('slow');
+    $('.loader').fadeOut('slow');
 }
 ",yii\web\View::POS_END, 'snapearn-form');
 ?>
