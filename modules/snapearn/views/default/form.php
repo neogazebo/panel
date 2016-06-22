@@ -116,7 +116,7 @@ $this->title = "Update SnapEarn";
                   <form role="form">
                     <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
-                    <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
+                    <?= $form->field($model, 'sna_com_id')->hiddenInput(['style' => 'display:none'])->label('') ?>
                     <div class="point-form">
                        <?=
                           $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
@@ -149,7 +149,7 @@ $this->title = "Update SnapEarn";
                           <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
                       </div>
                     </div>
-                    <input type="hidden" name="parent" id="parent" value="1">
+                    <input type="hidden" name="parent" class="parent" value="1">
                   </form>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->

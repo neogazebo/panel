@@ -96,13 +96,16 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'when' => function($model) {
                     return $model->sna_status == 1;
                 },'on' => 'update'],
-            [['sna_com_id'], 'checkMerchant','on' => 'update'],
+            // [['sna_com_id'], 'checkMerchant','on' => 'update'],
             [['sna_receipt_image'], 
                 'string', 
                 'max' => 75],
             [['sna_com_name'], 
                 'string', 
                 'max' => 100],
+            [['sna_com_id'], 'checkMerchant', 'when' => function($model) {
+                return $model->sna_status == 2;
+            }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 2 }",'on' => 'update'],
             [['sna_transaction_time',
                 'sna_receipt_number',
                 'sna_receipt_amount',

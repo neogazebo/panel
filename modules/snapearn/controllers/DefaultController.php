@@ -511,7 +511,7 @@ class DefaultController extends BaseController
     {
         $model = SnapEarn::find()->maxDuplicateReceipt($t,$u,$c);
         $sna_status = 0;
-        if ($model->count() >= SnapEarn::LIMIT_RECEIPT) {
+        if ($model->count() > SnapEarn::LIMIT_RECEIPT) {
             $sna_status = SnapEarn::STATUS_REJECTED;
         }
         return $sna_status;
