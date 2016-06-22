@@ -41,7 +41,8 @@ class CorrectionController extends BaseController
         $user = Yii::$app->user->id;
         $param = $id;
         $point = WorkingTime::POINT_APPROVAL;
-        $wrk_id = $this->startWorking($user, $type, $param,$point);
+        $point_type = WorkingTime::CORRECTION_TYPE;
+        $wrk_id = $this->startWorking($user,$param,$point_type,$point);
         return $this->redirect(['correction', 'id' => $id]);
     }
 	
@@ -49,6 +50,17 @@ class CorrectionController extends BaseController
 	{
     	$model = $this->findModel($id);
     	$model->scenario = 'correction';
+        $point_type = WorkingTime::CORRECTION_TYPE;
+        $check_wrk = $this->checkingWrk($id,$point_type);
+        if (empty($check_wrk) ) {
+            return $this->redirect(['to-update','id'=> $id]);
+        }
+        // validation has reviewed
+        $superuser = Yii::$app->user->identity->superuser;
+        if ($model->sna_status != 0 && $superuser != 1) {
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
+        }
+
         // get old point
         $oldPoint = $model->sna_point;
         $ctr = $model->member->acc_cty_id;

@@ -25,9 +25,13 @@ class WorkingTime extends \yii\db\ActiveRecord
     const REJECTED_TYPE = 2;
     const POINT_APPROVAL = 1;
     const POINT_ADD_NEW_MERCHANT = 3;
+    const CORRECTION_TYPE = 2;
+    const UPDATE_TYPE = 1;
 
     public $total_record;
     public $total_point;
+    public $total_rejected;
+    public $total_approved;
 
     /**
      * @inheritdoc
@@ -52,7 +56,7 @@ class WorkingTime extends \yii\db\ActiveRecord
     {
         return [
             [['wrk_type'], 'required'],
-            [['wrk_type', 'wrk_by', 'wrk_param_id', 'wrk_start', 'wrk_end', 'wrk_time', 'wrk_created', 'wrk_updated'], 'integer'],
+            [['wrk_type', 'wrk_by', 'wrk_param_id', 'wrk_start', 'wrk_end', 'wrk_time', 'wrk_created', 'wrk_updated','wrk_point_type'], 'integer'],
             [['wrk_description'], 'string', 'max' => 250],
         ];
     }

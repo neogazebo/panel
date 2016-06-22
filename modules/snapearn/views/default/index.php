@@ -162,6 +162,15 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                     }
                                 ],
                                 [
+                                    'label' => 'Description',
+                                    'attribute' => 'sna_sem_id',
+                                    'value' => function($data){
+                                        if (!empty($data->remark)) {
+                                            return $data->remark->sem_remark;
+                                        }
+                                    }
+                                ],
+                                [
                                     'class' => 'yii\grid\ActionColumn',
                                     'template' => '<span class="pull-right actionColumn">{update} {corection}</span>',
                                     'buttons' => [

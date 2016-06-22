@@ -22,21 +22,21 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <form class="form-inline pull-right" role="form" method="get" action="/logwork/view">
+                    <!-- <form class="form-inline pull-right" role="form" method="get" action="/logwork/view">
                         <div class="form-group">
                             <label>Date range</label><br>
                             <div class="input-group">
                                 <div class="input-group-addon" for="reservation">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ?>">
+                                <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="<?php // (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ?>">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>&nbsp;</label><br>
                             <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                         </div>
-                    </form>
+                    </form> -->
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">

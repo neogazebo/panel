@@ -34,26 +34,33 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function findWorkExist($param)
+    public function findWorkExist($param,$point_type)
     {
         $user = Yii::$app->user->id;
         $this->andWhere("wrk_by = $user");
         $this->andWhere("wrk_param_id = $param");
+        $this->adnWhere("wrk_point_type = $point_type");
         $this->andWhere("wrk_end IS NULL");
         return $this;
     }
 
     public function getWorker()
     {
-        $this->select('wrk_id,wrk_by,wrk_param_id,sum(wrk_time) as total_record,sum(wrk_point) as total_point');
+        $this->select("wrk_id,wrk_type,wrk_by,wrk_param_id,sum(wrk_time) as total_record,sum(wrk_point) as total_point,sum(wrk_type = 1) as total_approved, sum(wrk_type = 2) as total_rejected");
         $this->where('wrk_end IS NOT NULL');
         if (!empty($_POST['wrk_by'])) {
             $this->andWhere('wrk_by = :id',[
                     ':id' => $_POST['wrk_by']
                 ]);
         }
+        if (!empty($_POST['wrk_daterange'])) {
+            $range = explode(" to ", $_POST['wrk_daterange']);
+            $this->andWhere("date(from_unixtime(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
+        }
+
         $this->andWhere('wrk_time IS NOT NULL');
         $this->groupBy('wrk_by');
+        // echo $this->createCommand()->sql;exit;
         return $this;
     }
 

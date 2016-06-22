@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                <div class="form-inline">
+                <form role="form" class="form-inline" method="post" action="/logwork">
                     <div class="form-group">
                     <label>Username</label>
                     <?= 
@@ -79,15 +79,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                     <!-- </div> -->
                     <div class="form-group">
-                        <form role="form" method="post" action="/logwork">
-                            <input type="hidden" name="wrk_by" id="wrk_by">
-                            <input type="hidden" name="wrk_param_id" id="wrk_param_id">
-                            <label>&nbsp;</label><br>
-                            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
-                        </form>
+                        <label>Date range</label><br>
+                        <div class="input-group">
+                            <div class="input-group-addon" for="reservation">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="">
+                        </div>
                     </div>
-                </div>
-                </div>
+                    <div class="form-group">
+                        <input type="hidden" name="wrk_by" id="wrk_by">
+                        <input type="hidden" name="wrk_param_id" id="wrk_param_id">
+                        <label>&nbsp;</label><br>
+                        <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                    </div>
+                </form>
                 <div class="box-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
@@ -110,7 +116,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 ],
                                 [
-                                    'label' => 'Record Activity',
+                                    'label' => 'Total Approved',
+                                    'attribute' => 'wrk_type',
+                                    'value' => function($data) {
+                                        return $data->total_approved;
+                                    }
+                                ],
+                                [
+                                    'label' => 'Total Rejected',
+                                    'attribute' => 'wrk_type',
+                                    'value' => function($data) {
+                                        return $data->total_rejected;
+                                    }
+                                ],
+                                [
+                                    'label' => 'Total Work Time',
                                     'attribute' => 'wrk_time',
                                     'value' => function($data){
                                         date_default_timezone_set('UTC');

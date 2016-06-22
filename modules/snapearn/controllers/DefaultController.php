@@ -15,6 +15,7 @@ use app\models\Mall;
 use app\models\MallMerchant;
 use app\models\SnapEarn;
 use app\models\SnapEarnRule;
+use app\models\SnapEarnRemark;
 use app\models\Company;
 use app\models\Activity;
 use app\models\LoyaltyPointHistory;
@@ -185,20 +186,25 @@ class DefaultController extends BaseController
         $user = Yii::$app->user->id;
         $param = $id;
         $point = WorkingTime::POINT_APPROVAL;
-        $wrk_id = $this->startWorking($user, $param,$point);
+        $point_type = WorkingTime::UPDATE_TYPE;
+        $wrk_id = $this->startWorking($user, $param,$point_type,$point);
         return $this->redirect(['update','id'=> $id]);
     }
 
     public function actionUpdate($id)
     {
     	$model = $this->findModel($id);
-
+        $point_type = WorkingTime::UPDATE_TYPE;
+        $check_wrk = $this->checkingWrk($id,$point_type);
+        if (empty($check_wrk) ) {
+            return $this->redirect(['to-update','id'=> $id]);
+        }
         // validation has reviewed
         $superuser = Yii::$app->user->identity->superuser;
-        if ($model->sna_status !== 0 && $superuser !== 1) {
-            return $this->redirect([$this->getRememberUrl()]);
-        }elseif ($model->sna_status !== 0 && $superuser == 1) {
-            return $this->redirect(['/correction/to-correction?id='.$id]);
+        if ($model->sna_status != 0 && $superuser != 1) {
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
+        }elseif ($model->sna_status != 0 && $superuser = 1) {
+            return $this->redirect(['correction/to-correction?id='.$id]);
         }
 
         $model->scenario = 'update';
@@ -228,6 +234,7 @@ class DefaultController extends BaseController
                 $sna_status = $this->approvedReceiptPerday($t,$u,$c);
                 if (!empty($sna_status)) {
                     $model->sna_status = $sna_status;
+                    $model->sna_sem_id = SnapEarnRemark::FORCE_REJECTED_MAX_PER_DAY;
                 }
                 // var_dump($model->status);exit;
                 // get limited point per country 
