@@ -39,7 +39,7 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         $user = Yii::$app->user->id;
         $this->andWhere("wrk_by = $user");
         $this->andWhere("wrk_param_id = $param");
-        $this->adnWhere("wrk_point_type = $point_type");
+        $this->andWhere("wrk_point_type = $point_type");
         $this->andWhere("wrk_end IS NULL");
         return $this;
     }
