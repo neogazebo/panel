@@ -50,14 +50,17 @@ class CorrectionController extends BaseController
 	{
     	$model = $this->findModel($id);
     	$model->scenario = 'correction';
+
         $point_type = WorkingTime::CORRECTION_TYPE;
         $check_wrk = $this->checkingWrk($id,$point_type);
         if (empty($check_wrk) ) {
-            return $this->redirect(['to-update','id'=> $id]);
+            return $this->redirect(['to-correction','id'=> $id]);
         }
-        // validation has reviewed
+        // validation superuser
         $superuser = Yii::$app->user->identity->superuser;
-        if ($model->sna_status != 0 && $superuser != 1) {
+        if ($model->sna_status == 0 && $superuser != 1) {
+            return $this->redirect(['default/to-update','id'=> $id]);
+        }elseif ($model->sna_status != 0 && $superuser != 1) {
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         }
 
