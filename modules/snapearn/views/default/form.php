@@ -149,6 +149,7 @@ $this->title = "Update SnapEarn";
                           <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
                       </div>
                     </div>
+                    <input type="hidden" name="parent" id="parent" value="1">
                   </form>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->

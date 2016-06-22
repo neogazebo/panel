@@ -279,7 +279,8 @@ class CorrectionController extends BaseController
                     // end working time
                     $wrk = WorkingTime::find()->findWorkExist($model->sna_id)->one();
                     $desc = "Correction S&E $snap_type";
-                    $this->endWorking($wrk->wrk_id, $desc);
+                    $type = $model->sna_status;
+                    $this->endWorking($wrk->wrk_id,$type, $desc);
 
                     $transaction->commit();
                 } else {

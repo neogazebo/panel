@@ -401,11 +401,7 @@ class DefaultController extends BaseController
                     // end working time
                     $wrk = WorkingTime::find()->findWorkExist($model->sna_id)->one();
                     $desc = "Snapearn $snap_type";
-                    if ($snap_type == 'approved') {
-                        $type = 1;
-                    }elseif ($snap_type == 'rejected') {
-                        $type = 2;
-                    }
+                    $type = $model->sna_status;
                     $this->endWorking($wrk->wrk_id,$type,$desc);
 
                     $transaction->commit();

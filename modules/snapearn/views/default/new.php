@@ -409,6 +409,12 @@ var PostCodeid = '#company-com_address';
                 });
             });
         });
-
+if (window.opener == null) {
+    // var parent = window.opener.$('#parent').val();
+        id = location.search.split('id=')[1];
+    if (parent != 1) {
+        window.location= 'update?id='+id;
+    }
+}
 ",yii\web\View::POS_END, 'snapearn-form');
 ?>
