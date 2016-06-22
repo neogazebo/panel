@@ -89,6 +89,7 @@ class Mall extends EbizuActiveRecord
             [['mal_open_monday', 'mal_close_monday', 'mal_open_tuesday', 'mal_close_tuesday', 'mal_open_wednesday', 'mal_close_wednesday', 'mal_open_thursday', 'mal_close_thursday', 'mal_open_friday', 'mal_close_friday', 'mal_open_saturday', 'mal_close_saturday', 'mal_open_sunday', 'mal_close_sunday'], 'safe'],
             [['mal_name', 'mal_city', 'mal_email', 'mal_website'], 'string', 'max' => 200],
             [['mal_code'], 'string', 'max' => 5],
+            [['mal_name', 'mal_city'], 'required'],
             [['mal_address'], 'string', 'max' => 500],
             [['mal_postcode'], 'string', 'max' => 20],
             [['mal_photo', 'mal_building_id'], 'string', 'max' => 100],
