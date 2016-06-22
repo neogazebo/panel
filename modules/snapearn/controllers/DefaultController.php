@@ -174,8 +174,13 @@ class DefaultController extends BaseController
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
             $model->sna_com_id = (int)Yii::$app->request->post('com_id');
-            if ($model->save()) {
-                $this->setMessage('save', 'success', 'Merchant created successfully!');
+            if ($model->sna_com_id > 0) {
+                if ($model->save()) {
+                    $this->setMessage('save', 'success', 'Merchant created successfully!');
+                    return $this->redirect(['update?id='.$id]);
+                }
+            }else{
+                $this->setMessage('save', 'error', 'Merchant not selected!');
                 return $this->redirect(['update?id='.$id]);
             }
         } else {

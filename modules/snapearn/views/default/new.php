@@ -37,6 +37,7 @@ $company->com_in_mall = false;
 $form = ActiveForm::begin([
     'id' => 'create-form',
     'options' => ['class' => 'form-group'],
+    'enableClientValidation'=>true,
     'enableAjaxValidation' => true,
     'fieldConfig' => [
         'template' => "{label}\n<div class=\"col-lg-8\">{input}\n<div>{error}</div></div>",
@@ -253,7 +254,7 @@ $this->registerJs("
     $('.eb-cropper').on('click',function(){
         $('#cropper-modal').modal({show: true});
     });
-    
+
     var mall_checked = $('#company-com_in_mall').is('checked',true);
     $('#create-business').hide();
     $('#company-com_point').popover();

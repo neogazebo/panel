@@ -11,6 +11,7 @@ use app\models\Company;
 $form = ActiveForm::begin([
     'id' => 'create-form',
     'options' => ['class' => 'form-group'],
+    'enableClientValidation'=>true,
     'enableAjaxValidation' => true,
     'fieldConfig' => [
         'template' => "{label}\n<div class=\"col-lg-8\">{input}\n<div>{error}</div></div>",
