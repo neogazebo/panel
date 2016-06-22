@@ -238,7 +238,7 @@ class DefaultController extends BaseController
                 $u = $model->sna_acc_id;
                 $c = $model->sna_com_id;
                 $sna_status = $this->approvedReceiptPerday($t,$u,$c);
-                if (!empty($sna_status) && $sna_status != 0) {
+                if ($sna_status != 0) {
                     $model->sna_status = $sna_status;
                     $model->sna_sem_id = SnapEarnRemark::FORCE_REJECTED_MAX_PER_DAY;
                 }
@@ -505,7 +505,7 @@ class DefaultController extends BaseController
     protected function approvedReceiptPerday($t,$u,$c)
     {
         $model = SnapEarn::find()->maxDuplicateReceipt($t,$u,$c);
-        $sna_status = '';
+        $sna_status = 0;
         if ($model->count() >= SnapEarn::LIMIT_RECEIPT) {
             $sna_status = SnapEarn::STATUS_REJECTED;
         }
