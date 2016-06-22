@@ -48,7 +48,7 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
 
     public function getWorker()
     {
-        $this->select("wrk_id,wrk_type,wrk_by,wrk_param_id,sum(wrk_time) as total_record,sum(wrk_point) as total_point,sum(wrk_type = 1) as total_approved, sum(wrk_type = 2) as total_rejected");
+        $this->select("wrk_id,wrk_type,wrk_by,wrk_param_id,sum(wrk_time) as total_record,sum(wrk_point) as total_point,sum(wrk_type = 1) as total_approved, sum(wrk_type = 2) as total_rejected,  count(if(wrk_type = 2, wrk_id, null))/count(wrk_id) as rejected_rate");
         $this->where('wrk_end IS NOT NULL');
         if (!empty($_POST['wrk_by'])) {
             $this->andWhere('wrk_by = :id',[

@@ -130,6 +130,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 ],
                                 [
+                                    'label' => 'Rejected Rate',
+                                    'attribute' => 'wrk_type',
+                                    'value' => function($data){
+                                        return Yii::$app->formatter->asPercent($data->rejected_rate);
+                                    }
+                                ],
+                                [
                                     'label' => 'Total Work Time',
                                     'attribute' => 'wrk_time',
                                     'value' => function($data){

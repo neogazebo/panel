@@ -32,6 +32,7 @@ class WorkingTime extends \yii\db\ActiveRecord
     public $total_point;
     public $total_rejected;
     public $total_approved;
+    public $rejected_rate;
 
     /**
      * @inheritdoc
