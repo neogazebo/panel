@@ -295,7 +295,7 @@ $this->registerJs("
         $('#businessMap').css('display','none');
         $('.field-company-com_mac_id').show();
         // $('.field-company-com_subcategory_id').hide();
-        $('.field-company-com_address').hide();
+        // $('.field-company-com_address').hide();
         $('.field-company-com_postcode').hide();
         $('.field-company-com_city').hide();
         $('.field-mallmerchant-mam_mal_id').show();
@@ -306,7 +306,7 @@ $this->registerJs("
         $('#businessMap').css('display','block');
         $('.field-company-com_mac_id').hide();
         // $('.field-company-com_subcategory_id').show();
-        $('.field-company-com_address').show();
+        // $('.field-company-com_address').show();
         $('.field-company-com_postcode').show();
         $('.field-company-com_city').show();
         $('.field-mallmerchant-mam_mal_id').hide();
