@@ -293,7 +293,7 @@ class DefaultController extends BaseController
                     $model->sna_approved_datetime = NULL;
                     $model->sna_approved_by = NULL;
                     $model->sna_rejected_datetime = $set_time;
-                    $model->sna_transaction_time = 0;
+                    $model->sna_transaction_time = NULL;
                     $model->sna_rejected_by = $set_operator;
                     $model->sna_point = 0;
                 }else{
@@ -301,7 +301,7 @@ class DefaultController extends BaseController
                     $model->sna_approved_by = NULL;
                     $model->sna_rejected_datetime = NULL;
                     $model->sna_rejected_by = NULL;
-                    $model->sna_transaction_time = 0;
+                    $model->sna_transaction_time = NULL;
                     $model->sna_point = 0;
                     $model->sna_sem_id = 0;
                 }
