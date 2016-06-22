@@ -27,6 +27,7 @@ use app\models\ModuleInstalled;
 use app\models\SystemMessage;
 use app\models\WorkingTime;
 use yii\web\HttpException;
+use yii\web\ForbiddenHttpException;
 
 /**
 * 

@@ -12,7 +12,7 @@ use Yii;
  */
 class SnapEarnRemark extends \yii\db\ActiveRecord
 {
-    const FORCE_REJECTED_MAX_PER_DAY = 8;
+    const FORCE_REJECTED_MAX_PER_DAY = 7;
     /**
      * @inheritdoc
      */
