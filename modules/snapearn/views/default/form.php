@@ -116,7 +116,6 @@ $this->title = "Update SnapEarn";
                   <form role="form">
                     <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
-                    <?= $form->field($model, 'sna_com_id')->hiddenInput(['style' => 'display:none'])->label('') ?>
                     <div class="point-form">
                        <?=
                           $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
@@ -139,6 +138,7 @@ $this->title = "Update SnapEarn";
                       <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control']) ?>
                   </div>
                   <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
+                    <?= $form->field($model, 'sna_com_id')->hiddenInput(['style' => 'display:none'])->label('') ?>
                     <div class="box-footer clearfix">
                       <div class="button-right pull-right">
                           <button type="submit" class="btn-primary btn submit-button"><i class="fa fa-check"></i> Save</button>

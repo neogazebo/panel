@@ -143,7 +143,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             ->andWhere(['sna_com_id' => $this->sna_com_id])
             ->count();
 
-        if ($count >= 2) {
+        if ($count > 2) {
             $this->addError($data, Yii::t('app', "Sorry, only 2 receipt max /day/merchant."));
         }
     }
