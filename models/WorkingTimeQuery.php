@@ -34,12 +34,14 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function findWorkExist($param,$point_type)
+    public function findWorkExist($param,$point_type = 0)
     {
         $user = Yii::$app->user->id;
         $this->andWhere("wrk_by = $user");
         $this->andWhere("wrk_param_id = $param");
-        $this->andWhere("wrk_point_type = $point_type");
+        if ($point_type != 0) {
+            $this->andWhere("wrk_point_type = $point_type");
+        }
         $this->andWhere("wrk_end IS NULL");
         return $this;
     }
