@@ -69,12 +69,12 @@ $this->title = "Update SnapEarn";
                 </li>
                 <?php endif; ?>
                 <li class="">
-                  <a href="#"><b><?= (empty($model->business)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (!empty($model->newSuggestion)) ? $model->newSuggestion->cos_name : $model->business->com_name ?></span></a>
+                  <a href="#"><b><?= (empty($model->merchant)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
                 </li>
-                <?php if (!empty($model->business)) : ?>
+                <?php if (!empty($model->merchant)) : ?>
                 <li class="">
                   <a href="#"><b>Merchant Point</b>
-                    <?php if ($model->business->com_point < 500) :?> 
+                    <?php if ($model->merchant->com_point < 500) :?> 
                       <?php if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
                         <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?> 
                       <?php else: ?>
@@ -82,12 +82,12 @@ $this->title = "Update SnapEarn";
                       <?php endif; ?>
                     <?php endif; ?>
                     <span class="pull-right text-light-blue">
-                      <?= (!empty($model->business)) ? $model->business->com_point : '' ?>
+                      <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
                     </span>
                   </a>
                 </li>
                 <?php endif; ?>
-                <?php if (empty($model->business)) : ?>
+                <?php if (empty($model->merchant)) : ?>
                 <li>
                   <a href="#"><b>Sugest Mall</b>
                     <span class="pull-right text-light-blue"><?= $model->newSuggestion->cos_mall ?></span>
@@ -105,7 +105,7 @@ $this->title = "Update SnapEarn";
               <div class="box box-widget">
                 <div class="box-header with-border">
                   <h3 class="box-title">Form Approval</h3>
-                  <?php if (empty($model->business)) : ?>
+                  <?php if (empty($model->merchant)) : ?>
                   <div class="pull-right btn-merchant">
                     <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
                     <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?> 
