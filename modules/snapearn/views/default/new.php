@@ -432,7 +432,7 @@ if (window.opener == null) {
     // var parent = window.opener.$('#parent').val();
         id = location.search.split('id=')[1];
     if (parent != 1) {
-        window.location= 'update?id='+id;
+        window.location= 'to-update?id='+id;
     }
 } else {
     $('.bg_load').fadeOut('slow');
