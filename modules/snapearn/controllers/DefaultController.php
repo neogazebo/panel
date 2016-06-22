@@ -242,7 +242,6 @@ class DefaultController extends BaseController
                     $model->sna_status = $sna_status;
                     $model->sna_sem_id = SnapEarnRemark::FORCE_REJECTED_MAX_PER_DAY;
                 }
-
                 // if approved action
                 if ($model->sna_status == 1) {
 
@@ -291,7 +290,13 @@ class DefaultController extends BaseController
                     $model->sna_rejected_datetime = $set_time;
                     $model->sna_rejected_by = $set_operator;
                     $model->sna_point = 0;
-                    // $model->sna_receipt_amount = 0;
+                }else{
+                    $model->sna_approved_datetime = NULL;
+                    $model->sna_approved_by = NULL;
+                    $model->sna_rejected_datetime = NULL;
+                    $model->sna_rejected_by = NULL;
+                    $model->sna_point = 0;
+                    $model->sna_sem_id = 0;
                 }
 
                 // execution save to snapearn
