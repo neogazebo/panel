@@ -276,7 +276,7 @@ class DefaultController extends BaseController
                     if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
                     }
-                    
+
                     $model->sna_approved_datetime = $set_time;
                     $model->sna_approved_by = $set_operator;
                     $model->sna_rejected_datetime = NULL;
@@ -509,7 +509,6 @@ class DefaultController extends BaseController
         if ($model->count() >= SnapEarn::LIMIT_RECEIPT) {
             $sna_status = SnapEarn::STATUS_REJECTED;
         }
-        var_dump($sna_status);exit;
         return $sna_status;
     }
 
