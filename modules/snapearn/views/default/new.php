@@ -15,7 +15,7 @@ $this->registerJsFile($this->theme->baseUrl . '/plugins/gmaps/gmaps.js', ['depen
 $this->registerCssFile($this->theme->baseUrl . '/dist/plugins/jQueryui/jquery-ui.min.css');
 $latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
 $longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
-$company->com_in_mall = false;
+$company->com_in_mall = true;
 ?>
 
 <section class="content-header">
@@ -257,7 +257,7 @@ $this->registerJs("
         $('#cropper-modal').modal({show: true});
     });
 
-    var mall_checked = $('#company-com_in_mall').is('checked',true);
+    var mall_checked = 1;
     $('#create-business').hide();
     $('#company-com_point').popover();
     $('.field-company-com_latitude').hide();

@@ -637,35 +637,35 @@ class DefaultController extends BaseController
 
     public function actionMallList($q = null, $id = null)
     {
-        // if (Yii::$app->request->isAjax){
-        //     $model = Mall::find()->SearchMallList();
-        //     $out = [];
-        //     if (!empty($model)) {
-        //         foreach ($model as $d) {
-        //             $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
-        //         }
-        //     }else{
-        //         $out[] = ['id' => 0,'value' => 'Merchant not found!'];
-        //     }
-        //     echo \yii\helpers\Json::encode($out);
-        // }
+        if (Yii::$app->request->isAjax){
+            $model = Mall::find()->SearchMallList();
+            $out = [];
+            if (!empty($model)) {
+                foreach ($model as $d) {
+                    $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
+                }
+            }else{
+                $out[] = ['id' => 0,'value' => 'Merchant not found!'];
+            }
+            echo \yii\helpers\Json::encode($out);
+        }
 
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $out = ['results' => ['id' => '', 'value' => '']];
-        if (!is_null($q)) {
-            $query = new \yii\db\Query;
-            $query->select('mal_id as id, mal_name AS value')
-                ->from('tbl_mall')
-                ->where(['like', 'mal_name', $q])
-                ->limit(20);
-            $command = $query->createCommand();
-            $data = $command->queryAll();
-            $out['results'] = array_values($data);
-        }
-        elseif ($id > 0) {
-            $out['results'] = ['id' => $id, 'value' => $value];
-        }
-        return $out;
+        // \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        // $out = ['results' => ['id' => '', 'value' => '']];
+        // if (!is_null($q)) {
+        //     $query = new \yii\db\Query;
+        //     $query->select('mal_id as id, mal_name AS value')
+        //         ->from('tbl_mall')
+        //         ->where(['like', 'mal_name', $q])
+        //         ->limit(20);
+        //     $command = $query->createCommand();
+        //     $data = $command->queryAll();
+        //     $out['results'] = array_values($data);
+        // }
+        // elseif ($id > 0) {
+        //     $out['results'] = ['id' => $id, 'value' => $value];
+        // }
+        // return $out;
     }
 
     public function actionTest()
