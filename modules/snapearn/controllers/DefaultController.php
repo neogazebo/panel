@@ -516,7 +516,6 @@ class DefaultController extends BaseController
     protected function approvedReceiptPerday($t,$u,$c)
     {
         $model = SnapEarn::find()->maxDuplicateReceipt($t,$u,$c);
-        var_dump($model->count());exit;
         $sna_status = 0;
         if ($model->count() >= 2) {
             $sna_status = 2;
