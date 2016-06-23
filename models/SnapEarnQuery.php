@@ -116,6 +116,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->andWhere('sna_com_id = :com',[
                 ':com' => $c
             ]);
+        $this->andWhere("sna_transaction_time != 0");
         $this->all();
 
         return $this;
