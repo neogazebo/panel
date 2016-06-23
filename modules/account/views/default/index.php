@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 ],
                                 [
-                                    'label' => 'Total Point',
+                                    'label' => 'Current Point',
                                     'attribute' => 'acc_id',
                                     'value' => function($data){
                                         return $data->lastPointMember();

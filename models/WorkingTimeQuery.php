@@ -62,7 +62,6 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
 
         $this->andWhere('wrk_time IS NOT NULL');
         $this->groupBy('wrk_by');
-        // echo $this->createCommand()->sql;exit;
         return $this;
     }
 
@@ -71,12 +70,16 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         $this->where('wrk_by = :user',[
                 ':user' => $id
             ]);
+
         $this->andWhere('wrk_end IS NOT NULL');
-       if (!empty($_GET['wrk_daterange'])){
-            $wrk_daterange = explode(' to ',($_GET['wrk_daterange']));
-            $this->andWhere("FROM_UNIXTIME(wrk_upload_date) BETWEEN '$wrk_daterange[0] 00:00:00' AND '$wrk_daterange[1] 23:59:59'");
+
+        if (!empty($_POST['wrk_daterange'])) {
+            $range = explode(" to ", $_POST['wrk_daterange']);
+            $this->andWhere("date(from_unixtime(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
         }
+
         $this->andWhere('wrk_time IS NOT NULL');
+        $this->orderBy('wrk_id DESC');
         return $this;
     }
 

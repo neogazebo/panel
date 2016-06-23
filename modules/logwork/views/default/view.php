@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <!-- <form class="form-inline pull-right" role="form" method="get" action="/logwork/view">
+                    <form class="form-inline pull-right" role="form" method="post" action="view?id=<?= $_GET['id'] ?>">
                         <div class="form-group">
                             <label>Date range</label><br>
                             <div class="input-group">
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <label>&nbsp;</label><br>
                             <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                         </div>
-                    </form> -->
+                    </form>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">
@@ -44,7 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
                             'columns' => [
-                                ['class' => 'yii\grid\SerialColumn'],
+                                [
+                                    'label' => 'Date',
+                                    'attribute' => 'wrk_end',
+                                    'value' => function($data){
+                                        return Yii::$app->formatter->asDateTime($data->wrk_end,'php: Y-m-d H:i:s');
+                                    }
+                                ],
                                 [
                                     'label' => 'Username',
                                     'attribute' => 'wrk_by',
