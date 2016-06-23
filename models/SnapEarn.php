@@ -155,15 +155,19 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         if ($this->sna_status == 1) {
             $query = self::find()
-                ->select('sna_receipt_number')
-                ->from('tbl_snapearn')
-                ->where('sna_com_id = :com_id AND sna_receipt_number = :receipt', [
-                    ':com_id' => $this->sna_com_id,
-                    ':receipt' => $this->sna_receipt_number
-                ])
-                ->createCommand()
-                ->queryAll();
-            if(!empty($query))
+                ->where(['sna_receipt_number' => $this->sna_receipt_number])
+                ->andWhere(['sna_com_id' => $this->sna_com_id])
+                ->andWhere(['<>','sna_status',0])
+                ->count();
+                // ->select('sna_receipt_number')
+                // ->from('tbl_snapearn')
+                // ->where('sna_com_id = :com_id AND sna_receipt_number = :receipt', [
+                //     ':com_id' => $this->sna_com_id,
+                //     ':receipt' => $this->sna_receipt_number
+                // ])
+                // ->createCommand()
+                // ->queryAll();
+            if($query >= 1)
                 $this->addError($data, Yii::t('app', 'This number receipt has taken'));
         }
     }
