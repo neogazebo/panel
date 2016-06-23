@@ -81,7 +81,7 @@ $form = ActiveForm::begin([
     <input id="mall_id" type="hidden" name="mall_id" value="">
     <?= $form->field($company, 'com_postcode')->textInput(); ?>
     <?= 
-        $form->field($company, 'mall_name')->widget(Typeahead::classname(),[
+        $form->field($company, 'mall_id')->widget(Typeahead::classname(),[
             'name' => 'merchant',
             'options' => [
                 'placeholder' => 'Mall Name',
@@ -107,11 +107,14 @@ $form = ActiveForm::begin([
             ]
         ])->label('Select Mall');
     ?>
+
+
     <div class="form-group" id="businessMap">
         <label class="col-lg-3 control-label">Map</label>
         <div class="col-lg-8">
             <div id="map" style="height:300px"></div>
         </div>
+        <div class="clearfix"></div>
     </div>
     <div id="floor-unit" class="form-group">
         <div class="form-group hide" id="hasmallkey">
@@ -144,7 +147,6 @@ $form = ActiveForm::begin([
             <?= $form->field($company->modelMallMerchant, 'mam_unit_number')->textInput() ?>
         </div>
     </div>
-    <div style="padding: 10px;" class="clearfix"></div>
     <?= $form->field($company, 'com_phone')->textInput(); ?>
     <?= $form->field($company, 'com_fax')->textInput(); ?>
     <?= $form->field($company, 'com_website')->textInput(); ?>
@@ -196,13 +198,13 @@ $form = ActiveForm::begin([
 <div class="bg_load"></div>
 <div class="loader">
     <div class="inner">
-        <span>L</span>
-        <span>o</span>
-        <span>a</span>
-        <span>d</span>
-        <span>i</span>
-        <span>n</span>
-        <span>g</span>
+        <span>E</span>
+        <span>B</span>
+        <span>I</span>
+        <span>Z</span>
+        <span>U</span>
+        <span>V</span>
+        <span>3</span>
     </div>
 </div>
 <!-- widget to create render modal -->
@@ -300,7 +302,7 @@ $this->registerJs("
         $('.field-company-com_postcode').hide();
         $('.field-company-com_city').hide();
         $('.field-mallmerchant-mam_mal_id').show();
-        $('.field-company-mall_name').show();
+        $('.field-company-mall_id').show();
         $('#floor-unit').show();
     };
     var unloadMall = function() {
@@ -311,7 +313,7 @@ $this->registerJs("
         $('.field-company-com_postcode').show();
         $('.field-company-com_city').show();
         $('.field-mallmerchant-mam_mal_id').hide();
-        $('.field-company-mall_name').hide();
+        $('.field-company-mall_id').hide();
         $('#floor-unit').hide();
     };
     var checkOrNot = function(mall_checked) {

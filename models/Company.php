@@ -148,11 +148,11 @@ class Company extends EbizuActiveRecord
                 'com_par_createdby',
                 'tag',
             ], 'safe'],
-            // [['mall_id'], 'required', 'when' => function($model) {
-            //     return $this ->com_in_mall == 1;
-            // }, 'whenClient' => "function (attribute, value) {
-            //     return $('#company-com_in_mall').val() == 1;
-            // }"],
+            [['mall_id'], 'required', 'when' => function($model) {
+                return $this ->com_in_mall == 1;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#company-com_in_mall').val() == 1;
+            }"],
         ];
     }
 
