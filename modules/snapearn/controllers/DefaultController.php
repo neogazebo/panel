@@ -239,13 +239,15 @@ class DefaultController extends BaseController
                 $set_operator = Yii::$app->user->id;
 
                 // limited transaction point per-user per-merchant per-day
-                $t = $model->sna_transaction_time;
-                $u = $model->sna_acc_id;
-                $c = $model->sna_com_id;
-                $sna_status = $this->approvedReceiptPerday($t,$u,$c);
-                if ($sna_status == 2) {
-                    $model->sna_status = $sna_status;
-                    $model->sna_sem_id = SnapEarnRemark::FORCE_REJECTED_MAX_PER_DAY;
+                if ($model->sna_transaction_time != 0) {
+                    $t = $model->sna_transaction_time;
+                    $u = $model->sna_acc_id;
+                    $c = $model->sna_com_id;
+                    $sna_status = $this->approvedReceiptPerday($t,$u,$c);
+                    if ($sna_status == 2) {
+                        $model->sna_status = $sna_status;
+                        $model->sna_sem_id = SnapEarnRemark::FORCE_REJECTED_MAX_PER_DAY;
+                    }
                 }
                 // if approved action
                 if ($model->sna_status == 1) {
