@@ -438,7 +438,6 @@ class DefaultController extends BaseController
         }
 
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
-        $model->sna_receipt_date = Utc::convert($model->sna_receipt_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
 
         return $this->render('form', [
@@ -517,9 +516,10 @@ class DefaultController extends BaseController
     protected function approvedReceiptPerday($t,$u,$c)
     {
         $model = SnapEarn::find()->maxDuplicateReceipt($t,$u,$c);
+        var_dump($model->count());exit;
         $sna_status = 0;
-        if ($model->count() >= SnapEarn::LIMIT_RECEIPT) {
-            $sna_status = SnapEarn::STATUS_REJECTED;
+        if ($model->count() >= 2) {
+            $sna_status = 2;
         }
         return $sna_status;
     }
