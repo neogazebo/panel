@@ -141,7 +141,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             ->where(['sna_acc_id' => $this->sna_acc_id])
             ->andWhere(['date(from_unixtime(sna_transaction_time))' => date('Y-m-d', strtotime($this->sna_transaction_time))])
             ->andWhere(['sna_com_id' => $this->sna_com_id])
-            ->wndWhere('sna_transaction_time != 0')
+            ->andWhere(['<>','sna_transaction_time',0])
             ->count();
         if ($this->sna_status == 1) {
             if ($count >= 2) {
