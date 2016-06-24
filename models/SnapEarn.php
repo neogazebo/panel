@@ -230,14 +230,9 @@ class SnapEarn extends \yii\db\ActiveRecord
         return $this->hasOne(Category::className(), ['cat_id' => 'sna_cat_id']);
     }
 
-    public function getAdminApproved()
+    public function getReview()
     {
-        return $this->hasOne(AdminUser::className(), ['id' => 'sna_approved_by']);
-    }
-
-    public function getAdminRejected()
-    {
-        return $this->hasOne(AdminUser::className(), ['id' => 'sna_rejected_by']);
+        return $this->hasOne(AdminUser::className(), ['id' => 'sna_review_by']);
     }
 
     /**
@@ -259,6 +254,8 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_approved_by' => 'Approved By',
             'sna_rejected_datetime' => 'Rejected Datetime',
             'sna_rejected_by' => 'Rejected By',
+            'sna_review_date' => 'Review Date',
+            'sna_review_by' => 'Review By',
             'sna_sem_id' => 'Remark',
             'sna_cat_id' => 'Category',
             'sna_receipt_image' => 'Receipt Image',

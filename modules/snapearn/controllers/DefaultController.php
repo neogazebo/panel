@@ -235,8 +235,8 @@ class DefaultController extends BaseController
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
                 $model->sna_point = floor($model->sna_receipt_amount);
 
-                $set_time = Utc::getNow();
-                $set_operator = Yii::$app->user->id;
+                $model->sna_review_date = Utc::getNow();
+                $model->sna_review_by = Yii::$app->user->id;
 
                 // limited transaction point per-user per-merchant per-day
                 if ($model->sna_transaction_time != 0) {
@@ -282,27 +282,16 @@ class DefaultController extends BaseController
                     if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
                     }
-
-                    $model->sna_approved_datetime = $set_time;
-                    $model->sna_approved_by = $set_operator;
-                    $model->sna_rejected_datetime = NULL;
-                    $model->sna_rejected_by = NULL;
                     $model->sna_sem_id = '';
                     // if rejected action
                 } elseif ($model->sna_status == 2) {
                     $username = $model->member->acc_screen_name;
                     $email = $model->member->acc_facebook_email;
-                    $model->sna_approved_datetime = NULL;
-                    $model->sna_approved_by = NULL;
-                    $model->sna_rejected_datetime = $set_time;
                     $model->sna_transaction_time = NULL;
-                    $model->sna_rejected_by = $set_operator;
                     $model->sna_point = 0;
                 }else{
-                    $model->sna_approved_datetime = NULL;
-                    $model->sna_approved_by = NULL;
-                    $model->sna_rejected_datetime = NULL;
-                    $model->sna_rejected_by = NULL;
+                    $model->sna_review_date = 0;
+                    $model->sna_review_by = 0;
                     $model->sna_transaction_time = NULL;
                     $model->sna_point = 0;
                     $model->sna_sem_id = 0;
@@ -645,7 +634,7 @@ class DefaultController extends BaseController
                     $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
                 }
             }else{
-                $out[] = ['id' => 0,'value' => 'Merchant not found!'];
+                $out[] = ['id' => 0,'value' => 'Mall not found!'];
             }
             echo \yii\helpers\Json::encode($out);
         }

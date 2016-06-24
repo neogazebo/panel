@@ -21,6 +21,13 @@ $this->registerCss("
         position: relative;
         width: 200px;
     }
+    
+    .profile-user-img.img-responsive.img-circle {
+        max-height: 100px;
+        max-width: 100px;
+        overflow: hidden;
+    }
+
 ");
 ?>
 

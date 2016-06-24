@@ -90,7 +90,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                     'format' => 'html',
                                     'value' => function($data) {
                                         if (!empty($data->merchant)) {
-                                            return $data->merchant['com_name'] . ($data->merchant['com_joined'] == 1 ? ' <i class="fa fa-check"></i>' : '');
+                                            return $data->merchant->com_name . ($data->merchant->com_joined == 1 ? ' <i class="fa fa-check"></i>' : '');
                                         }
                                     }
                                 ],
@@ -126,25 +126,21 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 ],
                                 [
                                     'label' => 'Date Review',
-                                    'attribute' => 'sna_approved_datetime',
+                                    'attribute' => 'sna_review_date',
                                     'value' => function($data) {
-                                        if (!empty($data->sna_approved_datetime)) {
-                                            return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_approved_datetime));
-                                        } elseif (!empty($data->sna_rejected_datetime)) {
-                                            return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_rejected_datetime));
+                                        if (!empty($data->sna_review_date)) {
+                                            return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_review_date));
                                         }
                                         
                                     }
                                 ],
                                 [
                                     'label' => 'Operator',
-                                    'attribute' => 'sna_status',
+                                    'attribute' => 'sna_review_by',
                                     'value' => function($data) {
-                                        if (!empty($data->adminRejected['username'])) {
-                                            return $data->adminRejected['username'];
-                                        } elseif (!empty($data->adminApproved['username'])) {
-                                            return $data->adminApproved['username'];
-                                        }
+                                        if (!empty($data->review)) {
+                                            return $data->review->username;
+                                        } 
                                     }
                                 ],
                                 [
