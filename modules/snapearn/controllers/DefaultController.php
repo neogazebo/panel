@@ -324,8 +324,6 @@ class DefaultController extends BaseController
                         }
     
                         // create snapearn point detail
-                        // SnapEarnPointDetail::savePoint($id, 7);
-    
                         $this->setMessage('save', 'success', 'Snap and Earn successfully approved!');
                         $snap_type = 'approved';
                     } elseif ($model->sna_status == 2) {
@@ -390,8 +388,6 @@ class DefaultController extends BaseController
                         }
     
                         // create snapearn point detail
-                        // SnapEarnPointDetail::savePoint($id, $model->sna_sem_id);
-    
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
                     }
@@ -430,7 +426,7 @@ class DefaultController extends BaseController
 
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
-
+        
         return $this->render('form', [
             'model' => $model,
             'id' => $id
@@ -638,23 +634,6 @@ class DefaultController extends BaseController
             }
             echo \yii\helpers\Json::encode($out);
         }
-
-        // \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        // $out = ['results' => ['id' => '', 'value' => '']];
-        // if (!is_null($q)) {
-        //     $query = new \yii\db\Query;
-        //     $query->select('mal_id as id, mal_name AS value')
-        //         ->from('tbl_mall')
-        //         ->where(['like', 'mal_name', $q])
-        //         ->limit(20);
-        //     $command = $query->createCommand();
-        //     $data = $command->queryAll();
-        //     $out['results'] = array_values($data);
-        // }
-        // elseif ($id > 0) {
-        //     $out['results'] = ['id' => $id, 'value' => $value];
-        // }
-        // return $out;
     }
 
     public function actionTest()
@@ -666,9 +645,6 @@ class DefaultController extends BaseController
             }])
             ->one();
         var_dump($model);exit;
-        // return $this->render('test',[
-        //         'model' => $model
-        //     ]);
     }
 
 }

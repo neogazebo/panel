@@ -10,6 +10,7 @@ use app\models\AuthAssignment;
 use app\models\AuthItemChild;
 use app\models\AuthRule;
 use app\models\User;
+use app\models\SearchUser;
 use app\controllers\BaseController;
 use app\modules\rbac\controllers\AdminRule;
 use app\components\helpers\General;
@@ -26,21 +27,13 @@ class IndexController extends BaseController
     public function actionIndex()
     {
         $this->setRememberUrl();
-    	$model = User::find()->where("type = 1");
-        if (Yii::$app->request->get('search')) {
-            $model->where('username LIKE :get', [':get' => '%' . Yii::$app->request->get('search') . '%']);
-        }
-        $model->orderBy('id DESC');
-    	$dataProvider = new ActiveDataProvider([
-            'query' => $model,
-            'pagination' => [
-                'pageSize' => 20
-            ]
-        ]);
+        $searchModel = new SearchUser();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-    		'dataProvider' => $dataProvider
-    	]);
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionDetail($id)

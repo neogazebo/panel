@@ -32,6 +32,7 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                             'id' => 'ListRole',
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
+                            'filterModel' => $searchModel,
                             'columns' => [
                                 'username',
                                 'email',
@@ -43,24 +44,18 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                     }
                                 ],
                                 [
-                                    'attribute' => 'create_time',
+                                    'label' => 'Registered Since',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asDateTime($data->create_time);
                                     }
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right actionColumn">{view} {update} {delete}</span>',
+                                    'template' => '<span class="pull-right actionColumn">{view}</span>',
                                     'buttons' => [
                                         'view' => function($url, $model) {
                                             return Html::a('<i class="fa fa-search"></i>', ['detail?id=' . $model->id]);
                                         },
-                                        'update' => function($url,$model) {
-                                            return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?id='.$model->id]), 'class' => 'modalButton']);
-                                        },
-                                        'delete' => function($url,$model) {
-                                            return Html::button('<i class="fa fa-times-circle-o"></i>', ['value' => Url::to(['delete?id=' . $model->id]), 'class' => 'deleteBtn']);
-                                        }
                                     ],
                                 ],
                             ],

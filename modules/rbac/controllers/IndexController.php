@@ -8,9 +8,11 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\data\Pagination;
 use app\models\AuthItem;
+use app\models\SearchAuthItem;
 use app\models\AuthRule;
 use app\models\AuthItemChild;
 use app\models\AuthAssignment;
+use app\models\User;
 use app\controllers\BaseController;
 use app\components\helpers\General;
 
@@ -30,16 +32,12 @@ class IndexController extends BaseController
     public function actionIndex()
     {
         $this->setRememberUrl();
-        $model = AuthItem::find()->with(['user'])->list;
-        $dataProvider = new ActiveDataProvider([
-            'query' => $model,
-            'pagination' => [
-                'pageSize' => 20
-            ]
-        ]);
+        $searchModel = new SearchAuthItem();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -75,7 +73,7 @@ class IndexController extends BaseController
 
     public function actionDetail($name)
     {
-        $lists = $this->allModel($name)->all();
+        $lists = $this->allModel($name)->where('type = 2')->all();
         $models = AuthItemChild::findAll($name);
         $title = $name;
 
@@ -207,11 +205,53 @@ class IndexController extends BaseController
         ]);
     }
 
+    public function actionAssign($role)
+    {
+        $model = new AuthAssignment();
+        if ($model->load(Yii::$app->request->post())) {
+            $userId = $model->user_id;
+            $name = User::findOne($userId)->username;
+            $r = AuthItem::find()->where('name = :role',[':role' => $role])->one();
+            $auth = $this->_role();
+            if ($auth->assign($r,$userId)) {
+                $this->setMessage('save', 'success', 'Success assign user '.$name.' to '.$role);
+                return $this->redirect(['user?name='.$role]);
+            }else{
+                $this->setMessage('save', 'error', 'Failed assign user '.$name.' to '.$role);
+                return $this->redirect(['user?name='.$role]);
+            }
+        } else {
+            return $this->renderAjax('assign', [
+                'model' => $model,
+                'role' => $role
+            ]);
+        }
+    }
+
     public function actionRevoke($role,$userId,$name)
     {
         $auth = $this->_role();
-        if ($auth->revoke($role,$userId)) {
+        $name = User::findOne($userId)->username;
+        $r = AuthItem::find()->where('name = :role',[':role' => $role])->one();
+        if ($auth->revoke($r,$userId)) {
             $this->setMessage('save', 'success', 'User '.$name.' success revoked from this role');
+            return $this->redirect(['user?name='.$role]);
+        }
+    }
+
+    public function actionUserList()
+    {
+        if (Yii::$app->request->isAjax){
+            $model = User::find()->searchUser();
+            $out = [];
+            if (!empty($model)) {
+                foreach ($model as $d) {
+                    $out[] = ['id' => $d->id,'username' => $d->username];
+                }
+            }else{
+                $out[] = ['id' => 0,'username' => 'Mall not found!'];
+            }
+            echo \yii\helpers\Json::encode($out);
         }
     }
 

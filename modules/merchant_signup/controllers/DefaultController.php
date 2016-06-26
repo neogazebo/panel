@@ -1,5 +1,4 @@
 <?php
-
 namespace app\modules\merchant_signup\controllers;
 
 use Yii;
@@ -31,18 +30,6 @@ use app\models\FeatureSubscription;
 class DefaultController extends BaseController
 {
 	private $_pageSize = 20;
-
-	// public function behaviors()
- //    {
-        // return [
-        //     'verbs' => [
-        //         'class' => VerbFilter::className(),
-        //         'actions' => [
-        //             'delete' => ['POST'],
-        //         ],
-        //     ],
-        // ];
-    // }
 
     /**
      * Renders the index view for the module

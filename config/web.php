@@ -20,20 +20,8 @@ $config = [
         'voucher' => [
             'class' => 'app\modules\voucher\Voucher',
         ],
-        'partner' => [
-            'class' => 'app\modules\partner\Partner',
-        ],
         'mobile' => [
             'class' => 'app\modules\mobile\Mobile',
-        ],
-        'report' => [
-            'class' => 'app\modules\report\Report',
-        ],
-        'merchant' => [
-            'class' => 'app\modules\merchant\Merchant',
-        ],
-        'mall' => [
-            'class' => 'app\modules\mall\Mall',
         ],
         'merchant-signup' => [
             'class' => 'app\modules\merchant_signup\MerchantSignup',
@@ -117,6 +105,7 @@ $config = [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'dd MMM yyyy',
+            'decimalSeparator' => ',',
         ],        
         'format' => [
             'class' => 'app\components\extensions\Formatter',

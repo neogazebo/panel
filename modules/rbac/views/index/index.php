@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 
 $this->title = 'Role List';
 ?>
-<section class="content-header ">
+<section class="content-header "> 
     <h1><?= $this->title?></h1>
 </section>
 
@@ -31,11 +31,26 @@ $this->title = 'Role List';
                             'id' => 'ListRole',
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
+                            'filterModel' => $searchModel,
                             'columns' => [
-                                'name',
-                                'description',
                                 [
-                                    'attribute' => 'created_by',
+                                    'label' => 'Role Name',
+                                    'attribute' => 'name',
+                                    'value' => function($data){
+                                        if (!empty($data->name)) {
+                                            return $data->name;
+                                        }
+                                    }
+                                ],
+                                [
+                                    'label' => 'Description',
+                                    'value' => function($data){
+                                        if (!empty($data->description)) 
+                                            return $data->description;
+                                    }
+                                ],
+                                [
+                                    'label' => 'Created By',
                                     'format' => 'html',
                                     'value' => function($data) {
                                         if(!empty($data->user))
@@ -43,13 +58,13 @@ $this->title = 'Role List';
                                     }
                                 ],
                                 [
-                                    'attribute' => 'created_at',
+                                    'label' => 'Created Date',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asDateTime($data->created_at);
                                     }
                                 ],
                                 [
-                                    'attribute' => 'updated_at',
+                                    'label' => 'Updated Date',
                                     'value' => function($data) {
                                         $create = Yii::$app->formatter->asDateTime($data->created_at);
                                         $update = Yii::$app->formatter->asDateTime($data->updated_at);
@@ -59,10 +74,10 @@ $this->title = 'Role List';
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right actionColumn">{user} {view} {update} {delete}</span>',
+                                    'template' => '<span class="pull-right actionColumn">{user} {view} {update} <!--{delete}--></span>',
                                     'buttons' => [
                                         'user' => function($url, $model) {
-                                            return Html::a('<i class="fa fa-group"></i>', ['user?name=' . $model->name]);
+                                            return Html::a('<i class="fa fa-group"></i>', ['user?name=' . $model->name,'class' => 'btn']);
                                         },
                                         'view' => function($url, $model) {
                                             return Html::a('<i class="fa fa-search"></i>', ['detail?name=' . $model->name]);
@@ -70,9 +85,9 @@ $this->title = 'Role List';
                                         'update' => function($url,$model) {
                                             return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?name='.$model->name]), 'class' => 'modalButton']);
                                         },
-                                        'delete' => function($url,$model) {
-                                            return Html::button('<i class="fa fa-times-circle-o"></i>', ['value' => Url::to(['delete?name=' . $model->name]), 'class' => 'deleteBtn']);
-                                        }
+                                        // 'delete' => function($url,$model) {
+                                        //     return Html::button('<i class="fa fa-times-circle-o"></i>', ['value' => Url::to(['delete?name=' . $model->name]), 'class' => 'deleteBtn']);
+                                        // }
                                     ],
                                 ],
                             ],

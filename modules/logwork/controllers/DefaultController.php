@@ -53,6 +53,11 @@ class DefaultController extends BaseController
         ]);
     }
 
+    public function actionTest()
+    {
+        return $this->render('invoice');
+    }
+
     public function actionUserList()
     {
     	if (Yii::$app->request->isAjax) {

@@ -55,7 +55,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function rules()
     {
-        new ProductItem;
         return [
             [['email'], 'unique'],
             [['email'], 'email'],

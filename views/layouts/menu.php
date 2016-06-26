@@ -1,20 +1,10 @@
+<?php
+use app\components\filters\AccessFilters;
+?>
 <!-- sidebar menu: : style can be found in sidebar.less -->
 <ul class="sidebar-menu">
     <li class="header">MAIN NAVIGATION</li>
-    <!-- <li class="treeview">
-        <a href="#">
-            <i class="fa fa-th-list"></i>
-            <span>Partner</span>
-            <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-            <li>
-                <a href="<?= Yii::$app->urlManager->createUrl('partner/index') ?>">
-                    <i class="fa fa-circle-o"></i> Dashboard
-                </a>
-            </li>
-        </ul>
-    </li> -->
+    <?php if (AccessFilters::getMenu('epay')) : ?>
     <li class="treeview">
         <a href="#">
             <i class="fa fa-credit-card"></i>
@@ -27,6 +17,8 @@
             <li><a href="<?= Yii::$app->urlManager->createUrl('epay/report') ?>"><i class="fa fa-circle-o"></i> Report</a></li>
         </ul>
     </li>
+    <?php endif; ?>
+    <?php if (AccessFilters::getMenu('merchant-signup')) : ?>
     <li class="treeview">
         <a href="#">
             <i class="fa fa-th-list"></i>
@@ -41,6 +33,8 @@
             </li>
         </ul>
     </li>
+    <?php endif; ?>
+    <?php if (AccessFilters::getMenu('account')) : ?>
     <li class="treeview">
         <a href="#">
             <i class="fa fa-user"></i>
@@ -51,6 +45,8 @@
             <li><a href="<?= Yii::$app->urlManager->createUrl('account') ?>"><i class="fa fa-circle-o"></i> List</a></li>
         </ul>
     </li>
+    <?php endif; ?>
+    <?php if (AccessFilters::getMenu('snapearn')) : ?>
     <li class="treeview">
         <a href="#">
             <i class="fa fa-hand-pointer-o"></i>
@@ -59,48 +55,13 @@
         </a>
         <ul class="treeview-menu">
             <li><a href="<?= Yii::$app->urlManager->createUrl('snapearn') ?>"><i class="fa fa-circle-o"></i> List</a></li>
+            <?php if (AccessFilters::getMenu('logwork')) : ?>
             <li><a href="<?= Yii::$app->urlManager->createUrl('logwork') ?>"><i class="fa fa-circle-o"></i> Log Work</a></li>
+            <?php endif; ?>
         </ul>
     </li>
-    <!-- <li class="treeview">
-        <a href="">
-            <i class="fa fa-signal"></i>
-            <span>Mobile Pulsa</span>
-            <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-            <li><a href="<?= Yii::$app->urlManager->createUrl('mobile/index') ?>"><i class="fa fa-circle-o"></i> Dashboard</a></li>
-            <li><a href="<?= Yii::$app->urlManager->createUrl('mobile/log') ?>"><i class="fa fa-circle-o"></i> Transaction Log</a></li>
-        </ul>
-    </li>
-    <li class="treeview">
-        <a href="#">
-            <i class="fa fa-cc-paypal"></i>
-            <span>Voucher Manage</span>
-            <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-            <li>
-                <a href="<?= Yii::$app->urlManager->createUrl('voucher/index') ?>">
-                    <i class="fa fa-circle-o"></i> Dashboard
-                </a>
-            </li>
-        </ul>
-    </li>
-    <li class="treeview">
-        <a href="">
-            <i class="fa fa-line-chart"></i>
-            <span>Report</span>
-            <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-            <li>
-                <a href="<?= Yii::$app->urlManager->createUrl('report/index') ?>">
-                    <i class="fa fa-circle-o"></i> Dashboard
-                </a>
-            </li>
-        </ul>
-    </li> -->
+    <?php endif; ?>
+    <?php if (AccessFilters::getMenu('rbac')) : ?>
     <!-- RBAC -->
     <li class="treeview">
         <a href="#">
@@ -121,4 +82,5 @@
             </li>
         </ul>
     </li>
+    <?php endif; ?>
 </ul>
