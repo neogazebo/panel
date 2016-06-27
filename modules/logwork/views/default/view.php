@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'label' => 'Date',
                                     'attribute' => 'wrk_end',
                                     'value' => function($data){
-                                        return Yii::$app->formatter->asDateTime(Utc::convert($data->wrk_end),'php: Y-m-d H:i:s');
+                                        return Yii::$app->formatter->asDateTime(Utc::convert($data->wrk_end));
                                     }
                                 ],
                                 [

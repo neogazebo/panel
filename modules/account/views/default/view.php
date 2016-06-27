@@ -89,16 +89,18 @@ $this->registerCss("
                         <i class="fa fa-map-marker bg-blue"></i>
                         <div class="timeline-item">
                           <span class="time"><i class="fa fa-clock-o"></i> <?= Yii::$app->formatter->asDateTime($location->adv_last_access) ?></span>
-                          <h3 class="timeline-header"><a href="#">Last Location</a></h3>
+                          <h3 class="timeline-header">
+                            <a href="#">Last Location</a>
+                          </h3>
                           <div class="timeline-body">
                             <?=
-                                \app\components\widgets\GmapLocation::widget([
-                                    'lat' => $location->adv_last_latitude,
-                                    'long' => $location->adv_last_longitude,
-                                    'height' => 150,
-                                    'type' => 'static'
-                                ]);
-                                ?>
+                              \app\components\widgets\GmapLocation::widget([
+                                  'lat' => $location->adv_last_latitude,
+                                  'long' => $location->adv_last_longitude,
+                                  'height' => 150,
+                                  'type' => 'static'
+                              ]);
+                            ?>
                           </div>
                           <div class="timeline-footer">
                           <!--   <a class="btn btn-primary btn-xs">Read more</a>
@@ -107,32 +109,6 @@ $this->registerCss("
                         </div>
                       </li>
                       <?php endforeach; ?>
-                      <!-- END timeline item -->
-                      <!-- timeline item -->
-                 <!--      <li>
-                        <i class="fa fa-user bg-aqua"></i>
-                        <div class="timeline-item">
-                          <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-                          <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
-                        </div>
-                      </li> -->
-                      <!-- END timeline item -->
-                      <!-- timeline item -->
-                     <!--  <li>
-                        <i class="fa fa-comments bg-yellow"></i>
-                        <div class="timeline-item">
-                          <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-                          <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-                          <div class="timeline-body">
-                            Take me to your leader!
-                            Switzerland is small and neutral!
-                            We are more like Germany, ambitious and misunderstood!
-                          </div>
-                          <div class="timeline-footer">
-                            <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                          </div>
-                        </div>
-                      </li> -->
                       <li>
                         <i class="fa fa-camera bg-purple"></i>
                         <div class="timeline-item">
