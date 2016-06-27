@@ -53,7 +53,7 @@ $this->registerCss("
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <p>Please select reconciliation process below</p>
-                    <table class="table table-hover table-bordered">
+                    <table class="table table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -61,48 +61,27 @@ $this->registerCss("
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>
-                        <tbody>
-<!--                             <tr>
-                                <td>Recon All Data & Download to local</td>
-                                <td></td>
-                                <td>
-                                    <?= Html::a('<i class="fa fa-external-link-square"></i> <span>' . Yii::t('app', 'Process') . '</span>', ['recon/manual-recon/?data=all'], ['id' => 'rec-all', 'class' => 'btn btn-xs btn-midnightblue DTTT_button_text']); ?>                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Recon Data Today & Download to local</td>
-                                <td></td>
-                                <td>
-                                    <?= Html::a('<i class="fa fa-external-link-square"></i> <span>' . Yii::t('app', 'Process') . '</span>', ['recon/manual-recon/?data=today'], ['id' => 'rec-today', 'class' => 'btn btn-xs btn-midnightblue DTTT_button_text']); ?>                                    
-                                </td>
-                            </tr>  -->   
+                        <tbody>  
                             <?php
                             $form = ActiveForm::begin([
                                 'id' => 'category-form',
-                                'action' => Yii::$app->urlManager->createUrl(['epay/recon/manual-recon/?data=specific']),
+                                'action' => Yii::$app->urlManager->createUrl(['epay/report/manual-recon/?data=specific']),
                                 'options' => ['class' => 'form-horizontal', 'target' => ''],
                                 'fieldConfig' => [],
                             ]);
                             ?>                                
                             <tr>
-                                <td>Recon Data Specific Date & Download to local</td>
+                                <td>Recon Data Specific Date &amp; Download to local</td>
                                 <td><?= Html::textInput('date', '', ['class' => 'datepicker form-control']) ?></td>
                                 <td>
                                     <button type="submit" class="btn btn-xs btn-midnightblue DTTT_button_text"><i class="fa fa-external-link-square"></i> <span> Process</button>
                                 </td>
-                            </tr>                                                                
+                            </tr>
                             <?php ActiveForm::end(); ?>
-   <!--                          <tr>
-                                <td>Recon Data Today & Upload to Epay Server</td>
-                                <td></td>
-                                <td>
-                                    <?= Html::a('<i class="fa fa-external-link-square"></i> <span>' . Yii::t('app', 'Process') . '</span>', ['recon/ftp'], ['id' => 'rec-today', 'class' => 'btn btn-xs btn-midnightblue DTTT_button_text']); ?>                                    
-                                </td>
-                            </tr>  -->  
                             <?php
                             $form = ActiveForm::begin([
                                 'id' => 'ftp-form',
-                                'action' => Yii::$app->urlManager->createUrl(['epay/recon/ftp']),
+                                'action' => Yii::$app->urlManager->createUrl(['epay/report/ftp']),
                                 'options' => ['class' => 'form-horizontal', 'target' => ''],
                                 'fieldConfig' => [
                                 'template' => "{input}\n{error}",

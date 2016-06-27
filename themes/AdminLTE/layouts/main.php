@@ -34,9 +34,9 @@ $this->registerCss("
                 <!-- Logo -->
                 <a href="<?= Yii::$app->homeUrl ?>" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b>RED</b></span>
+                    <span class="logo-mini"><b>v3</b></span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><b>Ebizu</b>Redemption<i>Store</i></span>
+                    <span class="logo-lg"><b>Admin</b>Panel<i>v3</i></span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top" role="navigation">
@@ -77,7 +77,7 @@ $this->registerCss("
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <img src="<?= $this->theme->baseUrl ?>/dist/img/ebz_logo.png" class="user-image" alt="User Image">
-                                    <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
+                                    <span class="hidden-xs"><?= (isset(Yii::$app->user->identity)) ? Yii::$app->user->identity->username : '' ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
@@ -85,7 +85,7 @@ $this->registerCss("
                                         <img src="<?= $this->theme->baseUrl ?>/dist/img/ebz_logo.png" class="img-circle" alt="User Image">
                                         <p>
                                             <?= Yii::$app->user->identity->username ?>
-                                            <small>Admin User since <?= Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) ?></small>
+                                            <small>Admin User since <?= (isset(Yii::$app->user->identity)) ? Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) : '' ?></small>
                                         </p>
                                     </li>
                                     <!-- Menu Footer-->
@@ -145,9 +145,11 @@ $this->registerCss("
         <?php $this->endBody(); ?>
     </body>
 
-    <script>
-        var baseUrl = '<?= Yii::$app->homeUrl ?>';
-        $.widget.bridge('uibutton', $.ui.button);
-    </script>
+    <?php
+    $this->registerJs("
+        var baseUrl = '" . Yii::$app->homeUrl . "';
+    //     $.widget.bridge('uibutton', $.ui.button);
+    ", yii\web\View::POS_BEGIN, 'main');
+    ?>
 </html>
 <?php $this->endPage(); ?>

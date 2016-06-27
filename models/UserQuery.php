@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+use app\models\AuthAssignment;
 /**
  * This is the ActiveQuery class for [[User]].
  *
@@ -36,5 +38,20 @@ class UserQuery extends \yii\db\ActiveQuery
     public function getCron($date)
     {
         echo $date;
+    }
+
+    public function searchUser()
+    {
+        $search = $_GET['q'];
+        $role = $_GET['role'];
+        $this->select('id, username');
+        if(!empty($role)) {
+            $exists = AuthAssignment::find()->where('item_name = :role',[':role'=>$role])->all();
+            foreach ($exists as $value) {
+                $this->andWhere(['<>','id',$value->user_id]);
+            }
+        }
+        $this->andWhere('username LIKE "%'.$search.'%" ');
+        return $this->all();
     }
 }

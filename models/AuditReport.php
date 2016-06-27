@@ -66,7 +66,7 @@ class AuditReport extends EbizuActiveRecord
                 ],
             ],            
         ];
-    }     
+    }
     
     /**
      * 

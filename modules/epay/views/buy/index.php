@@ -8,14 +8,19 @@ use yii\bootstrap\Modal;
 
 $this->title = 'Epay Transaction List';
 $dataProvider->sort->defaultOrder = ['epa_datetime' => SORT_DESC];
-$dataProvider->sort->attributes['rewardBought.vob_datetime'] = [
-    'asc' => ['rewardBought.vob_datetime' => SORT_ASC],
-    'desc' => ['rewardBought.vob_datetime' => SORT_DESC],
+$dataProvider->sort->attributes['bought.vob_datetime'] = [
+    'asc' => ['bought.vob_datetime' => SORT_ASC],
+    'desc' => ['bought.vob_datetime' => SORT_DESC],
 ];
-$dataProvider->sort->attributes['productTitle.epp_title'] = [
-    'asc' => ['productTitle.epp_title' => SORT_ASC],
-    'desc' => ['productTitle.epp_title' => SORT_DESC],
+$dataProvider->sort->attributes['voucher.vou_reward_name'] = [
+    'asc' => ['voucher.vou_reward_name' => SORT_ASC],
+    'desc' => ['voucher.vou_reward_name' => SORT_DESC],
 ];
+$dataProvider->sort->attributes['product.epp_title'] = [
+    'asc' => ['product.epp_title' => SORT_ASC],
+    'desc' => ['product.epp_title' => SORT_DESC],
+];
+$search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -27,6 +32,12 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <?= Html::a('<i class="fa fa-plus-square"></i> New Buy', ['create'], ['class' => 'btn btn-primary btn-sm']) ?>
+                    <div class="box-tools pull-right">
+                        <div class="has-feedback">
+                            <input type="text" id="filtersearch" value="<?= $search ?>" class="form-control input-sm" placeholder="Search Epay Buy">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                    </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
@@ -37,16 +48,13 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                             'layout' => '{items}{summary}{pager}',
                             'columns' => [
                                 'epa_admin_name',
-                                // [
-                                //     'attribute' => 'rewardBought.vob_datetime',
-                                //     'format' => 'html',
-                                //     'value' => function($data) {
-                                //         if(!empty($data->rewardBought))
-                                //             return Yii::$app->formatter->asDate($data->rewardBought->vob_datetime);
-                                //     }
-                                // ],
-                                 'productTitle.epp_title',
                                 [
+                                    'attribute' => 'productTitle.epp_title',
+                                    'header' => 'Product'
+                                ],
+                                [
+                                    'attribute' => 'reward.vou_reward_name',
+                                    'header' => 'Voucher',
                                     'label' => 'Reward',
                                     'format' => 'html',
                                     'value' => function($model, $url){
@@ -98,7 +106,7 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                                     'format' => 'html',
                                     'value' => function($data) {
                                         if(!empty($data->rewardBought))
-                                            return $data->rewardBought->vob_status == 0 ? '<i class="btn btn-warning btn-xs">In Progress</i>' : '<i class="btn btn-success btn-xs">Done</i>';
+                                            return $data->rewardBought->vob_status == 0 ? '<i class="btn btn-warning btn-xs">In Progress</i>' : '<i class="btn btn-success disabled btn-xs">Done</i>';
                                     }
                                 ],
                                 [
@@ -107,8 +115,16 @@ $dataProvider->sort->attributes['productTitle.epp_title'] = [
                                     'buttons' => [
                                         'sell' => function($url, $model) {
                                             if(!empty($model->rewardBought)) {
-                                                if($model->rewardBought->vob_status == 1)
+                                                if($model->rewardBought->vob_status == 0){
+                                                    return "<span class='btn btn-warning disabled btn-xs'><i class='fa fa-check'></i></span>";
+                                                }else{
                                                     return Html::a('<i class="fa fa-check"></i>', 'javascript:;', ['data-id' => $model->epa_id, 'data-qty' => $model->epa_success_qty, 'class' => 'sell btn btn-warning btn-xs']);
+                                                }
+                                                // if($model->rewardBought->vob_status == 1 && $model->rewardBought->vob_ready_to_sell == 1 ){
+                                                //     return "<span class='btn btn-warning disabled btn-xs'><i class='fa fa-check'></i></span>";
+                                                // }else{
+                                                //     return Html::a('<i class="fa fa-check"></i>', 'javascript:;', ['data-id' => $model->epa_id, 'data-qty' => $model->epa_success_qty, 'class' => 'sell btn btn-warning btn-xs']);
+                                                // }
                                             }
                                         },
                                         'detail' => function($url, $model) {
@@ -151,7 +167,7 @@ $this->registerJs("
     $('#filtersearch').popover();
     $('#filtersearch').on('keypress', function(ev) {
         if(ev.which == 13) {
-            window.location = baseUrl + 'epay/buy?search=' + $(this).val();
+            window.location = baseUrl + 'epay/buy?search=' + encodeURIComponent($(this).val());
         }
     });
 

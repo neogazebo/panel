@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use app\models\CompanyTag;
 use app\models\EbizuActiveRecord;
 
 class Company extends EbizuActiveRecord
@@ -27,6 +28,8 @@ class Company extends EbizuActiveRecord
     public $totalBiz;
     public $id;
     public $text;
+    public $mall_name = null;
+    // public $com_in_mall = true; don't ever do this
 
     CONST COM_STATUS_NOT_ACTIVE = 0;
     CONST COM_STATUS_ACTIVE = 1;
@@ -56,7 +59,7 @@ class Company extends EbizuActiveRecord
             ['com_status', 'required', 'on' => 'change_status'],
             [['com_photo', 'com_banner_photo'], 'validateGif'],
             [['com_joined', 'com_joined_datetime', 'com_joined_by'], 'required', 'on' => 'joined'],
-            [['com_timezone', 'com_mac_id'], 'integer'],
+            [['com_timezone', 'com_mac_id','com_in_mall'], 'integer'],
             [[
                 'com_name',
                 'com_business_name',
@@ -89,13 +92,12 @@ class Company extends EbizuActiveRecord
                 'com_contactp_gender',
                 'com_searchable',
                 'com_show_start_tips',
-                'com_type', 'com_in_mall',
+                'com_type',
                 'com_snapearn',
                 'com_snapearn_checkin',
                 'com_reg_num',
                 'com_description',
                 'com_subcategory_id',
-                // 'com_in_mall',
                 'com_address',
                 'com_city',
                 'com_postcode',
@@ -147,9 +149,9 @@ class Company extends EbizuActiveRecord
                 'tag',
             ], 'safe'],
             [['mall_id'], 'required', 'when' => function($model) {
-                return $model->com_in_mall == 1;
+                return $this ->com_in_mall == 1;
             }, 'whenClient' => "function (attribute, value) {
-                return $('#company-com_in_mall').prop('checked') == true;
+                return $('#company-com_in_mall').val() == 1;
             }"],
         ];
     }
@@ -275,19 +277,6 @@ class Company extends EbizuActiveRecord
         ];
     }
 
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['com_created_date'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['com_edited_date'],
-                ],
-            ],
-        ];
-    }
-
     /*
      * this function used to clear cache photo & banner on the S3
      * Author : tajhul <tajhul@ebizu.com>
@@ -296,14 +285,23 @@ class Company extends EbizuActiveRecord
     {
         // if the photo has been changed
         if ($this->old_photo !== null && ($this->old_photo != $this->com_photo)) {
-            \common\components\helpers\Image::DeleteS3($this->old_photo);
+            \app\components\helpers\Image::DeleteS3($this->old_photo);
         }
 
         // if the banner photo has been changed
         if ($this->old_banner !== null && ($this->old_banner != $this->com_banner_photo)) {
-            \common\components\helpers\Image::DeleteS3($this->old_banner);
+            \app\components\helpers\Image::DeleteS3($this->old_banner);
         }
     }
+
+    public function getModelMallMerchant()
+    {
+        $model = MallMerchant::findOne(['mam_com_id' => $this->com_id]);
+        $model->scenario= 'newMerchant';
+        if ($model)
+            return $model;
+        return new MallMerchant();
+    } 
 
     public function getTimeZoneListData()
     {
@@ -727,6 +725,270 @@ class Company extends EbizuActiveRecord
             '413' => 'WSDT (+14:00) Pacific/Apia',
             '210' => 'LINT (+14:00) Pacific/Kiritimati',
         ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['com_created_date'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['com_edited_date'],
+                ],
+            ],
+            'company' => [
+                'class' => 'app\components\behaviors\ChangeCompany',
+            ],
+            'Location' => [
+                'class' => 'app\components\behaviors\ExplodeLocation',
+                'location' => 'com_city',
+                'attributes' => [
+                    'city' => 'com_city_id',
+                    'region' => 'com_region_id',
+                    'country' => 'com_country_id'
+                ]
+            ],
+            'getQuery' => [
+                'class' => 'app\components\behaviors\WorkerQueryBehavior',
+                'tableName' => self::tableName(),
+                'fieldIdName' => 'com_id',
+                'version' => 'v1.0',
+                'type' => 'high'
+            ],
+        ];
+    }
+
+
+    public static function colorLegend()
+    {
+        return [
+            'orange',
+            'blue',
+            'green',
+            'red',
+            'black',
+            'yellow',
+            'brown',
+            'magenta',
+            'purple',
+            'pink',
+        ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert))
+        {
+            /*
+             * on update profile, clear old image on S3
+             * Author : tajhul
+             */
+            if ($this->scenario == 'update-profile')
+            {
+                // get old data
+                $model = self::findOne($this->com_id);
+                $this->old_photo = !empty($model->com_photo) ? $model->com_photo : null;
+                $this->old_banner = !empty($model->com_banner_photo) ? $model->com_banner_photo : null;
+            }
+
+            // replace company address with mall address if company in mall
+            if ($this->com_in_mall == 1)
+            {
+                $mall = Mall::findOne($this->mall_id);
+                if ($mall instanceof Mall)
+                {
+                    $name = preg_replace('/ @.*/', '', $this->com_name);
+                    $this->com_name = $name . ' @ ' . $mall->mal_name;
+                    $this->com_address = $mall->mal_address;
+                    $this->com_postcode = $mall->mal_postcode;
+                    $this->com_city = $mall->mal_city;
+                    $this->com_city_id = $mall->mal_city_id;
+                    $this->com_region_id = $mall->mal_region_id;
+                    $this->com_country_id = $mall->mal_country_id;
+                    $this->com_latitude = $mall->mal_lat;
+                    $this->com_longitude = $mall->mal_lng;
+                }
+            }
+
+            $this->com_name = Yii::$app->encode->utf8($this->com_name);
+            $this->com_business_name = Yii::$app->encode->utf8($this->com_business_name);
+            $this->com_description = Yii::$app->encode->utf8($this->com_description);
+            $this->com_address = Yii::$app->encode->utf8($this->com_address);
+
+            return true;
+        }
+        return false;
+    }
+
+    // public function afterSave($insert, $changedAttributes)
+    // {
+    //     if ($this->com_in_mall == 1)
+    //     {
+    //         $malMerchant = $this->modelMallMerchant;
+    //         if ($malMerchant->load(Yii::$app->request->post()))
+    //         {
+    //             if (isset($this->idTemp))
+    //             {
+    //                 $malMerchant->idTemp = $this->idTemp;
+    //             }
+    //             $malMerchant->mam_mal_id = $this->mall_id;
+    //             $malMerchant->mam_com_id = $this->com_id;
+    //             $malMerchant->save();
+    //         }
+    //     }
+
+    //     // clear cache image on S3
+    //     if ($this->scenario == 'update-profile')
+    //     {
+    //         $this->clearCacheImage();
+    //     }
+    //     parent::afterSave($insert,$changedAttributes);
+    // }
+
+    public function afterDelete()
+    {
+        $merchant = MallMerchant::findOne(['mam_com_id' => $this->com_id]);
+        if ($merchant instanceof MallMerchant)
+        {
+            $merchant->resetFloorplan();
+            $merchant->delete();
+        }
+    }
+
+    public function isEmailUsageByOther()
+    {
+        $model = User::find()->where('usr_email=:email AND usr_id!=:id', ['email' => $this->com_email, 'id' => $this->com_usr_id]);
+        return $model->count() > 1 ? true : false;
+    }
+
+    public function floorPlanDataProvider()
+    {
+        $query = FloorPlan::find()->where('flp_mal_id = :mal_id', [':mal_id' => Yii::$app->user->identity->mall]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20
+            ]
+        ]);
+        return $dataProvider;
+    }
+
+    public function getCategoryListData($type = 1)
+    {
+        $data = [];
+        $categori = CompanyCategory::findAll([
+            'com_parent_category_id' => '0'
+        ]);
+
+        foreach ($categori as $row) {
+            if($row->com_category_type == $type) {
+                $subCategory = CompanyCategory::findAll([
+                    'com_parent_category_id' => $row->com_category_id
+                ]);
+
+                $dataSub = [];
+                foreach ($subCategory as $sub)
+                    if ($sub->com_parent_category_id == $row->com_category_id)
+                        $dataSub[$sub->com_category_id] = $sub->com_category;
+
+                $data[$row->com_category] = $dataSub;
+            }
+        }
+        return $data;
+    }
+
+    public function getFeatureSubscription()
+    {
+        $model = FeatureSubscription::find()->all();
+        return \app\components\helpers\Html::listData($model, 'fes_id', 'fes_name');
+    }
+
+    public function getCompanySizeListData()
+    {
+        return [
+            'Small Enterprise' => 'Small Enterprise',
+            'Medium Enterprise' => 'Medium Enterprise',
+            'Large Enterprise' => 'Large Enterprise',
+            'Multinational Enterprise' => 'Multinational Enterprise'
+        ];
+    }
+
+    public function getNumberEmployeeListData()
+    {
+        return [
+            '1-5' => '1-5',
+            '6-25' => '6-25',
+            '26-50' => '26-50',
+            '51-250' => '51-250',
+            '251-500' => '251-500',
+            '500+' => '500+',
+        ];
+    }
+
+    public function getCategoryList()
+    {
+        $model = (new yii\db\Query())
+            ->select('com_category_id AS cat_id, com_category AS category, (
+                    SELECT com_category FROM tbl_company_category WHERE com_category_id = com_parent_category_id
+                ) AS parent_id
+            ')
+            ->from('tbl_company_category')
+            ->where('com_category_type = :type AND com_parent_category_id > :parent', [
+                ':type' => 1,
+                ':parent' => 0
+            ])
+            ->all();
+        return \app\components\helpers\Html::listData($model, 'cat_id', 'category', 'parent_id');
+    }    
+
+    public function getMarchant()
+    {
+        return $this->hasOne(MallMerchant::className(), ['mam_com_id' => 'com_id']);
+    }
+
+
+    public function setTag()
+    {
+        $tags = CompanyTag::deleteAll('cot_com_id = :com_id', [':com_id' => $this->com_id]);
+        $tag = explode(',', trim($this->tag));
+        $unique = [];
+        foreach ($tag as $value)
+        {
+            if (!in_array($value, $unique, true))
+            {
+                array_push($unique, $value);
+            }
+        }
+        sort($unique);
+        if (!empty($unique))
+        {
+            for ($i = 1; $i < count($unique); $i++)
+            {
+                if (!empty($unique[$i]))
+                {
+                    $tags = new CompanyTag();
+                    $tags->cot_com_id = $this->com_id;
+                    $tags->cot_tag_id = $unique[$i];
+                    $tags->cot_datetime_create = time();
+                    $tags->save();
+                }
+            }
+        }
+    }
+
+    public function getTag($id)
+    {
+        return Tag::find()->select('tag_id, tag_name')
+        ->innerJoin('tbl_company_tag b', 'b.cot_tag_id = tag_id')
+        ->leftJoin('tbl_company c', 'c.com_id = b.cot_com_id')
+        ->where(['c.com_id' => $id])
+        ->all();
+    }    
+
+    public static function find()
+    {
+        return new CompanyQuery(get_called_class());
     }
 
 }

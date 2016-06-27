@@ -23,20 +23,12 @@ class EbizuActiveRecord extends ActiveRecord
     public function isAttributeChanged($name, $identical = true)
     {
         if (!empty($this->{$name}) && !empty($this->getOldAttribute($name)))
-        {
             if ($identical)
-            {
                 return $this->{$name} !== $this->getOldAttribute($name);
-            }
             else
-            {
                 return $this->{$name} != $this->getOldAttribute($name);
-            }
-        }
         else
-        {
             return !empty($this->{$name}) || !empty($this->getOldAttribute($name));
-        }
     }
 
     /**
@@ -52,45 +44,30 @@ class EbizuActiveRecord extends ActiveRecord
     {
         $dirty_attrs = $this->getDirtyAttributes();
 
-        if (!empty($manualy_checked_attr))
-        {
-            foreach ($manualy_checked_attr as $attr)
-            {
+        if (!empty($manualy_checked_attr)) {
+            foreach ($manualy_checked_attr as $attr) {
                 $is_attr_changed = $this->isAttributeChanged($attr, false);
                 if (!$is_attr_changed)
-                {
                     unset($dirty_attrs[$attr]);
-                }
             }
         }
 
-
-        if (!empty($date_attr))
-        {
-            foreach ($date_attr as $attr)
-            {
+        if (!empty($date_attr)) {
+            foreach ($date_attr as $attr) {
                 $is_date_changed = strtotime($this->{$attr}) != $this->getOldAttribute($attr);
                 if (!$is_date_changed)
-                {
                     unset($dirty_attrs[$attr]);
-                }
             }
         }
 
-
-        if (!empty($skip_checked))
-        {
+        if (!empty($skip_checked)) {
             foreach ($skip_checked as $attr)
             if (array_key_exists($attr, $dirty_attrs))
-            {
                 unset($dirty_attrs[$attr]);
-            }
         }
 
-        if (!empty($dirty_attrs))
-        {
-            foreach ($dirty_attrs as $key => $val)
-            {
+        if (!empty($dirty_attrs)) {
+            foreach ($dirty_attrs as $key => $val) {
                 $dirty_attrs[$this->getAttributeLabel($key)] = $val;
                 unset($dirty_attrs[$key]);
             }
@@ -108,9 +85,7 @@ class EbizuActiveRecord extends ActiveRecord
     {
         $isUTF8 = mb_detect_encoding($str, 'UTF-8', TRUE);
         if ($isUTF8 === false)
-        {
             return mb_convert_encoding($str, 'UTF-8');
-        }
 
         return $str;
     }
@@ -120,16 +95,11 @@ class EbizuActiveRecord extends ActiveRecord
         $tok = strtok($text, ' ');
         $string = '';
 
-        while ($tok !== false && strlen($string) < $max)
-        {
+        while ($tok !== false && strlen($string) < $max) {
             if (strlen($string) + strlen($tok) <= $max)
-            {
                 $string .= $tok . ' ';
-            }
             else
-            {
                 break;
-            }
 
             $tok = strtok(' ');
         }

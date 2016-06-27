@@ -23,7 +23,17 @@ class BuyController extends EpaybaseController
     public function actionIndex()
     {
         $this->setRememberUrl();
-        $model = Epay::find()->with(['rewardBought.voucher', 'productTitle'])->voucher();
+        $model = Epay::find()
+            ->joinWith(['reward' => function($model) {
+                $model->from(['voucher' => 'tbl_voucher']);
+            }])
+            ->joinWith(['rewardBought' => function($model) {
+                $model->from(['bought' => 'tbl_voucher_bought']);
+            }])
+            ->joinWith(['productTitle' => function($model) {
+                $model->from(['product' => 'tbl_epay_product']);
+            }])
+            ->voucher();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
@@ -49,6 +59,7 @@ class BuyController extends EpaybaseController
             $model = Epay::findOne($_POST['epa_id']);
             if(!empty($model)){
                 $vBought = VoucherBought::findOne($model->epa_vob_id);
+                $vBought->scenario = 'ready_to_sell';
                 $vBought->vob_ready_to_sell = (int)$_POST['vob_ready_to_sell'];
                 if($vBought->save(false)){
                     $voucher = Voucher::findOne($vBought->vob_vou_id);

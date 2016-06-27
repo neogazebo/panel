@@ -9,10 +9,34 @@ $config = [
     'id' => 'ebizu-bs',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'defaultRoute' => 'epay/index',
+    'defaultRoute' => 'snapearn/default',
     'modules' => [
+        'snapearn' => [
+            'class' => 'app\modules\snapearn\Snapearn',
+        ],
         'epay' => [
             'class' => 'app\modules\epay\Module'
+        ],
+        'voucher' => [
+            'class' => 'app\modules\voucher\Voucher',
+        ],
+        'mobile' => [
+            'class' => 'app\modules\mobile\Mobile',
+        ],
+        'merchant-signup' => [
+            'class' => 'app\modules\merchant_signup\MerchantSignup',
+        ],
+        'account' => [
+            'class' => 'app\modules\account\Account',
+        ],
+        'users' => [
+            'class' => 'app\modules\users\Users',
+        ],
+        'rbac' => [
+            'class' => 'app\modules\rbac\Rbac',
+        ],
+        'logwork' => [
+            'class' => 'app\modules\logwork\Logwork',
         ],
     ],
     'components' => [
@@ -20,8 +44,21 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'W2DvT9IrYxWJM7BBJXtPywmjawYB6msU',
         ],
+        'pushNotif' => [
+            'class' => 'app\components\extentions\PushNotif'
+        ],
+        'encode' => [
+            'class' => 'app\components\helpers\Encode'
+        ],
+        'general' => [
+            'class' => 'app\components\helpers\GlobalHelper'
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
+        ],
+        'AdminMail' => [
+            'class' => 'app\components\extensions\AdminMail',
+            'template' => '//mail/template/template',
         ],
         'user' => [
             'identityClass' => 'app\models\User',
@@ -56,6 +93,7 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'db2' => require(__DIR__ . '/db2.php'),
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -67,19 +105,34 @@ $config = [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'dd MMM yyyy',
+            'decimalSeparator' => ',',
+        ],        
+        'format' => [
+            'class' => 'app\components\extensions\Formatter',
+            'dateFormat' => 'dd-MM-yyyy',
+            'decimalFormat' => '#,##0.00'
         ],
         'request' => [
             'enableCookieValidation' => false,
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
+        'access' => [
+            'class' => 'app\components\filters\AccessFilters',
+        ],
+        'getRoutes' => [
+            'class' => 'app\components\helpers\GetRoutes',
         ],
         // ftp setup
         'ftp' => [
             'class' => '\gftp\FtpComponent',
             'driverOptions' => [
                 'class' => \gftp\FtpProtocol::valueOf('sftp')->driver,
-                'user' => 'ebizu',
-                'pass' => 'Mbr6khXJ79kAY',
-                'host' => 'sftp.e-pay.com.my',
-                'port' => 22,
+                'user' => $params['EPAY_FTP_USER'],
+                'pass' => $params['EPAY_FTP_PASSWORD'],
+                'host' => $params['EPAY_FTP_HOST'],
+                'port' => $params['EPAY_FTP_PORT'],
                 'timeout' => 120
             ],
         ],
@@ -89,4 +142,5 @@ $config = [
     ],
     'params' => $params,
 ];
+
 return $config;
