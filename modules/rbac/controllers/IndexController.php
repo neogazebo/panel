@@ -233,6 +233,33 @@ class IndexController extends BaseController
         $models = AuthAssignment::find($role)->with('user')->where('item_name = :role',[':role' => $role])->all();
         $lists = User::find()->where('type = 1')->all();
         $title = $role;
+        if (Yii::$app->request->isAjax) {
+            $childs = Yii::$app->request->post('to');
+            $revokes = Yii::$app->request->post('from');
+            $role = Yii::$app->request->post('role');
+            $auth = $this->_role();
+            $r = AuthItem::find()->where('name = :role',[':role' => $role])->one();
+            if(!empty($childs)) {
+                foreach ($childs as $val) {
+                    $getAssignment = AuthAssignment::find()->where([
+                            'item_name' => $role,
+                            'user_id' => $val
+                        ])->one();
+                   if (empty($getAssignment)) {
+                        $auth->assign($r,$val);
+                   }
+                }
+            }
+
+            if(!empty($revokes)) {
+                foreach ($revokes as $val) {
+                   $auth->revoke($r,$val);
+                }
+            }
+
+            $this->setMessage('save', 'success', 'Update assign user successfully');
+            return $this->redirect(['user?name='.$role]);
+        }
         return $this->render('multi-assign',[
                 'lists' => $lists,
                 'models' => $models,

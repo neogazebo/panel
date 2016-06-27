@@ -6,7 +6,7 @@ use yii\web\View;
 use yii\bootstrap\modal;
 use yii\helpers\Url;
 
-$this->title = 'Permission List of "'.$title.'"';
+$this->title = 'List user of "'.$title.'" role';
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -18,10 +18,10 @@ $this->title = 'Permission List of "'.$title.'"';
                 <div class="box-header with-border">
 
                 </div>
-                <form id="addChild" action="<?= Url::to(['add-child']) ?>" data-key="<?= $title; ?>" method="post">
+                <form id="addChild" action="<?= Url::to(["multi-assign?role=$title"]) ?>" data-key="<?= $title; ?>" method="post">
                     <div class="box-body">
                         <div id="searchList" class="col-sm-6">
-                            <h2><?= $title ?> User</h2>
+                            <h2><?= $title ?> list user</h2>
                             <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
                             <?php foreach($models as $model): ?>
                                 <option value="<?= $model->user_id ?>"><?= $model->user->username ?></option>
@@ -47,7 +47,7 @@ $this->title = 'Permission List of "'.$title.'"';
                         <div class="clearfix"></div>    
                     </div>
                     <div class="box-footer">
-                        <?= Html::a('<i class="fa fa-times"></i> Cancel',['index'], ['class' => 'btn btn-warning']) ?>
+                        <?= Html::a('<i class="fa fa-times"></i> Cancel',["user?name=".$title], ['class' => 'btn btn-warning']) ?>
                         <?= Html::submitButton('<i class="fa fa-check"></i> Save', ['class' => 'btn btn-primary pull-right']) ?>
                     </div>
                 </form>
