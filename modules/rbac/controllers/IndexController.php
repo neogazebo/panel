@@ -228,6 +228,20 @@ class IndexController extends BaseController
         }
     }
 
+    public function actionMultiAssign($role)
+    {
+        $models = AuthAssignment::find($role)->with('user')->where('item_name = :role',[':role' => $role])->all();
+        $lists = User::find()->where('type = 1')->all();
+        $title = $role;
+        return $this->render('multi-assign',[
+                'lists' => $lists,
+                'models' => $models,
+                'title' => $role
+            ]);
+
+        
+    }   
+
     public function actionRevoke($role,$userId,$name)
     {
         $auth = $this->_role();

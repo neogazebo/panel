@@ -23,6 +23,7 @@ $dataProvider->sort->attributes['user.username'] = [
                 <div class="box-header with-border">
                     <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['cancel'], ['class' => 'btn btn-success btn-sm']) ?>
                     <?= Html::button('<i class="fa fa-plus-square"></i> Assign User', ['type' => 'button','value' => Url::to(['assign?role=' .$name]), 'class' => 'modalButton btn btn-flat btn-warning pull-right']); ?> 
+                    <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['multi-assign?role='.$name], ['class' => 'btn btn-flat btn-warning pull-right']) ?>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">

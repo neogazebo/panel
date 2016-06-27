@@ -77,7 +77,7 @@ $this->title = 'Role List';
                                     'template' => '<span class="pull-right actionColumn">{user} {view} {update} <!--{delete}--></span>',
                                     'buttons' => [
                                         'user' => function($url, $model) {
-                                            return Html::a('<i class="fa fa-group"></i>', ['user?name=' . $model->name,'class' => 'btn']);
+                                            return Html::a('<i class="fa fa-group"></i>', ['user?name=' . $model->name,]);
                                         },
                                         'view' => function($url, $model) {
                                             return Html::a('<i class="fa fa-search"></i>', ['detail?name=' . $model->name]);

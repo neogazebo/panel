@@ -24,76 +24,79 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box box-primary">
                 <div class="box-header with-border">
                 <form role="form" class="form-inline" method="post" action="/logwork">
-                    <div class="form-group">
-                    <label>Username</label>
-                    <?= 
-                        Typeahead::widget([
-                            'name' => 'merchant',
-                            'options' => ['placeholder' => 'Find User'],
-                            'pluginOptions' => [
-                                'highlight'=>true,
-                                'minLength' => 3
-                            ],
-                            'pluginEvents' => [
-                                "typeahead:select" => "function(ev, suggestion) { $('#wrk_by').val(suggestion.id); }",
-                            ],
-                            'dataset' => [
-                                [
-                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                                    'display' => 'value',
-                                    'remote' => [
-                                        'url' => Url::to(['user-list']) . '?q=%QUERY',
-                                        'wildcard' => '%QUERY'
-                                    ],
-                                    'limit' => 20
+                    <div class="pull-right">
+                        <div class="form-group">
+                        <label>Username</label>
+                        <?= 
+                            Typeahead::widget([
+                                'name' => 'merchant',
+                                'options' => ['placeholder' => 'Find User'],
+                                'pluginOptions' => [
+                                    'highlight'=>true,
+                                    'minLength' => 3
+                                ],
+                                'pluginEvents' => [
+                                    "typeahead:select" => "function(ev, suggestion) { $('#wrk_by').val(suggestion.id); }",
+                                ],
+                                'dataset' => [
+                                    [
+                                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                        'display' => 'value',
+                                        'remote' => [
+                                            'url' => Url::to(['user-list']) . '?q=%QUERY',
+                                            'wildcard' => '%QUERY'
+                                        ],
+                                        'limit' => 20
+                                    ]
                                 ]
-                            ]
-                        ]);
-                    ?>
-                    </div>
-                    <!-- <div class="form-group">
-                    <label>Devision</label> -->
-                    <?php 
-                        // Typeahead::widget([
-                        //     'name' => 'merchant',
-                        //     'options' => ['placeholder' => 'Devision'],
-                        //     'pluginOptions' => [
-                        //         'highlight'=>true,
-                        //         'minLength' => 3
-                        //     ],
-                        //     'pluginEvents' => [
-                        //         "typeahead:select" => "function(ev, suggestion) { $('#wrk_param_id').val(suggestion.id); }",
-                        //     ],
-                        //     'dataset' => [
-                        //         [
-                        //             'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                        //             'display' => 'value',
-                        //             'remote' => [
-                        //                 'url' => Url::to(['devision']) . '?q=%QUERY',
-                        //                 'wildcard' => '%QUERY'
-                        //             ],
-                        //             'limit' => 20
-                        //         ]
-                        //     ]
-                        // ]);
-                    ?>
-                    <!-- </div> -->
-                    <div class="form-group">
-                        <label>Date range</label><br>
-                        <div class="input-group">
-                            <div class="input-group-addon" for="reservation">
-                                <i class="fa fa-calendar"></i>
+                            ]);
+                        ?>
+                        </div>
+                        <!-- <div class="form-group">
+                        <label>Devision</label> -->
+                        <?php 
+                            // Typeahead::widget([
+                            //     'name' => 'merchant',
+                            //     'options' => ['placeholder' => 'Devision'],
+                            //     'pluginOptions' => [
+                            //         'highlight'=>true,
+                            //         'minLength' => 3
+                            //     ],
+                            //     'pluginEvents' => [
+                            //         "typeahead:select" => "function(ev, suggestion) { $('#wrk_param_id').val(suggestion.id); }",
+                            //     ],
+                            //     'dataset' => [
+                            //         [
+                            //             'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                            //             'display' => 'value',
+                            //             'remote' => [
+                            //                 'url' => Url::to(['devision']) . '?q=%QUERY',
+                            //                 'wildcard' => '%QUERY'
+                            //             ],
+                            //             'limit' => 20
+                            //         ]
+                            //     ]
+                            // ]);
+                        ?>
+                        <!-- </div> -->
+                        <div class="form-group">
+                            <label>Date range</label><br>
+                            <div class="input-group">
+                                <div class="input-group-addon" for="reservation">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="">
                             </div>
-                            <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="wrk_by" id="wrk_by">
+                            <input type="hidden" name="wrk_param_id" id="wrk_param_id">
+                            <label>&nbsp;</label><br>
+                            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <input type="hidden" name="wrk_by" id="wrk_by">
-                        <input type="hidden" name="wrk_param_id" id="wrk_param_id">
-                        <label>&nbsp;</label><br>
-                        <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
-                    </div>
                 </form>
+                </div>
                 <div class="box-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
@@ -130,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 ],
                                 [
-                                    'label' => 'Rejected Rate',
+                                    'label' => 'Rejection Rate',
                                     'attribute' => 'wrk_type',
                                     'value' => function($data){
                                         return Yii::$app->formatter->asPercent($data->rejected_rate);
