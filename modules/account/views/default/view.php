@@ -21,11 +21,32 @@ $this->registerCss("
         position: relative;
         width: 200px;
     }
-    
+
     .profile-user-img.img-responsive.img-circle {
         max-height: 100px;
         max-width: 100px;
         overflow: hidden;
+    }
+
+    .timeline-inverse > li > .timeline-item {
+        background: transparent;
+        border: 0px solid #fff;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .nav-tabs-custom > .nav-tabs {
+        margin: 0;
+        border-bottom-color: #DDDDDD;
+        border-top-right-radius: 3px;
+        border-top-left-radius: 3px;
+        background-color: #eee;
+    }
+    .nav-tabs-custom > .tab-content {
+        background: #eee;
+        padding: 10px;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
     }
 
 ");
@@ -88,47 +109,81 @@ $this->registerCss("
                       <li>
                         <i class="fa fa-map-marker bg-blue"></i>
                         <div class="timeline-item">
-                          <span class="time"><i class="fa fa-clock-o"></i> <?= Yii::$app->formatter->asDateTime($location->adv_last_access) ?></span>
-                          <h3 class="timeline-header">
-                            <a href="#">Last Location</a>
-                          </h3>
-                          <div class="timeline-body">
-                            <?=
-                              \app\components\widgets\GmapLocation::widget([
-                                  'lat' => $location->adv_last_latitude,
-                                  'long' => $location->adv_last_longitude,
-                                  'height' => 150,
-                                  'type' => 'static'
-                              ]);
-                            ?>
-                          </div>
-                          <div class="timeline-footer">
-                          <!--   <a class="btn btn-primary btn-xs">Read more</a>
-                            <a class="btn btn-danger btn-xs">Delete</a> -->
-                          </div>
+                        <div class="box box-solid">
+                            <div class="box-header with-border">
+                            <h3 class="box-title">Last Location</h3>
+                            <div class="box-tools pull-right">
+                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                            </div>
+                            <div style="display: block;" class="box-body">
+                                <?=
+                                  \app\components\widgets\GmapLocation::widget([
+                                      'lat' => $location->adv_last_latitude,
+                                      'long' => $location->adv_last_longitude,
+                                      'height' => 150,
+                                      'type' => 'static'
+                                  ]);
+                                ?>
+                            </div>
+                        </div>
                         </div>
                       </li>
                       <?php endforeach; ?>
                       <li>
                         <i class="fa fa-camera bg-purple"></i>
                         <div class="timeline-item">
-                        <?php foreach ($model->lastSnapUpload() as $upload) : ?>
-                          <span class="time"><i class="fa fa-clock-o"></i> <?= Yii::$app->formatter->asDateTime($upload->sna_upload_date) ?></span>
+
+                            <div class="box box-solid">
+                                <div class="box-header with-border">
+                                <h3 class="box-title">Top Categories</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                </div>
+                                </div>
+                                <div class="box-body">
+                                    <div class="col-sm-5">
+                                        <div class="input-group" id="chart_daterange">
+                                          <span class="input-group-addon" id="basic-addon1"><i class="fa fa-calendar"></i>&nbsp;</span>
+                                          <input type="text" class="form-control call" aria-describedby="basic-addon1">
+                                        </div>
+                                        <p class="chart-notes">
+
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <canvas id="pieChart" data-url="top-chart" data-key="<?= $model->acc_id ?>" style="height:250px" value="wow"></canvas>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        <?php //foreach ($model->lastSnapUpload() as $upload) : ?>
+
+
+                          <!-- <span class="time"><i class="fa fa-clock-o"></i> <?php // Yii::$app->formatter->asDateTime($upload->sna_upload_date) ?></span> -->
+
+                          <!-- <div class="time box-tools pull-right">
+                              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                          </div>
                           <h3 class="timeline-header"><a href="#">Last Uploaded Receipt</a></h3>
                           <div class="timeline-body">
                             <div class="container">
                               <div class="row col-sm-3">
-                                <img src="<?= Yii::$app->params['businessUrl'] . 'receipt/' . $upload->sna_receipt_image ?>" alt="..." class="margin">
+                                <img src="<?php // Yii::$app->params['businessUrl'] . 'receipt/' . $upload->sna_receipt_image ?>" alt="..." class="margin">
                               </div>
                               <div class="col-sm-9">
-                                  <b>Status : </b> 
+                                  <b>Status : </b>
                                   <a class="">
-                                      <?= ((!empty($upload->sna_approved_datetime)) ? 'Approved' : (!empty($upload->sna_rejected_datetime)) ? 'Rejected' : 'New') ?>
+                                      <?php // ((!empty($upload->sna_approved_datetime)) ? 'Approved' : (!empty($upload->sna_rejected_datetime)) ? 'Rejected' : 'New') ?>
                                   </a>
                               </div>
                             </div>
-                          </div>
-                        <?php endforeach; ?>
+                          </div> -->
+                        <?php //endforeach; ?>
                         </div>
                       </li>
                       <!-- END timeline item -->

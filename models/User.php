@@ -132,8 +132,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::find()
             ->where('
-                (username = :username OR 
-                    email = :email) 
+                (username = :username OR
+                    email = :email)
                 AND status = :status
             ', [
                 ':username' => $email,

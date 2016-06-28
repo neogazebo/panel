@@ -69,7 +69,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                 if($country == 'MY'){
                     $timezone = 8;
                 } else {
-                   $timezone = 7; 
+                   $timezone = 7;
                 }
             $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0] 00:00:00' AND '$sna_daterange[1] 23:59:59'");
         }
@@ -120,5 +120,28 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->all();
 
         return $this;
+    }
+
+    public function setChartTopFour()
+    {
+        $userId = $_POST['id'];
+        $this->select('sna_cat_id,cat_name as category, count(*) as total_cat');
+        $this->leftJoin('tbl_category','tbl_category.cat_id = sna_cat_id');
+        $this->where('sna_acc_id = :id',[
+            ':id' => $userId
+        ]);
+        if (!empty($_POST['chart_daterange'])){
+            $sna_daterange = explode(' to ',($_POST['chart_daterange']));
+                if($country == 'MY'){
+                    $timezone = 8;
+                } else {
+                   $timezone = 7;
+                }
+            $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0] 00:00:00' AND '$sna_daterange[1] 23:59:59'");
+        }
+        $this->groupBy('sna_cat_id');
+        $this->orderBy('total_cat DESC');
+        $this->limit(4);
+        return $this->all();
     }
 }

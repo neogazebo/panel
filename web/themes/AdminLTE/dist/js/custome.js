@@ -1,8 +1,8 @@
 $(function() {
 	// this function to hide flash message in 3 second
 	function timeout() {
-		setTimeout(function() { 
-			$(".alert-dismissable").hide(); 
+		setTimeout(function() {
+			$(".alert-dismissable").hide();
 		}, 5000);
 	};
 	timeout();
@@ -25,7 +25,7 @@ $(function() {
 		timeout();
 	}
 
-	// this function to show render modal 
+	// this function to show render modal
 	$('.modalButton').on('click',function() {
 		$('#modal').modal('show')
 			.find('#modalContent')
@@ -156,7 +156,7 @@ $(function() {
 
 	//Date range picker
     $('#the_daterange').daterangepicker(
-		{	
+		{
 			separator : ' to ',
 			format: 'YYYY-MM-DD',
 	      	ranges: {
@@ -181,6 +181,78 @@ $(function() {
         var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
         if ((evt.keyCode == 13) && (node.type=='text'))  {return false;}
     }
-    document.onkeypress = stopRKey; 
+    document.onkeypress = stopRKey;
 
 });
+
+function topFour() {
+	function cb(start, end) {
+	  $('#chart_daterange .call').val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+	}
+	cb(moment().startOf('month'), moment().endOf('month'));
+    $('#chart_daterange').daterangepicker({
+      	ranges: {
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+			'This Week': [moment().startOf('week')],
+			'Last Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+      	}
+    },cb);
+
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+    var pieChart = new Chart(pieChartCanvas);
+	if ($('#pieChart').length > 0) {
+		var div = $('#pieChart');
+			url = $(div).data('url');
+			id = $(div).data('key');
+			sna_daterange = $('#chart_daterange .call').val();
+			$.ajax({
+    			type: 'POST',
+    			url: url,
+    			data: {
+					id : id,
+					date : sna_daterange
+				},
+    			success: function(results) {
+					var data = jQuery.parseJSON(results);
+					var html = "<ul class='nav nav-stacked'>";
+					for (var i = 0; i < data.length; i++) {
+
+                		html += "<li><a href='#'>"+data[i].label+"<span class='pull-right badge ' style='background-color:"+data[i].color+"'>"+data[i].value+"</span></a></li>";
+					}
+					html += "</ul>";
+					$('.chart-notes').html(html);
+					var PieData = data;
+					var pieOptions = {
+			          //Boolean - Whether we should show a stroke on each segment
+			          segmentShowStroke: true,
+			          //String - The colour of each segment stroke
+			          segmentStrokeColor: '#fff',
+			          //Number - The width of each segment stroke
+			          segmentStrokeWidth: 2,
+			          //Number - The percentage of the chart that we cut out of the middle
+			          percentageInnerCutout: 50, // This is 0 for Pie charts
+			          //Number - Amount of animation steps
+			          animationSteps: 100,
+			          //String - Animation easing effect
+			          animationEasing: 'easeOutBounce',
+			          //Boolean - Whether we animate the rotation of the Doughnut
+			          animateRotate: true,
+			          //Boolean - Whether we animate scaling the Doughnut from the centre
+			          animateScale: false,
+			          //Boolean - whether to make the chart responsive to window resizing
+			          responsive: true,
+			          // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+			          maintainAspectRatio: true,
+			          //String - A legend template
+			          legendTemplate: '<ul class=\'<%=name.toLowerCase()%>-legend\'><% for (var i=0; i<segments.length; i++){%><li><span style=\'background-color:<%=segments[i].fillColor%>\'></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+			        };
+			        //Create pie or douhnut chart
+			        // You can switch between pie and douhnut using the method below.
+			        pieChart.Doughnut(PieData, pieOptions);
+
+				}
+			});
+	}
+  };
+topFour();

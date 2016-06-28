@@ -6,6 +6,7 @@ use yii\web\Controller;
 use app\controllers\BaseController;
 use app\models\Account;
 use app\models\AccountSearch;
+use app\models\SnapEarn;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -39,6 +40,43 @@ class DefaultController extends BaseController
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    /**
+    *
+    *
+    */
+    public function actionTopChart()
+    {
+        if (Yii::$app->request->isAjax){
+            $model = SnapEarn::find()->setChartTopFour();
+            // var_dump($model->category->cat_name);exit;
+            $out = [];
+            if (!empty($model)) {
+                $i = 0;
+                $color[0] = '#f56954';
+                $color[1] = '#f39c12';
+                $color[2] = '#3c8dbc';
+                $color[3] = '#d2d6de';
+
+                foreach ($model as $d) {
+                    if ($d->category == null) {
+                        $d->category = 'Undefined';
+                    }
+                    $out[] = [
+                        'id' => $i,
+                        'value' => $d->total_cat,
+                        'color' => $color[$i],
+                        'highlight' => $color[$i],
+                        'label' => $d->category
+                    ];
+                    $i++;
+                }
+            }else{
+                $out[] = ['category' => 0,'value' => 'Mall not found!'];
+            }
+            echo \yii\helpers\Json::encode($out);
+        }
     }
 
     /**

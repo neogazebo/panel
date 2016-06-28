@@ -2,8 +2,8 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=manisdb.ebizu.com;dbname=manisv3_db',
+    'dsn' => 'mysql:host=dbx.ebizu.com;dbname=manisv3_db_dev',
     'username' => 'manis',
-    'password' => 'EB!zu-43bizu*@',
+    'password' => 'ebizu4ebizu',
     'charset' => 'utf8',
 ];
