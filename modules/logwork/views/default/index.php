@@ -11,8 +11,7 @@ use yii\helpers\ArrayHelper;
 /* @var $searchModel app\models\AccountSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Log Work';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Working Hours';
 ?>
 <section class="content-header ">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -23,79 +22,79 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                <form role="form" class="form-inline" method="post" action="/logwork">
-                    <div class="pull-right">
-                        <div class="form-group">
-                        <label>Username</label>
-                        <?= 
-                            Typeahead::widget([
-                                'name' => 'merchant',
-                                'options' => ['placeholder' => 'Find User'],
-                                'pluginOptions' => [
-                                    'highlight'=>true,
-                                    'minLength' => 3
-                                ],
-                                'pluginEvents' => [
-                                    "typeahead:select" => "function(ev, suggestion) { $('#wrk_by').val(suggestion.id); }",
-                                ],
-                                'dataset' => [
-                                    [
-                                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                                        'display' => 'value',
-                                        'remote' => [
-                                            'url' => Url::to(['user-list']) . '?q=%QUERY',
-                                            'wildcard' => '%QUERY'
-                                        ],
-                                        'limit' => 20
+                    <form role="form" class="form-inline" method="post" action="/logwork">
+                        <div class="pull-right">
+                            <div class="form-group">
+                            <label>Username</label>
+                            <?= 
+                                Typeahead::widget([
+                                    'name' => 'merchant',
+                                    'options' => ['placeholder' => 'Find User'],
+                                    'pluginOptions' => [
+                                        'highlight' => true,
+                                        'minLength' => 3
+                                    ],
+                                    'pluginEvents' => [
+                                        "typeahead:select" => "function(ev, suggestion) { $('#wrk_by').val(suggestion.id); }",
+                                    ],
+                                    'dataset' => [
+                                        [
+                                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                            'display' => 'value',
+                                            'remote' => [
+                                                'url' => Url::to(['user-list']) . '?q=%QUERY',
+                                                'wildcard' => '%QUERY'
+                                            ],
+                                            'limit' => 20
+                                        ]
                                     ]
-                                ]
-                            ]);
-                        ?>
-                        </div>
-                        <!-- <div class="form-group">
-                        <label>Devision</label> -->
-                        <?php 
-                            // Typeahead::widget([
-                            //     'name' => 'merchant',
-                            //     'options' => ['placeholder' => 'Devision'],
-                            //     'pluginOptions' => [
-                            //         'highlight'=>true,
-                            //         'minLength' => 3
-                            //     ],
-                            //     'pluginEvents' => [
-                            //         "typeahead:select" => "function(ev, suggestion) { $('#wrk_param_id').val(suggestion.id); }",
-                            //     ],
-                            //     'dataset' => [
-                            //         [
-                            //             'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                            //             'display' => 'value',
-                            //             'remote' => [
-                            //                 'url' => Url::to(['devision']) . '?q=%QUERY',
-                            //                 'wildcard' => '%QUERY'
-                            //             ],
-                            //             'limit' => 20
-                            //         ]
-                            //     ]
-                            // ]);
-                        ?>
-                        <!-- </div> -->
-                        <div class="form-group">
-                            <label>Date range</label><br>
-                            <div class="input-group">
-                                <div class="input-group-addon" for="reservation">
-                                    <i class="fa fa-calendar"></i>
+                                ]);
+                            ?>
+                            </div>
+                            <!-- <div class="form-group">
+                            <label>Devision</label> -->
+                            <?php 
+                                // Typeahead::widget([
+                                //     'name' => 'merchant',
+                                //     'options' => ['placeholder' => 'Devision'],
+                                //     'pluginOptions' => [
+                                //         'highlight'=>true,
+                                //         'minLength' => 3
+                                //     ],
+                                //     'pluginEvents' => [
+                                //         "typeahead:select" => "function(ev, suggestion) { $('#wrk_param_id').val(suggestion.id); }",
+                                //     ],
+                                //     'dataset' => [
+                                //         [
+                                //             'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                //             'display' => 'value',
+                                //             'remote' => [
+                                //                 'url' => Url::to(['devision']) . '?q=%QUERY',
+                                //                 'wildcard' => '%QUERY'
+                                //             ],
+                                //             'limit' => 20
+                                //         ]
+                                //     ]
+                                // ]);
+                            ?>
+                            <!-- </div> -->
+                            <div class="form-group">
+                                <label>Date range</label><br>
+                                <div class="input-group">
+                                    <div class="input-group-addon" for="reservation">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="">
                                 </div>
-                                <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="">
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="wrk_by" id="wrk_by">
+                                <input type="hidden" name="wrk_param_id" id="wrk_param_id">
+                                <label>&nbsp;</label><br>
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <input type="hidden" name="wrk_by" id="wrk_by">
-                            <input type="hidden" name="wrk_param_id" id="wrk_param_id">
-                            <label>&nbsp;</label><br>
-                            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">
@@ -107,44 +106,44 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                     'label' => 'Username',
                                     'attribute' => 'wrk_by',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         return $data->user->username;
                                     }
                                 ],
                                 [
                                     'label' => 'Total Point',
                                     'attribute' => 'wrk_point',
-                                    'value' => function($data){
-                                        return $data->total_point;
+                                    'value' => function($data) {
+                                        return Yii::$app->formatter->asDecimal($data->total_point);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Approved',
                                     'attribute' => 'wrk_type',
                                     'value' => function($data) {
-                                        return $data->total_approved;
+                                        return Yii::$app->formatter->asDecimal($data->total_approved);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Rejected',
                                     'attribute' => 'wrk_type',
                                     'value' => function($data) {
-                                        return $data->total_rejected;
+                                        return Yii::$app->formatter->asDecimal($data->total_rejected);
                                     }
                                 ],
                                 [
                                     'label' => 'Rejection Rate',
                                     'attribute' => 'wrk_type',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         return Yii::$app->formatter->asPercent($data->rejected_rate);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Work Time',
                                     'attribute' => 'wrk_time',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                         date_default_timezone_set('UTC');
-                                        return date('H:i:s',$data->total_record);
+                                        return date('H:i:s', $data->total_record);
                                     }
                                 ],
                                 [
@@ -156,8 +155,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         },
                                     ]
                                 ]
-
                             ],
+                            'tableOptions' => ['class' => 'table table-striped table-hover']
                         ]); ?>
                     </div>
                 </div>
