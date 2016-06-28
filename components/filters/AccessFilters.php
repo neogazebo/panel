@@ -15,7 +15,7 @@ use yii\web\ForbiddenHttpException;
 // use app\models\AuthItemChild;
 
 /**
-* 
+*
 */
 class AccessFilters extends ActionFilter
 {
@@ -29,29 +29,26 @@ class AccessFilters extends ActionFilter
 		$obj = Yii::$app->controller;
 		$actionId = $obj->getRoute();
 		$permisionName = $auth->getPermissionsByUser($user->id);
-		// foreach ($permisionName as $value) {
-		// if ($user->can('/'.$actionId)) {
-		// 	return true;
-		// }
+  		if ($user->can('/'.$actionId)) {
+  			return true;
+  		}
 
-		// do {
-		// 	if ($user->can('/'. ltrim($obj->getUniqueId() . '/*', '/'))) {
-		// 		return true;
-		// 	}
+  		do {
+  			if ($user->can('/'. ltrim($obj->getUniqueId() . '/*', '/'))) {
+  				return true;
+  			}
 
-		// 	$obj = $obj->module;
-		// } while ($obj !== null);
-		// $this->denyAccess($user);
-  //       return false;
- 		// }
-  
+  			$obj = $obj->module;
+  		} while ($obj !== null);
+  		$this->denyAccess($user);
+      return false;
+
 	}
 
 	public static function getMenu($menu)
-	{	
+	{
 		$auth = Yii::$app->authManager;
 		$user = Yii::$app->user;
-		// $roles = $auth->getRolesByUser('/'.$user->id.'/*');
 		if($user->can('/'.$menu.'/*')){
 			return true;
 		}
@@ -68,7 +65,6 @@ class AccessFilters extends ActionFilter
 				return $role->name;exit;
 			}
 		}
-		$this->denyAccess($user);
 		return false;
 
 	}
