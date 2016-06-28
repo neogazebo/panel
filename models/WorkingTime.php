@@ -102,19 +102,15 @@ class WorkingTime extends \yii\db\ActiveRecord
     public function getTime($userId)
     {
         $query = self::find()
-                ->select('sum(wrk_time) as total_record')
-                ->where('wrk_end IS NOT NULL')
-                ->andWhere('wrk_by = :id',[
-                        ':id' => $userId
-                    ])
-                ->one();
-        // $this->select('sum(wrk_time)');
-        // $this->where('wrk_end IS NOT NULL');
-        // $this->andWhere('wrk_by = :id',[
-        //         ':id' => $userId
-        //     ]);
+            ->select('sum(wrk_time) as total_record')
+            ->where('wrk_end IS NOT NULL')
+            ->andWhere('wrk_by = :id',[
+                    ':id' => $userId
+                ])
+            ->one();
         return $query;
     }
+
     /**
      * @inheritdoc
      * @return WorkingTimeQuery the active query used by this AR class.

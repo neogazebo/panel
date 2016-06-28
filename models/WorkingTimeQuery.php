@@ -34,7 +34,7 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function findWorkExist($param,$point_type = 0)
+    public function findWorkExist($param, $point_type = 0)
     {
         $user = Yii::$app->user->id;
         $this->andWhere("wrk_by = $user");
@@ -48,16 +48,26 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
 
     public function getWorker()
     {
-        $this->select("wrk_id,wrk_type,wrk_by,wrk_param_id,sum(wrk_time) as total_record,sum(wrk_point) as total_point,sum(wrk_type = 1) as total_approved, sum(wrk_type = 2) as total_rejected,  count(if(wrk_type = 2, wrk_id, null))/count(wrk_id) as rejected_rate");
+        $this->select("
+            wrk_id,
+            wrk_type,
+            wrk_by,
+            wrk_param_id,
+            SUM(wrk_time) AS total_record,
+            SUM(wrk_point) AS total_point,
+            SUM(wrk_type = 1) AS total_approved,
+            SUM(wrk_type = 2) AS total_rejected,
+            COUNT(IF(wrk_type = 2, wrk_id, null)) / COUNT(wrk_id) AS rejected_rate
+        ");
         $this->where('wrk_end IS NOT NULL');
         if (!empty($_POST['wrk_by'])) {
-            $this->andWhere('wrk_by = :id',[
-                    ':id' => $_POST['wrk_by']
-                ]);
+            $this->andWhere('wrk_by = :id', [
+                ':id' => $_POST['wrk_by']
+            ]);
         }
         if (!empty($_POST['wrk_daterange'])) {
             $range = explode(" to ", $_POST['wrk_daterange']);
-            $this->andWhere("date(from_unixtime(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
+            $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
         }
 
         $this->andWhere('wrk_time IS NOT NULL');
@@ -67,18 +77,36 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
 
     public function detailPoint($id)
     {
-        $this->where('wrk_by = :user',[
-                ':user' => $id
-            ]);
-
-        $this->andWhere('wrk_end IS NOT NULL');
+        $this->where('wrk_by = :user AND wrk_end IS NOT NULL', [
+            ':user' => $id
+        ]);
 
         if (!empty($_POST['wrk_daterange'])) {
             $range = explode(" to ", $_POST['wrk_daterange']);
-            $this->andWhere("date(from_unixtime(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
+            $this->andWhere("date(FROM_UNIXTIME(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
         }
 
         $this->andWhere('wrk_time IS NOT NULL');
+        $this->orderBy('wrk_id DESC');
+        return $this;
+    }
+
+    public function getReport($id, $date)
+    {
+        $date = explode(' to ', $date);
+        $first_date = $date[0] . ' 00:00:00';
+        $last_date = $date[1] . ' 23:59:59';
+
+        $this->where('
+            wrk_by = :user 
+            AND wrk_end IS NOT NULL 
+            AND DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN :first_date AND :last_date 
+            AND wrk_time IS NOT NULL
+        ', [
+            ':user' => $id,
+            ':first_date' => $first_date,
+            ':last_date' => $last_date,
+        ]);
         $this->orderBy('wrk_id DESC');
         return $this;
     }
