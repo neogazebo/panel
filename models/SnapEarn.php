@@ -33,7 +33,10 @@ class SnapEarn extends \yii\db\ActiveRecord
     const LIMIT_RECEIPT = 2;
     public $sna_push = true;
     public $total_cat = null;
-    public $category;
+    public $categoryName;
+    public $amount;
+    public $country;
+    public $total_amount;
 
     /**
      * @inheritdoc

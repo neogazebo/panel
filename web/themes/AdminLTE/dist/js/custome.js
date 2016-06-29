@@ -231,8 +231,12 @@ function topFour(data) {
 			 var data = jQuery.parseJSON(results);
 			 var html = "<ul class='nav nav-stacked'>";
 			 for (var i = 0; i < data.length; i++) {
-
-				 html += "<li><a href='#'>"+data[i].label+"<span class='pull-right badge ' style='background-color:"+data[i].color+"'>"+data[i].value+"</span></a></li>";
+				 var total = data[i].currency+'. '+(data[i].total)+data[i].k;
+				 if (data[i].value == 0 ) {
+					 total = '.00';
+				 }
+				 $("#testing").text(total);
+				 html += "<li><a href='#'>"+data[i].label+"<span class='pull-right badge ' style='background-color:"+data[i].color+"'>"+data[i].currency+'. '+data[i].value+data[i].k+"</span></a></li>";
 			 }
 			 html += "</ul>";
 			 $('.chart-notes').html(html);

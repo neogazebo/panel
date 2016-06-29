@@ -126,13 +126,8 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     public function setChartTopFour($filters = null)
     {
         $dt = new DateRangeCarbon();
-
         $userId = $_POST['id'];
-        $this->select('sna_cat_id,cat_name as category, count(*) as total_cat');
-        $this->leftJoin('tbl_category','tbl_category.cat_id = sna_cat_id');
-        $this->where('sna_acc_id = :id',[
-            ':id' => $userId
-        ]);
+
         if ($filters != null){
             switch($filters) {
     			case 'thisMonth':
@@ -152,10 +147,20 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         } else {
             $sna_daterange = explode(' to ',($dt->getThisMonth()));
         }
-
+        $this->select("
+                cat_name as categoryName,
+                sum(sna_receipt_amount) as amount,
+                acc_cty_id as country
+                ");
+        $this->innerJoin('tbl_category','tbl_category.cat_id = tbl_snapearn.sna_cat_id');
+        $this->leftJoin("tbl_account","tbl_account.acc_id = tbl_snapearn.sna_acc_id");
+        $this->where('sna_acc_id = :id',[
+            ':id' => $userId
+        ]);
+        $this->andWhere('sna_status = 1');
         $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->groupBy('sna_cat_id');
-        $this->orderBy('total_cat DESC');
+        $this->orderBy('sum(sna_receipt_amount) DESC');
         $this->limit(4);
         return $this->all();
     }

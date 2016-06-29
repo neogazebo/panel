@@ -322,12 +322,15 @@ $this->registerCss("
                                 </div>
                                 <div class="box-body">
                                     <div class="col-sm-5">
-                                        <select name="filter_chart" id="filter_chart" class="form-control select2">
-                                            <option value="thisMonth">This Month </option>
-                                            <option value="lastMonth">Last Month </option>
-                                            <option value="thisWeek">This Week </option>
-                                            <option value="lastWeek">Last Week </option>
-                                        </select>
+                                        <div class="input-group">
+                                            <select name="filter_chart" id="filter_chart" class="form-control select2">
+                                                <option value="thisMonth">This Month </option>
+                                                <option value="lastMonth">Last Month </option>
+                                                <option value="thisWeek">This Week </option>
+                                                <option value="lastWeek">Last Week </option>
+                                            </select>
+                                            <span id="testing" class="input-group-addon">.00</span>
+                                        </div>
                                         <div class="clearfix">
 
                                         </div>
