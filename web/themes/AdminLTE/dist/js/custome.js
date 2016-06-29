@@ -237,7 +237,7 @@ function topFour(data) {
 			 html += "</ul>";
 			 $('.chart-notes').html(html);
 			 topFour(data);
-			 $(".overlay").css('display','none');
+			 $(".overlay").hide();
 		   }
 	   });
   }
@@ -245,7 +245,7 @@ function topFour(data) {
 		startChart()
 	}
 $("#filter_chart").change(function(){
-	$(".overlay").css('display','block');
+	$(".overlay").show();
 	var selector = $(this).val();
 	startChart(selector);
 });
