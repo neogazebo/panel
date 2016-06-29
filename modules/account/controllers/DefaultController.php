@@ -9,6 +9,7 @@ use app\models\AccountSearch;
 use app\models\SnapEarn;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 /**
  * IndexController implements the CRUD actions for Account model.
@@ -37,8 +38,17 @@ class DefaultController extends BaseController
      */
     public function actionView($id)
     {
+        $receipt = SnapEarn::find()->where('sna_acc_id = :id',[':id' => $id])->orderBy('sna_id DESC');
+        $receiptProvider =  new ActiveDataProvider([
+            'query' => $receipt,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'receiptProvider' => $receiptProvider
         ]);
     }
 
