@@ -145,9 +145,14 @@ $this->registerCss("
                                 </div>
                                 <div class="box-body">
                                     <div class="col-sm-5">
-                                        <div class="input-group" id="chart_daterange">
-                                          <span class="input-group-addon" id="basic-addon1"><i class="fa fa-calendar"></i>&nbsp;</span>
-                                          <input type="text" class="form-control call" aria-describedby="basic-addon1">
+                                        <select name="filter_chart" id="filter_chart" class="form-control select2">
+                                            <option value="thisMonth">This Month </option>
+                                            <option value="lastMonth">Last Month </option>
+                                            <option value="thisWeek">This Week </option>
+                                            <option value="lastWeek">Last Week </option>
+                                        </select>
+                                        <div class="clearfix">
+
                                         </div>
                                         <p class="chart-notes">
 

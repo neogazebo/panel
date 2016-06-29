@@ -49,8 +49,8 @@ class DefaultController extends BaseController
     public function actionTopChart()
     {
         if (Yii::$app->request->isAjax){
-            $model = SnapEarn::find()->setChartTopFour();
-            // var_dump($model->category->cat_name);exit;
+            $filters = Yii::$app->request->post('data');
+            $model = SnapEarn::find()->setChartTopFour($filters);
             $out = [];
             if (!empty($model)) {
                 $i = 0;
@@ -73,7 +73,7 @@ class DefaultController extends BaseController
                     $i++;
                 }
             }else{
-                $out[] = ['category' => 0,'value' => 'Mall not found!'];
+                $out[] = ['category' => 0,'value' => 'Receipt is null'];
             }
             echo \yii\helpers\Json::encode($out);
         }

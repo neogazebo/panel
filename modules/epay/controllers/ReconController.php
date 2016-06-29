@@ -26,7 +26,7 @@ class ReconController extends Controller
         parent::init();
         date_default_timezone_set('Etc/UTC');
     }
-    
+
     public function behaviors()
     {
         return [
@@ -64,7 +64,6 @@ class ReconController extends Controller
 
         // get data from table EpayDetail
         $data = $model->getReconciliationData($recapType, $date);
-        exit;
         // create local directory
         $dir = Yii::$app->basePath."/runtime/sFTp/";
 

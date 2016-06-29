@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\helpers\DateRangeCarbon;
 /**
  * This is the ActiveQuery class for [[AccountDevice]].
  *
@@ -122,23 +123,37 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         return $this;
     }
 
-    public function setChartTopFour()
+    public function setChartTopFour($filters = null)
     {
+        $dt = new DateRangeCarbon();
+
         $userId = $_POST['id'];
         $this->select('sna_cat_id,cat_name as category, count(*) as total_cat');
         $this->leftJoin('tbl_category','tbl_category.cat_id = sna_cat_id');
         $this->where('sna_acc_id = :id',[
             ':id' => $userId
         ]);
-        if (!empty($_POST['chart_daterange'])){
-            $sna_daterange = explode(' to ',($_POST['chart_daterange']));
-                if($country == 'MY'){
-                    $timezone = 8;
-                } else {
-                   $timezone = 7;
-                }
-            $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0] 00:00:00' AND '$sna_daterange[1] 23:59:59'");
+        if ($filters != null){
+            switch($filters) {
+    			case 'thisMonth':
+    				$dt = $dt->getThisMonth();
+    				break;
+    			case 'lastMonth':
+    				$dt = $dt->getLastMonth();
+    				break;
+                case 'thisWeek':
+                    $dt = $dt->getThisWeek();
+                    break;
+                case 'lastWeek':
+                    $dt = $dt->getLastWeek();
+                    break;
+    		}
+            $sna_daterange = explode(' to ',($dt));
+        } else {
+            $sna_daterange = explode(' to ',($dt->getThisMonth()));
         }
+
+        $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->groupBy('sna_cat_id');
         $this->orderBy('total_cat DESC');
         $this->limit(4);
