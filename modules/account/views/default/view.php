@@ -413,7 +413,7 @@ $this->registerCss("
                           </div>
                       </li>
                       </li>
-                      <li>
+                      <!-- <li>
                           <i class="fa  fa-line-chart bg-yellow"></i>
                           <div class="timeline-item">
                               <div class="box box-solid">
@@ -429,7 +429,7 @@ $this->registerCss("
                                   </div>
                               </div>
                           </div>
-                      </li>
+                      </li> -->
                       <!-- END timeline item -->
                       <li>
                         <i class="fa fa-clock-o bg-gray"></i>
