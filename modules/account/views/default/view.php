@@ -6,7 +6,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Account */
-
+// var_dump($model->lastLogin());exit;
 $this->title = $model->acc_screen_name;
 $model->acc_gender = ($model->acc_gender == 1) ? 'Male' : 'Female';
 $this->params['breadcrumbs'][] = ['label' => 'Accounts', 'url' => ['index']];
@@ -248,7 +248,7 @@ $this->registerCss("
                       <b>Current Point </b> <a class="pull-right"><?= $model->lastPointMember() ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Last Activity </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->lastLogin()) ?></a>
+                      <b>Last Activity </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->lastLogin()->adv_last_access) ?></a>
                     </li>
                     <li class="list-group-item">
                       <b>Facebook Id </b> <a href="https://www.facebook.com/<?= $model->acc_facebook_id ?>" target="blank_" class="pull-right"> <?= $model->acc_facebook_id ?></a>
