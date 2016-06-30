@@ -22,7 +22,7 @@ $this->title = 'Detail Working Hours';
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
+                    <?php // Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
                     <form class="form-inline pull-right" role="form" method="post" action="view?id=<?= $_GET['id'] ?>">
                         <div class="form-group">
                             <label>Date range</label><br>
