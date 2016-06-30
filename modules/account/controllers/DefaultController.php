@@ -100,7 +100,7 @@ class DefaultController extends BaseController
                     $i++;
                 }
             }else{
-                $out[] = ['value' => 0,'label' => 'No Receipt'];
+                $out[] = ['value' => 0,'label' => 'No Receipt','total' => 0];
             }
             echo \yii\helpers\Json::encode($out);
         }

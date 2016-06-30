@@ -232,7 +232,7 @@ function topFour(data) {
 			 var html = "<ul class='nav nav-stacked'>";
 			 for (var i = 0; i < data.length; i++) {
 				 var total = data[i].currency+'. '+(data[i].total)+data[i].k;
-				 if (data[i].value == 0 ) {
+				 if (data[i].total == 0 ) {
 					 total = '.00';
 				 }
 				 $("#testing").text(total);
