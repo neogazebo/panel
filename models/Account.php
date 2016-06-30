@@ -81,15 +81,15 @@ class Account extends \yii\db\ActiveRecord
     public function lastLocation()
     {
         $model = AccountDevice::find()->getLastLocatione($this->acc_id);
-        $location = (!empty($model->all())) ? $model->all() : '0';
+        $location = $model->all();
         return $location;
     }
 
     public function lastLogin()
     {
         $model = AccountDevice::find()->getLastLocatione($this->acc_id);
-        $location = (!empty($model->one())) ? $model->one() : '0';
-        return $location->adv_last_access;
+        $location = $model->one();
+        return $location;
     }
 
     public function lastSnapUpload()

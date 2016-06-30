@@ -257,10 +257,10 @@ $this->registerCss("
                       <b>Registered Since  </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->acc_created_datetime) ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Device Active  </b> <a class="pull-right"><?= $model->activeDevice()->dvc_model ?></a>
+                      <b>Device Active  </b> <a class="pull-right"><?= (!empty($model->activeDevice())) ? $model->activeDevice()->dvc_model : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>OS Version  </b> <a class="pull-right"><?= $model->activeDevice()->dvc_os_version ?></a>
+                      <b>OS Version  </b> <a class="pull-right"><?= (!empty($model->activeDevice())) ? $model->activeDevice()->dvc_os_version : '<a class="pull-right"><span class="not-set">(not set)</span></a>'?></a>
                     </li>
                   </ul>
                 </div>
