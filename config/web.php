@@ -106,7 +106,8 @@ $config = [
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'dd MMM yyyy',
             'decimalSeparator' => ',',
-        ],        
+            'thousandSeparator' => ','
+        ],
         'format' => [
             'class' => 'app\components\extensions\Formatter',
             'dateFormat' => 'dd-MM-yyyy',

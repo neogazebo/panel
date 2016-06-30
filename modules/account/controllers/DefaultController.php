@@ -6,8 +6,12 @@ use yii\web\Controller;
 use app\controllers\BaseController;
 use app\models\Account;
 use app\models\AccountSearch;
+use app\models\SnapEarn;
+use app\models\Country;
+use app\models\SnapEarnRule;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 /**
  * IndexController implements the CRUD actions for Account model.
@@ -36,9 +40,70 @@ class DefaultController extends BaseController
      */
     public function actionView($id)
     {
+        $receipt = SnapEarn::find()->where('sna_acc_id = :id',[':id' => $id])->orderBy('sna_id DESC');
+        $receiptProvider =  new ActiveDataProvider([
+            'query' => $receipt,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'receiptProvider' => $receiptProvider
         ]);
+    }
+
+    /**
+    *
+    *
+    */
+    public function actionTopChart()
+    {
+        if (Yii::$app->request->isAjax){
+            $filters = Yii::$app->request->post('data');
+            $model = SnapEarn::find()->setChartTopFour($filters);
+            $out = [];
+            if (!empty($model)) {
+                $i = 0;
+                $color[0] = '#f56954';
+                $color[1] = '#f39c12';
+                $color[2] = '#3c8dbc';
+                $color[3] = '#d2d6de';
+                $total_amount = 0;
+                foreach ($model as $d) {
+                    if ($d->categoryName == null) {
+                        $d->categoryName = 'Others';
+                    }
+
+                    $cr = Country::find()->where('cty_short_code = :cty',[':cty' => strtoupper($d->country)])->one();
+                    $config = SnapEarnRule::find()->where(['ser_country' => $cr->cty_currency_name_iso3])->one();
+                    $amount = $d->amount;
+                    $k = '';
+                    if ($config->ser_point_provision > 0 ) {
+                        $amount = (int)($amount / $config->ser_point_provision);
+                        $k = ' K';
+
+                    }
+
+                    $currency = ($cr->cty_currency_name_iso3 == 'IDR') ? 'Rp' : 'RM';
+                    $out[] = [
+                        'id' => $i,
+                        'value' => $amount,
+                        'color' => $color[$i],
+                        'highlight' => $color[$i],
+                        'label' => $d->categoryName,
+                        'currency' => $currency,
+                        'k' => $k,
+                        'total' => $total_amount += $amount
+                    ];
+                    $i++;
+                }
+            }else{
+                $out[] = ['value' => 0,'label' => 'No Receipt'];
+            }
+            echo \yii\helpers\Json::encode($out);
+        }
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\helpers\DateRangeCarbon;
 /**
  * This is the ActiveQuery class for [[AccountDevice]].
  *
@@ -69,7 +70,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                 if($country == 'MY'){
                     $timezone = 8;
                 } else {
-                   $timezone = 7; 
+                   $timezone = 7;
                 }
             $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0] 00:00:00' AND '$sna_daterange[1] 23:59:59'");
         }
@@ -120,5 +121,47 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->all();
 
         return $this;
+    }
+
+    public function setChartTopFour($filters = null)
+    {
+        $dt = new DateRangeCarbon();
+        $userId = $_POST['id'];
+
+        if ($filters != null){
+            switch($filters) {
+    			case 'thisMonth':
+    				$dt = $dt->getThisMonth();
+    				break;
+    			case 'lastMonth':
+    				$dt = $dt->getLastMonth();
+    				break;
+                case 'thisWeek':
+                    $dt = $dt->getThisWeek();
+                    break;
+                case 'lastWeek':
+                    $dt = $dt->getLastWeek();
+                    break;
+    		}
+            $sna_daterange = explode(' to ',($dt));
+        } else {
+            $sna_daterange = explode(' to ',($dt->getThisMonth()));
+        }
+        $this->select("
+                cat_name as categoryName,
+                sum(sna_receipt_amount) as amount,
+                acc_cty_id as country
+                ");
+        $this->innerJoin('tbl_category','tbl_category.cat_id = tbl_snapearn.sna_cat_id');
+        $this->leftJoin("tbl_account","tbl_account.acc_id = tbl_snapearn.sna_acc_id");
+        $this->where('sna_acc_id = :id',[
+            ':id' => $userId
+        ]);
+        $this->andWhere('sna_status = 1');
+        $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
+        $this->groupBy('sna_cat_id');
+        $this->orderBy('sum(sna_receipt_amount) DESC');
+        $this->limit(4);
+        return $this->all();
     }
 }

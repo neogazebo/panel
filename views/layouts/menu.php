@@ -56,7 +56,7 @@ use app\components\filters\AccessFilters;
         <ul class="treeview-menu">
             <li><a href="<?= Yii::$app->urlManager->createUrl('snapearn') ?>"><i class="fa fa-circle-o"></i> List</a></li>
             <?php if (AccessFilters::getMenu('logwork')) : ?>
-            <li><a href="<?= Yii::$app->urlManager->createUrl('logwork') ?>"><i class="fa fa-circle-o"></i> Log Work</a></li>
+            <li><a href="<?= Yii::$app->urlManager->createUrl('logwork') ?>"><i class="fa fa-circle-o"></i> Working Hours</a></li>
             <?php endif; ?>
         </ul>
     </li>

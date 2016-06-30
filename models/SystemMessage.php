@@ -74,18 +74,18 @@ class SystemMessage extends \yii\db\ActiveRecord
         return false;
     }
 
-    public function parser($id=0, $name, $to, $parsers, $language="en_us", $from_name="Ebizu", $use_logo=false) 
+    public function parser($id=0, $name, $to, $parsers, $language="en_us", $from_name="Ebizu", $use_logo=false)
     {
         if($id > 0) {
             $model = SystemMessage::findOne($id);
             $title = $model->sym_title;
             $message = $model->sym_message;
         }
-        
+
         foreach($parsers as $row) {
             $message = str_replace($row[0], $row[1], $message);
         }
-        
+
         $logo = '';
         if ($use_logo)
             $logo = '<img src="'.Yii::$app->params['businessUrl'].$use_logo.'" width="90px" height="60px"/>';
@@ -343,7 +343,7 @@ class SystemMessage extends \yii\db\ActiveRecord
                 </div>
                 ';
             $messages = $body;
-        } elseif($name == 'snapearn_receipt_blur' || $name == 'snapearn_receipt_dark' || $name == 'snapearn_receipt_incomplete' || $name == 'snapearn_receipt_suspicious' || $name == 'snapearn_duplicate' || $name == 'snapearn_invalid') {
+        } elseif($name == 'snapearn_receipt_blur' || $name == 'snapearn_receipt_dark' || $name == 'snapearn_receipt_incomplete' || $name == 'snapearn_receipt_suspicious' || $name == 'snapearn_duplicate' || $name == 'snapearn_invalid' || $name = 'snapearn_receipt_violates') {
             $messages_plain = $message;
             $body = '
                 <!DOCTYPE>
@@ -380,8 +380,8 @@ class SystemMessage extends \yii\db\ActiveRecord
                           <td>&nbsp;</td>
                         </tr>
                         <tr>
-                          <td align="center" style="font-size:10px;">Copyright &copy; 2014 Ebizu Sdn Bhd, All rights reserved. 
-                            You are receiving this email because you opted in or signed up for services. 
+                          <td align="center" style="font-size:10px;">Copyright &copy; 2014 Ebizu Sdn Bhd, All rights reserved.
+                            You are receiving this email because you opted in or signed up for services.
                             <br>To manage your e-mail subscriptions or remove yourself from our e-mail program, click here</td>
                           </tr>
                           <tr>
@@ -571,7 +571,7 @@ class SystemMessage extends \yii\db\ActiveRecord
                             */
                             #templatePreheader{
                             /*@editable*/ background-color: #595f69;
-                            /*@editable*/ border-bottom:1px solid #CCCCCC;  
+                            /*@editable*/ border-bottom:1px solid #CCCCCC;
                             }
                             /**
                             * @tab Header
@@ -919,12 +919,12 @@ class SystemMessage extends \yii\db\ActiveRecord
                             .footerContent a{display:block !important;} /* Place footer social and utility links on their own lines, for easier access */
                             }
                         </style>
-                    </head>    
+                    </head>
                     <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
                         <center>
                             <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
                                 <tr>
-                                    <td align="center" valign="top">                        
+                                    <td align="center" valign="top">
                                         <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
                                             <tr>
                                                 <td align="center" valign="top" id="templateHeader">
@@ -985,7 +985,7 @@ class SystemMessage extends \yii\db\ActiveRecord
                                     <td align="center" valign="top">
                                         <!-- Begin Template Footer -->
                                         <!-- BEGIN FOOTER -->
-                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter" style="background: #488dcb">                                        
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter" style="background: #488dcb">
                                             <tr>
                                                 <td valign="top" class="footerContent" style="color: #fff; padding: 20px;">
                                                     <p>
@@ -1005,10 +1005,10 @@ class SystemMessage extends \yii\db\ActiveRecord
 
                                                     <p>
                                                         <strong>Our mailing address is:</strong><br />Ebizu Sdn. Bhd., Suite 2-2, Level 2, Tower 9, Avenue 5, The Horizon, Bangsar South, No.8 Jalan Kerinchi, 5900 Kuala Lumpur
-                                                    </p>                                                                
+                                                    </p>
                                                 </td>
-                                            </tr>                                         
-                                        </table>                       
+                                            </tr>
+                                        </table>
                                         <!-- END FOOTER -->
                                         <!-- End Template Footer -->
                                     </td>
@@ -1023,7 +1023,7 @@ class SystemMessage extends \yii\db\ActiveRecord
             $title                  = 'Link Reset Password';
             $company_name           = $parsers[0][1];
             $link                   = $parsers[1][1];
-            $title_messages_plain   = 'Hi, '.$company_name; 
+            $title_messages_plain   = 'Hi, '.$company_name;
             $messages_plain         = 'Please follow this '.$link.' to reset your password, this link is valid for next 2 hours';
             //Html body
             $body = '
@@ -1102,7 +1102,7 @@ class SystemMessage extends \yii\db\ActiveRecord
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td valign="top" class="bodyContent" style="border-bottom: 1px solid #CCCCCC">     
+                                        <td valign="top" class="bodyContent" style="border-bottom: 1px solid #CCCCCC">
                                             <div style="padding:20px">
                                                 <div style="color: #828282;font-style: italic;">
                                                     <p>
@@ -1114,9 +1114,9 @@ class SystemMessage extends \yii\db\ActiveRecord
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td valign="top" class="bodyContent" style="border-bottom: 1px solid #CCCCCC">     
+                                        <td valign="top" class="bodyContent" style="border-bottom: 1px solid #CCCCCC">
                                             <div style="text-align: left;padding: 40px 20px; width: 50%; float: left;color: #828282;font-style: italic;">
-                                                Copyright © '.date('Y').' Ebizu Sdn. Bhd. 
+                                                Copyright © '.date('Y').' Ebizu Sdn. Bhd.
                                             </div>
                                         </td>
                                     </tr>
@@ -1164,11 +1164,11 @@ class SystemMessage extends \yii\db\ActiveRecord
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td valign="top" class="bodyContent" style="border-bottom: 1px solid #CCCCCC">     
+                                        <td valign="top" class="bodyContent" style="border-bottom: 1px solid #CCCCCC">
                                             <div style="padding:20px">
                                                 <div style="color: #828282;font-style: italic;">
                                                     <p>
-                                                        You are receiving this email because you registered on <a href="http://ebizu.com">ebizu.com</a> with this email address. 
+                                                        You are receiving this email because you registered on <a href="http://ebizu.com">ebizu.com</a> with this email address.
                                                         If you wish to stop receiving this email, please click here to unsubscribe or you can modify which emails to receive under your account settings page
                                                     </p>
                                                 </div>
@@ -1176,9 +1176,9 @@ class SystemMessage extends \yii\db\ActiveRecord
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td valign="top" class="bodyContent" style="border-bottom: 1px solid #CCCCCC">     
+                                        <td valign="top" class="bodyContent" style="border-bottom: 1px solid #CCCCCC">
                                             <div style="text-align: left;padding: 40px 20px; width: 50%; float: left;color: #828282;font-style: italic;">
-                                                Copyright © '.date('Y').' Ebizu Sdn. Bhd. 
+                                                Copyright © '.date('Y').' Ebizu Sdn. Bhd.
                                             </div>
                                         </td>
                                     </tr>
@@ -1296,9 +1296,9 @@ class SystemMessage extends \yii\db\ActiveRecord
         $command->bindParam(':body', $body);
         $command->bindParam(':body_plain', $body_plain);
         $command->execute();
-        // return $connection->getLastInsertID(); 
+        // return $connection->getLastInsertID();
     }
-    
+
     static function updateQueue($queue_id,$aws_message_id)
     {
         $connection = Yii::$app->db;

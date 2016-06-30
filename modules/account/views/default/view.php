@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Account */
@@ -21,16 +22,214 @@ $this->registerCss("
         position: relative;
         width: 200px;
     }
-    
+
     .profile-user-img.img-responsive.img-circle {
         max-height: 100px;
         max-width: 100px;
         overflow: hidden;
     }
 
+    .timeline-inverse > li > .timeline-item {
+        background: transparent;
+        border: 0px solid #fff;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .nav-tabs-custom > .nav-tabs {
+        margin: 0;
+        border-bottom-color: #DDDDDD;
+        border-top-right-radius: 3px;
+        border-top-left-radius: 3px;
+        background-color: #eee;
+    }
+    .nav-tabs-custom > .tab-content {
+        background: #eee;
+        padding: 10px;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+    }
+    #fountainG{
+    	position:relative;
+    	width:234px;
+    	height:28px;
+    	margin:auto;
+        top: 50%;
+    }
+
+    .fountainG{
+    	position:absolute;
+    	top:0;
+    	background-color:rgb(0,0,0);
+    	width:28px;
+    	height:28px;
+    	animation-name:bounce_fountainG;
+    		-o-animation-name:bounce_fountainG;
+    		-ms-animation-name:bounce_fountainG;
+    		-webkit-animation-name:bounce_fountainG;
+    		-moz-animation-name:bounce_fountainG;
+    	animation-duration:1.5s;
+    		-o-animation-duration:1.5s;
+    		-ms-animation-duration:1.5s;
+    		-webkit-animation-duration:1.5s;
+    		-moz-animation-duration:1.5s;
+    	animation-iteration-count:infinite;
+    		-o-animation-iteration-count:infinite;
+    		-ms-animation-iteration-count:infinite;
+    		-webkit-animation-iteration-count:infinite;
+    		-moz-animation-iteration-count:infinite;
+    	animation-direction:normal;
+    		-o-animation-direction:normal;
+    		-ms-animation-direction:normal;
+    		-webkit-animation-direction:normal;
+    		-moz-animation-direction:normal;
+    	transform:scale(.3);
+    		-o-transform:scale(.3);
+    		-ms-transform:scale(.3);
+    		-webkit-transform:scale(.3);
+    		-moz-transform:scale(.3);
+    	border-radius:19px;
+    		-o-border-radius:19px;
+    		-ms-border-radius:19px;
+    		-webkit-border-radius:19px;
+    		-moz-border-radius:19px;
+    }
+
+    #fountainG_1{
+    	left:0;
+    	animation-delay:0.6s;
+    		-o-animation-delay:0.6s;
+    		-ms-animation-delay:0.6s;
+    		-webkit-animation-delay:0.6s;
+    		-moz-animation-delay:0.6s;
+    }
+
+    #fountainG_2{
+    	left:29px;
+    	animation-delay:0.75s;
+    		-o-animation-delay:0.75s;
+    		-ms-animation-delay:0.75s;
+    		-webkit-animation-delay:0.75s;
+    		-moz-animation-delay:0.75s;
+    }
+
+    #fountainG_3{
+    	left:58px;
+    	animation-delay:0.9s;
+    		-o-animation-delay:0.9s;
+    		-ms-animation-delay:0.9s;
+    		-webkit-animation-delay:0.9s;
+    		-moz-animation-delay:0.9s;
+    }
+
+    #fountainG_4{
+    	left:88px;
+    	animation-delay:1.05s;
+    		-o-animation-delay:1.05s;
+    		-ms-animation-delay:1.05s;
+    		-webkit-animation-delay:1.05s;
+    		-moz-animation-delay:1.05s;
+    }
+
+    #fountainG_5{
+    	left:117px;
+    	animation-delay:1.2s;
+    		-o-animation-delay:1.2s;
+    		-ms-animation-delay:1.2s;
+    		-webkit-animation-delay:1.2s;
+    		-moz-animation-delay:1.2s;
+    }
+
+    #fountainG_6{
+    	left:146px;
+    	animation-delay:1.35s;
+    		-o-animation-delay:1.35s;
+    		-ms-animation-delay:1.35s;
+    		-webkit-animation-delay:1.35s;
+    		-moz-animation-delay:1.35s;
+    }
+
+    #fountainG_7{
+    	left:175px;
+    	animation-delay:1.5s;
+    		-o-animation-delay:1.5s;
+    		-ms-animation-delay:1.5s;
+    		-webkit-animation-delay:1.5s;
+    		-moz-animation-delay:1.5s;
+    }
+
+    #fountainG_8{
+    	left:205px;
+    	animation-delay:1.64s;
+    		-o-animation-delay:1.64s;
+    		-ms-animation-delay:1.64s;
+    		-webkit-animation-delay:1.64s;
+    		-moz-animation-delay:1.64s;
+    }
+
+
+
+    @keyframes bounce_fountainG{
+    	0%{
+    	transform:scale(1);
+    		background-color:rgb(0,0,0);
+    	}
+
+    	100%{
+    	transform:scale(.3);
+    		background-color:rgb(255,255,255);
+    	}
+    }
+
+    @-o-keyframes bounce_fountainG{
+    	0%{
+    	-o-transform:scale(1);
+    		background-color:rgb(0,0,0);
+    	}
+
+    	100%{
+    	-o-transform:scale(.3);
+    		background-color:rgb(255,255,255);
+    	}
+    }
+
+    @-ms-keyframes bounce_fountainG{
+    	0%{
+    	-ms-transform:scale(1);
+    		background-color:rgb(0,0,0);
+    	}
+
+    	100%{
+    	-ms-transform:scale(.3);
+    		background-color:rgb(255,255,255);
+    	}
+    }
+
+    @-webkit-keyframes bounce_fountainG{
+    	0%{
+    	-webkit-transform:scale(1);
+    		background-color:rgb(0,0,0);
+    	}
+
+    	100%{
+    	-webkit-transform:scale(.3);
+    		background-color:rgb(255,255,255);
+    	}
+    }
+
+    @-moz-keyframes bounce_fountainG{
+    	0%{
+    	-moz-transform:scale(1);
+    		background-color:rgb(0,0,0);
+    	}
+
+    	100%{
+    	-moz-transform:scale(.3);
+    		background-color:rgb(255,255,255);
+    	}
+    }
 ");
 ?>
-
 <section class="content">
 
           <div class="row">
@@ -88,48 +287,148 @@ $this->registerCss("
                       <li>
                         <i class="fa fa-map-marker bg-blue"></i>
                         <div class="timeline-item">
-                          <span class="time"><i class="fa fa-clock-o"></i> <?= Yii::$app->formatter->asDateTime($location->adv_last_access) ?></span>
-                          <h3 class="timeline-header">
-                            <a href="#">Last Location</a>
-                          </h3>
-                          <div class="timeline-body">
-                            <?=
-                              \app\components\widgets\GmapLocation::widget([
-                                  'lat' => $location->adv_last_latitude,
-                                  'long' => $location->adv_last_longitude,
-                                  'height' => 150,
-                                  'type' => 'static'
-                              ]);
-                            ?>
-                          </div>
-                          <div class="timeline-footer">
-                          <!--   <a class="btn btn-primary btn-xs">Read more</a>
-                            <a class="btn btn-danger btn-xs">Delete</a> -->
-                          </div>
+                        <div class="box box-solid">
+                            <div class="box-header with-border">
+                            <h3 class="box-title">Last Location</h3>
+                            <div class="box-tools pull-right">
+                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                            </div>
+                            <div style="display: block;" class="box-body">
+                                <?=
+                                  \app\components\widgets\GmapLocation::widget([
+                                      'lat' => $location->adv_last_latitude,
+                                      'long' => $location->adv_last_longitude,
+                                      'height' => 150,
+                                      'type' => 'static'
+                                  ]);
+                                ?>
+                            </div>
+                        </div>
                         </div>
                       </li>
                       <?php endforeach; ?>
                       <li>
-                        <i class="fa fa-camera bg-purple"></i>
+                        <i class="fa fa-pie-chart bg-purple"></i>
                         <div class="timeline-item">
-                        <?php foreach ($model->lastSnapUpload() as $upload) : ?>
-                          <span class="time"><i class="fa fa-clock-o"></i> <?= Yii::$app->formatter->asDateTime($upload->sna_upload_date) ?></span>
-                          <h3 class="timeline-header"><a href="#">Last Uploaded Receipt</a></h3>
-                          <div class="timeline-body">
-                            <div class="container">
-                              <div class="row col-sm-3">
-                                <img src="<?= Yii::$app->params['businessUrl'] . 'receipt/' . $upload->sna_receipt_image ?>" alt="..." class="margin">
-                              </div>
-                              <div class="col-sm-9">
-                                  <b>Status : </b> 
-                                  <a class="">
-                                      <?= ((!empty($upload->sna_approved_datetime)) ? 'Approved' : (!empty($upload->sna_rejected_datetime)) ? 'Rejected' : 'New') ?>
-                                  </a>
-                              </div>
+                            <div class="box box-solid">
+                                <div class="box-header with-border">
+                                <h3 class="box-title">Top Categories</h3>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                </div>
+                                </div>
+                                <div class="box-body">
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <select name="filter_chart" id="filter_chart" class="form-control select2">
+                                                <option value="thisMonth">This Month </option>
+                                                <option value="lastMonth">Last Month </option>
+                                                <option value="thisWeek">This Week </option>
+                                                <option value="lastWeek">Last Week </option>
+                                            </select>
+                                            <span id="testing" class="input-group-addon">.00</span>
+                                        </div>
+                                        <div class="clearfix">
+
+                                        </div>
+                                        <p class="chart-notes">
+
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <canvas id="pieChart" data-url="top-chart" data-key="<?= $model->acc_id ?>" style="height:250px" value="wow"></canvas>
+                                    </div>
+
+                                </div>
+                                <div class="overlay">
+                                    <div id="fountainG">
+                                    	<div id="fountainG_1" class="fountainG"></div>
+                                    	<div id="fountainG_2" class="fountainG"></div>
+                                    	<div id="fountainG_3" class="fountainG"></div>
+                                    	<div id="fountainG_4" class="fountainG"></div>
+                                    	<div id="fountainG_5" class="fountainG"></div>
+                                    	<div id="fountainG_6" class="fountainG"></div>
+                                    	<div id="fountainG_7" class="fountainG"></div>
+                                    	<div id="fountainG_8" class="fountainG"></div>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
-                        <?php endforeach; ?>
                         </div>
+                      </li>
+                      <li>
+                          <i class="fa fa-barcode bg-aqua"></i>
+                          <div class="timeline-item">
+                              <div class="box box-solid">
+                                  <div class="box-header with-border">
+                                  <h3 class="box-title">Receipt History</h3>
+                                  <div class="box-tools pull-right">
+                                      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                  </div>
+                                  </div>
+                                  <div class="box-body">
+                                        <?=
+                                        GridView::widget([
+                                          'id' => 'list_snapearn',
+                                          'options' => [
+                                                'style' => 'font-size: 13px',
+                                          ],
+                                          'layout' => '{items} {summary} {pager}',
+                                          'dataProvider' => $receiptProvider,
+                                          'columns' => [
+                                              [
+                                                  'label' => 'Merchant',
+                                                  'attribute' => 'sna_com_id',
+                                                  'format' => 'html',
+                                                  'value' => function($data) {
+                                                      if (!empty($data->merchant)) {
+                                                          return $data->merchant->com_name . ($data->merchant->com_joined == 1 ? ' <i class="fa fa-check"></i>' : '');
+                                                      }
+                                                  }
+                                              ],
+                                              'sna_receipt_date',
+                                              [
+                                                  'attribute' => 'sna_receipt_amount',
+                                                  'format' => 'html',
+                                                  'value' => function($data) {
+                                                      return Yii::$app->formatter->asDecimal($data->sna_receipt_amount);
+                                                  }
+                                              ],
+                                              [
+                                                  'attribute' => 'sna_point',
+                                                  'format' => 'html',
+                                                  'value' => function($data) {
+                                                      return Yii::$app->formatter->asDecimal($data->sna_point);
+                                                  }
+                                              ]
+                                          ],
+                                          'tableOptions' => ['class' => 'table table-hover']
+                                      ]);
+                                      ?>
+                                  </div>
+                              </div>
+                          </div>
+                      </li>
+                      </li>
+                      <li>
+                          <i class="fa  fa-line-chart bg-yellow"></i>
+                          <div class="timeline-item">
+                              <div class="box box-solid">
+                                  <div class="box-header with-border">
+                                  <h3 class="box-title">Redeem History</h3>
+                                  <div class="box-tools pull-right">
+                                      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                  </div>
+                                  </div>
+                                  <div class="box-body">
+
+                                  </div>
+                              </div>
+                          </div>
                       </li>
                       <!-- END timeline item -->
                       <li>

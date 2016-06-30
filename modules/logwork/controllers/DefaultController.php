@@ -7,6 +7,7 @@ use yii\web\Controller;
 use app\models\WorkingTime;
 use app\models\SearchWorkingTime;
 use app\models\User;
+use app\models\PdfForm;
 use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -49,8 +50,14 @@ class DefaultController extends BaseController
         ]);
         return $this->render('view',[
             'dataProvider' => $dataProvider,
+            'id' => $id,
             'username' => $username
         ]);
+    }
+
+    public function actionCancel($id)
+    {
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     public function actionTest()
@@ -75,5 +82,34 @@ class DefaultController extends BaseController
     	if (Yii::$app->request->isAjax) {
     		# code...
     	}
+    }
+
+    public function actionReport($id)
+    {
+        $user = User::findOne($id);
+        $model = new PdfForm();
+        if($model->load(Yii::$app->request->post())) {
+            $date = explode(' to ', $model->date_range);
+            $first_date = $date[0] . ' 00:00:00';
+            $last_date = $date[1] . ' 23:59:59';
+
+            $query = WorkingTime::find()->getReport($id, $model->date_range);
+            $preview = '_preview';
+            $redirect = 'logwork/default/view?id=' . $id;
+            $title = [
+                'username' => $user->username,
+                'country' => $user->country == 'ID' ? 'Indonesia' : 'Malaysia',
+                'first_date' => Yii::$app->formatter->asDate($first_date),
+                'last_date' => Yii::$app->formatter->asDate($last_date),
+            ];
+
+            return \app\components\helpers\PdfExport::export($title, $model, $query, $preview, $redirect);
+        }
+
+        $model->username = $id;
+        return $this->render('report', [
+            'model' => $model,
+            'user' => $user
+        ]);
     }
 }

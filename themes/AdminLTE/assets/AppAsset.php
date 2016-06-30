@@ -38,6 +38,7 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/dist/plugins/jQueryui/jquery-ui.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
         // 'themes/AdminLTE/plugins/morris/morris.min.js',
+        'themes/AdminLTE/plugins/chartjs/Chart.min.js',
         'themes/AdminLTE/plugins/iCheck/icheck.min.js',
         'themes/AdminLTE/plugins/sparkline/jquery.sparkline.min.js',
         'themes/AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js',
