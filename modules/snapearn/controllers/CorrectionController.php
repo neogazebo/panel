@@ -30,7 +30,7 @@ use yii\web\HttpException;
 use yii\web\ForbiddenHttpException;
 
 /**
-* 
+*
 */
 class CorrectionController extends BaseController
 {
@@ -46,7 +46,7 @@ class CorrectionController extends BaseController
         $wrk_id = $this->startWorking($user,$param,$point_type,$point);
         return $this->redirect(['correction', 'id' => $id]);
     }
-	
+
 	public function actionCorrection($id)
 	{
     	$model = $this->findModel($id);
@@ -96,7 +96,7 @@ class CorrectionController extends BaseController
                     'desc' => 'Debet from Correction',
                 ];
                 $history = $this->savePoint($minusPointUser,'D');
-                // param to configuration to give back point merchant 
+                // param to configuration to give back point merchant
                 $addPointmerchant = [
                     'com_point' => $mp->com_point,
                     'sna_point' => $oldPoint,
@@ -117,15 +117,15 @@ class CorrectionController extends BaseController
 
                 // if approved action
                 if ($model->sna_status == 1) {
-                    
-                    // get limited point per country 
+
+                    // get limited point per country
                     $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 
                    // setup devision point per country
                     if ($config->ser_point_provision > 0 ) {
                         $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
                     }
-                    
+
                     // optional point for premium or default merchant
                     if(!empty($config) && !empty($model->business)) {
                         if($model->business->com_premium == 1) {
@@ -139,7 +139,7 @@ class CorrectionController extends BaseController
                     // get current point merchant
                     $mp = Company::find()->getCurrentPoint($model->sna_com_id);
                     $lph = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                    
+
                     if ($lph->lph_total_point > $oldPoint) {
                         $cp = $lph->lph_total_point;
                     } elseif ($lph <= $oldPoint) {
@@ -184,7 +184,7 @@ class CorrectionController extends BaseController
                             $customData = ['type' => 'snapearn'];
                             Activity::insertAct($model->sna_acc_id, 31, $params, $customData);
                         }
-    
+
                         // create snapearn point detail
                         $this->setMessage('save', 'success', 'Snap and Earn successfully approved!');
                         $snap_type = 'approved';
@@ -203,7 +203,7 @@ class CorrectionController extends BaseController
                         if (!empty($model->sna_sem_id)) {
                             $params = [];
                             $picture = Yii::$app->params['businessUrl'] . 'receipt/receipt_sample.jpg';
-    
+
                             switch ($model->sna_sem_id) {
                                 case 1:
                                     $params[0] = ['[username]', $username];
@@ -252,10 +252,10 @@ class CorrectionController extends BaseController
                             $customData = ['type' => 'snapearn'];
                             Activity::insertAct($model->sna_acc_id, 30, $params, $customData);
                         }
-    
+
                         // create snapearn point detail
                         // SnapEarnPointDetail::savePoint($id, $model->sna_sem_id);
-    
+
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
                     }
@@ -263,7 +263,7 @@ class CorrectionController extends BaseController
                     // webhook for manis v3
                     // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
                     $curl = new curl\Curl();
-                    $response = $curl->get('https://apixv3.ebizu.com/v1/webhook/admin/after/approval?data={"acc_id":' . intval($model->sna_acc_id) . ',"sna_id":' . intval($model->sna_id) . ',"sna_status":' . intval($model->sna_status) . '}');
+                    $response = $curl->get(Yii::$app->params['WEBHOOK_MANIS_API'].'?data={"acc_id":' . intval($model->sna_acc_id) . ',"sna_id":' . intval($model->sna_id) . ',"sna_status":' . intval($model->sna_status) . '}');
 
                     $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
 
@@ -294,7 +294,7 @@ class CorrectionController extends BaseController
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
         $model->sna_receipt_amount = Yii::$app->formatter->asDecimal($model->sna_receipt_amount);
-        
+
         return $this->render('form', [
             'model' => $model,
             'id' => $id
@@ -372,7 +372,7 @@ class CorrectionController extends BaseController
     {
         $this->cancelWorking($id);
         return $this->redirect([$this->getRememberUrl()]);
-    } 
+    }
 
     protected function merchantPoint($params, $type = true)
     {

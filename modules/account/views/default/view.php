@@ -245,16 +245,16 @@ $this->registerCss("
                       <b>Country </b> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Current Point </b> <a class="pull-right"><?= $model->lastPointMember() ?></a>
+                      <b>Current Point </b> <a class="pull-right"><?= (!empty($model->lastPointMember())) ? $model->lastPointMember() : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Last Activity </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->lastLogin()->adv_last_access) ?></a>
+                      <b>Last Activity </b> <a class="pull-right"><?= (!empty($model->lastLogin())) ? Yii::$app->formatter->asDate($model->lastLogin()->adv_last_access) : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Facebook Id </b> <a href="https://www.facebook.com/<?= $model->acc_facebook_id ?>" target="blank_" class="pull-right"> <?= $model->acc_facebook_id ?></a>
+                      <b>Facebook Id </b> <a href="https://www.facebook.com/<?= $model->acc_facebook_id ?>" target="blank_" class="pull-right"> <?= (!empty($model->acc_facebook_id)) ? $model->acc_facebook_id : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Registered Since  </b> <a class="pull-right"><?= Yii::$app->formatter->asDate($model->acc_created_datetime) ?></a>
+                      <b>Registered Since  </b> <a class="pull-right"><?= (!empty($model->acc_created_datetime)) ? Yii::$app->formatter->asDate($model->acc_created_datetime) : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
                     </li>
                     <li class="list-group-item">
                       <b>Device Active  </b> <a class="pull-right"><?= (!empty($model->activeDevice())) ? $model->activeDevice()->dvc_model : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>

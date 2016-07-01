@@ -128,7 +128,7 @@ class DefaultController extends BaseController
                                     $mam_model->mam_mal_id = Yii::$app->request->post('mall_id');
                                     $mam_model->save(false);
                                 }
-                                
+
                                 // SnapEarnPointDetail::savePoint($id, 8);
 
                                 $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
@@ -252,7 +252,7 @@ class DefaultController extends BaseController
                 // if approved action
                 if ($model->sna_status == 1) {
 
-                    // get limited point per country 
+                    // get limited point per country
                     $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 
                     // setup devision point per country
@@ -322,7 +322,7 @@ class DefaultController extends BaseController
                             $customData = ['type' => 'snapearn'];
                             Activity::insertAct($model->sna_acc_id, 31, $params, $customData);
                         }
-    
+
                         // create snapearn point detail
                         $this->setMessage('save', 'success', 'Snap and Earn successfully approved!');
                         $snap_type = 'approved';
@@ -341,7 +341,7 @@ class DefaultController extends BaseController
                         if (!empty($model->sna_sem_id)) {
                             $params = [];
                             $picture = Yii::$app->params['businessUrl'] . 'receipt/receipt_sample.jpg';
-    
+
                             switch ($model->sna_sem_id) {
                                 case 1:
                                     $params[0] = ['[username]', $username];
@@ -386,7 +386,7 @@ class DefaultController extends BaseController
                             $customData = ['type' => 'snapearn'];
                             Activity::insertAct($model->sna_acc_id, 30, $params, $customData);
                         }
-    
+
                         // create snapearn point detail
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
@@ -395,7 +395,7 @@ class DefaultController extends BaseController
                     // webhook for manis v3
                     // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
                     $curl = new curl\Curl();
-                    $response = $curl->get('https://apixv3.ebizu.com/v1/webhook/admin/after/approval?data={"acc_id":' . intval($model->sna_acc_id) . ',"sna_id":' . intval($model->sna_id) . ',"sna_status":' . intval($model->sna_status) . '}');
+                    $response = $curl->get(Yii::$app->params['WEBHOOK_MANIS_API'].'?data={"acc_id":' . intval($model->sna_acc_id) . ',"sna_id":' . intval($model->sna_id) . ',"sna_status":' . intval($model->sna_status) . '}');
 
                     $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
 
@@ -426,7 +426,7 @@ class DefaultController extends BaseController
 
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
-        
+
         return $this->render('form', [
             'model' => $model,
             'id' => $id
@@ -489,7 +489,7 @@ class DefaultController extends BaseController
     {
         $this->cancelWorking($id);
         return $this->redirect([$this->getRememberUrl()]);
-    } 
+    }
 
     protected function findModel($id)
     {
@@ -639,9 +639,9 @@ class DefaultController extends BaseController
     public function actionTest()
     {
         $model = SnapEarn::find()
-            ->joinWith(['merchant' => function($query) { 
+            ->joinWith(['merchant' => function($query) {
                    return $query->from('ebizu_db.'.Company::tableName())
-                          ->andWhere(['com_id' => 1642497]); 
+                          ->andWhere(['com_id' => 1642497]);
             }])
             ->one();
         var_dump($model);exit;
