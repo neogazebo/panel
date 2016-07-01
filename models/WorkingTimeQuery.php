@@ -67,7 +67,9 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         }
         if (!empty($_POST['wrk_daterange'])) {
             $range = explode(" to ", $_POST['wrk_daterange']);
-            $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
+            $first_date = $range[0] . ' 00:00:00';
+            $last_date = $range[1] . ' 23:59:59';
+            $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
         }
 
         $this->andWhere('wrk_time IS NOT NULL');
@@ -83,7 +85,9 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
 
         if (!empty($_POST['wrk_daterange'])) {
             $range = explode(" to ", $_POST['wrk_daterange']);
-            $this->andWhere("date(FROM_UNIXTIME(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
+            $first_date = $range[0] . ' 00:00:00';
+            $last_date = $range[1] . ' 23:59:59';
+            $this->andWhere("date(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
         }
 
         $this->andWhere('wrk_time IS NOT NULL');
@@ -98,9 +102,9 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         $last_date = $date[1] . ' 23:59:59';
 
         $this->where('
-            wrk_by = :user 
-            AND wrk_end IS NOT NULL 
-            AND DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN :first_date AND :last_date 
+            wrk_by = :user
+            AND wrk_end IS NOT NULL
+            AND DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN :first_date AND :last_date
             AND wrk_time IS NOT NULL
         ', [
             ':user' => $id,

@@ -14,7 +14,7 @@ use app\components\helpers\Utc;
 $this->title = 'Detail Working Hours';
 ?>
 <section class="content-header ">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title).' of <strong>'.$username ?></strong></h1>
 </section>
 
 <section class="content">
@@ -52,16 +52,19 @@ $this->title = 'Detail Working Hours';
                                         return Yii::$app->formatter->asDateTime(Utc::convert($data->wrk_end));
                                     }
                                 ],
-                                [
-                                    'label' => 'Username',
-                                    'attribute' => 'wrk_by',
-                                    'value' => function($data) {
-                                        return $data->user->username;
-                                    }
-                                ],
+                                // [
+                                //     'label' => 'Username',
+                                //     'attribute' => 'wrk_by',
+                                //     'value' => function($data) {
+                                //         return $data->user->username;
+                                //     }
+                                // ],
                                 [
                                     'label' => 'Description',
-                                    'attribute' => 'wrk_description',
+                                    'attribute' => 'wrk_type',
+                                    'value' => function($data){
+                                        return ($data->wrk_type == 1) ? 'Snap and Earn Approved' : 'Snap and Earn Rejected';
+                                    }
                                 ],
                                 [
                                     'label' => 'Total Point',
