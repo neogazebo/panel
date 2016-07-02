@@ -52,7 +52,7 @@ class Company extends EbizuActiveRecord
             [['com_name', 'com_business_name', 'com_category_id', 'com_agent_code', 'com_par_id'], 'required', 'on' => 'partner'],
             [['com_par_id', 'com_email'], 'safe', 'on' => 'snapEarnUpdate'],
             [['com_email'], 'unique'],
-            [['com_name', 'com_email'], 'required'],
+            [['com_name', 'com_email','com_subcategory_id'], 'required'],
             [['com_email'], 'email'],
             [['com_business_name'], 'required', 'on' => 'signup'],
             [['com_point'], 'required', 'on' => 'point'],
@@ -97,7 +97,7 @@ class Company extends EbizuActiveRecord
                 'com_snapearn_checkin',
                 'com_reg_num',
                 'com_description',
-                'com_subcategory_id',
+                // 'com_subcategory_id',
                 'com_address',
                 'com_city',
                 'com_postcode',
@@ -301,7 +301,7 @@ class Company extends EbizuActiveRecord
         if ($model)
             return $model;
         return new MallMerchant();
-    } 
+    }
 
     public function getTimeZoneListData()
     {
@@ -940,7 +940,7 @@ class Company extends EbizuActiveRecord
             ])
             ->all();
         return \app\components\helpers\Html::listData($model, 'cat_id', 'category', 'parent_id');
-    }    
+    }
 
     public function getMarchant()
     {
@@ -984,7 +984,7 @@ class Company extends EbizuActiveRecord
         ->leftJoin('tbl_company c', 'c.com_id = b.cot_com_id')
         ->where(['c.com_id' => $id])
         ->all();
-    }    
+    }
 
     public static function find()
     {

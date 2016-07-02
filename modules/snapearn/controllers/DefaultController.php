@@ -78,12 +78,14 @@ class DefaultController extends BaseController
         $suggest->cos_mall_id = '';
         // if mall name not empty getting id mall
         if (!empty($suggest->cos_mall)) {
-            $suggest->cos_mall_id = Mall::find()
+            $cos_mall_id = Mall::find()
                                     ->where('mal_name = :mal',[
                                         ':mal' => $suggest->cos_mall
                                     ])
-                                    ->one()
-                                    ->mal_id;
+                                    ->one();
+            if (isset($cos_mall_id)) {
+                $suggest->cos_mall_id = $cos_mall_id->mall_id;
+            }
         }
 
         // ajax validation
@@ -110,8 +112,10 @@ class DefaultController extends BaseController
                     }
                     if ($company->save()) {
                         $com_id = $company->com_id;
+                        $cat_id = $company->com_subcategory_id;
                         $snapearn = SnapEarn::findOne($id);
                         $snapearn->sna_com_id = $com_id;
+                        $snapearn->sna_cat_id = $this->getCategoryId($cat_id);
                         $snapearn->save(false);
 
                         $suggestion = CompanySuggestion::find()->where('cos_sna_id = :id', [':id' => $id])->one();
@@ -174,6 +178,9 @@ class DefaultController extends BaseController
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
             $model->sna_com_id = (int)Yii::$app->request->post('com_id');
+            $company = Company::findOne($model->sna_com_id);
+            $cat_id = $this->getCategoryId($company->com_subcategory_id);
+            $model->sna_cat_id = $cat_id;
             if ($model->sna_com_id > 0) {
                 if ($model->save()) {
                     $this->setMessage('save', 'success', 'Merchant created successfully!');
@@ -634,6 +641,47 @@ class DefaultController extends BaseController
             }
             echo \yii\helpers\Json::encode($out);
         }
+    }
+
+    protected function getCategoryId($id)
+    {
+        $cats = [
+            1 => [1, 7, 8, 9, 10, 58, 122],
+            2 => [24, 121],
+            3 => [4, 23, 34, 36, 37],
+            4 => [13, 16, 43, 59, 120],
+            5 => [18, 38, 61],
+            6 => [15, 20, 41, 62, 63, 64, 119],
+            7 => [3, 14, 25, 26, 27, 31, 32, 33],
+            8 => [5, 39, 50, 60],
+            9 => [6, 12, 17, 19, 21],
+            10 => [28, 30],
+            11 => [35, 42],
+            12 => [2, 11, 22, 44, 123]
+        ];
+        foreach ($cats as $key => $val) {
+            $check = in_array($id,$val);
+            if ($check) {
+                return $key;
+            }
+        }
+        return null;
+        // dari bias
+        // $maps = array(
+        //     array(1, 7, 8, 9, 10, 58, 122),
+        //     array(24, 121),
+        //     array(4, 23, 34, 36, 37),
+        //     array(13, 16, 43, 59, 120),
+        //     array(18, 38, 61),
+        //     array(15, 20, 41, 62, 63, 64, 119),
+        //     array(3, 14, 25, 26, 27, 31, 32, 33),
+        //     array(5, 39, 50, 60),
+        //     array(6, 12, 17, 19, 21),
+        //     array(28, 30),
+        //     array(35, 42),
+        //     array(2, 11, 22, 44, 123),
+        // );
+
     }
 
     public function actionTest()

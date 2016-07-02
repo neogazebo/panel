@@ -49,11 +49,11 @@ $form = ActiveForm::begin([
     <?= $form->field($company, 'com_name')->textInput(['value' => $suggest->cos_name]) ?>
     <?= $form->field($company, 'com_business_name')->textInput(['value' => $suggest->cos_name]) ?>
     <?= $form->field($company, 'com_email')->textInput() ?>
-    <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList); ?>
+    <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList,['prompt' => '']); ?>
     <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
-   
+
     <?= $form->field($company, 'com_address')->textInput(); ?>
-    <?= 
+    <?=
         $form->field($company, 'com_city')->widget(Typeahead::classname(),[
             'name' => 'merchant',
             'options' => ['placeholder' => 'City, Region, Country'],
@@ -80,7 +80,7 @@ $form = ActiveForm::begin([
     <input id="com_city" type="hidden" name="com_city" value="">
     <input id="mall_id" type="hidden" name="mall_id" value="">
     <?= $form->field($company, 'com_postcode')->textInput(); ?>
-    <?= 
+    <?=
         $form->field($company, 'mall_id')->widget(Typeahead::classname(),[
             'name' => 'merchant',
             'options' => [
@@ -243,7 +243,7 @@ $this->registerCss("
         font-family: 'Roboto','sans-serif';
         line-height: 30px;
         padding-left: 10px;
-      } 
+      }
 ");
 $this->registerJs("
 
@@ -350,7 +350,7 @@ var PostCodeid = '#company-com_address';
         var geocoder;
         var map;
         var marker;
-        
+
         function initialize() {
             // init map
             var initialLat = $(latval).val();
@@ -366,27 +366,27 @@ var PostCodeid = '#company-com_address';
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 heading: 90,
                 tilt: 45
-            };   
-        
+            };
+
             map = new google.maps.Map(document.getElementById('map'), options);
-        
-            geocoder = new google.maps.Geocoder();    
-        
+
+            geocoder = new google.maps.Geocoder();
+
             marker = new google.maps.Marker({
                 map: map,
                 draggable: true,
                 position: latlng
             });
-        
+
             google.maps.event.addListener(marker, 'dragend', function (event) {
                 var point = marker.getPosition();
                 map.panTo(point);
             });
-            
+
         };
-        
+
         $(document).ready(function () {
-        
+
             initialize();
 
             $(function () {
@@ -399,13 +399,13 @@ var PostCodeid = '#company-com_address';
                                     label: item.formatted_address,
                                     value: item.formatted_address
                                 };
-                                
+
                             }));
                         });
                     }
                 });
             });
-        
+
             $(PostCodeid).keyup(function (e) {
                 var address = $(PostCodeid).val();
                 geocoder.geocode({ 'address': address }, function (results, status) {
@@ -418,7 +418,7 @@ var PostCodeid = '#company-com_address';
                 });
                 e.preventDefault();
             });
-        
+
             //Add listener to marker for reverse geocoding
             google.maps.event.addListener(marker, 'drag', function () {
                 geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
