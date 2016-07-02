@@ -116,6 +116,7 @@ class DefaultController extends BaseController
                         $snapearn = SnapEarn::findOne($id);
                         $snapearn->sna_com_id = $com_id;
                         $snapearn->sna_cat_id = $this->getCategoryId($cat_id);
+                        $snapearn->sna_com_name = $company->com_name;
                         $snapearn->save(false);
 
                         $suggestion = CompanySuggestion::find()->where('cos_sna_id = :id', [':id' => $id])->one();
@@ -181,6 +182,7 @@ class DefaultController extends BaseController
             $company = Company::findOne($model->sna_com_id);
             $cat_id = $this->getCategoryId($company->com_subcategory_id);
             $model->sna_cat_id = $cat_id;
+            $model->sna_com_name = $company->com_name;
             if ($model->sna_com_id > 0) {
                 if ($model->save()) {
                     $this->setMessage('save', 'success', 'Merchant created successfully!');
