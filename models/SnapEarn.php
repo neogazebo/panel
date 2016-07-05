@@ -82,7 +82,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_sem_id',
                 'sna_cat_id'],
             'integer'],
-            [['sna_receipt_amount'],'double'],
+            [['sna_receipt_amount'],'number'],
             [['sna_receipt_number'],
                 'string',
                 'max' => 20],

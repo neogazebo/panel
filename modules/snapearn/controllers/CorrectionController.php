@@ -87,6 +87,13 @@ class CorrectionController extends BaseController
 
 				// start process rollback
                 // configuration to get real point user before reviews
+                $mp = Company::find()->getCurrentPoint($model->sna_com_id);
+                $up = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
+                if($up !== NULL) {
+                    $cp = $up->lph_total_point;
+                } else {
+                    $cp = 0;
+                }
                 $minusPointUser = [
                     'current_point' => $cp,
                     'sna_point' => $oldPoint,
