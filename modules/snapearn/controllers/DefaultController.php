@@ -611,12 +611,20 @@ class DefaultController extends BaseController
         if (Yii::$app->request->isAjax) {
             $model = Company::find()->searchExistingMerchant();
             $out = [];
-            foreach ($model as $d) {
+            if (!empty($model)) {
+                foreach ($model as $d) {
+                    $out[] = [
+                        'id' => $d->com_id,
+                        'value' => $d->com_name
+                    ];
+                }
+            } else {
                 $out[] = [
-                    'id' => $d->com_id,
-                    'value' => $d->com_name
+                    'id' => 0,
+                    'value' => 'Merchant Not Found!',
                 ];
             }
+
             echo \yii\helpers\Json::encode($out);
         }
     }
@@ -639,7 +647,7 @@ class DefaultController extends BaseController
                     $out[] = ['id' => $d->mal_id,'value' => $d->mal_name];
                 }
             }else{
-                $out[] = ['id' => 0,'value' => 'Mall not found!'];
+                $out[] = ['id' => 0,'value' => 'Mall Not Found!'];
             }
             echo \yii\helpers\Json::encode($out);
         }

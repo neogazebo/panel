@@ -21,10 +21,12 @@ $form = ActiveForm::begin([
 
 ?>
 <div class="modal-body">
-	<?= 
+	<?=
         Typeahead::widget([
             'name' => 'merchant',
-            'options' => ['placeholder' => 'Filter as you type ...','required' => 'required'],
+            'options' => ['placeholder' => 'Filter as you type ...'],
+            'useHandleBars' => false,
+            'scrollable' => true,
             'pluginOptions' => [
                 'highlight'=>true,
                 'minLength' => 3
@@ -63,6 +65,6 @@ $this->registerJs("
         if ((evt.keyCode == 13) && (node.type=='text'))  {return false;}
     }
 
-    document.onkeypress = stopRKey; 
+    document.onkeypress = stopRKey;
 ");
 ?>

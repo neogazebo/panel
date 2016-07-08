@@ -44,14 +44,15 @@ class CompanyQuery extends \yii\db\ActiveQuery
     {
         $search = $_GET['q'];
         $this->select('com_id, com_name');
-        $this->andWhere('
-            com_name LIKE :search
-        ', [
-            ':search' => '%' . $search . '%',
-        ]);
+        $keyword = preg_split("/[\s,]+/",$search);
+        $this->select('com_id, com_name');
+        foreach($keyword as $key){
+            $this->andWhere('com_name LIKE "%'.$key.'%" ');
+        }
+        $this->andWhere('com_status != 2');
         $this->andWhere('com_status != 2');
         $this->orderBy('com_name');
-        $this->limit(20);
+        // $this->limit(20);
         return $this->all();
     }
 }
