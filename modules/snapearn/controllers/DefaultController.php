@@ -177,6 +177,7 @@ class DefaultController extends BaseController
     public function actionAjaxExisting($id)
     {
         $model = $this->findModel($id);
+
         if ($model->load(Yii::$app->request->post())) {
             $model->sna_com_id = (int)Yii::$app->request->post('com_id');
             $company = Company::findOne($model->sna_com_id);
@@ -192,11 +193,14 @@ class DefaultController extends BaseController
                 $this->setMessage('save', 'error', 'Merchant not selected!');
                 return $this->redirect(['update?id='.$id]);
             }
-        } else {
+        }
+
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('existing', [
                 'model' => $model,
             ]);
         }
+        return $this->redirect(['update?id='.$id]);
     }
 
 
