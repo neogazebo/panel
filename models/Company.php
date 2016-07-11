@@ -297,7 +297,6 @@ class Company extends EbizuActiveRecord
     public function getModelMallMerchant()
     {
         $model = MallMerchant::findOne(['mam_com_id' => $this->com_id]);
-        $model->scenario= 'newMerchant';
         if ($model)
             return $model;
         return new MallMerchant();
