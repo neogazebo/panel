@@ -74,9 +74,9 @@ $this->title = "Update SnapEarn";
                 <?php if (!empty($model->merchant)) : ?>
                 <li class="">
                   <a href="#"><b>Merchant Point</b>
-                    <?php if ($model->merchant->com_point < 500) :?> 
+                    <?php if ($model->merchant->com_point < 500) :?>
                       <?php if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
-                        <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?> 
+                        <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
                       <?php else: ?>
                         <span class="label label-warning add-point">Point is less than 500!</span>
                       <?php endif; ?>
@@ -89,8 +89,8 @@ $this->title = "Update SnapEarn";
                 <?php endif; ?>
                 <?php if (empty($model->merchant)) : ?>
                 <li>
-                  <a href="#"><b>Sugest Mall</b>
-                    <span class="pull-right text-light-blue"><?= $model->newSuggestion->cos_mall ?></span>
+                  <a href="#"><b>Sugest Location</b>
+                    <span class="pull-right text-light-blue"><?= $model->newSuggestion->cos_location ?></span>
                   </a>
                 </li>
               <?php endif; ?>
@@ -108,7 +108,7 @@ $this->title = "Update SnapEarn";
                   <?php if (empty($model->merchant)) : ?>
                   <div class="pull-right btn-merchant">
                     <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
-                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?> 
+                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?>
                   </div>
                   <?php endif; ?>
                 </div>
@@ -128,7 +128,7 @@ $this->title = "Update SnapEarn";
                                   'format' => 'yyyy-mm-dd hh:i:ss'
                               ]
                           ]);
-                      ?> 
+                      ?>
 
                       <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                       <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
@@ -226,7 +226,7 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
 
         if($(this).val() == 1) {
             pointConvert();
-            
+
             if (com_id == 0) {
                 $('.field-snapearn-sna_receipt_amount').addClass('has-error');
                 $('.btn-merchant').css({
@@ -272,7 +272,7 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
     $('.submit-button, .reset-button').click(function(){
         $('#saveNext').val(0);
     });
-    
+
     $('.new_m').on('click',function(){
         $('.modal-dialog').switchClass( 'modal-md', 'modal-lg');
     });
