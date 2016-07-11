@@ -129,6 +129,7 @@ class DefaultController extends BaseController
                             if ($fsc->save()) {
                                 if ($company->com_in_mall = 1) {
                                     $mam_model = new MallMerchant();
+                                    $mam_model->scenario= 'newMerchant';
                                     $mam_model->mam_com_id = $company->com_id;
                                     $mam_model->mam_mal_id = Yii::$app->request->post('mall_id');
                                     $mam_model->save(false);
