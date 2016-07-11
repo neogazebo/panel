@@ -185,8 +185,11 @@ class DefaultController extends BaseController
             $model->sna_cat_id = $cat_id;
             $model->sna_com_name = $company->com_name;
             if ($model->sna_com_id > 0) {
-                if ($model->save()) {
+                if ($model->save(false)) {
                     $this->setMessage('save', 'success', 'Merchant created successfully!');
+                    return $this->redirect(['update?id='.$id]);
+                }else{
+                    $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                     return $this->redirect(['update?id='.$id]);
                 }
             }else{
