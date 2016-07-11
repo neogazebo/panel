@@ -7,6 +7,9 @@ use app\controllers\BaseController;
 use app\models\Account;
 use app\models\AccountSearch;
 use app\models\SnapEarn;
+use app\models\LoyaltyPointHistory;
+use app\models\SavedOffers;
+use app\models\SavedRewards;
 use app\models\Country;
 use app\models\SnapEarnRule;
 use yii\web\NotFoundHttpException;
@@ -40,9 +43,38 @@ class DefaultController extends BaseController
      */
     public function actionView($id)
     {
-        $receipt = SnapEarn::find()->where('sna_acc_id = :id',[':id' => $id])->orderBy('sna_id DESC');
+        $receipt = SnapEarn::find()
+            ->where('sna_acc_id = :id', [':id' => $id])
+            ->orderBy('sna_id DESC');
         $receiptProvider =  new ActiveDataProvider([
             'query' => $receipt,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+        $redeem = LoyaltyPointHistory::find()
+            ->where('lph_acc_id = :id', [':id' => $id])
+            ->orderBy('lph_id DESC');
+        $redeemProvider =  new ActiveDataProvider([
+            'query' => $redeem,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+        $offer = SavedOffers::find()
+            ->where('svo_acc_id = :id', [':id' => $id])
+            ->orderBy('svo_id DESC');
+        $offerProvider =  new ActiveDataProvider([
+            'query' => $offer,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+        $reward = SavedRewards::find()
+            ->where('svr_acc_id = :id', [':id' => $id])
+            ->orderBy('svr_id DESC');
+        $rewardProvider =  new ActiveDataProvider([
+            'query' => $reward,
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -50,7 +82,10 @@ class DefaultController extends BaseController
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'receiptProvider' => $receiptProvider
+            'receiptProvider' => $receiptProvider,
+            'redeemProvider' => $redeemProvider,
+            'offerProvider' => $offerProvider,
+            'rewardProvider' => $rewardProvider,
         ]);
     }
 

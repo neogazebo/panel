@@ -41,22 +41,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                     'label' => 'Registered Date',
                                     'attribute' => 'acc_created_datetime',
-                                    'value' => function($data){
+                                    'value' => function($data) {
                                        return Yii::$app->formatter->asDate($data->acc_created_datetime);
                                     }
                                 ],
                                 [
                                     'label' => 'Current Point',
                                     'attribute' => 'acc_id',
-                                    'value' => function($data){
-                                        return $data->lastPointMember();
+                                    'value' => function($data) {
+                                        return Yii::$app->formatter->asDecimal($data->lastPointMember());
                                     }
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
                                     'template' => '<span class="pull-right actionColumn">{summary}</span>',
                                     'buttons' => [
-                                        'summary' => function($url,$model){
+                                        'summary' => function($url, $model) {
                                             return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model->acc_id]);
                                         }
                                     ],

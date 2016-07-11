@@ -83,6 +83,11 @@ class LoyaltyPointHistory extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getMerchant()
+    {
+        return $this->hasOne(Company::className(), ['com_id' => 'lph_com_id']);
+    }
+
     /**
      * @inheritdoc
      * @return LoyaltyPointHistoryQuery the active query used by this AR class.
