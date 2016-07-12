@@ -19,7 +19,7 @@ class AccountSearch extends Account
     {
         return [
             [['acc_id', 'acc_facebook_id', 'acc_created_datetime', 'acc_updated_datetime', 'acc_status', 'acc_tmz_id', 'acc_birthdate', 'acc_gender'], 'integer'],
-            [['acc_facebook_email', 'acc_facebook_graph', 'acc_google_id', 'acc_google_email', 'acc_google_token', 'acc_screen_name', 'acc_cty_id', 'acc_photo', 'acc_address'], 'safe'],
+            [['acc_facebook_email', 'acc_facebook_graph', 'acc_google_id', 'acc_google_email', 'acc_google_token', 'acc_screen_name', 'acc_country', 'acc_photo', 'acc_address'], 'safe'],
         ];
     }
 
@@ -75,7 +75,7 @@ class AccountSearch extends Account
             ->andFilterWhere(['like', 'acc_google_email', $this->acc_google_email])
             ->andFilterWhere(['like', 'acc_google_token', $this->acc_google_token])
             ->andFilterWhere(['like', 'acc_screen_name', $this->acc_screen_name])
-            ->andFilterWhere(['like', 'acc_cty_id', $this->acc_cty_id])
+            ->andFilterWhere(['like', 'acc_country', $this->acc_country])
             ->andFilterWhere(['like', 'acc_photo', $this->acc_photo])
             ->andFilterWhere(['like', 'acc_address', $this->acc_address]);
 
