@@ -52,49 +52,12 @@ $this->title = "Update SnapEarn";
                 <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s') ?></span>
               </div>
             <?php endif; ?>
-            <div class="box-tools">
-             <!--  <button data-original-title="Mark as read" class="btn btn-box-tool" data-toggle="tooltip" title=""><i class="fa fa-circle-o"></i></button>
-              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> -->
-            </div><!-- /.box-tools -->
-          </div><!-- /.box-header -->
+          </div>
           <div style="display: block;" class="box-body">
               <div id="sna_image" class="img-responsive pad magic-zoom"></div>
           </div>
           <div style="display: block;" class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                <li class="">
-                  <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
-                </li>
-                <?php endif; ?>
-                <li class="">
-                  <a href="#"><b><?= (empty($model->merchant)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
-                </li>
-                <?php if (!empty($model->merchant)) : ?>
-                <li class="">
-                  <a href="#"><b>Merchant Point</b>
-                    <?php if ($model->merchant->com_point < 500) :?>
-                      <?php if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
-                        <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
-                      <?php else: ?>
-                        <span class="label label-warning add-point">Point is less than 500!</span>
-                      <?php endif; ?>
-                    <?php endif; ?>
-                    <span class="pull-right text-light-blue">
-                      <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
-                    </span>
-                  </a>
-                </li>
-                <?php endif; ?>
-                <?php if (empty($model->merchant)) : ?>
-                <li>
-                  <a href="#"><b>Sugest Location</b>
-                    <span class="pull-right text-light-blue"><?= $model->newSuggestion->cos_location ?></span>
-                  </a>
-                </li>
-              <?php endif; ?>
-              </ul>
+
           </div>
         </div>
       </div>
@@ -113,7 +76,40 @@ $this->title = "Update SnapEarn";
                   <?php endif; ?>
                 </div>
                 <div class="box-body">
-                  <form role="form">
+                    <ul class="nav nav-stacked">
+                      <?php if(Yii::$app->user->identity->superuser == 1): ?>
+                      <li class="">
+                        <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
+                      </li>
+                      <?php endif; ?>
+                      <li class="">
+                        <a href="#"><b><?= (empty($model->merchant)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
+                      </li>
+                      <?php if (!empty($model->merchant)) : ?>
+                      <li class="">
+                        <a href="#"><b>Merchant Point</b>
+                          <?php if ($model->merchant->com_point < 500) :?>
+                            <?php if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
+                              <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
+                            <?php else: ?>
+                              <span class="label label-warning add-point">Point is less than 500!</span>
+                            <?php endif; ?>
+                          <?php endif; ?>
+                          <span class="pull-right text-light-blue">
+                            <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
+                          </span>
+                        </a>
+                      </li>
+                      <?php endif; ?>
+                      <?php if (empty($model->merchant)) : ?>
+                      <li>
+                        <a href="#"><b>Sugest Location</b>
+                          <span class="pull-right text-light-blue"><?= $model->newSuggestion->cos_location ?></span>
+                        </a>
+                      </li>
+                    <?php endif; ?>
+                        <li></li>
+                    </ul>
                     <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                     <div class="point-form">
@@ -150,9 +146,8 @@ $this->title = "Update SnapEarn";
                       </div>
                     </div>
                     <input type="hidden" name="parent" class="parent" value="1">
-                  </form>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
+                </div>
+              </div>
             </div>
     </div>
     <?php ActiveForm::end(); ?>
@@ -185,7 +180,7 @@ $this->registerCss("
     .magic-zoom {
         position: relative;
         width: 100%;
-        height: 350px;
+        height: 480px;
         overflow: hidden;
         border: 1px solid #ddd;
         background-color: #ECF0F5;
@@ -196,6 +191,27 @@ $this->registerCss("
         border: 1px solid #999;
         height: 28px;
         z-index: 5000;
+    }
+
+    .nav-stacked {
+        padding: 0px 0px 10px 0px;
+    }
+
+    .nav-stacked > li > a {
+        border-radius: 0;
+        border-top: 0;
+        border-left: 0px solid transparent;
+        color: #444;
+    }
+
+    .nav > li > a {
+        position: relative;
+        display: block;
+        padding: 10px 0px;
+    }
+
+    .form-div {
+        padding-top: 10px;
     }
 
     .point-form { display: none; }
