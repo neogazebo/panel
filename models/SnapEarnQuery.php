@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use yii\db\Expression;
 use app\components\helpers\DateRangeCarbon;
 
 /**
@@ -106,9 +107,9 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     public function maxDuplicateReceipt($t, $u, $c)
     {
         $this->andWhere('
-            DATE(FROM_UNIXTIME(sna_transaction_time)) = :time 
-            AND sna_acc_id = :acc 
-            AND sna_com_id = :com 
+            DATE(FROM_UNIXTIME(sna_transaction_time)) = :time
+            AND sna_acc_id = :acc
+            AND sna_com_id = :com
             AND sna_transaction_time != 0
         ', [
             ':time' => date('Y-m-d', strtotime($t)),
@@ -151,8 +152,8 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->innerJoin('tbl_category','tbl_category.cat_id = tbl_snapearn.sna_cat_id');
         $this->leftJoin("tbl_account","tbl_account.acc_id = tbl_snapearn.sna_acc_id");
         $this->where('
-            sna_acc_id = :id 
-            AND sna_status = 1 
+            sna_acc_id = :id
+            AND sna_status = 1
 
         ', [
             ':id' => $userId
@@ -162,5 +163,216 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->orderBy('sum(sna_receipt_amount) DESC');
         $this->limit(4);
         return $this->all();
+    }
+
+    public function uploadIdChart($filters = null)
+    {
+        $dt = new DateRangeCarbon();
+        $this->select('date(from_unixtime(sna_upload_date)) as tanggal, count(*) as jumlah');
+        if ($filters != null) {
+            switch ($filters) {
+                case 'thisMonth':
+                    $dt = $dt->getThisMonth();
+                    break;
+                case 'lastMonth':
+                    $dt = $dt->getLastMonth();
+                    break;
+                case 'thisWeek':
+                    $dt = $dt->getThisWeek();
+                    break;
+                case 'lastWeek':
+                    $dt = $dt->getLastWeek();
+                    break;
+            }
+            $sna_daterange = explode(' to ', ($dt));
+        } else
+            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+
+        $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
+        $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+        $this->andWhere('tbl_account.acc_cty_id = :cty',[
+            ':cty' => 'ID'
+        ]);
+        $this->groupBy('date(from_unixtime(sna_upload_date)) ');
+        return $this;
+    }
+
+    public function uploadMyChart($filters = null)
+    {
+        $dt = new DateRangeCarbon();
+        $this->select('date(from_unixtime(sna_upload_date)) as tanggal, count(*) as jumlah');
+        if ($filters != null) {
+            switch ($filters) {
+                case 'thisMonth':
+                    $dt = $dt->getThisMonth();
+                    break;
+                case 'lastMonth':
+                    $dt = $dt->getLastMonth();
+                    break;
+                case 'thisWeek':
+                    $dt = $dt->getThisWeek();
+                    break;
+                case 'lastWeek':
+                    $dt = $dt->getLastWeek();
+                    break;
+            }
+            $sna_daterange = explode(' to ', ($dt));
+        } else
+            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+
+        $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
+        $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+        $this->andWhere('tbl_account.acc_cty_id = :cty',[
+            ':cty' => 'MY'
+        ]);
+        $this->groupBy('date(from_unixtime(sna_upload_date)) ');
+        return $this;
+    }
+
+    public function approveIdChart($filters = '')
+    {
+        $dt = new DateRangeCarbon();
+        $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
+        if ($filters != null) {
+            switch ($filters) {
+                case 'thisMonth':
+                    $dt = $dt->getThisMonth();
+                    break;
+                case 'lastMonth':
+                    $dt = $dt->getLastMonth();
+                    break;
+                case 'thisWeek':
+                    $dt = $dt->getThisWeek();
+                    break;
+                case 'lastWeek':
+                    $dt = $dt->getLastWeek();
+                    break;
+            }
+            $sna_daterange = explode(' to ', ($dt));
+        } else
+            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+
+        $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
+        $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+        $this->andWhere('sna_status = :status',[
+            ':status' => SnapEarn::STATUS_APPROVED
+        ]);
+        $this->andWhere('tbl_account.acc_cty_id = :cty',[
+            ':cty' => 'ID'
+        ]);
+        $this->groupBy('date(from_unixtime(sna_review_date)) ');
+        return $this;
+    }
+
+    public function approveMyChart($filters = '')
+    {
+        $dt = new DateRangeCarbon();
+        $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
+        if ($filters != null) {
+            switch ($filters) {
+                case 'thisMonth':
+                    $dt = $dt->getThisMonth();
+                    break;
+                case 'lastMonth':
+                    $dt = $dt->getLastMonth();
+                    break;
+                case 'thisWeek':
+                    $dt = $dt->getThisWeek();
+                    break;
+                case 'lastWeek':
+                    $dt = $dt->getLastWeek();
+                    break;
+            }
+            $sna_daterange = explode(' to ', ($dt));
+        } else
+            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+
+        $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
+        $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+        $this->andWhere('sna_status = :status',[
+            ':status' => SnapEarn::STATUS_APPROVED
+        ]);
+        $this->andWhere('tbl_account.acc_cty_id = :cty',[
+            ':cty' => 'MY'
+        ]);
+        $this->groupBy('date(from_unixtime(sna_review_date)) ');
+        return $this;
+    }
+
+    public function rejectIdChart($filters = '')
+    {
+        $dt = new DateRangeCarbon();
+        $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
+        if ($filters != null) {
+            switch ($filters) {
+                case 'thisMonth':
+                    $dt = $dt->getThisMonth();
+                    break;
+                case 'lastMonth':
+                    $dt = $dt->getLastMonth();
+                    break;
+                case 'thisWeek':
+                    $dt = $dt->getThisWeek();
+                    break;
+                case 'lastWeek':
+                    $dt = $dt->getLastWeek();
+                    break;
+            }
+            $sna_daterange = explode(' to ', ($dt));
+        } else
+            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+
+        $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
+        $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+        $this->andWhere('sna_status = :status',[
+            ':status' => SnapEarn::STATUS_REJECTED
+        ]);
+        $this->andWhere('tbl_account.acc_cty_id = :cty',[
+            ':cty' => 'ID'
+        ]);
+        $this->groupBy('date(from_unixtime(sna_review_date)) ');
+        return $this;
+    }
+
+    public function rejectMyChart($filters = '')
+    {
+        $dt = new DateRangeCarbon();
+        $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
+        if ($filters != null) {
+            switch ($filters) {
+                case 'thisMonth':
+                    $dt = $dt->getThisMonth();
+                    break;
+                case 'lastMonth':
+                    $dt = $dt->getLastMonth();
+                    break;
+                case 'thisWeek':
+                    $dt = $dt->getThisWeek();
+                    break;
+                case 'lastWeek':
+                    $dt = $dt->getLastWeek();
+                    break;
+            }
+            $sna_daterange = explode(' to ', ($dt));
+        } else
+            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+
+        $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
+        $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+        $this->andWhere('sna_status = :status',[
+            ':status' => SnapEarn::STATUS_REJECTED
+        ]);
+        $this->andWhere('tbl_account.acc_cty_id = :cty',[
+            ':cty' => 'MY'
+        ]);
+        $this->groupBy('date(from_unixtime(sna_review_date)) ');
+        return $this;
+    }
+
+    public function getUniqueUser()
+    {
+        $this->select(new Expression('yearweek(from_unixtime(sna_upload_date),3) as weeks, count(distinct sna_acc_id) as total_unique, count(sna_acc_id) as total_user'));
+        $this->groupBy(new Expression('yearweek(from_unixtime(sna_upload_date),3) DESC'));
+        return $this;
     }
 }
