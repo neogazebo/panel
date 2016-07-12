@@ -42,9 +42,9 @@ function setUpload(data) {
           datasets: [
             {
               label: "Indonesia",
-              fillColor: "rgba(210, 214, 222, 1)",
-              strokeColor: "rgba(210, 214, 222, 1)",
-              pointColor: "rgba(210, 214, 222, 1)",
+              fillColor: "rgb(245, 105, 84)",
+              strokeColor: "rgb(245, 105, 84)",
+              pointColor: "rgb(245, 105, 84)",
               pointStrokeColor: "#c1c7d1",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "rgba(220,220,220,1)",
@@ -68,9 +68,9 @@ function setUpload(data) {
           datasets: [
             {
               label: "Indonesia",
-              fillColor: "rgba(210, 214, 222, 1)",
-              strokeColor: "rgba(210, 214, 222, 1)",
-              pointColor: "rgba(210, 214, 222, 1)",
+              fillColor: "rgb(245, 105, 84)",
+              strokeColor: "rgb(245, 105, 84)",
+              pointColor: "rgb(245, 105, 84)",
               pointStrokeColor: "#c1c7d1",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "rgba(220,220,220,1)",
@@ -94,9 +94,9 @@ function setUpload(data) {
           datasets: [
             {
               label: "Indonesia",
-              fillColor: "rgba(210, 214, 222, 1)",
-              strokeColor: "rgba(210, 214, 222, 1)",
-              pointColor: "rgba(210, 214, 222, 1)",
+              fillColor: "rgb(245, 105, 84)",
+              strokeColor: "rgb(245, 105, 84)",
+              pointColor: "rgb(245, 105, 84)",
               pointStrokeColor: "#c1c7d1",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "rgba(220,220,220,1)",
