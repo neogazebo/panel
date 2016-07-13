@@ -665,7 +665,7 @@ class DefaultController extends BaseController
     protected function getCategoryId($id)
     {
         $cats = [
-            1 => [1, 7, 8, 9, 10, 58, 122],
+            1 => [1, 7, 8, 9, 10, 58, 122, 125],
             2 => [24, 121],
             3 => [4, 23, 34, 36, 37],
             4 => [13, 16, 43, 59, 120],
@@ -676,7 +676,7 @@ class DefaultController extends BaseController
             9 => [6, 12, 17, 19, 21],
             10 => [28, 30],
             11 => [35, 42],
-            12 => [2, 11, 22, 44, 123]
+            12 => [2, 11, 22, 44, 123, 124, 126]
         ];
         foreach ($cats as $key => $val) {
             $check = in_array($id,$val);

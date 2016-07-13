@@ -9,8 +9,23 @@ use yii\widgets\Pjax;
 
 $this->title = 'Dashboard';
 ?>
+
 <section class="content-header ">
     <h1><?= $this->title?></h1>
+    
+    <div class="box box-solid">
+        <div class="box-header with-border">
+            <div class="form-group">
+                <label>Date range</label><br>
+                <div class="input-group">
+                    <div class="input-group-addon" for="reservation">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="">
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <section class="content">
     <div class="row">
