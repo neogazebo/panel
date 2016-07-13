@@ -12,17 +12,22 @@ $this->title = 'Dashboard';
 
 <section class="content-header ">
     <h1><?= $this->title?></h1>
-    
+
     <div class="box box-solid">
         <div class="box-header with-border">
-            <div class="form-group">
+            <div class="form-group pull-right">
                 <label>Date range</label><br>
-                <div class="input-group">
-                    <div class="input-group-addon" for="reservation">
-                        <i class="fa fa-calendar"></i>
+                <form role="form" class="form-inline" method="get" action="/dashboard">
+                    <div class="input-group">
+                        <div class="input-group-addon" for="reservation">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" name="dash_daterange" class="form-control pull-right" id="the_daterange" value="">
                     </div>
-                    <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="">
-                </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -23,7 +23,7 @@ class DefaultController extends BaseController
      * @return string
      */
     public function actionIndex()
-    {        
+    {
     	// $searchModel = new SearchWorkingTime();
      //    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $model = WorkingTime::find()->getWorker();
@@ -40,7 +40,7 @@ class DefaultController extends BaseController
 
     public function actionView($id)
     {
-        $model = WorkingTime::find()->detailPoint($id);
+        $model = WorkingTime::find()->with('reason')->detailPoint($id);
         $username = User::findOne($id)->username;
         $dataProvider = new ActiveDataProvider([
             'query' => $model,

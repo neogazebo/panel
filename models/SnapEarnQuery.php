@@ -169,24 +169,13 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_upload_date)) as tanggal, count(*) as jumlah');
-        if ($filters != null) {
-            switch ($filters) {
-                case 'thisMonth':
-                    $dt = $dt->getThisMonth();
-                    break;
-                case 'lastMonth':
-                    $dt = $dt->getLastMonth();
-                    break;
-                case 'thisWeek':
-                    $dt = $dt->getThisWeek();
-                    break;
-                case 'lastWeek':
-                    $dt = $dt->getLastWeek();
-                    break;
-            }
-            $sna_daterange = explode(' to ', ($dt));
-        } else
+        if(!empty($_GET['dash_daterange'])){
+            $sna_daterange = explode(" to ", $_GET['dash_daterange']);
+            $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
+            $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
+        }else{
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+        }
 
         $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
@@ -201,24 +190,13 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_upload_date)) as tanggal, count(*) as jumlah');
-        if ($filters != null) {
-            switch ($filters) {
-                case 'thisMonth':
-                    $dt = $dt->getThisMonth();
-                    break;
-                case 'lastMonth':
-                    $dt = $dt->getLastMonth();
-                    break;
-                case 'thisWeek':
-                    $dt = $dt->getThisWeek();
-                    break;
-                case 'lastWeek':
-                    $dt = $dt->getLastWeek();
-                    break;
-            }
-            $sna_daterange = explode(' to ', ($dt));
-        } else
+        if(!empty($_GET['dash_daterange'])){
+            $sna_daterange = explode(" to ", $_GET['dash_daterange']);
+            $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
+            $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
+        }else{
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+        }
 
         $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
@@ -233,24 +211,13 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
-        if ($filters != null) {
-            switch ($filters) {
-                case 'thisMonth':
-                    $dt = $dt->getThisMonth();
-                    break;
-                case 'lastMonth':
-                    $dt = $dt->getLastMonth();
-                    break;
-                case 'thisWeek':
-                    $dt = $dt->getThisWeek();
-                    break;
-                case 'lastWeek':
-                    $dt = $dt->getLastWeek();
-                    break;
-            }
-            $sna_daterange = explode(' to ', ($dt));
-        } else
+        if(!empty($_GET['dash_daterange'])){
+            $sna_daterange = explode(" to ", $_GET['dash_daterange']);
+            $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
+            $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
+        }else{
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+        }
 
         $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
@@ -268,24 +235,13 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
-        if ($filters != null) {
-            switch ($filters) {
-                case 'thisMonth':
-                    $dt = $dt->getThisMonth();
-                    break;
-                case 'lastMonth':
-                    $dt = $dt->getLastMonth();
-                    break;
-                case 'thisWeek':
-                    $dt = $dt->getThisWeek();
-                    break;
-                case 'lastWeek':
-                    $dt = $dt->getLastWeek();
-                    break;
-            }
-            $sna_daterange = explode(' to ', ($dt));
-        } else
+        if(!empty($_GET['dash_daterange'])){
+            $sna_daterange = explode(" to ", $_GET['dash_daterange']);
+            $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
+            $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
+        }else{
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+        }
 
         $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
@@ -303,24 +259,14 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
-        if ($filters != null) {
-            switch ($filters) {
-                case 'thisMonth':
-                    $dt = $dt->getThisMonth();
-                    break;
-                case 'lastMonth':
-                    $dt = $dt->getLastMonth();
-                    break;
-                case 'thisWeek':
-                    $dt = $dt->getThisWeek();
-                    break;
-                case 'lastWeek':
-                    $dt = $dt->getLastWeek();
-                    break;
-            }
-            $sna_daterange = explode(' to ', ($dt));
-        } else
+
+        if(!empty($_GET['dash_daterange'])){
+            $sna_daterange = explode(" to ", $_GET['dash_daterange']);
+            $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
+            $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
+        }else{
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+        }
 
         $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
@@ -338,24 +284,13 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
-        if ($filters != null) {
-            switch ($filters) {
-                case 'thisMonth':
-                    $dt = $dt->getThisMonth();
-                    break;
-                case 'lastMonth':
-                    $dt = $dt->getLastMonth();
-                    break;
-                case 'thisWeek':
-                    $dt = $dt->getThisWeek();
-                    break;
-                case 'lastWeek':
-                    $dt = $dt->getLastWeek();
-                    break;
-            }
-            $sna_daterange = explode(' to ', ($dt));
-        } else
+        if(!empty($_GET['dash_daterange'])){
+            $sna_daterange = explode(" to ", $_GET['dash_daterange']);
+            $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
+            $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
+        }else{
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+        }
 
         $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
@@ -371,9 +306,18 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
 
     public function getUniqueUser()
     {
+        $dt = new DateRangeCarbon();
         $this->select(new Expression('yearweek(from_unixtime(sna_upload_date),3) as weeks, count(distinct sna_acc_id) as total_unique, count(sna_acc_id) as total_user'));
+        if(!empty($_GET['dash_daterange'])){
+            $sna_daterange = explode(" to ", $_GET['dash_daterange']);
+            $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
+            $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
+        }else{
+            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+        }
+
+        $this->andWhere("DATE(FROM_UNIXTIME(sna_upload_date)) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->groupBy(new Expression('yearweek(from_unixtime(sna_upload_date),3)'));
-        // echo $this->createCommand()->sql;exit;
         return $this;
     }
 }

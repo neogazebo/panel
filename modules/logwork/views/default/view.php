@@ -61,9 +61,14 @@ $this->title = 'Detail Working Hours';
                                 // ],
                                 [
                                     'label' => 'Description',
-                                    'attribute' => 'wrk_type',
+                                    'attribute' => 'wrk_rjct_number',
+                                    'format' => 'html',
                                     'value' => function($data){
-                                        return ($data->wrk_type == 1) ? 'Snap and Earn Approved' : 'Snap and Earn Rejected';
+                                        if ($data->wrk_type == 2) {
+                                            return ($data->wrk_rjct_number != 0) ? '<p class="text-yellow">'.$data->reason->sem_remark.'</p>' : '<a class=""><span class="not-set">(not set)</span></a>';
+                                        } else{
+                                            return '<p class="text-green">Approved</p>';
+                                        }
                                     }
                                 ],
                                 [
