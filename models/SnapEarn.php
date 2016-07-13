@@ -164,7 +164,7 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         if ($this->sna_status == 1) {
             $query = self::find()
-                ->where(['sna_receipt_number' => $this->sna_receipt_number])
+                ->where(['sna_receipt_number' => trim($this->sna_receipt_number)])
                 ->andWhere(['sna_com_id' => $this->sna_com_id])
                 ->andWhere(['<>','sna_status',0])
                 ->count();

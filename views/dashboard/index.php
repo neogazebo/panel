@@ -66,7 +66,7 @@ $this->title = 'Dashboard';
                 </div>
                 <div class="box-body">
                     <div class="chart">
-                        <canvas id="lineChart" data-url="dashboard/line-chart"></canvas>
+                        <canvas id="lineChart" data-url="/dashboard/line-chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@ $this->title = 'Dashboard';
                 </div>
                 <div class="box-body">
                     <div class="chart">
-                        <canvas id="lineRejectChart" data-url="dashboard/line-chart"></canvas>
+                        <canvas id="lineRejectChart" data-url="/dashboard/line-chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -100,7 +100,7 @@ $this->title = 'Dashboard';
                 </div>
                 <div class="box-body">
                     <div class="chart">
-                        <canvas id="lineApproveChart" data-url="dashboard/line-chart"></canvas>
+                        <canvas id="lineApproveChart" data-url="/dashboard/line-chart"></canvas>
                     </div>
                 </div>
             </div>

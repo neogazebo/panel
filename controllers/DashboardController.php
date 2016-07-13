@@ -15,7 +15,7 @@ class DashboardController extends Controller
     public function actionIndex()
     {
         $model = SnapEarn::find()->getUniqueUser();
-
+        // var_dump($model->all());exit;
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [

@@ -373,6 +373,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $this->select(new Expression('yearweek(from_unixtime(sna_upload_date),3) as weeks, count(distinct sna_acc_id) as total_unique, count(sna_acc_id) as total_user'));
         $this->groupBy(new Expression('yearweek(from_unixtime(sna_upload_date),3)'));
+        // echo $this->createCommand()->sql;exit;
         return $this;
     }
 }
