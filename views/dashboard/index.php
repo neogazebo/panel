@@ -22,7 +22,7 @@ $this->title = 'Dashboard';
                         <div class="input-group-addon" for="reservation">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" name="dash_daterange" class="form-control pull-right" id="the_daterange" value="">
+                        <input type="text" name="dash_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['dash_daterange'])) ? $_GET['dash_daterange'] :''; ?>">
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
@@ -86,7 +86,7 @@ $this->title = 'Dashboard';
                 </div>
                 <div class="box-body">
                     <div class="chart">
-                        <canvas id="lineChart" data-url="/dashboard/line-chart"></canvas>
+                        <canvas id="lineChart" data-url="/dashboard/line-chart?dash_daterange=<?= (!empty($_GET['dash_daterange'])) ? $_GET['dash_daterange'] :''; ?>"></canvas>
                     </div>
                 </div>
             </div>
@@ -104,7 +104,7 @@ $this->title = 'Dashboard';
                 </div>
                 <div class="box-body">
                     <div class="chart">
-                        <canvas id="lineRejectChart" data-url="/dashboard/line-chart"></canvas>
+                        <canvas id="lineRejectChart" data-url="/dashboard/line-chart?dash_daterange=<?= (!empty($_GET['dash_daterange'])) ? $_GET['dash_daterange'] :''; ?>"></canvas>
                     </div>
                 </div>
             </div>
@@ -120,7 +120,7 @@ $this->title = 'Dashboard';
                 </div>
                 <div class="box-body">
                     <div class="chart">
-                        <canvas id="lineApproveChart" data-url="/dashboard/line-chart"></canvas>
+                        <canvas id="lineApproveChart" data-url="/dashboard/line-chart?dash_daterange=<?= (!empty($_GET['dash_daterange'])) ? $_GET['dash_daterange'] :''; ?>"></canvas>
                     </div>
                 </div>
             </div>

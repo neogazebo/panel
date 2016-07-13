@@ -167,6 +167,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
 
     public function uploadIdChart($filters = null)
     {
+        // echo $_GET['dash_daterange'];exit;
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_upload_date)) as tanggal, count(*) as jumlah');
         if(!empty($_GET['dash_daterange'])){
@@ -204,6 +205,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             ':cty' => 'MY'
         ]);
         $this->groupBy('date(from_unixtime(sna_upload_date)) ');
+        // echo $this->createCommand()->sql;exit;
         return $this;
     }
 
