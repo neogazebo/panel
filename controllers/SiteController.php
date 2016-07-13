@@ -69,7 +69,7 @@ class SiteController extends Controller
             if ($checkRoute == 'merchantSG') {
                 $defaultRoute = Yii::$app->urlManager->createUrl(['merchant-signup']);
             }elseif($checkRoute == 'snapearn') {
-                $defaultRoute = Yii::$app->urlManager->createUrl(['dashboard']);
+                $defaultRoute = Yii::$app->urlManager->createUrl(['snapearn']);
             }else {
                 $defaultRoute = Yii::$app->urlManager->createUrl(['epay/index']);
             }
