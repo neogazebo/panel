@@ -18,6 +18,7 @@ use yii\db\ActiveRecord;
  * @property string $wrk_description
  * @property integer $wrk_created
  * @property integer $wrk_updated
+ * @property integer $wrk_rjct_number
  */
 class WorkingTime extends \yii\db\ActiveRecord
 {
@@ -57,7 +58,7 @@ class WorkingTime extends \yii\db\ActiveRecord
     {
         return [
             [['wrk_type'], 'required'],
-            [['wrk_type', 'wrk_by', 'wrk_param_id', 'wrk_start', 'wrk_end', 'wrk_time', 'wrk_created', 'wrk_updated','wrk_point_type'], 'integer'],
+            [['wrk_type', 'wrk_by', 'wrk_param_id', 'wrk_start', 'wrk_end', 'wrk_time', 'wrk_created', 'wrk_updated','wrk_point_type','wrk_rjct_number'], 'integer'],
             [['wrk_description'], 'string', 'max' => 250],
         ];
     }
@@ -78,6 +79,7 @@ class WorkingTime extends \yii\db\ActiveRecord
             'wrk_description' => 'Description',
             'wrk_created' => 'Created',
             'wrk_updated' => 'Updated',
+            'wrk_rjct_number' => 'Reson Rejected',
         ];
     }
 
@@ -97,6 +99,11 @@ class WorkingTime extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::ClassName(),['id' => 'wrk_by']);
+    }
+
+    public function getReason()
+    {
+        return $this->hasOne(SnapEarnRemark::ClassName(),['sem_id' => 'wrk_rjct_number']);
     }
 
     public function getTime($userId)

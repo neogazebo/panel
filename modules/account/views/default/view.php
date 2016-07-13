@@ -215,7 +215,7 @@ $this->registerCss("
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Country </b> <a class="pull-right"><?= ($model->acc_country == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
+                            <b>Country </b> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
                         </li>
                         <li class="list-group-item">
                             <b>Current Point </b> <a class="pull-right"><?= (!empty($model->lastPointMember())) ? Yii::$app->formatter->asDecimal($model->lastPointMember()) : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>

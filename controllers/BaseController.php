@@ -112,7 +112,7 @@ class BaseController extends Controller
         }
     }
 
-    public function endWorking($id,$type,$desc)
+    public function endWorking($id,$type,$desc,$sem_id = 0)
     {
         $this->centralTimeZone();
     	$model = WorkingTime::findOne($id);
@@ -120,6 +120,7 @@ class BaseController extends Controller
     	$model->wrk_description = $desc;
     	$model->wrk_end = microtime(true);
         $model->wrk_time = ($model->wrk_end - $model->wrk_start);
+        $model->wrk_rjct_number = $sem_id;
     	$model->save(false);
     }
 

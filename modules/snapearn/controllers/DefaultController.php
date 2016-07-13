@@ -420,7 +420,8 @@ class DefaultController extends BaseController
                     $wrk = WorkingTime::find()->findWorkExist($model->sna_id)->one();
                     $desc = "Snapearn $snap_type";
                     $type = $model->sna_status;
-                    $this->endWorking($wrk->wrk_id,$type,$desc);
+                    $sem_id = $model->sna_sem_id;
+                    $this->endWorking($wrk->wrk_id,$type,$desc,$sem_id);
 
                     $transaction->commit();
                 } else {

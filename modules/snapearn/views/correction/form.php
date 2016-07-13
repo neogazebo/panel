@@ -54,28 +54,13 @@ $this->title = "Update SnapEarn";
               </div>
             <?php endif; ?>
             <div class="box-tools">
-             <!--  <button data-original-title="Mark as read" class="btn btn-box-tool" data-toggle="tooltip" title=""><i class="fa fa-circle-o"></i></button>
-              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> -->
-            </div><!-- /.box-tools -->
-          </div><!-- /.box-header -->
+            </div>
+          </div>
           <div style="display: block;" class="box-body">
               <div id="sna_image" class="img-responsive pad magic-zoom"></div>
           </div>
           <div style="display: block;" class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                <li class="">
-                  <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
-                </li>
-                <?php endif; ?>
-                <li class="">
-                  <a href="#"><b><?= (empty($model->business)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (!empty($model->newSuggestion)) ? $model->newSuggestion->cos_name : $model->business->com_name ?></span></a>
-                </li>
-                <li class="">
-                  <a href="#"><b><?= (!empty($model->business)) ? 'Merchant Point' : 'Mall Sugest' ?> </b> <span class="pull-right text-light-blue"><?= (!empty($model->business)) ? $model->business->com_point : $model->newSuggestion->cos_mall ?></span></a>
-                </li>
-              </ul>
+
           </div>
         </div>
       </div>
@@ -89,11 +74,45 @@ $this->title = "Update SnapEarn";
                   <?php if (empty($model->business)) : ?>
                   <div class="pull-right btn-merchant">
                     <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
-                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?> 
+                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?>
                   </div>
                   <?php endif; ?>
                 </div>
                 <div class="box-body">
+                    <ul class="nav nav-stacked">
+                      <?php if(Yii::$app->user->identity->superuser == 1): ?>
+                      <li class="">
+                        <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
+                      </li>
+                      <?php endif; ?>
+                      <li class="">
+                        <a href="#"><b><?= (empty($model->merchant)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
+                      </li>
+                      <?php if (!empty($model->merchant)) : ?>
+                      <li class="">
+                        <a href="#"><b>Merchant Point</b>
+                          <?php if ($model->merchant->com_point < 500) :?>
+                            <?php if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
+                              <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
+                            <?php else: ?>
+                              <span class="label label-warning add-point">Point is less than 500!</span>
+                            <?php endif; ?>
+                          <?php endif; ?>
+                          <span class="pull-right text-light-blue">
+                            <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
+                          </span>
+                        </a>
+                      </li>
+                      <?php endif; ?>
+                      <?php if (empty($model->merchant)) : ?>
+                      <li>
+                        <a href="#"><b><?= (empty($model->sna_address)) ? 'Sugest Location' : 'Location' ?></b>
+                          <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
+                        </a>
+                      </li>
+                    <?php endif; ?>
+                        <li></li>
+                    </ul>
                   <form role="form">
                     <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
@@ -110,7 +129,7 @@ $this->title = "Update SnapEarn";
                           //         'format' => 'yyyy-mm-dd H:i:s'
                           //     ]
                           // ]);
-                      ?>    
+                      ?>
                       <div class="form-group field-snapearn-sna_transaction_time sna_status">
                       <label class="control-label" >Transaction Time</label>
                           <div class="">
@@ -119,7 +138,7 @@ $this->title = "Update SnapEarn";
                                   <div class="help-block"></div>
                               </div>
                           </div>
-                      </div>  
+                      </div>
                       <div class="form-group field-snapearn-sna_receipt_number sna_status">
                       <label class="control-label" >Receipt Number</label>
                           <div class="">
@@ -128,7 +147,7 @@ $this->title = "Update SnapEarn";
                                   <div class="help-block"></div>
                               </div>
                           </div>
-                      </div>            
+                      </div>
                       <?php // $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                       <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
                       <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
@@ -182,7 +201,7 @@ $this->registerCss("
     .magic-zoom {
         position: relative;
         width: 100%;
-        height: 350px;
+        height: 480px;
         overflow: hidden;
         border: 1px solid #ddd;
         background-color: #ECF0F5;
@@ -193,6 +212,27 @@ $this->registerCss("
         border: 1px solid #999;
         height: 28px;
         z-index: 5000;
+    }
+
+    .nav-stacked {
+        padding: 0px 0px 10px 0px;
+    }
+
+    .nav-stacked > li > a {
+        border-radius: 0;
+        border-top: 0;
+        border-left: 0px solid transparent;
+        color: #444;
+    }
+
+    .nav > li > a {
+        position: relative;
+        display: block;
+        padding: 10px 0px;
+    }
+
+    .form-div {
+        padding-top: 10px;
     }
 
     .point-form { display: none; }
@@ -223,7 +263,7 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
 
         if($(this).val() == 1) {
             pointConvert();
-            
+
             if (com_id == 0) {
                 $('.field-snapearn-sna_receipt_amount').addClass('has-error');
                 $('.btn-merchant').css({
@@ -269,7 +309,7 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
     $('.submit-button, .reset-button').click(function(){
         $('#saveNext').val(0);
     });
-    
+
     $('.new_m').on('click',function(){
         $('.modal-dialog').switchClass( 'modal-md', 'modal-lg');
     });

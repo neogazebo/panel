@@ -25,6 +25,7 @@ use app\components\helpers\Html;
  * @property integer $sna_cat_id
  * @property string $sna_receipt_image
  * @property string $sna_com_name
+ * @property string $sna_address
  */
 class SnapEarn extends \yii\db\ActiveRecord
 {
@@ -109,7 +110,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             [['sna_receipt_image'],
                 'string',
                 'max' => 75],
-            [['sna_com_name'],
+            [['sna_com_name','sna_address'],
                 'string',
                 'max' => 100],
             [['sna_com_id'], 'checkMerchant', 'when' => function($model) {

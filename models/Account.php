@@ -15,7 +15,7 @@ use Yii;
  * @property string $acc_google_email
  * @property string $acc_google_token
  * @property string $acc_screen_name
- * @property string $acc_country
+ * @property string $acc_cty_id
  * @property string $acc_photo
  * @property integer $acc_created_datetime
  * @property integer $acc_updated_datetime
@@ -54,7 +54,7 @@ class Account extends \yii\db\ActiveRecord
             [['acc_facebook_graph'], 'string'],
             [['acc_facebook_email', 'acc_screen_name'], 'string', 'max' => 50],
             [['acc_google_id', 'acc_google_email', 'acc_google_token'], 'string', 'max' => 1],
-            [['acc_country'], 'string', 'max' => 2],
+            [['acc_cty_id'], 'string', 'max' => 2],
             [['acc_photo'], 'string', 'max' => 35],
             [['acc_address'], 'string', 'max' => 200],
             [['acc_facebook_id'], 'unique'],
@@ -63,7 +63,7 @@ class Account extends \yii\db\ActiveRecord
 
     public function getCountry()
     {
-        return $this->hasOne(Country::className(), ['cty_short_code' => 'acc_country']);
+        return $this->hasOne(Country::className(), ['cty_short_code' => 'acc_cty_id']);
     }
 
     public function getTimezone()
@@ -119,7 +119,7 @@ class Account extends \yii\db\ActiveRecord
             'acc_google_email' => 'Google Email',
             'acc_google_token' => 'Google Token',
             'acc_screen_name' => 'Screen Name',
-            'acc_country' => 'Country',
+            'acc_cty_id' => 'Country',
             'acc_photo' => 'Photo',
             'acc_created_datetime' => 'Created Datetime',
             'acc_updated_datetime' => 'Updated Datetime',

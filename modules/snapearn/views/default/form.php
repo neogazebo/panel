@@ -83,7 +83,7 @@ $this->title = "Update SnapEarn";
                       </li>
                       <?php endif; ?>
                       <li class="">
-                        <a href="#"><b><?= (empty($model->merchant)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
+                        <a href="#"><b><?= (empty($model->merchant)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
                       </li>
                       <?php if (!empty($model->merchant)) : ?>
                       <li class="">
@@ -103,8 +103,8 @@ $this->title = "Update SnapEarn";
                       <?php endif; ?>
                       <?php if (empty($model->merchant)) : ?>
                       <li>
-                        <a href="#"><b>Sugest Location</b>
-                          <span class="pull-right text-light-blue"><?= $model->newSuggestion->cos_location ?></span>
+                        <a href="#"><b><?= (empty($model->sna_address)) ? 'Sugest Location' : 'Location' ?></b>
+                          <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
                         </a>
                       </li>
                     <?php endif; ?>

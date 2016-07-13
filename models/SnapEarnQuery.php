@@ -45,7 +45,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->leftJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
         if(!empty($_GET['sna_cty'])) {
             $sna_cty = $_GET['sna_cty'];
-            $this->andWhere(['LIKE', 'tbl_account.acc_country', $sna_cty]);
+            $this->andWhere(['LIKE', 'tbl_account.acc_cty_id', $sna_cty]);
         }
 
         if(!empty($_GET['sna_member'])) {
@@ -95,7 +95,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $this->leftJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
         $this->andWhere('sna_id < :id', [':id' => $id]);
-        $this->andWhere('acc_country = :ctr', [
+        $this->andWhere('acc_cty_id = :ctr', [
             ':ctr' => $ctr
         ]);
         $this->andWhere('sna_status = 0');
@@ -147,7 +147,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->select("
             cat_name as categoryName,
             sum(sna_receipt_amount) as amount,
-            acc_country as country
+            acc_cty_id as country
         ");
         $this->innerJoin('tbl_category','tbl_category.cat_id = tbl_snapearn.sna_cat_id');
         $this->leftJoin("tbl_account","tbl_account.acc_id = tbl_snapearn.sna_acc_id");
