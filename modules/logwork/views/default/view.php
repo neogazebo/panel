@@ -8,9 +8,6 @@ use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
 use app\components\helpers\Utc;
 
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\AccountSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Detail Working Hours';
 ?>
 <section class="content-header ">
@@ -23,7 +20,11 @@ $this->title = 'Detail Working Hours';
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <?php // Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
-                    <form class="form-inline pull-right" role="form" method="post" action="view?id=<?= $_GET['id'] ?>">
+                    <div class="col-sm-6">
+                       
+                    </div>
+                    <div class="col-sm-6">
+                        <form class="form-inline pull-right" role="form" method="post" action="view?id=<?= $_GET['id'] ?>">
                         <div class="form-group">
                             <label>Date range</label><br>
                             <div class="input-group">
@@ -38,6 +39,7 @@ $this->title = 'Detail Working Hours';
                             <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                         </div>
                     </form>
+                    </div>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">

@@ -76,14 +76,6 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
                             'columns' => [
-                                // [
-                                //     'label' => 'Receipt',
-                                //     'attribute' => 'sna_receipt_image',
-                                //     'format' => 'raw',
-                                //     'value' => function($data) {
-                                //         return Html::img($data->image, ['style' => 'max-width: 70px; height: 32px']);
-                                //     }
-                                // ],
                                 [
                                     'label' => 'Merchant',
                                     'attribute' => 'sna_com_id',
@@ -97,9 +89,10 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 [
                                     'label' => 'Member',
                                     'visible' => $visible,
+                                    'format' => 'html',
                                     'attribute' => 'sna_acc_id',
                                     'value' => function($data) {
-                                        return $data->member->acc_screen_name;
+                                        return (!empty($data->member)) ? $data->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>';
                                     }
                                 ],
                                 'sna_receipt_number',
