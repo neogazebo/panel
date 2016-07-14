@@ -296,7 +296,7 @@ $this->registerCss("
                                         <div class="box-body">
                                             <div class="col-sm-5">
                                                 <div class="input-group">
-                                                    <select name="filter_chart" id="filter_chart" class="form-control select2">
+                                                    <select name="filter_chart" id="filter_chart" class="form-control select2" style="display: none;">
                                                         <option value="thisMonth">This Month </option>
                                                         <option value="lastMonth">Last Month </option>
                                                         <option value="thisWeek">This Week </option>

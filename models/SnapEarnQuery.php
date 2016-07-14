@@ -309,7 +309,13 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     public function getUniqueUser()
     {
         $dt = new DateRangeCarbon();
-        $this->select(new Expression('yearweek(from_unixtime(sna_upload_date),3) as weeks, count(distinct sna_acc_id) as total_unique, count(sna_acc_id) as total_user'));
+        $this->select(new Expression("
+            yearweek(from_unixtime(sna_upload_date),3) as weeks, 
+            count(distinct sna_acc_id) as total_unique, 
+            count(distinct IF(acc_cty_id = 'ID', sna_acc_id, null))  as total_unique_user_id,
+            count(distinct IF(acc_cty_id = 'MY', sna_acc_id, null))  as total_unique_user_my
+            "));
+        $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
         if(!empty($_GET['dash_daterange'])){
             $sna_daterange = explode(" to ", $_GET['dash_daterange']);
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';

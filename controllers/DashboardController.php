@@ -9,13 +9,12 @@ use app\models\SnapEarn;
 /**
  *
  */
-class DashboardController extends Controller
+class DashboardController extends BaseController
 {
 
     public function actionIndex()
     {
         $model = SnapEarn::find()->getUniqueUser();
-        // var_dump($model->all());exit;
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
             'pagination' => [

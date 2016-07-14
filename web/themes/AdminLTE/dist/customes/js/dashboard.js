@@ -176,7 +176,7 @@ function setUpload(data) {
         lineChartOptions.datasetFill = false;
         lineRjtChart.Line(areaRjtChartData, lineChartOptions);
 };
-function startChart(selector = null){
+function startChart(selector){
     var div = $("#lineChart");
         url = $(div).data('url');
         $.ajax({
