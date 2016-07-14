@@ -58,9 +58,13 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                         </div>
                         <?php if ($visible) : ?>
                         <div class="form-group">
+                            <label for="receipt">Receipt</label><br>
+                            <input name="sna_receipt" class="form-control" id="receipt" placeholder="Receipt number" type="text" value="<?= (!empty($_GET['sna_receipt'])) ? $_GET['sna_receipt'] : '' ?>">
+                        </div>  
+                        <div class="form-group">
                             <label for="member">Member</label><br>
                             <input name="sna_member" class="form-control" id="member" placeholder="Enter name" type="text" value="<?= (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '' ?>">
-                        </div>  
+                        </div> 
                         <?php endif; ?>  
                         <div class="form-group">
                             <label>&nbsp;</label><br>

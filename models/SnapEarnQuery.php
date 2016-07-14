@@ -52,6 +52,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_member = $_GET['sna_member'];
             $this->andWhere(['LIKE', 'tbl_account.acc_screen_name', $sna_member]);
         }
+
+        if(!empty($_GET['sna_receipt'])) {
+            $sna_receipt = $_GET['sna_receipt'];
+            $this->andWhere(['LIKE', 'sna_receipt_number', $sna_receipt]);
+        }
         if (!empty($_GET['sna_status'])) {
             $sna_status = $_GET['sna_status'];
             switch ($_GET['sna_status']) {
