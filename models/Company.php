@@ -946,7 +946,6 @@ class Company extends EbizuActiveRecord
         return $this->hasOne(MallMerchant::className(), ['mam_com_id' => 'com_id']);
     }
 
-
     public function setTag()
     {
         $tags = CompanyTag::deleteAll('cot_com_id = :com_id', [':com_id' => $this->com_id]);

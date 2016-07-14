@@ -415,12 +415,28 @@ $this->registerCss("
                                             'dataProvider' => $redeemProvider,
                                             'columns' => [
                                                 [
-                                                    'label' => 'Merchant',
-                                                    'attribute' => 'lph_com_id',
+                                                    'header' => 'From',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        if (!empty($data->merchant)) {
-                                                            return $data->merchant->com_name . ($data->merchant->com_joined == 1 ? ' <i class="fa fa-check"></i>' : '');
+                                                        switch ($data->lph_lpe_id) {
+                                                            case 2:
+                                                                if (!empty($data->offer))
+                                                                    return $data->offer->del_title;
+                                                                break;
+                                                            case 3:
+                                                                if (!empty($data->voucher))
+                                                                    return $data->voucher->vou_reward_name;
+                                                                break;
+                                                            case 4:
+                                                                if (!empty($data->event))
+                                                                    return $data->event->evt_name;
+                                                                break;
+                                                            case 22:
+                                                                if (!empty($data->user))
+                                                                    return $data->user->acc_screen_name;
+                                                            case 55:
+                                                                if (!empty($data->redeem->voucher))
+                                                                    return $data->redeem->voucher->vou_reward_name;
                                                         }
                                                     }
                                                 ],
@@ -612,29 +628,3 @@ $this->registerCss("
 ?>
 <div id="modalContent"></div>
 <?php Modal::end(); ?>
-
-<?php
-$this->registerJs("
-    google.charts.load('current', {'packages': ['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-    function drawChart()
-    {
-        var data = google.visualization.arrayToDataTable([
-            ['Task', 'Hours per Day'],
-            ['Work',     11],
-            ['Eat',      2],
-            ['Commute',  2],
-            ['Watch TV', 2],
-            ['Sleep',    7]
-        ]);
-
-        var options = {
-            title: 'My Daily Activities'
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data, options);
-    }
-", yii\web\View::POS_END, 'member-profile');
-?>

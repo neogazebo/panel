@@ -86,6 +86,41 @@ class LoyaltyPointHistory extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getOffer()
+    {
+        return Deal::find()
+            ->where('del_id = :id', [':id' => $this->lph_param])
+            ->one();
+    }
+
+    public function getVoucher()
+    {
+        return Voucher::find()
+            ->where('vou_id = :id', [':id' => $this->lph_param])
+            ->one();
+    }
+
+    public function getEvent()
+    {
+        return Event::find()
+            ->where('evt_id = :id', [':id' => $this->lph_param])
+            ->one();
+    }
+
+    public function getUser()
+    {
+        return Account::find()
+            ->where('acc_id = :id', [':id' => $this->lph_param])
+            ->one();
+    }
+
+    public function getRedeem()
+    {
+        return VoucherRedeemed::find()
+            ->where('vor_id = :id', [':id' => $this->lph_param])
+            ->one();
+    }
+
     public function getMember()
     {
         return $this->hasOne(Account::className(), ['acc_id' => 'lph_acc_id']);
