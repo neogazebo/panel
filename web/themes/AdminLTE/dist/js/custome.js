@@ -217,7 +217,8 @@ function topFour(data) {
     // You can switch between pie and douhnut using the method below.
     pieChart.Doughnut(PieData, pieOptions);
   };
-  function startChart(selector = null){
+
+  function startChart(selector){
 	  var div = $('#pieChart');
 		 url = $(div).data('url');
 		 id = $(div).data('key');
@@ -226,7 +227,7 @@ function topFour(data) {
 			 url: url,
 			 data: {
 				 id : id,
-				 data : selector
+				 data : selector ? selector : ''
 			 },success: function(results) {
 			 var data = jQuery.parseJSON(results);
 			 var html = "<ul class='nav nav-stacked'>";

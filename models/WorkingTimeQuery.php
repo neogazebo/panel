@@ -61,13 +61,13 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             COUNT(IF(wrk_type = 2, wrk_id, null)) / COUNT(wrk_id) AS rejected_rate
         ");
         $this->where('wrk_end IS NOT NULL');
-        if (!empty($_POST['wrk_by'])) {
+        if (!empty($_GET['wrk_by'])) {
             $this->andWhere('wrk_by = :id', [
-                ':id' => $_POST['wrk_by']
+                ':id' => $_GET['wrk_by']
             ]);
         }
-        if (!empty($_POST['wrk_daterange'])) {
-            $range = explode(" to ", $_POST['wrk_daterange']);
+        if (!empty($_GET['wrk_daterange'])) {
+            $range = explode(" to ", $_GET['wrk_daterange']);
             $first_date = $range[0] . ' 00:00:00';
             $last_date = $range[1] . ' 23:59:59';
             $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
@@ -90,8 +90,8 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             ':user' => $id
         ]);
 
-        if (!empty($_POST['wrk_daterange'])) {
-            $range = explode(" to ", $_POST['wrk_daterange']);
+        if (!empty($_GET['wrk_daterange'])) {
+            $range = explode(" to ", $_GET['wrk_daterange']);
             $first_date = $range[0] . ' 00:00:00';
             $last_date = $range[1] . ' 23:59:59';
             $this->andWhere("date(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");

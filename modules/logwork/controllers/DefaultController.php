@@ -24,8 +24,6 @@ class DefaultController extends BaseController
      */
     public function actionIndex()
     {
-    	// $searchModel = new SearchWorkingTime();
-     //    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $model = WorkingTime::find()->getWorker();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,

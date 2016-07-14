@@ -42,7 +42,8 @@ class SnapEarn extends \yii\db\ActiveRecord
     public $jumlah;
     public $weeks;
     public $total_unique;
-    public $total_user;
+    public $total_unique_user_id;
+    public $total_unique_user_my;
 
     /**
      * @inheritdoc

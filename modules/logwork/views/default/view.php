@@ -49,16 +49,10 @@ $this->title = 'Detail Working Hours';
                                     'label' => 'Date',
                                     'attribute' => 'wrk_end',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDateTime(Utc::convert($data->wrk_end));
+                                        date_default_timezone_set('UTC');
+                                        return date('Y M d H:m:s',$data->wrk_end);
                                     }
                                 ],
-                                // [
-                                //     'label' => 'Username',
-                                //     'attribute' => 'wrk_by',
-                                //     'value' => function($data) {
-                                //         return $data->user->username;
-                                //     }
-                                // ],
                                 [
                                     'label' => 'Description',
                                     'attribute' => 'wrk_rjct_number',

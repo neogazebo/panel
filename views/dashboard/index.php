@@ -12,24 +12,25 @@ $this->title = 'Dashboard';
 
 <section class="content-header ">
     <h1><?= $this->title?></h1>
-
-    <div class="box box-solid">
-        <div class="box-header with-border">
-            <div class="form-group pull-right">
-                <label>Date range</label><br>
-                <form role="form" class="form-inline" method="get" action="/dashboard">
-                    <div class="input-group">
-                        <div class="input-group-addon" for="reservation">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <input type="text" name="dash_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['dash_daterange'])) ? $_GET['dash_daterange'] :''; ?>">
+    <div class="row">
+    <div class="col-sm-12">
+        <div class="box box-solid">
+        <div class="form-group pull-right">
+            <label>Date range</label><br>
+            <form role="form" class="form-inline" method="get" action="/dashboard">
+                <div class="input-group">
+                    <div class="input-group-addon" for="reservation">
+                        <i class="fa fa-calendar"></i>
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
-                    </div>
-                </form>
-            </div>
+                    <input type="text" name="dash_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['dash_daterange'])) ? $_GET['dash_daterange'] :''; ?>">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                </div>
+            </form>
         </div>
+        </div>
+    </div>
     </div>
 </section>
 <section class="content">
@@ -63,12 +64,19 @@ $this->title = 'Dashboard';
                             }
                         ],
                         [
-                            'label' => 'Total User',
+                            'label' => 'User MY',
                             'attribute' => 'sna_acc_id',
                             'value' => function($data){
-                                return $data->total_user;
+                                return $data->total_unique_user_my;
                             }
-                        ]
+                        ],
+                        [
+                            'label' => 'User ID',
+                            'attribute' => 'sna_acc_id',
+                            'value' => function($data){
+                                return $data->total_unique_user_id;
+                            }
+                        ],
                     ],
                     'tableOptions' => ['class' => 'table table-striped table-hover']
                 ]); ?>
