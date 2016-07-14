@@ -26,6 +26,8 @@ use Yii;
  */
 class LoyaltyPointHistory extends \yii\db\ActiveRecord
 {
+    public $lph_member;
+
     /**
      * @inheritdoc
      */
@@ -68,19 +70,25 @@ class LoyaltyPointHistory extends \yii\db\ActiveRecord
             'lph_acc_id' => 'Account ID',
             'lph_com_id' => 'Merchant ID',
             'lph_cus_id' => 'Cus ID',
-            'lph_lpe_id' => 'Lpe ID',
+            'lph_lpe_id' => 'Type',
             'lph_param' => 'Param',
             'lph_amount' => 'Amount',
             'lph_type' => 'Type',
             'lph_free' => 'Free',
-            'lph_datetime' => 'Datetime',
+            'lph_datetime' => 'Redeemed Time',
             'lph_total_point' => 'Total Point',
             'lph_expired' => 'Expired',
             'lph_current_point' => 'Current Point',
             'lph_approve' => 'Approve',
             'lph_lpt_id' => 'Lpt ID',
             'lph_description' => 'Description',
+            'lph_member' => 'Account'
         ];
+    }
+
+    public function getMember()
+    {
+        return $this->hasOne(Account::className(), ['acc_id' => 'lph_acc_id']);
     }
 
     public function getMerchant()

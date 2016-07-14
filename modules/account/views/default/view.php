@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
+use yii\bootstrap\Modal;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -215,6 +217,9 @@ $this->registerCss("
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
+                            <b>Currency </b> <a class="pull-right"><?= !empty($model->country) ? $model->country->cty_currency_name_iso3 : '' ?></a>
+                        </li>
+                        <li class="list-group-item">
                             <b>Country </b> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
                         </li>
                         <li class="list-group-item">
@@ -236,6 +241,7 @@ $this->registerCss("
                             <b>OS Version  </b> <a class="pull-right"><?= (!empty($model->activeDevice())) ? $model->activeDevice()->dvc_os_version : '<a class="pull-right"><span class="not-set">(not set)</span></a>'?></a>
                         </li>
                     </ul>
+                    <?= Html::button('<i class="fa fa-dollar"></i> Point Correction', ['value' => Url::to(['correction?id=' . $model->acc_id]), 'class' => 'btn btn-primary modalButton']) ?>
                 </div>
             </div>
         </div>
@@ -275,7 +281,7 @@ $this->registerCss("
                                                 'long' => $location->adv_last_longitude,
                                                 'height' => 150,
                                                 'type' => 'static'
-                                                ]);
+                                            ]);
                                             ?>
                                         </div>
                                     </div>
@@ -308,7 +314,7 @@ $this->registerCss("
                                                 <p class="chart-notes"></p>
                                             </div>
                                             <div class="col-sm-7">
-                                                <canvas id="pieChart" data-url="top-chart" data-key="<?= $model->acc_id ?>" style="height:250px" value="wow"></canvas>
+                                                <canvas id="pieChart" data-url="top-chart" data-key="<?= $model->acc_id ?>" style="height: 250px" value="wow"></canvas>
                                             </div>
                                         </div>
                                         <div class="overlay">
@@ -331,7 +337,7 @@ $this->registerCss("
                                 <div class="timeline-item">
                                     <div class="box box-solid">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title">Receipt History</h3>
+                                            <h3 class="box-title">Snap &amp; Earn History</h3>
                                             <div class="box-tools pull-right">
                                                 <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                                                 <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -357,7 +363,13 @@ $this->registerCss("
                                                             }
                                                         }
                                                     ],
-                                                    'sna_receipt_date',
+                                                    [
+                                                        'attribute' => 'sna_upload_date',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->sna_upload_date));
+                                                        }
+                                                    ],
                                                     [
                                                         'attribute' => 'sna_receipt_amount',
                                                         'format' => 'html',
@@ -416,7 +428,7 @@ $this->registerCss("
                                                     'attribute' => 'lph_datetime',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime($data->lph_datetime);
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->lph_datetime));
                                                     }
                                                 ],
                                                 [
@@ -424,13 +436,6 @@ $this->registerCss("
                                                     'format' => 'html',
                                                     'value' => function($data) {
                                                         return Yii::$app->formatter->asDecimal($data->lph_amount);
-                                                    }
-                                                ],
-                                                [
-                                                    'attribute' => 'lph_type',
-                                                    'format' => 'html',
-                                                    'value' => function($data) {
-                                                        return $data->lph_type == 'C' ? 'Credit' : 'Debet';
                                                     }
                                                 ],
                                                 [
@@ -444,7 +449,7 @@ $this->registerCss("
                                                     'attribute' => 'lph_expired',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime($data->lph_expired);
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->lph_expired));
                                                     }
                                                 ],
                                             ],
@@ -489,7 +494,7 @@ $this->registerCss("
                                                     'attribute' => 'svo_datetime',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime($data->svo_datetime);
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->svo_datetime));
                                                     }
                                                 ],
                                                 [
@@ -497,7 +502,7 @@ $this->registerCss("
                                                     'format' => 'html',
                                                     'value' => function($data) {
                                                         if(!empty($data->promotion))
-                                                            return Yii::$app->formatter->asDatetime($data->promotion->del_start);
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->promotion->del_start));
                                                     }
                                                 ],
                                                 [
@@ -505,7 +510,7 @@ $this->registerCss("
                                                     'format' => 'html',
                                                     'value' => function($data) {
                                                         if(!empty($data->promotion))
-                                                            return Yii::$app->formatter->asDatetime($data->promotion->del_end);
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->promotion->del_end));
                                                     }
                                                 ],
                                             ],
@@ -550,7 +555,7 @@ $this->registerCss("
                                                     'attribute' => 'svr_datetime',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime($data->svr_datetime);
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->svr_datetime));
                                                     }
                                                 ],
                                                 [
@@ -558,7 +563,7 @@ $this->registerCss("
                                                     'format' => 'html',
                                                     'value' => function($data) {
                                                         if(!empty($data->posVoucher))
-                                                            return Yii::$app->formatter->asDatetime($data->posVoucher->pvo_valid_start);
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->posVoucher->pvo_valid_start));
                                                     }
                                                 ],
                                                 [
@@ -566,7 +571,7 @@ $this->registerCss("
                                                     'format' => 'html',
                                                     'value' => function($data) {
                                                         if(!empty($data->posVoucher))
-                                                            return Yii::$app->formatter->asDatetime($data->posVoucher->pvo_valid_end);
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->posVoucher->pvo_valid_end));
                                                     }
                                                 ],
                                                 [
@@ -596,3 +601,40 @@ $this->registerCss("
     </div>
 </div>
 </section>
+
+<!-- widget to create render modal -->
+<?php
+    Modal::begin([
+        'header' => '</button><h4 class="modal-title">Correction Point</h4>',
+        'id' => 'modal',
+        'size' => 'modal-md',
+    ]);
+?>
+<div id="modalContent"></div>
+<?php Modal::end(); ?>
+
+<?php
+$this->registerJs("
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart()
+    {
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Work',     11],
+            ['Eat',      2],
+            ['Commute',  2],
+            ['Watch TV', 2],
+            ['Sleep',    7]
+        ]);
+
+        var options = {
+            title: 'My Daily Activities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+", yii\web\View::POS_END, 'member-profile');
+?>

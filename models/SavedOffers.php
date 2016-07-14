@@ -60,7 +60,7 @@ class SavedOffers extends \yii\db\ActiveRecord
             'svo_id' => 'ID',
             'svo_acc_id' => 'Account',
             'svo_del_id' => 'Promotion',
-            'svo_datetime' => 'Datetime',
+            'svo_datetime' => 'Saved Time',
         ];
     }
 }

@@ -61,7 +61,7 @@ class SavedRewards extends \yii\db\ActiveRecord
             'svr_id' => 'ID',
             'svr_acc_id' => 'Account',
             'svr_pvo_id' => 'Pos Voucher',
-            'svr_datetime' => 'Datetime',
+            'svr_datetime' => 'Saved Time',
         ];
     }
 }
