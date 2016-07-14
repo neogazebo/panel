@@ -12,9 +12,10 @@ $form = ActiveForm::begin([
 
 <div class="modal-body">
     <?= $form->field($model, 'lph_member')->textInput(['value' => is_object($model->member) ? $model->member->acc_screen_name : '', 'readonly' => true]); ?>
-    <?= $form->field($model, 'lph_acc_id')->hiddenInput() ?>
+    <?= $form->field($model, 'lph_acc_id')->hiddenInput()->label('', ['style' => 'display: none']) ?>
     <?= $form->field($model, 'lph_amount')->textInput(['value' => 0]); ?>
     <?= $form->field($model, 'lph_type')->dropDownList(['C' => 'Credit', 'D' => 'Debet']); ?>
+    <?= $form->field($model, 'lph_description')->textArea(); ?>
 </div>
 <div class="modal-footer">
     <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>

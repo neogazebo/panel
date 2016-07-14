@@ -4,6 +4,7 @@ namespace app\modules\account\controllers;
 use Yii;
 use yii\web\Controller;
 use app\controllers\BaseController;
+use app\components\helpers\General;
 use app\models\Account;
 use app\models\AccountSearch;
 use app\models\SnapEarn;
@@ -126,9 +127,11 @@ class DefaultController extends BaseController
                     $history->lph_com_id = 0;
                     $history->lph_cus_id = 0;
                     $history->lph_lpe_id = 22;
-                    $history->lph_param = 'Point Correction';
+                    $history->lph_param = (string)Yii::$app->user->id;
                     $history->lph_free = 'N';
                     $history->lph_datetime = $set_time;
+                    $history->lph_approve = 0;
+                    $history->lph_lpt_id = 0;
                     $history->lph_total_point = $total_point;
                     $history->lph_expired = $set_time + 365 * 86400;
                     $history->lph_current_point = $history->lph_amount;
@@ -140,12 +143,12 @@ class DefaultController extends BaseController
                         return $this->redirect(['default/view?id='.$model->lph_acc_id]);
                     } else {
                         $transaction->rollBack();
-                        $this->setMessage('save', 'error', General::extactErrorModel($history->getErrors()));
+                        $this->setMessage('save', 'error', General::extractErrorModel($history->getErrors()));
                         return $this->redirect(['default/view?id='.$model->lph_acc_id]);
                     }
                 } catch(Expression $e) {
                     $transaction->rollBack();
-                    $this->setMessage('save', 'error', General::extactErrorModel($history->getErrors()));
+                    $this->setMessage('save', 'error', General::extractErrorModel($history->getErrors()));
                     return $this->redirect(['default/view?id='.$model->lph_acc_id]);
                 }
             } else {

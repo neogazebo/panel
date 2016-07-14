@@ -428,7 +428,7 @@ $this->registerCss("
                                                     'attribute' => 'lph_datetime',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime($data->lph_datetime);
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->lph_datetime));
                                                     }
                                                 ],
                                                 [
@@ -449,7 +449,7 @@ $this->registerCss("
                                                     'attribute' => 'lph_expired',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime($data->lph_expired);
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->lph_expired));
                                                     }
                                                 ],
                                             ],
@@ -555,7 +555,7 @@ $this->registerCss("
                                                     'attribute' => 'svr_datetime',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime($data->svr_datetime);
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->svr_datetime));
                                                     }
                                                 ],
                                                 [
@@ -563,7 +563,7 @@ $this->registerCss("
                                                     'format' => 'html',
                                                     'value' => function($data) {
                                                         if(!empty($data->posVoucher))
-                                                            return Yii::$app->formatter->asDatetime($data->posVoucher->pvo_valid_start);
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->posVoucher->pvo_valid_start));
                                                     }
                                                 ],
                                                 [
@@ -571,7 +571,7 @@ $this->registerCss("
                                                     'format' => 'html',
                                                     'value' => function($data) {
                                                         if(!empty($data->posVoucher))
-                                                            return Yii::$app->formatter->asDatetime($data->posVoucher->pvo_valid_end);
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->posVoucher->pvo_valid_end));
                                                     }
                                                 ],
                                                 [
