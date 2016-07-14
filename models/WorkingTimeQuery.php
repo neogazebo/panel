@@ -102,6 +102,27 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         return $this;
     }
 
+    public function totalDetail($id)
+    {
+        $this->select("
+            count(wrk_id) AS total_reviewed,
+            SUM(wrk_time) AS total_record,
+            SUM(wrk_point) AS total_point,
+            SUM(wrk_type = 1) AS total_approved,
+            SUM(wrk_type = 2) AS total_rejected");
+        $this->where('wrk_by = :user AND wrk_end IS NOT NULL', [
+            ':user' => $_GET['id']
+        ]);
+        if (!empty($_GET['wrk_daterange'])) {
+            $range = explode(" to ", $_GET['wrk_daterange']);
+            $first_date = $range[0] . ' 00:00:00';
+            $last_date = $range[1] . ' 23:59:59';
+            $this->andWhere("date(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
+        }
+        $this->andWhere('wrk_time IS NOT NULL');
+        return $this->one();
+    }
+
     public function getReport($id, $date)
     {
         $date = explode(' to ', $date);

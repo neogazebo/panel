@@ -29,6 +29,7 @@ class WorkingTime extends \yii\db\ActiveRecord
     const CORRECTION_TYPE = 2;
     const UPDATE_TYPE = 1;
 
+    public $total_reviewed;
     public $total_record;
     public $total_point;
     public $total_rejected;

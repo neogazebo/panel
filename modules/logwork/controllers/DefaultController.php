@@ -39,6 +39,7 @@ class DefaultController extends BaseController
     public function actionView($id)
     {
         $model = WorkingTime::find()->with('reason')->detailPoint($id);
+        $total = WorkingTime::find()->totalDetail($id);
         $username = User::findOne($id)->username;
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
@@ -49,7 +50,8 @@ class DefaultController extends BaseController
         return $this->render('view',[
             'dataProvider' => $dataProvider,
             'id' => $id,
-            'username' => $username
+            'username' => $username,
+            'total' => $total
         ]);
     }
 
