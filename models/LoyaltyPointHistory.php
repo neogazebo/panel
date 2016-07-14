@@ -26,6 +26,8 @@ use Yii;
  */
 class LoyaltyPointHistory extends \yii\db\ActiveRecord
 {
+    public $lph_member;
+
     /**
      * @inheritdoc
      */
@@ -80,7 +82,13 @@ class LoyaltyPointHistory extends \yii\db\ActiveRecord
             'lph_approve' => 'Approve',
             'lph_lpt_id' => 'Lpt ID',
             'lph_description' => 'Description',
+            'lph_member' => 'Account'
         ];
+    }
+
+    public function getMember()
+    {
+        return $this->hasOne(Account::className(), ['acc_id' => 'lph_acc_id']);
     }
 
     public function getMerchant()

@@ -25,6 +25,7 @@ class Utc
 		}
 		return $gmt;
 	}
+
 	public static function getNow()
 	{
 		$time = Yii::$app->db

@@ -53,7 +53,13 @@ class DefaultController extends BaseController
             ]
         ]);
         $redeem = LoyaltyPointHistory::find()
-            ->where('lph_acc_id = :id', [':id' => $id])
+            ->where('
+                lph_acc_id = :id 
+                AND lph_type = :type
+            ', [
+                ':id' => $id,
+                ':type' => 'D'
+            ])
             ->orderBy('lph_id DESC');
         $redeemProvider =  new ActiveDataProvider([
             'query' => $redeem,
@@ -86,6 +92,69 @@ class DefaultController extends BaseController
             'redeemProvider' => $redeemProvider,
             'offerProvider' => $offerProvider,
             'rewardProvider' => $rewardProvider,
+        ]);
+    }
+
+    public function actionCorrection($id)
+    {
+        $model = LoyaltyPointHistory::find()
+            ->where('lph_acc_id = :acc_id', [
+                ':acc_id' => $id
+            ])
+            ->orderBy('lph_id DESC')
+            ->one();
+        if(empty($model)) {
+            $model = new LoyaltyPointHistory();
+            $model->lph_acc_id = $id;
+        }
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            $history = new LoyaltyPointHistory();
+            $history->attributes = $model->attributes;
+            if($history->lph_amount > 0) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    $set_time = \app\components\helpers\Utc::getNow();
+                    if($history->lph_type == 'C')
+                        $total_point = $model->lph_total_point + $history->lph_amount;
+                    else
+                        $total_point = $model->lph_total_point - $history->lph_amount;
+                    $history->lph_parent = 0;
+                    $history->lph_com_id = 0;
+                    $history->lph_cus_id = 0;
+                    $history->lph_lpe_id = 22;
+                    $history->lph_param = 'Point Correction';
+                    $history->lph_free = 'N';
+                    $history->lph_datetime = $set_time;
+                    $history->lph_total_point = $total_point;
+                    $history->lph_expired = $set_time + 365 * 86400;
+                    $history->lph_current_point = $history->lph_amount;
+
+                    if($history->save()) {
+                        $acc_screen_name = !empty($model->member) ? $model->member->acc_screen_name . ' (' . $model->member->acc_google_email . ')' : $model->lph_acc_id;
+                        $transaction->commit();
+                        $this->setMessage('save', 'success', 'Point successfully corrected!');
+                        return $this->redirect(['default/view?id='.$model->lph_acc_id]);
+                    } else {
+                        $transaction->rollBack();
+                        $this->setMessage('save', 'error', General::extactErrorModel($history->getErrors()));
+                        return $this->redirect(['default/view?id='.$model->lph_acc_id]);
+                    }
+                } catch(Expression $e) {
+                    $transaction->rollBack();
+                    $this->setMessage('save', 'error', General::extactErrorModel($history->getErrors()));
+                    return $this->redirect(['default/view?id='.$model->lph_acc_id]);
+                }
+            } else {
+                $this->setMessage('save', 'error', 'Point cannot be zero or less than zero!');
+                return $this->redirect(['default/view?id=' . $model->lph_acc_id]);
+            }
+        }
+        return $this->renderAjax('correction', [
+            'model' => $model
         ]);
     }
 
