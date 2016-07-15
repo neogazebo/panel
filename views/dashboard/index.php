@@ -8,6 +8,31 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 $this->title = 'Dashboard';
+$this->registerCss("
+    .invoice {
+        position: relative;
+        background: #eaeaea;
+        border: 1px solid #f4f4f4;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    .page-header {
+        padding-bottom: 9px;
+        border-bottom: 1px solid #00C0EF;
+    }
+    .page-header span{
+        font-size: 17px;
+        margin-left: 20px;
+    }
+    .bg-malaysia{
+        background-color: #3c8dbc;
+        padding: 0px 50px;
+    }
+    .bg-indonesia{
+        background-color: #f56954;
+        padding: 0px 50px;
+    }
+");
 ?>
 
 <section class="content-header ">
@@ -34,7 +59,15 @@ $this->title = 'Dashboard';
     </div>
 </section>
 <section class="content">
+    <div class="invoice">
     <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">
+        <i class="fa fa-area-chart"></i> 
+        <span>Malaysia : </span> <span class="bg-malaysia">&nbsp;</span>  <span>Indonesia : </span> <span class="bg-indonesia">&nbsp;</span>
+        <small class="pull-right">Receipt Upload</small>
+      </h2>
+    </div>
     <div class="col-md-6">
         <div class="box box-info">
             <div class="box-header with-border">
@@ -100,7 +133,16 @@ $this->title = 'Dashboard';
             </div>
         </div>
     </div>
+    </div>
+    <div class="invoice">
     <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">
+        <i class="fa fa-area-chart"></i>
+        <span>Malaysia : </span> <span class="bg-malaysia">&nbsp;</span>  <span>Indonesia : </span> <span class="bg-indonesia">&nbsp;</span>
+        <small class="pull-right">Receipt Reviewed</small>
+      </h2>
+    </div>
         <div class="col-md-6">
             <div class="box box-info">
                 <div class="box-header with-border">
@@ -133,6 +175,7 @@ $this->title = 'Dashboard';
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </section>
 <?php

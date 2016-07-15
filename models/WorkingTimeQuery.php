@@ -111,7 +111,7 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             SUM(wrk_type = 1) AS total_approved,
             SUM(wrk_type = 2) AS total_rejected");
         $this->where('wrk_by = :user AND wrk_end IS NOT NULL', [
-            ':user' => $_GET['id']
+            ':user' => $id
         ]);
         if (!empty($_GET['wrk_daterange'])) {
             $range = explode(" to ", $_GET['wrk_daterange']);

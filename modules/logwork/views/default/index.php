@@ -151,7 +151,7 @@ $this->title = 'Working Hours';
                                     'template' => '<span class="pull-right actionColumn">{detail} </span>',
                                     'buttons' => [
                                         'detail' => function($url,$model) {
-                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model->wrk_by]);
+                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model->wrk_by,'wrk_daterange' => (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ]);
                                         },
                                     ]
                                 ]

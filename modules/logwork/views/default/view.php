@@ -13,25 +13,25 @@ $this->title = 'Detail Working Hours';
 <section class="content-header ">
     <h1><?= Html::encode($this->title).' of <strong>'.$username ?></strong></h1>
     <div class="row">
-                    <?php // Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
-                    <div class="col-sm-3">
-                        <ul class="nav nav-stacked">
-                            <li><a href="#">Total Reviewed : <span class="pull-right badge bg-blue"><?= $total->total_reviewed ?></span></a></li>
-                            <li><a href="#">Total Time : <span class="pull-right badge bg-red"><?= date('H:m:s',$total->total_record) ?></span></a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-3">
-                        <ul class="nav nav-stacked">
-                            <li><a href="#">Total Approved : <span class="pull-right badge bg-aqua"><?= $total->total_approved ?></span></a></li>
-                            <li><a href="#">Total Rejected : <span class="pull-right badge bg-green"><?= $total->total_rejected ?></span></a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-3">
-                        <ul class="nav nav-stacked">
-                            <li><a href="#">Total Point : <span class="pull-right badge bg-red"><?= $total->total_point ?></span></a></li>
-                        </ul>
-                    </div>
-                </div>
+        <?php // Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
+        <div class="col-sm-3">
+            <ul class="nav nav-stacked">
+                <li><a href="#">Total Reviewed : <span class="pull-right badge bg-blue"><?= $total->total_reviewed ?></span></a></li>
+                <li><a href="#">Total Time : <span class="pull-right badge bg-aqua"><?= date('H:m:s',$total->total_record) ?></span></a></li>
+            </ul>
+        </div>
+        <div class="col-sm-3">
+            <ul class="nav nav-stacked">
+                <li><a href="#">Total Approved : <span class="pull-right badge bg-green"><?= $total->total_approved ?></span></a></li>
+                <li><a href="#">Total Rejected : <span class="pull-right badge bg-yellow"><?= $total->total_rejected ?></span></a></li>
+            </ul>
+        </div>
+        <div class="col-sm-3">
+            <ul class="nav nav-stacked">
+                <li><a href="#">Total Point : <span class="pull-right badge bg-aqua"><?= $total->total_point ?></span></a></li>
+            </ul>
+        </div>
+    </div>
 </section>
 
 <section class="content">
