@@ -50,8 +50,14 @@ $this->registerCss("
 ");
 $receiptProvider->pagination->pageParam = 'receipt-page';
 $receiptProvider->sort->sortParam = 'receipt-sort';
-$redeemProvider->pagination->pageParam = 'redeem-page';
-$redeemProvider->sort->sortParam = 'redeem-sort';
+// $redeemProvider->pagination->pageParam = 'redeem-page';
+// $redeemProvider->sort->sortParam = 'redeem-sort';
+$historyCashProvider->pagination->pageParam = 'historyCash-page';
+$historyCashProvider->sort->sortParam = 'historyCash-sort';
+$historyOfferProvider->pagination->pageParam = 'historyOffer-page';
+$historyOfferProvider->sort->sortParam = 'historyOffer-sort';
+$referenceProvider->pagination->pageParam = 'reference-page';
+$referenceProvider->sort->sortParam = 'reference-sort';
 $offerProvider->pagination->pageParam = 'offer-page';
 $offerProvider->sort->sortParam = 'offer-sort';
 $rewardProvider->pagination->pageParam = 'reward-page';
@@ -256,72 +262,164 @@ $rewardProvider->sort->sortParam = 'reward-sort';
                                         </div>
                                     </div>
                                     <div class="box-body">
+                                        <h4>History Offers</h4>
                                         <?=
                                         GridView::widget([
-                                            'id' => 'list_redemption',
+                                            'id' => 'history_offer',
                                             'options' => [
-                                                'style' => 'font-size: 13px',
+                                                'style' => 'font-size: 13px'
                                             ],
                                             'layout' => '{items} {summary} {pager}',
-                                            'dataProvider' => $redeemProvider,
+                                            'dataProvider' => $historyOfferProvider,
                                             'columns' => [
+                                                'offer.del_title',
                                                 [
-                                                    'header' => 'From',
+                                                    'attribute' => 'des_redeem_datetime',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        switch ($data->lph_lpe_id) {
-                                                            case 2:
-                                                                if (!empty($data->offer))
-                                                                    return $data->offer->del_title;
-                                                                break;
-                                                            case 3:
-                                                                if (!empty($data->voucher))
-                                                                    return $data->voucher->vou_reward_name;
-                                                                break;
-                                                            case 4:
-                                                                if (!empty($data->event))
-                                                                    return $data->event->evt_name;
-                                                                break;
-                                                            case 22:
-                                                                if (!empty($data->user))
-                                                                    return $data->user->acc_screen_name;
-                                                            case 55:
-                                                                if (!empty($data->redeem->voucher))
-                                                                    return $data->redeem->voucher->vou_reward_name;
-                                                        }
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->des_redeem_datetime));
+                                                    }
+                                                ],
+                                                'des_sn'
+                                            ],
+                                            'tableOptions' => ['class' => 'table table-bordered table-hover']
+                                        ]);
+                                        ?>
+                                        <br />
+                                        <h4>History Cash Vouchers</h4>
+                                        <?=
+                                        GridView::widget([
+                                            'id' => 'history_cash',
+                                            'options' => [
+                                                'style' => 'font-size: 13px'
+                                            ],
+                                            'layout' => '{items} {summary} {pager}',
+                                            'dataProvider' => $historyCashProvider,
+                                            'columns' => [
+                                                'cvr_pvo_name',
+                                                'cvr_com_name',
+                                                'cvr_pvd_code',
+                                                'cvr_pvd_sn',
+                                                [
+                                                    'attribute' => 'cvr_pvd_update_datetime',
+                                                    'format' => 'html',
+                                                    'value' => function($data) {
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_update_datetime));
                                                     }
                                                 ],
                                                 [
-                                                    'attribute' => 'lph_datetime',
+                                                    'attribute' => 'cvr_pvd_expired',
                                                     'format' => 'html',
                                                     'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->lph_datetime));
-                                                    }
-                                                ],
-                                                [
-                                                    'attribute' => 'lph_amount',
-                                                    'format' => 'html',
-                                                    'value' => function($data) {
-                                                        return Yii::$app->formatter->asDecimal($data->lph_amount);
-                                                    }
-                                                ],
-                                                [
-                                                    'attribute' => 'lph_total_point',
-                                                    'format' => 'html',
-                                                    'value' => function($data) {
-                                                        return Yii::$app->formatter->asDecimal($data->lph_total_point);
-                                                    }
-                                                ],
-                                                [
-                                                    'attribute' => 'lph_expired',
-                                                    'format' => 'html',
-                                                    'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->lph_expired));
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_expired));
                                                     }
                                                 ],
                                             ],
-                                            'tableOptions' => ['class' => 'table table-hover']
+                                            'tableOptions' => ['class' => 'table table-bordered table-hover']
                                         ]);
+                                        ?>
+                                        <br />
+                                        <h4>Redemption Reference</h4>
+                                        <?=
+                                        GridView::widget([
+                                            'id' => 'redemption_reference',
+                                            'options' => [
+                                                'style' => 'font-size: 13px'
+                                            ],
+                                            'layout' => '{items} {summary} {pager}',
+                                            'dataProvider' => $referenceProvider,
+                                            'columns' => [
+                                                'rdr_name',
+                                                [
+                                                    'attribute' => 'rdr_vou_value',
+                                                    'format' => 'html',
+                                                    'value' => function($data) {
+                                                        return Yii::$app->formatter->asDecimal($data->rdr_vou_value);
+                                                    }
+                                                ],
+                                                'rdr_sn',
+                                                'rdr_code',
+                                                'rdr_expired',
+                                                'rdr_vor_trx_id',
+                                                'rdr_reference_code',
+                                                'rdr_msisdn',
+                                                [
+                                                    'attribute' => 'rdr_datetime',
+                                                    'format' => 'html',
+                                                    'value' => function($data) {
+                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->rdr_datetime));
+                                                    }
+                                                ],
+                                            ],
+                                            'tableOptions' => ['class' => 'table table-bordered table-hover']
+                                        ]);
+                                        ?>
+                                        <?php
+                                        // echo GridView::widget([
+                                        //     'id' => 'list_redemption',
+                                        //     'options' => [
+                                        //         'style' => 'font-size: 13px',
+                                        //     ],
+                                        //     'layout' => '{items} {summary} {pager}',
+                                        //     'dataProvider' => $redeemProvider,
+                                        //     'columns' => [
+                                        //         [
+                                        //             'header' => 'From',
+                                        //             'format' => 'html',
+                                        //             'value' => function($data) {
+                                        //                 switch ($data->lph_lpe_id) {
+                                        //                     case 2:
+                                        //                         if (!empty($data->offer))
+                                        //                             return $data->offer->del_title;
+                                        //                         break;
+                                        //                     case 3:
+                                        //                         if (!empty($data->voucher))
+                                        //                             return $data->voucher->vou_reward_name;
+                                        //                         break;
+                                        //                     case 4:
+                                        //                         if (!empty($data->event))
+                                        //                             return $data->event->evt_name;
+                                        //                         break;
+                                        //                     case 22:
+                                        //                         if (!empty($data->user))
+                                        //                             return $data->user->acc_screen_name;
+                                        //                     case 55:
+                                        //                         if (!empty($data->redeem->voucher))
+                                        //                             return $data->redeem->voucher->vou_reward_name;
+                                        //                 }
+                                        //             }
+                                        //         ],
+                                        //         [
+                                        //             'attribute' => 'lph_datetime',
+                                        //             'format' => 'html',
+                                        //             'value' => function($data) {
+                                        //                 return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->lph_datetime));
+                                        //             }
+                                        //         ],
+                                        //         [
+                                        //             'attribute' => 'lph_amount',
+                                        //             'format' => 'html',
+                                        //             'value' => function($data) {
+                                        //                 return Yii::$app->formatter->asDecimal($data->lph_amount);
+                                        //             }
+                                        //         ],
+                                        //         [
+                                        //             'attribute' => 'lph_total_point',
+                                        //             'format' => 'html',
+                                        //             'value' => function($data) {
+                                        //                 return Yii::$app->formatter->asDecimal($data->lph_total_point);
+                                        //             }
+                                        //         ],
+                                        //         [
+                                        //             'attribute' => 'lph_expired',
+                                        //             'format' => 'html',
+                                        //             'value' => function($data) {
+                                        //                 return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->lph_expired));
+                                        //             }
+                                        //         ],
+                                        //     ],
+                                        //     'tableOptions' => ['class' => 'table table-hover']
+                                        // ]);
                                         ?>
                                     </div>
                                 </div>

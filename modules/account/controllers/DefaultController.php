@@ -9,6 +9,9 @@ use app\models\Account;
 use app\models\AccountSearch;
 use app\models\SnapEarn;
 use app\models\LoyaltyPointHistory;
+use app\models\DealIssued;
+use app\models\CashvoucherRedeemed;
+use app\models\RedemptionReference;
 use app\models\SavedOffers;
 use app\models\SavedRewards;
 use app\models\Country;
@@ -53,21 +56,48 @@ class DefaultController extends BaseController
                 'pageSize' => 10
             ]
         ]);
-        $redeem = LoyaltyPointHistory::find()
-            ->where('
-                lph_acc_id = :id 
-                AND lph_type = :type
-            ', [
-                ':id' => $id,
-                ':type' => 'D'
-            ])
-            ->orderBy('lph_id DESC');
-        $redeemProvider =  new ActiveDataProvider([
-            'query' => $redeem,
+        $historyOffer = DealIssued::find()
+            ->where('des_receiver_id = :id AND des_redeem_datetime > 0', [':id' => $id])
+            ->orderBy('des_id DESC');
+        $historyOfferProvider =  new ActiveDataProvider([
+            'query' => $historyOffer,
             'pagination' => [
                 'pageSize' => 10
             ]
         ]);
+        $historyCash = CashvoucherRedeemed::find()
+            ->where('cvr_acc_id = :id', [':id' => $id])
+            ->orderBy('cvr_id DESC');
+        $historyCashProvider =  new ActiveDataProvider([
+            'query' => $historyCash,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+        $reference = RedemptionReference::find()
+            ->where('rdr_acc_id = :id', [':id' => $id])
+            ->orderBy('rdr_id DESC');
+        $referenceProvider =  new ActiveDataProvider([
+            'query' => $reference,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+        // $redeem = LoyaltyPointHistory::find()
+        //     ->where('
+        //         lph_acc_id = :id 
+        //         AND lph_type = :type
+        //     ', [
+        //         ':id' => $id,
+        //         ':type' => 'D'
+        //     ])
+        //     ->orderBy('lph_id DESC');
+        // $redeemProvider =  new ActiveDataProvider([
+        //     'query' => $redeem,
+        //     'pagination' => [
+        //         'pageSize' => 10
+        //     ]
+        // ]);
         $offer = SavedOffers::find()
             ->where('svo_acc_id = :id', [':id' => $id])
             ->orderBy('svo_id DESC');
@@ -90,6 +120,9 @@ class DefaultController extends BaseController
         return $this->render('view', [
             'model' => $this->findModel($id),
             'receiptProvider' => $receiptProvider,
+            'historyOfferProvider' => $historyOfferProvider,
+            'historyCashProvider' => $historyCashProvider,
+            'referenceProvider' => $referenceProvider,
             'redeemProvider' => $redeemProvider,
             'offerProvider' => $offerProvider,
             'rewardProvider' => $rewardProvider,
