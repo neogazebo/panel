@@ -480,3 +480,8 @@ $this->registerCss("
 ?>
 <div id="modalContent"></div>
 <?php Modal::end(); ?>
+
+<?php $this->registerJs("
+    $.pjax.reload({container: '#redemption_history'});
+");
+?>
