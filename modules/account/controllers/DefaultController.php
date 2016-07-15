@@ -83,21 +83,21 @@ class DefaultController extends BaseController
                 'pageSize' => 10
             ]
         ]);
-        // $redeem = LoyaltyPointHistory::find()
-        //     ->where('
-        //         lph_acc_id = :id 
-        //         AND lph_type = :type
-        //     ', [
-        //         ':id' => $id,
-        //         ':type' => 'D'
-        //     ])
-        //     ->orderBy('lph_id DESC');
-        // $redeemProvider =  new ActiveDataProvider([
-        //     'query' => $redeem,
-        //     'pagination' => [
-        //         'pageSize' => 10
-        //     ]
-        // ]);
+        $redeem = LoyaltyPointHistory::find()
+            ->where('
+                lph_acc_id = :id 
+                AND lph_type = :type
+            ', [
+                ':id' => $id,
+                ':type' => 'D'
+            ])
+            ->orderBy('lph_id DESC');
+        $redeemProvider =  new ActiveDataProvider([
+            'query' => $redeem,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
         $offer = SavedOffers::find()
             ->where('svo_acc_id = :id', [':id' => $id])
             ->orderBy('svo_id DESC');

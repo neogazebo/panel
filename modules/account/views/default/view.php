@@ -4,11 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\Account */
-// var_dump($model->lastLogin());exit;
 $this->title = $model->acc_screen_name;
 $model->acc_gender = ($model->acc_gender == 1) ? 'Male' : 'Female';
 
@@ -48,20 +45,6 @@ $this->registerCss("
         border-bottom-left-radius: 3px;
     }
 ");
-$receiptProvider->pagination->pageParam = 'receipt-page';
-$receiptProvider->sort->sortParam = 'receipt-sort';
-// $redeemProvider->pagination->pageParam = 'redeem-page';
-// $redeemProvider->sort->sortParam = 'redeem-sort';
-$historyCashProvider->pagination->pageParam = 'historyCash-page';
-$historyCashProvider->sort->sortParam = 'historyCash-sort';
-$historyOfferProvider->pagination->pageParam = 'historyOffer-page';
-$historyOfferProvider->sort->sortParam = 'historyOffer-sort';
-$referenceProvider->pagination->pageParam = 'reference-page';
-$referenceProvider->sort->sortParam = 'reference-sort';
-$offerProvider->pagination->pageParam = 'offer-page';
-$offerProvider->sort->sortParam = 'offer-sort';
-$rewardProvider->pagination->pageParam = 'reward-page';
-$rewardProvider->sort->sortParam = 'reward-sort';
 ?>
 <section class="content">
     <div class="row">
@@ -209,6 +192,12 @@ $rewardProvider->sort->sortParam = 'reward-sort';
                                                 ],
                                                 'layout' => '{items} {summary} {pager}',
                                                 'dataProvider' => $receiptProvider,
+                                                'pjax'=>true,
+                                                'pjaxSettings'=>[
+                                                    'neverTimeout'=>true,
+                                                    'beforeGrid'=>'My fancy content before.',
+                                                    'afterGrid'=>'My fancy content after.',
+                                                ],
                                                 'columns' => [
                                                     [
                                                         'label' => 'Merchant',
@@ -271,6 +260,12 @@ $rewardProvider->sort->sortParam = 'reward-sort';
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $historyOfferProvider,
+                                            'pjax'=>true,
+                                            'pjaxSettings'=>[
+                                                'neverTimeout'=>true,
+                                                'beforeGrid'=>'My fancy content before.',
+                                                'afterGrid'=>'My fancy content after.',
+                                            ],
                                             'columns' => [
                                                 'offer.del_title',
                                                 [
@@ -295,6 +290,12 @@ $rewardProvider->sort->sortParam = 'reward-sort';
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $historyCashProvider,
+                                            'pjax'=>true,
+                                            'pjaxSettings'=>[
+                                                'neverTimeout'=>true,
+                                                'beforeGrid'=>'My fancy content before.',
+                                                'afterGrid'=>'My fancy content after.',
+                                            ],
                                             'columns' => [
                                                 'cvr_pvo_name',
                                                 'cvr_com_name',
@@ -328,6 +329,12 @@ $rewardProvider->sort->sortParam = 'reward-sort';
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $referenceProvider,
+                                            'pjax'=>true,
+                                            'pjaxSettings'=>[
+                                                'neverTimeout'=>true,
+                                                'beforeGrid'=>'My fancy content before.',
+                                                'afterGrid'=>'My fancy content after.',
+                                            ],
                                             'columns' => [
                                                 'rdr_name',
                                                 [
@@ -337,9 +344,9 @@ $rewardProvider->sort->sortParam = 'reward-sort';
                                                         return Yii::$app->formatter->asDecimal($data->rdr_vou_value);
                                                     }
                                                 ],
-                                                'rdr_sn',
-                                                'rdr_code',
-                                                'rdr_expired',
+                                                'rdr_vod_sn',
+                                                'rdr_vod_code',
+                                                'rdr_vod_expired',
                                                 'rdr_vor_trx_id',
                                                 'rdr_reference_code',
                                                 'rdr_msisdn',
@@ -362,6 +369,12 @@ $rewardProvider->sort->sortParam = 'reward-sort';
                                         //     ],
                                         //     'layout' => '{items} {summary} {pager}',
                                         //     'dataProvider' => $redeemProvider,
+                                        // 'pjax'=>true,
+                                        // 'pjaxSettings'=>[
+                                        //     'neverTimeout'=>true,
+                                        //     'beforeGrid'=>'My fancy content before.',
+                                        //     'afterGrid'=>'My fancy content after.',
+                                        // ],
                                         //     'columns' => [
                                         //         [
                                         //             'header' => 'From',
@@ -446,6 +459,12 @@ $rewardProvider->sort->sortParam = 'reward-sort';
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $offerProvider,
+                                            'pjax'=>true,
+                                            'pjaxSettings'=>[
+                                                'neverTimeout'=>true,
+                                                'beforeGrid'=>'My fancy content before.',
+                                                'afterGrid'=>'My fancy content after.',
+                                            ],
                                             'columns' => [
                                                 [
                                                     'label' => 'Promotion',
@@ -507,6 +526,12 @@ $rewardProvider->sort->sortParam = 'reward-sort';
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $rewardProvider,
+                                            'pjax'=>true,
+                                            'pjaxSettings'=>[
+                                                'neverTimeout'=>true,
+                                                'beforeGrid'=>'My fancy content before.',
+                                                'afterGrid'=>'My fancy content after.',
+                                            ],
                                             'columns' => [
                                                 [
                                                     'label' => 'Reward',

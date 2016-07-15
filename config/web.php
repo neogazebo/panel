@@ -38,6 +38,9 @@ $config = [
         'logwork' => [
             'class' => 'app\modules\logwork\Logwork',
         ],
+       'gridview' =>  [
+            'class' => '\kartik\grid\Module',
+        ]
     ],
     'components' => [
         'request' => [
