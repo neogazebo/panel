@@ -84,7 +84,7 @@ $this->registerCss("
                                     <li class="user-header">
                                         <img src="<?= $this->theme->baseUrl ?>/dist/img/ebz_logo.png" class="img-circle" alt="User Image">
                                         <p>
-                                            <?= Yii::$app->user->identity->username ?>
+                                            <?= (!empty(Yii::$app->user)) ? Yii::$app->user->identity->username : '' ?>
                                             <small>Admin User since <?= (isset(Yii::$app->user->identity)) ? Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) : '' ?></small>
                                         </p>
                                     </li>
