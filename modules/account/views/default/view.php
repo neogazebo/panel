@@ -5,12 +5,14 @@ use yii\widgets\DetailView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Account */
 // var_dump($model->lastLogin());exit;
 $this->title = $model->acc_screen_name;
 $model->acc_gender = ($model->acc_gender == 1) ? 'Male' : 'Female';
+
 $this->registerCss("
     #gmap-waypoints {
         position: relative;
@@ -405,6 +407,7 @@ $this->registerCss("
                                         </div>
                                     </div>
                                     <div class="box-body">
+                                        <?php Pjax::begin(['id' => 'redemption_history']) ?>
                                         <?=
                                         GridView::widget([
                                             'id' => 'list_redemption',
@@ -472,6 +475,7 @@ $this->registerCss("
                                             'tableOptions' => ['class' => 'table table-hover']
                                         ]);
                                         ?>
+                                        <?php Pjax::end() ?>
                                     </div>
                                 </div>
                             </div>
