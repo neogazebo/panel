@@ -5,7 +5,6 @@ use yii\widgets\DetailView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Account */
@@ -49,6 +48,14 @@ $this->registerCss("
         border-bottom-left-radius: 3px;
     }
 ");
+$receiptProvider->pagination->pageParam = 'receipt-page';
+$receiptProvider->sort->sortParam = 'receipt-sort';
+$redeemProvider->pagination->pageParam = 'redeem-page';
+$redeemProvider->sort->sortParam = 'redeem-sort';
+$offerProvider->pagination->pageParam = 'offer-page';
+$offerProvider->sort->sortParam = 'offer-sort';
+$rewardProvider->pagination->pageParam = 'reward-page';
+$rewardProvider->sort->sortParam = 'reward-sort';
 ?>
 <section class="content">
     <div class="row">
@@ -188,7 +195,6 @@ $this->registerCss("
                                             </div>
                                         </div>
                                         <div class="box-body">
-                                            <?php Pjax::begin(); ?>
                                             <?=
                                             GridView::widget([
                                                 'id' => 'list_snapearn',
@@ -233,7 +239,6 @@ $this->registerCss("
                                                 'tableOptions' => ['class' => 'table table-hover']
                                             ]);
                                             ?>
-                                            <?php Pjax::end(); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -251,7 +256,6 @@ $this->registerCss("
                                         </div>
                                     </div>
                                     <div class="box-body">
-                                        <?php Pjax::begin(['id' => 'redemption_history']) ?>
                                         <?=
                                         GridView::widget([
                                             'id' => 'list_redemption',
@@ -319,7 +323,6 @@ $this->registerCss("
                                             'tableOptions' => ['class' => 'table table-hover']
                                         ]);
                                         ?>
-                                        <?php Pjax::end(); ?>
                                     </div>
                                 </div>
                             </div>
@@ -337,7 +340,6 @@ $this->registerCss("
                                         </div>
                                     </div>
                                     <div class="box-body">
-                                    <?php Pjax::begin(); ?>
                                         <?=
                                         GridView::widget([
                                             'id' => 'list_offers',
@@ -382,7 +384,6 @@ $this->registerCss("
                                             'tableOptions' => ['class' => 'table table-hover']
                                         ]);
                                         ?>
-                                        <?php Pjax::end(); ?>
                                     </div>
                                 </div>
                             </div>
@@ -400,7 +401,6 @@ $this->registerCss("
                                         </div>
                                     </div>
                                     <div class="box-body">
-                                    <?php Pjax::begin(); ?>
                                         <?=
                                         GridView::widget([
                                             'id' => 'list_rewards',
@@ -453,7 +453,6 @@ $this->registerCss("
                                             'tableOptions' => ['class' => 'table table-hover']
                                         ]);
                                         ?>
-                                        <?php Pjax::end(); ?>
                                     </div>
                                 </div>
                             </div>
@@ -480,8 +479,3 @@ $this->registerCss("
 ?>
 <div id="modalContent"></div>
 <?php Modal::end(); ?>
-
-<?php $this->registerJs("
-    $.pjax.reload({container: '#redemption_history'});
-");
-?>
