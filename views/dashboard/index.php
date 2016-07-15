@@ -178,6 +178,7 @@ $this->registerCss("
     </div>
     </div>
 </section>
+
 <?php
 $this->registerJsFile($this->theme->baseUrl.'/dist/customes/js/dashboard.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
  ?>
