@@ -18,7 +18,7 @@ class AccountSearch extends Account
     public function rules()
     {
         return [
-            [['acc_id', 'acc_facebook_id', 'acc_created_datetime', 'acc_updated_datetime', 'acc_status', 'acc_tmz_id', 'acc_birthdate', 'acc_gender'], 'integer'],
+            [['acc_facebook_id',  'acc_updated_datetime', 'acc_status', 'acc_tmz_id', 'acc_birthdate', 'acc_gender'], 'integer'],
             [['acc_facebook_email', 'acc_facebook_graph', 'acc_google_id', 'acc_google_email', 'acc_google_token', 'acc_screen_name', 'acc_cty_id', 'acc_photo', 'acc_address'], 'safe'],
         ];
     }

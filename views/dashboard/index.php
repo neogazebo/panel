@@ -86,7 +86,7 @@ $this->registerCss("
                             'label' => 'Week Year',
                             'attribute' => 'sna_upload_date',
                             'value' => function($data){
-                                return $data->weeks;
+                                return str_replace("-00",'',$data->weeks);
                             }
                         ],
                         [

@@ -315,7 +315,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select(new Expression("
-            yearweek(from_unixtime(sna_upload_date),3) as weeks, 
+            STR_TO_DATE(yearweek(from_unixtime(sna_upload_date),3),'%Y%d') as weeks, 
             count(distinct sna_acc_id) as total_unique, 
             count(distinct IF(acc_cty_id = 'ID', sna_acc_id, null))  as total_unique_user_id,
             count(distinct IF(acc_cty_id = 'MY', sna_acc_id, null))  as total_unique_user_my
