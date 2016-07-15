@@ -84,7 +84,7 @@ $this->title = 'Detail Working Hours';
                                         if ($data->wrk_type == 2) {
                                             return ($data->wrk_rjct_number != 0) ? '<p class="text-yellow">'.$data->reason->sem_remark.'</p>' : '<a class=""><span class="not-set">(not set)</span></a>';
                                         } else{
-                                            return '<p class="text-green">Approved</p>';
+                                            return ($data->wrk_point == 4) ? '<p class="text-green">Approved <strong class="text-red">+</strong> </p>' : '<p class="text-green">Approved</p>';
                                         }
                                     }
                                 ],

@@ -86,7 +86,7 @@ $this->registerCss("
                             'label' => 'Week Year',
                             'attribute' => 'sna_upload_date',
                             'value' => function($data){
-                                return $data->weeks;
+                                return str_replace("-00",'',$data->weeks);
                             }
                         ],
                         [
@@ -178,6 +178,7 @@ $this->registerCss("
     </div>
     </div>
 </section>
+
 <?php
 $this->registerJsFile($this->theme->baseUrl.'/dist/customes/js/dashboard.js',['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
  ?>

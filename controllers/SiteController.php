@@ -39,7 +39,7 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->redirect(Yii::$app->urlManager->createUrl(['epay/index/']));
+        return $this->redirect(Yii::$app->urlManager->createUrl(['dashboard']));
     }
 
     public function actions()
@@ -71,7 +71,7 @@ class SiteController extends Controller
             }elseif($checkRoute == 'snapearn') {
                 $defaultRoute = Yii::$app->urlManager->createUrl(['snapearn']);
             }else {
-                $defaultRoute = Yii::$app->urlManager->createUrl(['epay/index']);
+                $defaultRoute = Yii::$app->urlManager->createUrl(['dashboard']);
             }
 
             return $this->redirect($defaultRoute);
