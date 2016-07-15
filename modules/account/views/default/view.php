@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Account */
@@ -186,6 +187,7 @@ $this->registerCss("
                                             </div>
                                         </div>
                                         <div class="box-body">
+                                            <?php Pjax::begin(); ?>
                                             <?=
                                             GridView::widget([
                                                 'id' => 'list_snapearn',
@@ -230,6 +232,7 @@ $this->registerCss("
                                                 'tableOptions' => ['class' => 'table table-hover']
                                             ]);
                                             ?>
+                                            <?php Pjax::end(); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -247,6 +250,7 @@ $this->registerCss("
                                         </div>
                                     </div>
                                     <div class="box-body">
+                                    <?php Pjax::begin(); ?>
                                         <?=
                                         GridView::widget([
                                             'id' => 'list_redemption',
@@ -314,6 +318,7 @@ $this->registerCss("
                                             'tableOptions' => ['class' => 'table table-hover']
                                         ]);
                                         ?>
+                                        <?php Pjax::end(); ?>
                                     </div>
                                 </div>
                             </div>
@@ -331,6 +336,7 @@ $this->registerCss("
                                         </div>
                                     </div>
                                     <div class="box-body">
+                                    <?php Pjax::begin(); ?>
                                         <?=
                                         GridView::widget([
                                             'id' => 'list_offers',
@@ -375,6 +381,7 @@ $this->registerCss("
                                             'tableOptions' => ['class' => 'table table-hover']
                                         ]);
                                         ?>
+                                        <?php Pjax::end(); ?>
                                     </div>
                                 </div>
                             </div>
@@ -392,6 +399,7 @@ $this->registerCss("
                                         </div>
                                     </div>
                                     <div class="box-body">
+                                    <?php Pjax::begin(); ?>
                                         <?=
                                         GridView::widget([
                                             'id' => 'list_rewards',
@@ -444,6 +452,7 @@ $this->registerCss("
                                             'tableOptions' => ['class' => 'table table-hover']
                                         ]);
                                         ?>
+                                        <?php Pjax::end(); ?>
                                     </div>
                                 </div>
                             </div>

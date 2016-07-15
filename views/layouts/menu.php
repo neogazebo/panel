@@ -8,7 +8,6 @@ use app\components\filters\AccessFilters;
         <a href="<?= Yii::$app->urlManager->createUrl('dashboard') ?>">
             <i class="fa fa-credit-card"></i>
             <span>Dashboard</span>
-            <i class="fa fa-angle-right pull-right"></i>
         </a>
     </li>
     <?php if (AccessFilters::getMenu('epay')) : ?>
