@@ -192,11 +192,9 @@ $this->registerCss("
                                                 ],
                                                 'layout' => '{items} {summary} {pager}',
                                                 'dataProvider' => $receiptProvider,
-                                                'pjax'=>true,
-                                                'pjaxSettings'=>[
-                                                    'neverTimeout'=>true,
-                                                    'beforeGrid'=>'My fancy content before.',
-                                                    'afterGrid'=>'My fancy content after.',
+                                                'pjax' => true,
+                                                'pjaxSettings' => [
+                                                    'neverTimeout' => true,
                                                 ],
                                                 'columns' => [
                                                     [
@@ -260,11 +258,9 @@ $this->registerCss("
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $historyOfferProvider,
-                                            'pjax'=>true,
-                                            'pjaxSettings'=>[
-                                                'neverTimeout'=>true,
-                                                'beforeGrid'=>'My fancy content before.',
-                                                'afterGrid'=>'My fancy content after.',
+                                            'pjax' => true,
+                                            'pjaxSettings' => [
+                                                'neverTimeout' => true,
                                             ],
                                             'columns' => [
                                                 'offer.del_title',
@@ -290,11 +286,9 @@ $this->registerCss("
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $historyCashProvider,
-                                            'pjax'=>true,
-                                            'pjaxSettings'=>[
-                                                'neverTimeout'=>true,
-                                                'beforeGrid'=>'My fancy content before.',
-                                                'afterGrid'=>'My fancy content after.',
+                                            'pjax' => true,
+                                            'pjaxSettings' => [
+                                                'neverTimeout' => true,
                                             ],
                                             'columns' => [
                                                 'cvr_pvo_name',
@@ -329,11 +323,9 @@ $this->registerCss("
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $referenceProvider,
-                                            'pjax'=>true,
-                                            'pjaxSettings'=>[
-                                                'neverTimeout'=>true,
-                                                'beforeGrid'=>'My fancy content before.',
-                                                'afterGrid'=>'My fancy content after.',
+                                            'pjax' => true,
+                                            'pjaxSettings' => [
+                                                'neverTimeout' => true,
                                             ],
                                             'columns' => [
                                                 'rdr_name',
@@ -369,11 +361,9 @@ $this->registerCss("
                                         //     ],
                                         //     'layout' => '{items} {summary} {pager}',
                                         //     'dataProvider' => $redeemProvider,
-                                        // 'pjax'=>true,
-                                        // 'pjaxSettings'=>[
-                                        //     'neverTimeout'=>true,
-                                        //     'beforeGrid'=>'My fancy content before.',
-                                        //     'afterGrid'=>'My fancy content after.',
+                                        // 'pjax' => true,
+                                        // 'pjaxSettings' => [
+                                        //     'neverTimeout' => true,
                                         // ],
                                         //     'columns' => [
                                         //         [
@@ -459,11 +449,9 @@ $this->registerCss("
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $offerProvider,
-                                            'pjax'=>true,
-                                            'pjaxSettings'=>[
-                                                'neverTimeout'=>true,
-                                                'beforeGrid'=>'My fancy content before.',
-                                                'afterGrid'=>'My fancy content after.',
+                                            'pjax' => true,
+                                            'pjaxSettings' => [
+                                                'neverTimeout' => true,
                                             ],
                                             'columns' => [
                                                 [
@@ -526,11 +514,9 @@ $this->registerCss("
                                             ],
                                             'layout' => '{items} {summary} {pager}',
                                             'dataProvider' => $rewardProvider,
-                                            'pjax'=>true,
-                                            'pjaxSettings'=>[
-                                                'neverTimeout'=>true,
-                                                'beforeGrid'=>'My fancy content before.',
-                                                'afterGrid'=>'My fancy content after.',
+                                            'pjax' => true,
+                                            'pjaxSettings' => [
+                                                'neverTimeout' => true,
                                             ],
                                             'columns' => [
                                                 [
