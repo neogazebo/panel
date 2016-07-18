@@ -40,9 +40,12 @@ $this->title = 'Detail Working Hours';
                 <div class="box-header with-border">
                     <div class="row">
                     <div class="col-sm-6">
+                        <div class="form-group">
+                        <label>&nbsp;</label><br>
+                        <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
+                        </div>
                     </div>
                     <div class="col-sm-6">
-                        <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
                         <form class="form-inline pull-right" role="form" method="get" action="view">
                             <div class="form-group">
                                 <label>Date range</label><br>
