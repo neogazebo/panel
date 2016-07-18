@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use kartik\widgets\DateTimePicker;
+use kartik\money\MaskMoney;
 
 $this->title = "Update SnapEarn";
 ?>
@@ -127,7 +128,7 @@ $this->title = "Update SnapEarn";
                       ?>
 
                       <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
-                      <?= $form->field($model, 'sna_receipt_amount')->textInput(['class' => 'form-control sna_amount']) ?>
+                      <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                       <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                   </div>
                   <div class="reject-form">

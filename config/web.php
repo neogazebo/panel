@@ -108,8 +108,8 @@ $config = [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'dd MMM yyyy',
-            'decimalSeparator' => ',',
-            'thousandSeparator' => ','
+            'thousandSeparator' => ',',
+            'decimalSeparator' => '.',
         ],
         'format' => [
             'class' => 'app\components\extensions\Formatter',
