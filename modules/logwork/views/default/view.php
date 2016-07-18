@@ -13,7 +13,6 @@ $this->title = 'Detail Working Hours';
 <section class="content-header ">
     <h1><?= Html::encode($this->title).' of <strong>'.$username ?></strong></h1>
     <div class="row">
-        <?php // Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
         <div class="col-sm-3">
             <ul class="nav nav-stacked">
                 <li><a href="#">Total Reviewed : <span class="pull-right badge bg-blue"><?= $total->total_reviewed ?></span></a></li>
@@ -43,6 +42,7 @@ $this->title = 'Detail Working Hours';
                     <div class="col-sm-6">
                     </div>
                     <div class="col-sm-6">
+                        <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
                         <form class="form-inline pull-right" role="form" method="get" action="view">
                             <div class="form-group">
                                 <label>Date range</label><br>

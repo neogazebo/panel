@@ -28,11 +28,19 @@
 		<?php foreach ($report as $rp): ?>
 		<tr>
 			<td><?= $rp->wrk_type == 1 ? 'Snap & Earn' : 'Merchant' ?></td>
-			<td><?= Yii::$app->formatter->asDateTime($rp->wrk_start) ?></td>
-			<td><?= Yii::$app->formatter->asDateTime($rp->wrk_end) ?></td>
-			<td><?= Yii::$app->formatter->asDateTime($rp->wrk_time) ?></td>
-			<td><?= $rp->wrk_description ?></td>
-			<td><?= $rp->wrk_description == 1 ? 'Update' : 'Correction' ?></td>
+			<td><?= date('Y M dd H:m:s',$rp->wrk_start) ?></td>
+			<td><?= date('Y M dd H:m:s',$rp->wrk_end) ?></td>
+			<td><?= date('Y M dd H:m:s',$rp->wrk_time) ?></td>
+			<td><?= $rp->wrk_point ?></td>
+			<td>
+				<?php
+				if ($rp->wrk_type == 2) {
+                        echo ($rp->wrk_rjct_number != 0) ? '<p class="text-yellow">'.$rp->reason->sem_remark.'</p>' : '<a class=""><span class="not-set">(not set)</span></a>';
+                    } else{
+                        echo ($rp->wrk_point == 4) ? '<p class="text-green">Approved <strong class="text-red">+</strong> </p>' : '<p class="text-green">Approved</p>';
+                    }
+				?>
+			</td>
 		</tr>
 		<?php endforeach ?>
 	</tbody>

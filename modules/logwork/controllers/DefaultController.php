@@ -93,7 +93,7 @@ class DefaultController extends BaseController
             $first_date = $date[0] . ' 00:00:00';
             $last_date = $date[1] . ' 23:59:59';
 
-            $query = WorkingTime::find()->getReport($id, $model->date_range);
+            $query = WorkingTime::find()->with('reason')->getReport($id, $model->date_range);
             $preview = '_preview';
             $redirect = 'logwork/default/view?id=' . $id;
             $title = [
