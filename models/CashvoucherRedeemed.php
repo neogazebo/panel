@@ -71,4 +71,9 @@ class CashvoucherRedeemed extends \yii\db\ActiveRecord
             'cvr_pvd_expired' => 'Expired',
         ];
     }
+
+    public function getAccount()
+    {
+        return $this->hasOne(Account::className(), ['acc_id' => 'cvr_acc_id']);
+    }
 }

@@ -81,4 +81,10 @@ class RedemptionReference extends \yii\db\ActiveRecord
             'rdr_vod_image' => 'Image',
         ];
     }
+
+    public function getAccount()
+    {
+        return $this->hasOne(Account::className(), ['acc_id' => 'rdr_acc_id']);
+    }
+
 }

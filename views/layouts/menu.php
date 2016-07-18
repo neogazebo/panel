@@ -6,7 +6,7 @@ use app\components\filters\AccessFilters;
     <li class="header">MAIN NAVIGATION</li>
     <li class="treeview">
         <a href="<?= Yii::$app->urlManager->createUrl('dashboard') ?>">
-            <i class="fa fa-credit-card"></i>
+            <i class="fa fa-dashboard"></i>
             <span>Dashboard</span>
         </a>
     </li>
@@ -35,6 +35,27 @@ use app\components\filters\AccessFilters;
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('merchant-signup') ?>">
                     <i class="fa fa-circle-o"></i> List
+                </a>
+            </li>
+        </ul>
+    </li>
+    <?php endif; ?>
+    <?php if (AccessFilters::getMenu('voucher')) : ?>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-dollar"></i>
+            <span>Voucher</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('voucher/default/reward') ?>">
+                    <i class="fa fa-circle-o"></i> Reward
+                </a>
+            </li>
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('voucher/default/cash') ?>">
+                    <i class="fa fa-circle-o"></i> Cash Voucher
                 </a>
             </li>
         </ul>
