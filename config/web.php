@@ -38,7 +38,10 @@ $config = [
         'logwork' => [
             'class' => 'app\modules\logwork\Logwork',
         ],
-       'gridview' =>  [
+        'voucher' => [
+            'class' => 'app\modules\voucher\Voucher',
+        ],
+        'gridview' =>  [
             'class' => '\kartik\grid\Module',
         ]
     ],

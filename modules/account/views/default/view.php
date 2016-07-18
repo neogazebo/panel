@@ -249,110 +249,114 @@ $this->registerCss("
                                         </div>
                                     </div>
                                     <div class="box-body">
-                                        <h4>History Offers</h4>
-                                        <?=
-                                        GridView::widget([
-                                            'id' => 'history_offer',
-                                            'options' => [
-                                                'style' => 'font-size: 13px'
-                                            ],
-                                            'layout' => '{items} {summary} {pager}',
-                                            'dataProvider' => $historyOfferProvider,
-                                            'pjax' => true,
-                                            'pjaxSettings' => [
-                                                'neverTimeout' => true,
-                                            ],
-                                            'columns' => [
-                                                'offer.del_title',
-                                                [
-                                                    'attribute' => 'des_redeem_datetime',
-                                                    'format' => 'html',
-                                                    'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->des_redeem_datetime));
-                                                    }
+                                        <div class="clearfix">
+                                            <h4>History Offers</h4>
+                                            <?=
+                                            GridView::widget([
+                                                'id' => 'history_offer',
+                                                'options' => [
+                                                    'style' => 'font-size: 13px'
                                                 ],
-                                                'des_sn'
-                                            ],
-                                            'tableOptions' => ['class' => 'table table-bordered table-hover']
-                                        ]);
-                                        ?>
-                                        <br />
-                                        <h4>History Cash Vouchers</h4>
-                                        <?=
-                                        GridView::widget([
-                                            'id' => 'history_cash',
-                                            'options' => [
-                                                'style' => 'font-size: 13px'
-                                            ],
-                                            'layout' => '{items} {summary} {pager}',
-                                            'dataProvider' => $historyCashProvider,
-                                            'pjax' => true,
-                                            'pjaxSettings' => [
-                                                'neverTimeout' => true,
-                                            ],
-                                            'columns' => [
-                                                'cvr_pvo_name',
-                                                'cvr_com_name',
-                                                'cvr_pvd_code',
-                                                'cvr_pvd_sn',
-                                                [
-                                                    'attribute' => 'cvr_pvd_update_datetime',
-                                                    'format' => 'html',
-                                                    'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_update_datetime));
-                                                    }
+                                                'layout' => '{items} {summary} {pager}',
+                                                'dataProvider' => $historyOfferProvider,
+                                                'pjax' => true,
+                                                'pjaxSettings' => [
+                                                    'neverTimeout' => true,
                                                 ],
-                                                [
-                                                    'attribute' => 'cvr_pvd_expired',
-                                                    'format' => 'html',
-                                                    'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_expired));
-                                                    }
+                                                'columns' => [
+                                                    'offer.del_title',
+                                                    [
+                                                        'attribute' => 'des_redeem_datetime',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->des_redeem_datetime));
+                                                        }
+                                                    ],
+                                                    'des_sn'
                                                 ],
-                                            ],
-                                            'tableOptions' => ['class' => 'table table-bordered table-hover']
-                                        ]);
-                                        ?>
-                                        <br />
-                                        <h4>Redemption Reference</h4>
-                                        <?=
-                                        GridView::widget([
-                                            'id' => 'redemption_reference',
-                                            'options' => [
-                                                'style' => 'font-size: 13px'
-                                            ],
-                                            'layout' => '{items} {summary} {pager}',
-                                            'dataProvider' => $referenceProvider,
-                                            'pjax' => true,
-                                            'pjaxSettings' => [
-                                                'neverTimeout' => true,
-                                            ],
-                                            'columns' => [
-                                                'rdr_name',
-                                                [
-                                                    'attribute' => 'rdr_vou_value',
-                                                    'format' => 'html',
-                                                    'value' => function($data) {
-                                                        return Yii::$app->formatter->asDecimal($data->rdr_vou_value);
-                                                    }
+                                                'tableOptions' => ['class' => 'table table-hover']
+                                            ]);
+                                            ?>
+                                        </div>
+                                        <div class="clearfix" style="margin-top: 20px">
+                                            <h4>History Cash Vouchers</h4>
+                                            <?=
+                                            GridView::widget([
+                                                'id' => 'history_cash',
+                                                'options' => [
+                                                    'style' => 'font-size: 13px'
                                                 ],
-                                                'rdr_vod_sn',
-                                                'rdr_vod_code',
-                                                'rdr_vod_expired',
-                                                'rdr_vor_trx_id',
-                                                'rdr_reference_code',
-                                                'rdr_msisdn',
-                                                [
-                                                    'attribute' => 'rdr_datetime',
-                                                    'format' => 'html',
-                                                    'value' => function($data) {
-                                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->rdr_datetime));
-                                                    }
+                                                'layout' => '{items} {summary} {pager}',
+                                                'dataProvider' => $historyCashProvider,
+                                                'pjax' => true,
+                                                'pjaxSettings' => [
+                                                    'neverTimeout' => true,
                                                 ],
-                                            ],
-                                            'tableOptions' => ['class' => 'table table-bordered table-hover']
-                                        ]);
-                                        ?>
+                                                'columns' => [
+                                                    'cvr_pvo_name',
+                                                    'cvr_com_name',
+                                                    'cvr_pvd_code',
+                                                    'cvr_pvd_sn',
+                                                    [
+                                                        'attribute' => 'cvr_pvd_update_datetime',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_update_datetime));
+                                                        }
+                                                    ],
+                                                    [
+                                                        'attribute' => 'cvr_pvd_expired',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_expired));
+                                                        }
+                                                    ],
+                                                ],
+                                                'tableOptions' => ['class' => 'table table-hover']
+                                            ]);
+                                            ?>
+                                        </div>
+                                        <div class="clearfix" style="margin-top: 20px">
+                                            <h4>Redemption Reference</h4>
+                                            <?=
+                                            GridView::widget([
+                                                'id' => 'redemption_reference',
+                                                'options' => [
+                                                    'style' => 'font-size: 13px'
+                                                ],
+                                                'layout' => '{items} {summary} {pager}',
+                                                'dataProvider' => $referenceProvider,
+                                                'pjax' => true,
+                                                'pjaxSettings' => [
+                                                    'neverTimeout' => true,
+                                                ],
+                                                'columns' => [
+                                                    'rdr_name',
+                                                    [
+                                                        'attribute' => 'rdr_vou_value',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return Yii::$app->formatter->asDecimal($data->rdr_vou_value);
+                                                        }
+                                                    ],
+                                                    'rdr_vod_sn',
+                                                    'rdr_vod_code',
+                                                    'rdr_vod_expired',
+                                                    'rdr_vor_trx_id',
+                                                    'rdr_reference_code',
+                                                    'rdr_msisdn',
+                                                    [
+                                                        'attribute' => 'rdr_datetime',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->rdr_datetime));
+                                                        }
+                                                    ],
+                                                ],
+                                                'tableOptions' => ['class' => 'table table-hover']
+                                            ]);
+                                            ?>
+                                        </div>
                                         <?php
                                         // echo GridView::widget([
                                         //     'id' => 'list_redemption',
