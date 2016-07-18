@@ -1,136 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
 <?php
 $this->registerCss("
-  .image-logo{
-    width: 30px;
-    border-radius: 4px;
-  }
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: #478DCB;
+    color: white;
+}
 ");
+
 ?>
-        <section class="invoice">
-          <!-- title row -->
-          <div class="row">
-            <div class="col-xs-12">
-              <h2 class="page-header">
-                <img src="<?= $this->theme->baseUrl ?>/dist/img/ebz_logo.png" class="image-logo" alt=""> Snap and Earn Report 
-                <small class="pull-right"><i>Date: 2/10/2016 to 10/10/2016</i></small>
-              </h2>
-            </div>
-          </div>
-          <!-- info row -->
-          <div class="row invoice-info">
-            <div class="col-sm-4 invoice-col">
-              <address>
-                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                  <strong>Username : </strong>M. Ilkham Fauzi<br>
-                  <strong>Country : </strong>Indonesia<br>
-                </p>
-              </address>
-            </div>
-          </div>
+</head>
+<body>
+<section class="invoice">
+    <h2 class="page-header">
+      <i class="fa fa-globe"></i> Report
+      <small class="pull-right">Date: 2/10/2014</small>
+    </h2>
+    <ul>
+      <li>Username : </li>
+      <li>Country : </li>
+    </ul>
+<table>
+  <tr>
+    <th>Firstname</th>
+    <th>Lastname</th>
+    <th>Savings</th>
+  </tr>
+  <tr>
+    <td>Peter</td>
+    <td>Griffin</td>
+    <td>$100</td>
+  </tr>
+  <tr>
+    <td>Lois</td>
+    <td>Griffin</td>
+    <td>$150</td>
+  </tr>
+  <tr>
+    <td>Joe</td>
+    <td>Swanson</td>
+    <td>$300</td>
+  </tr>
+  <tr>
+    <td>Cleveland</td>
+    <td>Brown</td>
+    <td>$250</td>
+</tr>
+</table>
+</section>
 
-          <!-- Table row -->
-          <div class="row">
-            <div class="col-xs-12 table-responsive">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>No.</th>
-                    <th>Activity</th>
-                    <th>Total Activity</th>
-                    <th>Total Point</th>
-                    <th>Total Time</th>
-                    <th>Total Point</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Approved</td>
-                    <td>40</td>
-                    <td>40</td>
-                    <td>04:00:57</td>
-                    <td>40</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- this row will not appear when printing -->
-          <div class="box-footer">
-            
-          </div>
-          </div>
-        </section><!-- /.content -->
+</body>
+</html>

@@ -76,7 +76,7 @@ $this->title = "Update SnapEarn";
                   <?php endif; ?>
                 </div>
                 <div class="box-body">
-                    <ul class="nav nav-stacked">
+                    <ul class="nav nav-stacked update">
                       <?php if(Yii::$app->user->identity->superuser == 1): ?>
                       <li class="">
                         <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
@@ -204,7 +204,7 @@ $this->registerCss("
         color: #444;
     }
 
-    .nav > li > a {
+    .nav.update > li > a {
         position: relative;
         display: block;
         padding: 10px 0px;
