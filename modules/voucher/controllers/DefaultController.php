@@ -24,10 +24,9 @@ class DefaultController extends BaseController
 
 	public function actionReward()
 	{
-		$model = RedemptionReference::find();
+		$model = RedemptionReference::find()->orderBy('rdr_datetime DESC');
         $dataProvider =  new ActiveDataProvider([
             'query' => $model,
-            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -39,10 +38,9 @@ class DefaultController extends BaseController
 
 	public function actionCash()
 	{
-		$model = CashvoucherRedeemed::find();
+		$model = CashvoucherRedeemed::find()->orderBy('cvr_pvd_update_datetime DESC');
         $dataProvider =  new ActiveDataProvider([
             'query' => $model,
-            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
