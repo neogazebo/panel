@@ -19,7 +19,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="modal-footer">
     <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>
-    <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'disabled btn btn-info pull-right']) ?>
+    <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'btn btn-info pull-right']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>
