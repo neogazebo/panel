@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 $this->title = 'Cash Voucher';
-$dataProvider->sort->defaultOrder = ['cvr_pvd_update_datetime' => SORT_DESC];
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>

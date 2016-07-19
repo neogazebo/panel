@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 $this->title = 'Redemption Reference';
-$dataProvider->sort->defaultOrder = ['rdr_datetime' => SORT_DESC];
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
@@ -57,7 +56,6 @@ $dataProvider->sort->defaultOrder = ['rdr_datetime' => SORT_DESC];
                                     }
                                 ]
                             ],
-                            'tableOptions' => ['class' => 'table table-striped table-hover']
                         ]);
                         ?> 
                     </div>
