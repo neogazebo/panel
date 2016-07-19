@@ -115,7 +115,7 @@ $this->title = "Update SnapEarn";
                         <li></li>
                     </ul>
                   <form role="form">
-                    <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
+                    <?= $form->field($model, 'sna_status')->dropDownList($model->statuscorrection, ['class' => 'form-control status']) ?>
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                     <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                     <div class="point-form">
