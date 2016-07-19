@@ -454,18 +454,16 @@ class DefaultController extends BaseController
 
     public function actionShortPoint($id,$sna_id)
     {
-        if (Yii::$app->request->isAjax) {
-            $model = Company::findOne($id);
-            if ($model->load(Yii::$app->request->post())) {
-                if ($model->save(false)) {
-                    return $this->redirect(['update?id='.$sna_id]);
-                }
+        $model = Company::findOne($id);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if ($model->save(false)) {
+                return $this->redirect(['update?id='.$sna_id]);
             }
-
-            return $this->renderAjax('point',[
+        }
+        return $this->renderAjax('point',[
                     'model' => $model
                 ]);
-        }
     }
 
     public function actionAjaxSnapearnPoint()

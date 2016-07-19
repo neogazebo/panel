@@ -191,6 +191,11 @@ class SnapEarn extends \yii\db\ActiveRecord
         return [0 => 'New', 1 => 'Approved', 2 => 'Rejected'];
     }
 
+    public function getStatuscorrection()
+    {
+        return [1 => 'Approved', 2 => 'Rejected'];
+    }
+
     public function getEmail()
     {
         $model = SnapEarnRemark::find()->all();
