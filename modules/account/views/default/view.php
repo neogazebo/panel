@@ -63,7 +63,7 @@ $this->registerCss("
                             <b>Country </b> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Current Point </b> <a class="pull-right"><?= (!empty($model->lastPointMember())) ? Yii::$app->formatter->asDecimal($model->lastPointMember()) : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
+                            <b>Current Point </b> <a class="pull-right"><?= (!empty($model->lastPointMember())) ? Yii::$app->formatter->asDecimal($model->lastPointMember(),0) : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
                         </li>
                         <li class="list-group-item">
                             <b>Last Activity </b> <a class="pull-right"><?= (!empty($model->lastLogin())) ? Yii::$app->formatter->asDate($model->lastLogin()->adv_last_access) : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
@@ -148,7 +148,7 @@ $this->registerCss("
                                                         <option value="thisWeek">This Week </option>
                                                         <option value="lastWeek">Last Week </option>
                                                     </select>
-                                                    <span id="testing" class="input-group-addon">.00</span>
+                                                    <span id="testing" class="input-group-addon">N/A</span>
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <p class="chart-notes"></p>
@@ -216,16 +216,30 @@ $this->registerCss("
                                                     ],
                                                     [
                                                         'attribute' => 'sna_receipt_amount',
-                                                        'format' => 'html',
+                                                        'format' => ['decimal',2],
                                                         'value' => function($data) {
-                                                            return Yii::$app->formatter->asDecimal($data->sna_receipt_amount);
+                                                            return $data->sna_receipt_amount;
                                                         }
                                                     ],
                                                     [
                                                         'attribute' => 'sna_point',
+                                                        'format' => ['decimal',0],
+                                                        'value' => function($data) {
+                                                            return $data->sna_point;
+                                                        }
+                                                    ],
+                                                    [
+                                                        'label' => 'Status',
+                                                        'attribute' => 'sna_status',
                                                         'format' => 'html',
                                                         'value' => function($data) {
-                                                            return Yii::$app->formatter->asDecimal($data->sna_point);
+                                                            if ($data->sna_status == 1) {
+                                                                return "<i class='fa fa-check approved-status'></i>";
+                                                            } elseif ($data->sna_status == 2) {
+                                                                return "<i class='fa fa-close rejected-status'></i>";
+                                                            } else {
+                                                                return "New";
+                                                            }
                                                         }
                                                     ]
                                                 ],

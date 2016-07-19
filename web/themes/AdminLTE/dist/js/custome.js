@@ -234,7 +234,7 @@ function topFour(data) {
 			 for (var i = 0; i < data.length; i++) {
 				 var total = data[i].currency+'. '+(data[i].total)+data[i].k;
 				 if (data[i].total == 0 ) {
-					 total = '.00';
+					 total = 'N/A';
 				 }
 				 $("#testing").text(total);
 				 html += "<li><a href='#'>"+data[i].label+"<span class='pull-right badge ' style='background-color:"+data[i].color+"'>"+data[i].currency+'. '+data[i].value+data[i].k+"</span></a></li>";

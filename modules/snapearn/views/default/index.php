@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use app\components\helpers\Utc;
 use yii\helpers\Url;
@@ -79,6 +79,10 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                             'id' => 'list_snapearn',
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
+                            'pjax' => true,
+                            'pjaxSettings' => [
+                                'neverTimeout' => true,
+                            ],
                             'columns' => [
                                 [
                                     'label' => 'Merchant',
@@ -103,16 +107,16 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 'sna_receipt_date',
                                 [
                                     'attribute' => 'sna_receipt_amount',
-                                    'format' => 'html',
+                                    'format' => ['decimal',2],
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->sna_receipt_amount);
+                                        return $data->sna_receipt_amount;
                                     }
                                 ],
                                 [
                                     'attribute' => 'sna_point',
-                                    'format' => 'html',
+                                    'format' => ['decimal',0],
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->sna_point);
+                                        return $data->sna_point;
                                     }
                                 ],
                                 [

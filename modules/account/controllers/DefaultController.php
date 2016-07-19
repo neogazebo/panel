@@ -52,6 +52,7 @@ class DefaultController extends BaseController
             ->orderBy('sna_id DESC');
         $receiptProvider =  new ActiveDataProvider([
             'query' => $receipt,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -61,6 +62,7 @@ class DefaultController extends BaseController
             ->orderBy('des_id DESC');
         $historyOfferProvider =  new ActiveDataProvider([
             'query' => $historyOffer,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -70,6 +72,7 @@ class DefaultController extends BaseController
             ->orderBy('cvr_id DESC');
         $historyCashProvider =  new ActiveDataProvider([
             'query' => $historyCash,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -79,6 +82,7 @@ class DefaultController extends BaseController
             ->orderBy('rdr_id DESC');
         $referenceProvider =  new ActiveDataProvider([
             'query' => $reference,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -94,6 +98,7 @@ class DefaultController extends BaseController
             ->orderBy('lph_id DESC');
         $redeemProvider =  new ActiveDataProvider([
             'query' => $redeem,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -103,6 +108,7 @@ class DefaultController extends BaseController
             ->orderBy('svo_id DESC');
         $offerProvider =  new ActiveDataProvider([
             'query' => $offer,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -112,6 +118,7 @@ class DefaultController extends BaseController
             ->orderBy('svr_id DESC');
         $rewardProvider =  new ActiveDataProvider([
             'query' => $reward,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
