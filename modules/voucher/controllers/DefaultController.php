@@ -27,6 +27,7 @@ class DefaultController extends BaseController
 		$model = RedemptionReference::find();
         $dataProvider =  new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]
@@ -41,6 +42,7 @@ class DefaultController extends BaseController
 		$model = CashvoucherRedeemed::find();
         $dataProvider =  new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 10
             ]

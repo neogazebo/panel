@@ -47,6 +47,7 @@ class SearchAuthItem extends AuthItem
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => false,
         ]);
 
         $this->load($params);

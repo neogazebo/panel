@@ -47,6 +47,7 @@ class SearchUser extends User
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => false,
         ]);
 
         $this->load($params);

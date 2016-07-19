@@ -27,6 +27,7 @@ class DefaultController extends BaseController
         $model = WorkingTime::find()->getWorker();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 20
             ]
@@ -43,6 +44,7 @@ class DefaultController extends BaseController
         $username = User::findOne($id)->username;
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 20
             ]

@@ -48,6 +48,7 @@ class DefaultController extends BaseController
         $model = SnapEarn::find()->findCustome();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 20
             ]

@@ -53,6 +53,7 @@ class DefaultController extends BaseController
     		$model = MerchantSignup::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => $this->_pageSize,
             ],
