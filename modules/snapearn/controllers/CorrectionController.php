@@ -77,7 +77,6 @@ class CorrectionController extends BaseController
 
         // get post request form
         if ($model->load(Yii::$app->request->post())) {
-            var_dump($model->sna_receipt_amount);exit;
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
