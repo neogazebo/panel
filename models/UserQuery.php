@@ -54,4 +54,12 @@ class UserQuery extends \yii\db\ActiveQuery
         $this->andWhere('username LIKE "%'.$search.'%" ');
         return $this->all();
     }
+
+    public function findUser()
+    {
+        $search = $_GET['q'];
+        $this->select('id, username');
+        $this->andWhere('username LIKE "%'.$search.'%" ');
+        return $this->all();
+    }
 }

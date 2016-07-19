@@ -68,7 +68,7 @@ class DefaultController extends BaseController
     public function actionUserList()
     {
     	if (Yii::$app->request->isAjax) {
-    		$model = User::find()->searchUser();
+    		$model = User::find()->findUser();
             $out = [];
             foreach ($model as $d) {
                 $out[] = ['id' => $d->id,'value' => $d->username];
