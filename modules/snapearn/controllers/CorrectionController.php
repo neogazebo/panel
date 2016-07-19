@@ -149,7 +149,7 @@ class CorrectionController extends BaseController
 
                     if ($lph->lph_total_point > $oldPoint) {
                         $cp = $lph->lph_total_point;
-                    } elseif ($lph <= $oldPoint) {
+                    } elseif ($lph->lph_total_point <= $oldPoint) {
                         $cp = $oldPoint;
                     }
 
