@@ -22,7 +22,7 @@ $form = ActiveForm::begin([
     <?= $form->field($model, 'com_point')->textInput(['class' => 'form-control']) ?>
 </div>
 <div class="modal-footer">
-    <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>
+    <div type="reset" class="pull-left btn btn-warning" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</div>
     <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'pull-right btn btn-info pull-right']) ?>
 </div>
 <?php ActiveForm::end(); ?>
