@@ -41,7 +41,7 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
         $status = Yii::$app->request->get('rwd_status');
         $code = Yii::$app->request->get('rwd_code');
         $daterange = Yii::$app->request->get('rwd_daterange');
-        
+
         if ($username){
             $this->andFilterWhere(['like', 'acc_screen_name', $username]);
         }
@@ -51,7 +51,7 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
             $this->andFilterWhere(['like', 'rdr_status', $status]);
         if (!empty($daterange)) {
             $daterange = explode(' to ', $daterange);
-            $this->andFilterWhere(['between','FROM_UNIXTIME(rdr_datetime)',$daterange[0].'00:00:00',$daterange[1].'23:59:59']);
+            $this->andWhere("FROM_UNIXTIME(rdr_datetime) BETWEEN '$daterange[0] 00:00:00' AND '$daterange[1] 23:59:59'");
         }
         if ($code)
             $this->andFilterWhere(['like','rdr_vod_code',$code]);

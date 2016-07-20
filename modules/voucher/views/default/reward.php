@@ -21,34 +21,34 @@ $this->title = 'Reward Reference';
                         <div class="form-group">
                         <label>Username</label>
                         <div>
-                            <input type="text" class="form-control" name="username" >
+                            <input type="text" class="form-control" name="username" value="<?= (!empty($_GET['username'])) ? $_GET['username'] : '' ?>">
                         </div>
                         </div>
                         <div class="form-group">
                             <label>MSISDN</label>
                             <div>
-                                <input type="text" class="form-control" name="rwd_msisdn">
+                                <input type="text" class="form-control" name="rwd_msisdn" value="<?= (!empty($_GET['rwd_msisdn'])) ? $_GET['rwd_msisdn'] : '' ?>">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>CODE</label>
                             <div>
-                                <input type="text" class="form-control" name="rwd_code">
+                                <input type="text" class="form-control" name="rwd_code" value="<?= (!empty($_GET['rwd_code'])) ? $_GET['rwd_code'] : '' ?>">
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Status</label>
                             <select name="rwd_status" class="form-control" style="width: 100%;">
-                                <option value="">All</option>
-                                <option value="1">Redeemed</option>
-                                <option value="0">Unredeemed</option>
+                                <option <?= (empty($_GET['rwd_status'])) ? 'selected' : '' ?> value="">All</option>
+                                <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] == '1') ? 'selected' : '' ?> value="1">Redeemed</option>
+                                <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] == '0') ? 'selected' : '' ?> value="0">Unredeemed</option>
 
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Transaction Time</label>
                             <div>
-                                <input type="text" class="form-control" name="rwd_daterange" id="the_daterange">
+                                <input type="text" class="form-control" name="rwd_daterange" id="the_daterange" value="<?= (!empty($_GET['rwd_daterange'])) ? $_GET['rwd_daterange'] : '' ?>">
                             </div>
                         </div>
                         <div class="form-group">
