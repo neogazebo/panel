@@ -6,6 +6,7 @@ use Yii;
 use app\controllers\BaseController;
 use app\models\RedemptionReference;
 use app\models\CashvoucherRedeemed;
+use app\models\CashvoucherRedeemedSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
@@ -28,7 +29,7 @@ class DefaultController extends BaseController
         $dataProvider =  new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
-                'pageSize' => 10
+                'pageSize' => 20
             ]
         ]);
 		return $this->render('reward', [
@@ -38,11 +39,11 @@ class DefaultController extends BaseController
 
 	public function actionCash()
 	{
-		$model = CashvoucherRedeemed::find()->orderBy('cvr_pvd_update_datetime DESC');
+		$model = CashvoucherRedeemed::find()->list;
         $dataProvider =  new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
-                'pageSize' => 10
+                'pageSize' => 20
             ]
         ]);
 		return $this->render('cash', [
