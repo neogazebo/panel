@@ -198,6 +198,10 @@ $this->registerCss("
                                                 ],
                                                 'columns' => [
                                                     [
+                                                        'label' => 'Receipt',
+                                                        'attribute' => 'sna_receipt_number',
+                                                    ],
+                                                    [
                                                         'label' => 'Merchant',
                                                         'attribute' => 'sna_com_id',
                                                         'format' => 'html',
@@ -307,22 +311,20 @@ $this->registerCss("
                                                     'neverTimeout' => true,
                                                 ],
                                                 'columns' => [
-                                                    'cvr_pvo_name',
+                                                    [
+                                                        'label' => 'Voucher Name',
+                                                        'attribute' => 'cvr_pvo_name',
+                                                    ],
+                                                    
                                                     'cvr_com_name',
                                                     'cvr_pvd_code',
                                                     'cvr_pvd_sn',
                                                     [
+                                                        'label' => 'Transaction Time',
                                                         'attribute' => 'cvr_pvd_update_datetime',
                                                         'format' => 'html',
                                                         'value' => function($data) {
                                                             return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_update_datetime));
-                                                        }
-                                                    ],
-                                                    [
-                                                        'attribute' => 'cvr_pvd_expired',
-                                                        'format' => 'html',
-                                                        'value' => function($data) {
-                                                            return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_expired));
                                                         }
                                                     ],
                                                 ],
@@ -331,7 +333,7 @@ $this->registerCss("
                                             ?>
                                         </div>
                                         <div class="clearfix" style="margin-top: 20px">
-                                            <h4>Redemption Reference</h4>
+                                            <h4>History Reward </h4>
                                             <?=
                                             GridView::widget([
                                                 'id' => 'redemption_reference',
@@ -355,8 +357,11 @@ $this->registerCss("
                                                     ],
                                                     'rdr_vod_sn',
                                                     'rdr_vod_code',
-                                                    'rdr_vod_expired',
-                                                    'rdr_vor_trx_id',
+                                                    [
+                                                        'label' => 'Transaction Id',
+                                                        'attribute' => 'rdr_vor_trx_id',
+                                                    ],
+                                                    
                                                     'rdr_reference_code',
                                                     'rdr_msisdn',
                                                     [
