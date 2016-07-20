@@ -20,8 +20,9 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 <?php
 $this->registerJs("
+	$('button.pull-right').removeClass('disabled');
 	$('#authitem-name').blur(function(){
-		if ($('.help-block').text() == '') {
+		if ($(this).val() == '') {
 			$('button.pull-right').removeClass('disabled');
 		} else {
 			$('button.pull-right').addClass('disabled');
