@@ -41,6 +41,7 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
         $status = Yii::$app->request->get('rwd_status');
         $code = Yii::$app->request->get('rwd_code');
         $daterange = Yii::$app->request->get('rwd_daterange');
+        
         if ($username){
             $this->andFilterWhere(['like', 'acc_screen_name', $username]);
         }
