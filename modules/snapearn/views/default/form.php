@@ -122,7 +122,8 @@ $this->title = "Update SnapEarn";
                               'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
                               'pluginOptions' => [
                                   'autoclose'=>true,
-                                  'format' => 'yyyy-mm-dd hh:i:ss'
+                                  'format' => 'yyyy-mm-dd hh:i:ss',
+                                  'endDate' => date('Y-m-d h:i:s'),
                               ]
                           ]);
                       ?>
