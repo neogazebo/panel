@@ -36,25 +36,27 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
 
     public function findCostume()
     {
-        // $userId = Yii::$app->request->get('rwd_params');
-        // $msisdn = Yii::$app->request->get('rwd_msisdn');
-        // $status = Yii::$app->request->get('rwd_status');
-        // $code = Yii::$app->request->get('rwd_code');
-        // $daterange = Yii::$app->request->get('rwd_daterange');
-        // if (!empty($userId))
-        //     $this->andFilterWhere(['like', 'rdr_acc_id', $userId]);
-        // if (!empty($msisdn))
-        //     $this->andFilterWhere(['like', 'rdr_msisdn', $msisdn]);
-        // if (!empty($status))
-        //     $this->andFilterWhere(['like', 'rdr_status', $status]);
-        // if (!empty($daterange))
-        //     $daterange = explode(' to ', $daterange);
-        //     $this->andFilterWhere("FROM_UNIXTIME(rdr_datetime) BETWEEN '$daterange[0] 00:00:00' AND '$daterange[1] 23:59:59'");
-        // if (!empty($code))
-        //     $this->andFilterWhere(['like','rdr_vod_code',$code]);
+        $username = Yii::$app->request->get('username');
+        $msisdn = Yii::$app->request->get('rwd_msisdn');
+        $status = Yii::$app->request->get('rwd_status');
+        $code = Yii::$app->request->get('rwd_code');
+        $daterange = Yii::$app->request->get('rwd_daterange');
+        if ($username){
+            $this->andFilterWhere(['like', 'acc_screen_name', $username]);
+        }
+        if ($msisdn)
+            $this->andFilterWhere(['like', 'rdr_msisdn', $msisdn]);
+        if ($status)
+            $this->andFilterWhere(['like', 'rdr_status', $status]);
+        if (!empty($daterange)) {
+            $daterange = explode(' to ', $daterange);
+            $this->andFilterWhere(['between','FROM_UNIXTIME(rdr_datetime)',$daterange[0].'00:00:00',$daterange[1].'23:59:59']);
+        }
+        if ($code)
+            $this->andFilterWhere(['like','rdr_vod_code',$code]);
 
-        // $this->orderBy('rdr_datetime DESC');
-
-        // return $this;
+        $this->join('LEFT JOIN','tbl_account','tbl_account.acc_id = rdr_acc_id');
+        $this->orderBy('rdr_datetime DESC');
+        return $this;
     }   
 }

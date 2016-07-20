@@ -130,4 +130,9 @@ class Account extends \yii\db\ActiveRecord
             'acc_gender' => 'Gender',
         ];
     }
+
+    public static function find()
+    {
+        return new AccountQuery(get_called_class());
+    }
 }
