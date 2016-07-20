@@ -38,6 +38,11 @@ class CashvoucherRedeemed extends \yii\db\ActiveRecord
         return Yii::$app->get('db2');
     }
 
+    public static function find()
+    {
+        return new CashvoucherRedeemedQuery(get_called_class());
+    }
+
     /**
      * @inheritdoc
      */
@@ -61,10 +66,10 @@ class CashvoucherRedeemed extends \yii\db\ActiveRecord
             'cvr_acc_id' => 'Account',
             'cvr_pvo_id' => 'Pos Voucher',
             'cvr_pvd_id' => 'Voucher Detail',
-            'cvr_pvd_update_datetime' => 'Update Time',
+            'cvr_pvd_update_datetime' => 'Transaction Time',
             'cvr_pvd_code' => 'Code',
             'cvr_pvd_sn' => 'SN',
-            'cvr_pvo_name' => 'Pos Voucher',
+            'cvr_pvo_name' => 'Voucher Name',
             'cvr_com_name' => 'Merchant',
             'cvr_com_photo' => 'Photo',
             'cvr_pvo_image' => 'Image',

@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 $this->title = 'Redemption Reference';
-$dataProvider->sort->defaultOrder = ['rdr_datetime' => SORT_DESC];
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
@@ -23,6 +22,7 @@ $dataProvider->sort->defaultOrder = ['rdr_datetime' => SORT_DESC];
                             ],
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
+                            'filterModel' => $searchModel,
                             'pjax' => true,
                             'pjaxSettings' => [
                                 'neverTimeout' => true,

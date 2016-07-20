@@ -12,7 +12,38 @@ $this->title = 'Cash Voucher';
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
-                <div class="box-header with-border"></div><!-- /.box-header -->
+                <div class="box-header with-border">
+                    <form class="form-inline" action="cash" method="get">
+                        <div class="form-group">
+                        <label>Member</label>
+                        <div>
+                            <input type="text" class="form-control" name="member" value="<?= Yii::$app->request->get('member') ?>" />
+                        </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Merchant</label>
+                            <div>
+                                <input type="text" class="form-control" name="merchant" value="<?= Yii::$app->request->get('merchant') ?>" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Voucher</label>
+                            <div>
+                                <input type="text" class="form-control" name="voucher" value="<?= Yii::$app->request->get('voucher') ?>" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Transaction Time</label>
+                            <div>
+                                <input type="text" class="form-control" name="update" id="the_daterange" value="<?= Yii::$app->request->get('update') ?>" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label><br>
+                            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                        </div>
+                    </form>
+                </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
@@ -38,16 +69,11 @@ $this->title = 'Cash Voucher';
                                 'cvr_pvo_name',
                                 'cvr_com_name',
                                 'cvr_pvd_sn',
-                                'cvr_pvd_code',
-                                [
-                                    'attribute' => 'cvr_pvd_expired',
-                                    'format' => 'html',
-                                    'value' => function($data) {
-                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_expired));
-                                    }
-                                ],
+                                'cvr_pvd_code'
                             ],
-                            'tableOptions' => ['class' => 'table table-striped table-hover']
+                            'bordered' => false,
+                            'striped' => false
+                            // 'tableOptions' => ['class' => 'table table-striped table-hover']
                         ]);
                         ?> 
                     </div>

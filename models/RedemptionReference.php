@@ -70,7 +70,7 @@ class RedemptionReference extends \yii\db\ActiveRecord
             'rdr_msisdn' => 'MSISDN',
             'rdr_reference_code' => 'Reference Code',
             'rdr_status' => 'Status',
-            'rdr_datetime' => 'Created',
+            'rdr_datetime' => 'Transaction Time',
             'rdr_vod_sn' => 'SN',
             'rdr_vod_code' => 'Code',
             'rdr_vod_expired' => 'Expired',
@@ -85,6 +85,11 @@ class RedemptionReference extends \yii\db\ActiveRecord
     public function getAccount()
     {
         return $this->hasOne(Account::className(), ['acc_id' => 'rdr_acc_id']);
+    }
+
+    public static function find()
+    {
+        return new RedemptionReferenceQuery(get_called_class());
     }
 
 }

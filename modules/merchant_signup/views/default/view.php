@@ -42,16 +42,24 @@ $multichain = ($model->mer_multichain) ? '<a href="'.Yii::$app->params['awsUrl']
                     
     <!-- <h1><?= Html::encode($this->title) ?></h1> -->
 
-    <!-- <p>
-        <?php Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
-              Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]); ?>
-    </p> -->
+    <p>
+        <?php 
+            //echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
+            
+            /*
+            echo Html::a('Delete', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                    'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+            ]); 
+            */
+        ?>
+
+        <button type="reset" class="pull-left btn" onclick="window.location = '<?= Yii::$app->urlManager->createUrl('merchant-signup') ?>'"><i class="fa fa-times"></i> Back</button>
+        <br style="clear: both">
+    </p>
 
                         <?= DetailView::widget([
                             'model' => $model,

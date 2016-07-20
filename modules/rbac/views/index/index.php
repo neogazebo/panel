@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
+use app\components\helpers\Utc;
 
 $this->title = 'Role List';
 ?>
@@ -60,7 +61,7 @@ $this->title = 'Role List';
                                 [
                                     'label' => 'Created Date',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDateTime($data->created_at);
+                                        return Yii::$app->formatter->asDateTime(Utc::convert($data->created_at));
                                     }
                                 ],
                                 [
