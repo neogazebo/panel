@@ -53,7 +53,6 @@ $this->title = 'Cash Voucher';
                             ],
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
-                            'filterModel' => $searchModel,
                             'pjax' => true,
                             'pjaxSettings' => [
                                 'neverTimeout' => true,
