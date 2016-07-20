@@ -64,3 +64,5 @@ web/index.php
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 curut.txt
+
+.ebextensions/03-composer.config
