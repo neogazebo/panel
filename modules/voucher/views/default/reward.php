@@ -17,33 +17,12 @@ $this->title = 'Reward Reference';
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <form class="form-inline" action="/reward" method="get">
+                    <form class="form-inline" action="reward" method="get">
                         <div class="form-group">
                         <label>Username</label>
-                        <?= 
-                            Typeahead::widget([
-                                'name' => 'username',
-                                'options' => ['placeholder' => 'Find User'],
-                                'pluginOptions' => [
-                                    'highlight' => true,
-                                    'minLength' => 3
-                                ],
-                                'pluginEvents' => [
-                                    "typeahead:select" => "function(ev, suggestion) { $('#user_params').val(suggestion.id); }",
-                                ],
-                                'dataset' => [
-                                    [
-                                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                                        'display' => 'value',
-                                        'remote' => [
-                                            'url' => Url::to(['user-list']) . '?q=%QUERY',
-                                            'wildcard' => '%QUERY'
-                                        ],
-                                        'limit' => 20
-                                    ]
-                                ]
-                            ]);
-                        ?>
+                        <div>
+                            <input type="text" class="form-control" name="username" >
+                        </div>
                         </div>
                         <div class="form-group">
                             <label>MSISDN</label>
@@ -59,7 +38,10 @@ $this->title = 'Reward Reference';
                         </div>
                         <div class="form-group">
                             <label>Status</label>
-                            <select name="rwd_status" class="form-control select2" style="width: 100%;">
+                            <select name="rwd_status" class="form-control" style="width: 100%;">
+                                <option value="">All</option>
+                                <option value="1">Redeemed</option>
+                                <option value="0">Unredeemed</option>
 
                             </select>
                         </div>
@@ -70,7 +52,6 @@ $this->title = 'Reward Reference';
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="hidden" name="rwd_params" id="user_params">
                             <label>&nbsp;</label><br>
                             <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                         </div>

@@ -53,10 +53,10 @@ class DefaultController extends BaseController
     public function actionUserList()
     {
     	if (Yii::$app->request->isAjax) {
-    		$model = \app\models\User::find()->findUser();
+    		$model = \app\models\Account::find()->findAccount();
             $out = [];
             foreach ($model as $d) {
-                $out[] = ['id' => $d->id,'value' => $d->username];
+                $out[] = ['id' => $d->acc_id,'value' => $d->acc_screen_name];
             }
             echo \yii\helpers\Json::encode($out);
     	}
