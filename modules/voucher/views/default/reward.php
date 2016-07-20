@@ -105,6 +105,8 @@ $this->title = 'Reward Reference';
                                     }
                                 ]
                             ],
+                            'bordered' => false,
+                            'striped' => false
                         ]);
                         ?> 
                     </div>
