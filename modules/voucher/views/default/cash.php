@@ -69,14 +69,7 @@ $this->title = 'Cash Voucher';
                                 'cvr_pvo_name',
                                 'cvr_com_name',
                                 'cvr_pvd_sn',
-                                'cvr_pvd_code',
-                                [
-                                    'attribute' => 'cvr_pvd_expired',
-                                    'format' => 'html',
-                                    'value' => function($data) {
-                                        return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data->cvr_pvd_expired));
-                                    }
-                                ],
+                                'cvr_pvd_code'
                             ],
                             'bordered' => false,
                             'striped' => false
