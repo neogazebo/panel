@@ -70,7 +70,7 @@ class RedemptionReference extends \yii\db\ActiveRecord
             'rdr_msisdn' => 'MSISDN',
             'rdr_reference_code' => 'Reference Code',
             'rdr_status' => 'Status',
-            'rdr_datetime' => 'Created',
+            'rdr_datetime' => 'Transaction Time',
             'rdr_vod_sn' => 'SN',
             'rdr_vod_code' => 'Code',
             'rdr_vod_expired' => 'Expired',
