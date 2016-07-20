@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+
 /**
  * This is the ActiveQuery class for [[RedemptionReference]].
  *
@@ -34,11 +36,11 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
 
     public function findCostume()
     {
-        // $userId = Yii::$app->request->isGet('rwd_params');
-        // $msisdn = Yii::$app->request->isGet('rwd_msisdn');
-        // $status = Yii::$app->request->isGet('rwd_status');
-        // $code = Yii::$app->request->isGet('rwd_code');
-        // $daterange = Yii::$app->request->isGet('rwd_daterange');
+        // $userId = Yii::$app->request->get('rwd_params');
+        // $msisdn = Yii::$app->request->get('rwd_msisdn');
+        // $status = Yii::$app->request->get('rwd_status');
+        // $code = Yii::$app->request->get('rwd_code');
+        // $daterange = Yii::$app->request->get('rwd_daterange');
         // if (!empty($userId))
         //     $this->andFilterWhere(['like', 'rdr_acc_id', $userId]);
         // if (!empty($msisdn))
@@ -46,7 +48,13 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
         // if (!empty($status))
         //     $this->andFilterWhere(['like', 'rdr_status', $status]);
         // if (!empty($daterange))
-        //     $rdr_daterange = explode(' to ', ($daterange));
-        //     $this->andFilterWhere(['between',''])
+        //     $daterange = explode(' to ', $daterange);
+        //     $this->andFilterWhere("FROM_UNIXTIME(rdr_datetime) BETWEEN '$daterange[0] 00:00:00' AND '$daterange[1] 23:59:59'");
+        // if (!empty($code))
+        //     $this->andFilterWhere(['like','rdr_vod_code',$code]);
+
+        // $this->orderBy('rdr_datetime DESC');
+
+        // return $this;
     }   
 }

@@ -24,7 +24,7 @@ class DefaultController extends BaseController
 
 	public function actionReward()
 	{
-		$model = RedemptionReference::find()->orderBy('rdr_datetime DESC');
+		$model = RedemptionReference::find()->findCostume();
         $dataProvider =  new ActiveDataProvider([
             'query' => $model,
             'pagination' => [
