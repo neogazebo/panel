@@ -40,8 +40,8 @@ $this->title = 'Reward Reference';
                             <label>Status</label>
                             <select name="rwd_status" class="form-control" style="width: 100%;">
                                 <option <?= (empty($_GET['rwd_status'])) ? 'selected' : '' ?> value="">All</option>
-                                <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] == '1') ? 'selected' : '' ?> value="1">Redeemed</option>
-                                <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] == '0') ? 'selected' : '' ?> value="0">Unredeemed</option>
+                                <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] == '1') ? 'selected' : '' ?> value="1">Close</option>
+                                <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] == '0') ? 'selected' : '' ?> value="0">Open</option>
 
                             </select>
                         </div>
