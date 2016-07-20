@@ -123,7 +123,7 @@ $this->title = "Update SnapEarn";
                               'pluginOptions' => [
                                   'autoclose'=>true,
                                   'format' => 'yyyy-mm-dd hh:i:ss',
-                                  'endDate' => date('Y-m-d h:i:s'),
+                                  'endDate' => date('Y-m-d 23:59:59')
                               ]
                           ]);
                       ?>
