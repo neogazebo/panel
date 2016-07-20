@@ -49,4 +49,16 @@ class DefaultController extends BaseController
 			'dataProvider' => $dataProvider
 		]);
 	}
+
+    public function actionUserList()
+    {
+    	if (Yii::$app->request->isAjax) {
+    		$model = \app\models\User::find()->findUser();
+            $out = [];
+            foreach ($model as $d) {
+                $out[] = ['id' => $d->id,'value' => $d->username];
+            }
+            echo \yii\helpers\Json::encode($out);
+    	}
+    }
 }

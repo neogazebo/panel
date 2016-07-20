@@ -2,8 +2,12 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\helpers\Url;
+use kartik\widgets\Typeahead;
+use kartik\widgets\TypeaheadBasic;
+use yii\helpers\ArrayHelper;
 
-$this->title = 'Redemption Reference';
+$this->title = 'Reward Reference';
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
@@ -12,7 +16,66 @@ $this->title = 'Redemption Reference';
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
-                <div class="box-header with-border"></div><!-- /.box-header -->
+                <div class="box-header with-border">
+                    <form class="form-inline" action="/reward" method="get">
+                        <div class="form-group">
+                        <label>Username</label>
+                        <?= 
+                            Typeahead::widget([
+                                'name' => 'username',
+                                'options' => ['placeholder' => 'Find User'],
+                                'pluginOptions' => [
+                                    'highlight' => true,
+                                    'minLength' => 3
+                                ],
+                                'pluginEvents' => [
+                                    "typeahead:select" => "function(ev, suggestion) { $('#user_params').val(suggestion.id); }",
+                                ],
+                                'dataset' => [
+                                    [
+                                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                        'display' => 'value',
+                                        'remote' => [
+                                            'url' => Url::to(['user-list']) . '?q=%QUERY',
+                                            'wildcard' => '%QUERY'
+                                        ],
+                                        'limit' => 20
+                                    ]
+                                ]
+                            ]);
+                        ?>
+                        </div>
+                        <div class="form-group">
+                            <label>MSISDN</label>
+                            <div>
+                                <input type="text" class="form-control" name="rwd_msisdn">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>CODE</label>
+                            <div>
+                                <input type="text" class="form-control" name="rwd_code">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select name="rwd_status" class="form-control select2" style="width: 100%;">
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Transaction Time</label>
+                            <div>
+                                <input type="text" class="form-control" name="rwd_daterange" id="the_daterange">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="rwd_params" id="user_params">
+                            <label>&nbsp;</label><br>
+                            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                        </div>
+                    </form>
+                </div>
                 <div class="box-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
@@ -27,8 +90,13 @@ $this->title = 'Redemption Reference';
                                 'neverTimeout' => true,
                             ],
                             'columns' => [
-                                'account.acc_screen_name',
                                 [
+                                    'label' => 'Username',
+                                    'attribute' => 'account.acc_screen_name'
+                                ],
+                                
+                                [
+                                    'label' => 'Transaction Time',
                                     'attribute' => 'rdr_datetime',
                                     'format' => 'html',
                                     'value' => function($data) {
@@ -40,8 +108,8 @@ $this->title = 'Redemption Reference';
                                 'rdr_reference_code',
                                 'rdr_vod_sn',
                                 'rdr_vod_code',
-                                'rdr_vod_expired',
                                 [
+                                    'label' => 'Point',
                                     'attribute' => 'rdr_vou_value',
                                     'format' => 'html',
                                     'value' => function($data) {

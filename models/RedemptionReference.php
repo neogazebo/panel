@@ -87,4 +87,9 @@ class RedemptionReference extends \yii\db\ActiveRecord
         return $this->hasOne(Account::className(), ['acc_id' => 'rdr_acc_id']);
     }
 
+    public static function find()
+    {
+        return new RedemptionReferenceQuery(get_called_class());
+    }
+
 }
