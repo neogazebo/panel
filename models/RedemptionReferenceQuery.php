@@ -60,7 +60,6 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
 
         $this->join('LEFT JOIN','tbl_account','tbl_account.acc_id = rdr_acc_id');
         $this->orderBy('rdr_datetime DESC');
-        // echo $this->createCommand()->sql;exit;
         return $this;
     }   
 }
