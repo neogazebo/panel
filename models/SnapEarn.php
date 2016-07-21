@@ -180,7 +180,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             $query = self::find()
                 ->where(['sna_receipt_number' => trim($this->sna_receipt_number)])
                 ->andWhere(['sna_com_id' => $this->sna_com_id])
-                ->andWhere(['<>','sna_status',0])
+                ->andWhere(['=','sna_status',1])
                 ->count();
             if($query >= 1)
                 $this->addError($data, Yii::t('app', 'This number receipt has taken'));
