@@ -105,26 +105,7 @@ $this->title = "Update SnapEarn";
                       <?php if (empty($model->merchant)) : ?>
                       <li>
                         <a href="#"><b><?= (empty($model->sna_address)) ? 'Sugest Location' : 'Location' ?></b>
-                          <span class="pull-right text-light-blue">
-                            <?php 
-                              //(empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address 
-                              if(empty($model->sna_address))
-                              {
-                                if($model->newSuggestion)
-                                {
-                                  $model->newSuggestion->cos_location;
-                                }
-                                else
-                                {
-                                  echo '';
-                                }
-                              }
-                              else
-                              {
-                                echo $model->sna_address;
-                              }
-                            ?>
-                          </span>
+                          <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
                         </a>
                       </li>
                     <?php endif; ?>
@@ -163,7 +144,7 @@ $this->title = "Update SnapEarn";
                           <input id="saveNext" type="hidden" name="saveNext" value="">
                       </div>
                       <div class="button-left pull-left">
-                          <?= Html::a('<i class="fa fa-times"></i> Cancel', ['#'], ['class' => 'btn btn-default','onclick' => 'window.history.back()']) ?>
+                          <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
                       </div>
                     </div>
                     <input type="hidden" name="parent" class="parent" value="1">
