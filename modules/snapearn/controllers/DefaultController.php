@@ -215,7 +215,10 @@ class DefaultController extends BaseController
         // working time start
         $model = SnapEarn::findOne($id);
         if (empty($model->member)) {
-            $this->setMessage('save', 'error', 'Please insert manis user first!');
+            $this->setMessage('save', 'error', 'Manis user is not set!');
+            return $this->redirect(Url::to($this->getRememberUrl()));
+        }elseif (empty($model->newSuggestion)) {
+            $this->setMessage('save', 'error', "This Snap and Earn doesn't set any merchant or sugestion! ");
             return $this->redirect(Url::to($this->getRememberUrl()));
         }
 
@@ -245,7 +248,14 @@ class DefaultController extends BaseController
 
         $model->scenario = 'update';
 
-        $ctr = $model->member->acc_cty_id;
+        // 'staging condition only'
+        // there might be data that has no member (member not set)
+        $ctr = 'ID';
+
+        if($model->member)
+        {
+            $ctr = $model->member->acc_cty_id;
+        }
 
         // ajax validation
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()))  {
@@ -512,7 +522,7 @@ class DefaultController extends BaseController
     public function actionCancel($id)
     {
         $this->cancelWorking($id);
-        return $this->redirect([$this->getRememberUrl()]);
+        return $this->redirect(Url::to($this->getRememberUrl()));
     }
 
     protected function findModel($id)

@@ -79,10 +79,10 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                             'id' => 'list_snapearn',
                             'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
-                            'pjax' => true,
-                            'pjaxSettings' => [
-                                'neverTimeout' => true,
-                            ],
+                            // 'pjax' => true,
+                            // 'pjaxSettings' => [
+                            //     'neverTimeout' => true,
+                            // ],
                             'columns' => [
                                 [
                                     'label' => 'Merchant',

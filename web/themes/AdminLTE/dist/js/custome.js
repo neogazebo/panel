@@ -3,7 +3,7 @@ $(function() {
 	function timeout() {
 		setTimeout(function() {
 			$(".alert-dismissable").hide();
-		}, 5000);
+		}, 10000);
 	};
 	timeout();
 

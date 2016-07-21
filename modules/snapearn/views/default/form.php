@@ -105,26 +105,7 @@ $this->title = "Update SnapEarn";
                       <?php if (empty($model->merchant)) : ?>
                       <li>
                         <a href="#"><b><?= (empty($model->sna_address)) ? 'Sugest Location' : 'Location' ?></b>
-                          <span class="pull-right text-light-blue">
-                            <?php 
-                              //(empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address 
-                              if(empty($model->sna_address))
-                              {
-                                if($model->newSuggestion)
-                                {
-                                  $model->newSuggestion->cos_location;
-                                }
-                                else
-                                {
-                                  echo '';
-                                }
-                              }
-                              else
-                              {
-                                echo $model->sna_address;
-                              }
-                            ?>
-                          </span>
+                          <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
                         </a>
                       </li>
                     <?php endif; ?>
