@@ -236,13 +236,13 @@ class DefaultController extends BaseController
                     $currency = ($cr->cty_currency_name_iso3 == 'IDR') ? 'Rp' : 'RM';
                     $out[] = [
                         'id' => $i,
-                        'value' => $amount,
+                        'value' => Yii::$app->formatter->asDecimal($amount,2),
                         'color' => $color[$i],
                         'highlight' => $color[$i],
                         'label' => $d->categoryName,
                         'currency' => $currency,
                         'k' => $k,
-                        'total' => $total_amount += $amount
+                        'total' => Yii::$app->formatter->asDecimal($total_amount += $amount,2)
                     ];
                     $i++;
                 }
