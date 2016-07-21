@@ -215,7 +215,10 @@ class DefaultController extends BaseController
         // working time start
         $model = SnapEarn::findOne($id);
         if (empty($model->member)) {
-            $this->setMessage('save', 'error', 'Please insert manis user first!');
+            $this->setMessage('save', 'error', 'Manis user is not set!');
+            return $this->redirect(Url::to($this->getRememberUrl()));
+        }elseif (empty($model->newSuggestion)) {
+            $this->setMessage('save', 'error', "This Snap and Earn doesn't set any merchant or sugestion! ");
             return $this->redirect(Url::to($this->getRememberUrl()));
         }
 
@@ -519,7 +522,7 @@ class DefaultController extends BaseController
     public function actionCancel($id)
     {
         $this->cancelWorking($id);
-        return $this->redirect([$this->getRememberUrl()]);
+        return $this->redirect(Url::to($this->getRememberUrl()));
     }
 
     protected function findModel($id)
