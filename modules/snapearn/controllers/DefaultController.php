@@ -245,7 +245,14 @@ class DefaultController extends BaseController
 
         $model->scenario = 'update';
 
-        $ctr = $model->member->acc_cty_id;
+        // 'staging condition only'
+        // there might be data that has no member (member not set)
+        $ctr = 'ID';
+
+        if($model->member)
+        {
+            $ctr = $model->member->acc_cty_id;
+        }
 
         // ajax validation
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()))  {
