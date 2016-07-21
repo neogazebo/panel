@@ -89,6 +89,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_sem_id',
                 'sna_cat_id'],
             'integer'],
+            [['sna_status'],'globalValidation'],
             [['sna_receipt_amount'],'number','min' => 1, 'when' => function($model) {
                 return $model->sna_status == 1;
             }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }",'on' => 'update'],
@@ -125,6 +126,16 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_com_id',
                 'sna_receipt_number'], 'safe','on' => 'correction']
         ];
+    }
+
+    public function globalValidation($data)
+    {   $m = Company::findOne($this->sna_com_id);
+        $mPoint = $m->com_point;
+        if ($this->sna_status == 1) {
+            if (($mPoint - $this->sna_point) < 0 || $this->sna_point > $mPoint || empty($mPoint)) {
+                $this->addError($data, Yii::t('app', 'Points merchant is Not Enough !'));
+            }
+        }
     }
 
     public function checkMerchant($data)
