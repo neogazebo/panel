@@ -242,7 +242,7 @@ class DefaultController extends BaseController
                         'label' => $d->categoryName,
                         'currency' => $currency,
                         'k' => $k,
-                        'total' => $total_amount += $amount
+                        'total' => Yii::$app->formatter->asDecimal($total_amount += $amount,2)
                     ];
                     $i++;
                 }
