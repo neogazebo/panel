@@ -163,7 +163,7 @@ $this->title = "Update SnapEarn";
                           <input id="saveNext" type="hidden" name="saveNext" value="">
                       </div>
                       <div class="button-left pull-left">
-                          <?= Html::a('<i class="fa fa-times"></i> Cancel', ['default/cancel?id='.$model->sna_id], ['class' => 'btn btn-default']) ?>
+                          <?= Html::a('<i class="fa fa-times"></i> Cancel', ['#'], ['class' => 'btn btn-default','onclick' => 'window.history.back()']) ?>
                       </div>
                     </div>
                     <input type="hidden" name="parent" class="parent" value="1">

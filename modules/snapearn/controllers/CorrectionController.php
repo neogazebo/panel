@@ -391,7 +391,7 @@ class CorrectionController extends BaseController
         $point = Company::findOne($params['sna_com_id']);
         $point->setScenario('snapEarnUpdate');
         $point->com_point = $com_point;
-        if($point->save())
+        if($point->save(false))
             $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
     }
 
