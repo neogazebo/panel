@@ -42,13 +42,15 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
         $code = Yii::$app->request->get('rwd_code');
         $daterange = Yii::$app->request->get('rwd_daterange');
 
-        if ($username){
+        if (!empty($username)){
             $this->andFilterWhere(['like', 'acc_screen_name', $username]);
         }
-        if ($msisdn)
+        if (!empty($msisdn))
             $this->andFilterWhere(['like', 'rdr_msisdn', $msisdn]);
-        if ($status)
-            $this->andFilterWhere(['like', 'rdr_status', $status]);
+        if ($status == 'open' || $status == 'close')
+            $this->andWhere('rdr_status = :status', [
+                ':status' => $status
+                ]);
         if (!empty($daterange)) {
             $daterange = explode(' to ', $daterange);
             $this->andWhere("FROM_UNIXTIME(rdr_datetime) BETWEEN '$daterange[0] 00:00:00' AND '$daterange[1] 23:59:59'");
@@ -58,6 +60,7 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
 
         $this->join('LEFT JOIN','tbl_account','tbl_account.acc_id = rdr_acc_id');
         $this->orderBy('rdr_datetime DESC');
+        // echo $this->createCommand()->sql;exit;
         return $this;
     }   
 }
