@@ -28,6 +28,7 @@ class DefaultController extends BaseController
 		$model = RedemptionReference::find()->findCostume();
         $dataProvider =  new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 20
             ]
@@ -42,6 +43,7 @@ class DefaultController extends BaseController
 		$model = CashvoucherRedeemed::find()->list;
         $dataProvider =  new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 20
             ]
