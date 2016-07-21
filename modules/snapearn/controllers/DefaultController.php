@@ -5,6 +5,7 @@ namespace app\modules\snapearn\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
+use yii\helpers\Url;
 use linslin\yii2\curl;
 use app\controllers\BaseController;
 use app\components\helpers\Utc;
@@ -212,12 +213,18 @@ class DefaultController extends BaseController
     public function actionToUpdate($id)
     {
         // working time start
+        $model = SnapEarn::findOne($id);
+        if (empty($model->member)) {
+            $this->setMessage('save', 'error', 'Please insert manis user first!');
+            return $this->redirect(Url::to($this->getRememberUrl()));
+        }
+
         $user = Yii::$app->user->id;
         $param = $id;
         $point = WorkingTime::POINT_APPROVAL;
         $point_type = WorkingTime::UPDATE_TYPE;
-        $wrk_id = $this->startWorking($user, $param,$point_type,$point);
-        return $this->redirect(['update','id'=> $id]);
+        $wrk_id = $this->startWorking($user, $param, $point_type, $point);
+        return $this->redirect(['update', 'id'=> $id]);
     }
 
     public function actionUpdate($id)
