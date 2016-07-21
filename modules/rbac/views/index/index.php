@@ -70,7 +70,7 @@ $this->title = 'Role List';
                                         $create = Yii::$app->formatter->asDateTime($data->created_at);
                                         $update = Yii::$app->formatter->asDateTime($data->updated_at);
                                         if($create!== $update)
-                                            return Yii::$app->formatter->asDateTime($data->updated_at);
+                                            return Yii::$app->formatter->asDateTime(Utc::convert($data->updated_at));
                                     }
                                 ],
                                 [

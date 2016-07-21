@@ -48,7 +48,7 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                     'template' => '<span class="pull-right actionColumn">{view}</span>',
                                     'buttons' => [
                                         'view' => function($url, $model) {
-                                            return Html::a('<i class="fa fa-search"></i>', ['detail?id=' . $model->id]);
+                                            return Html::a('<i class="fa fa-pencil-square-o"></i>', ['detail?id=' . $model->id]);
                                         },
                                     ],
                                 ],
