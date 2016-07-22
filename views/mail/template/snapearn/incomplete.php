@@ -15,6 +15,7 @@
                 <li>Merchant Name</li>
                 <li>Transaction Amount</li>
                 <li>Receipt Number</li>
+                <li>Merchant address/ location</li>
             </ol>
             <p>Below is a sample photo as a guideline.</p><br/>
             <img src="<?= $params[1][1] ?>" width="70%" /><br/>
