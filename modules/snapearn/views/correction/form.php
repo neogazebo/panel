@@ -10,6 +10,7 @@ use kartik\widgets\DateTimePicker;
 use kartik\money\MaskMoney;
 
 $this->title = "Update SnapEarn";
+$model->sna_push = true;
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>

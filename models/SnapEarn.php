@@ -32,7 +32,7 @@ class SnapEarn extends \yii\db\ActiveRecord
     const STATUS_REJECTED = 2;
     const STATUS_APPROVED = 1;
     const LIMIT_RECEIPT = 2;
-    public $sna_push = true;
+    public $sna_push;
     public $total_cat = null;
     public $categoryName;
     public $amount;
@@ -73,6 +73,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_cat_id',
                 'sna_com_name'],
             'required'],
+            [['sna_push'],'safe'],
             [['sna_receipt_amount',
                 'sna_receipt_number',
                 'sna_receipt_image',
