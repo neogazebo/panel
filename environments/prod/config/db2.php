@@ -7,7 +7,7 @@ return [
     'password' => 'EB!zu-43bizu*@',
     'charset' => 'utf8',
     'slaveConfig' => [
-		'username' => 'admin',
+		'username' => 'manis',
 		'password' => 'EB!zu-43bizu*@',
 		'attributes' => [
                PDO::ATTR_TIMEOUT => 10,
