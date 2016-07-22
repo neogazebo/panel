@@ -212,13 +212,16 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
-        // working time start
         $model = SnapEarn::findOne($id);
         if (empty($model->member)) {
-            $this->setMessage('save', 'error', 'Please insert manis user first!');
+            $this->setMessage('save', 'error', "Manis user is not set!, Please contact your web administrator this snap number <strong>' $id '</strong>");
+            return $this->redirect(Url::to($this->getRememberUrl()));
+        }elseif ((empty($model->newSuggestion)  && empty($model->sna_com_id))  || (!empty($model->sna_com_id) && empty($model->merchant))) {
+            $this->setMessage('save', 'error', "This Snap and Earn doesn't set any merchant or sugestion!, Please contact your web administrator this snap number <strong>' $id '</strong> ");
             return $this->redirect(Url::to($this->getRememberUrl()));
         }
 
+        // working time start
         $user = Yii::$app->user->id;
         $param = $id;
         $point = WorkingTime::POINT_APPROVAL;
@@ -519,7 +522,7 @@ class DefaultController extends BaseController
     public function actionCancel($id)
     {
         $this->cancelWorking($id);
-        return $this->redirect([$this->getRememberUrl()]);
+        return $this->redirect(Url::to($this->getRememberUrl()));
     }
 
     protected function findModel($id)

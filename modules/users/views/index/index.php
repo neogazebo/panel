@@ -17,7 +17,7 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <?= Html::a('<i class="fa fa-plus-square"></i> New User', ['create'], ['class' => 'btn btn-primary btn-sm']) ?>
+                    <?php // Html::a('<i class="fa fa-plus-square"></i> New User', ['create'], ['class' => 'btn btn-primary btn-sm']) ?>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">

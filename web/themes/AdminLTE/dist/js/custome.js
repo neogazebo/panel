@@ -3,7 +3,7 @@ $(function() {
 	function timeout() {
 		setTimeout(function() {
 			$(".alert-dismissable").hide();
-		}, 5000);
+		}, 10000);
 	};
 	timeout();
 
@@ -237,7 +237,7 @@ function topFour(data) {
 					 total = 'N/A';
 				 }
 				 $("#testing").text(total);
-				 html += "<li><a href='#'>"+data[i].label+"<span class='pull-right badge ' style='background-color:"+data[i].color+"'>"+data[i].currency+'. '+data[i].value+data[i].k+"</span></a></li>";
+				 html += "<li><a href='#'>"+data[i].label+"<span class='pull-right badge ' style='background-color:"+data[i].color+"'>"+data[i].currency+'. '+data[i].amount+data[i].k+"</span></a></li>";
 			 }
 			 html += "</ul>";
 			 $('.chart-notes').html(html);
