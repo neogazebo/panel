@@ -107,6 +107,7 @@ class DefaultController extends BaseController
                     $company->com_snapearn = 1;
                     $company->com_snapearn_checkin = 1;
                     $company->com_registered_to = 'EBC';
+                    $company->com_created_by = Yii::$app->user->id;
                     $mall_id = Yii::$app->request->post('mall_id');
                     if (!empty($mall_id)) {
                         $mall = Mall::findOne($mall_id)->mal_name;
