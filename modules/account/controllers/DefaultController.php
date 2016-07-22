@@ -19,6 +19,7 @@ use app\models\SnapEarnRule;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
+use linslin\yii2\curl;
 
 /**
  * IndexController implements the CRUD actions for Account model.
@@ -179,6 +180,11 @@ class DefaultController extends BaseController
                     if($history->save()) {
                         $acc_screen_name = !empty($model->member) ? $model->member->acc_screen_name . ' (' . $model->member->acc_google_email . ')' : $model->lph_acc_id;
                         $transaction->commit();
+                        
+                        // CLEAR CACHE WEBHOOK
+                        $curl = new curl\Curl();
+                        $curl->get(Yii::$app->params['WEBHOOK_POINT_CORRECTION'].'?data={"acc_id":' . intval($id) . ',"point":' . intval(0) . '}');
+                        
                         $this->setMessage('save', 'success', 'Point successfully corrected!');
                         return $this->redirect(['default/view?id='.$model->lph_acc_id]);
                     } else {
