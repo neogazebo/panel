@@ -111,7 +111,6 @@ class EmailQueue extends \yii\db\ActiveRecord
             $transaction->commit();
         } catch (Exception $e) {
             $transaction->rollBack();
-//            var_dump($model->getErrors());exit;
         }
     }
 

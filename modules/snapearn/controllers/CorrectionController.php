@@ -34,8 +34,6 @@ use yii\web\ForbiddenHttpException;
 */
 class CorrectionController extends BaseController
 {
-
-
     public function actionToCorrection($id)
     {
         // working time start
@@ -53,10 +51,11 @@ class CorrectionController extends BaseController
     	$model->scenario = 'correction';
 
         $point_type = WorkingTime::CORRECTION_TYPE;
-        $check_wrk = $this->checkingWrk($id,$point_type);
-        if (empty($check_wrk) ) {
+        $check_wrk = $this->checkingWrk($id, $point_type);
+        if (empty($check_wrk)) {
             return $this->redirect(['to-correction','id'=> $id]);
         }
+
         // validation superuser
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status == 0 && $superuser != 1) {
@@ -112,7 +111,6 @@ class CorrectionController extends BaseController
                 $point = $this->merchantPoint($addPointmerchant);
                 // end process rollback
 
-
                 // get current point merchant
                 $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                 $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
@@ -124,7 +122,6 @@ class CorrectionController extends BaseController
 
                 // if approved action
                 if ($model->sna_status == 1) {
-
                     // get limited point per country
                     $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 
@@ -152,7 +149,6 @@ class CorrectionController extends BaseController
                     } elseif ($lph->lph_total_point <= $oldPoint) {
                         $cp = $oldPoint;
                     }
-
 
                     if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
@@ -213,8 +209,8 @@ class CorrectionController extends BaseController
 
                             switch ($model->sna_sem_id) {
                                 case 1:
-                                    $params[0] = ['[username]', $username];
-                                    $params[1] = ['[picture]', $picture];
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[picture]', $picture];
                                     break;
                                 case 2:
                                     $params[] = ['[username]', $username];
@@ -225,8 +221,8 @@ class CorrectionController extends BaseController
                                     $params[] = ['[picture]', $picture];
                                     break;
                                 case 4:
-                                    $params[0] = ['[username]', $username];
-                                    $params[1] = ['[business]', $business];
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[business]', $business];
                                     break;
                                 case 5:
                                     $params[] = ['[username]', $username];
@@ -240,10 +236,6 @@ class CorrectionController extends BaseController
                                     $params[] = ['[business]', $business];
                                     $params[] = ['[location]', $location];
                                     break;
-                                case 8:
-                                    $params[] = ['[username]', $username];
-                                    $params[] = ['[business]', $business];
-                                    break;
                             }
 
                             Yii::$app
@@ -253,6 +245,7 @@ class CorrectionController extends BaseController
                                 ->send()
                                 ->view();
                         }
+
                         //if push notification checked then send to activity
                         if ($model->sna_push == 1) {
                             $params = [$model->sna_acc_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
@@ -262,7 +255,6 @@ class CorrectionController extends BaseController
 
                         // create snapearn point detail
                         // SnapEarnPointDetail::savePoint($id, $model->sna_sem_id);
-
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
                     }

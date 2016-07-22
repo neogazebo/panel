@@ -236,14 +236,14 @@ class DefaultController extends BaseController
     	$model = $this->findModel($id);
         $point_type = WorkingTime::UPDATE_TYPE;
         $check_wrk = $this->checkingWrk($id,$point_type);
-        if (empty($check_wrk) ) {
+        if (empty($check_wrk)) {
             return $this->redirect(['to-update','id'=> $id]);
         }
         // validation has reviewed
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status != 0 && $superuser != 1) {
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
-        }elseif ($model->sna_status != 0 && $superuser = 1) {
+        } elseif ($model->sna_status != 0 && $superuser = 1) {
             return $this->redirect(['correction/to-correction?id='.$id]);
         }
 
@@ -325,7 +325,7 @@ class DefaultController extends BaseController
                     $email = $model->member->acc_facebook_email;
                     $model->sna_transaction_time = NULL;
                     $model->sna_point = 0;
-                }else{
+                } else {
                     $model->sna_review_date = 0;
                     $model->sna_review_by = 0;
                     $model->sna_transaction_time = NULL;
@@ -416,6 +416,7 @@ class DefaultController extends BaseController
                                 ->send()
                                 ->view();
                         }
+
                         //if push notification checked then send to activity
                         if ($model->sna_push == 1) {
                             $params = [$model->sna_acc_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
@@ -440,7 +441,7 @@ class DefaultController extends BaseController
                     $desc = "Snapearn $snap_type";
                     $type = $model->sna_status;
                     $sem_id = $model->sna_sem_id;
-                    $this->endWorking($wrk->wrk_id,$type,$desc,$sem_id);
+                    $this->endWorking($wrk->wrk_id, $type, $desc, $sem_id);
 
                     $transaction->commit();
                 } else {
@@ -456,7 +457,7 @@ class DefaultController extends BaseController
                 if (!empty($nextUrl))
                     return $this->redirect(['default/to-update?id=' . $nextUrl->sna_id]);
             }
-            return $this->redirect([$this->getRememberUrl()]);
+            return $this->redirect(Url::to($this->getRememberUrl()));
         } else {
             $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
         }

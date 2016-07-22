@@ -50,7 +50,7 @@ class TMail
 
     public function view()
     {
-        return Yii::$app->controller->renderPartial($this->template, ['content' => $this->body, 'params' => $this->params]);
+        return Yii::$app->controller->renderPartial($this->body, ['content' => $this->template, 'params' => $this->params]);
     }
 }
 

@@ -137,12 +137,12 @@ class Mail
                     'path' => $this->attachParams['attachment_url'],
                     'contentType' => $contentType
                 ];
-                $attachJson =  json_encode($info);
+                $attachJson = json_encode($info);
             }
         }        
         
-        $mailBody = Yii::$app->controller->renderPartial($this->template, [
-            'content' => $this->body,
+        $mailBody = Yii::$app->controller->renderPartial($this->body, [
+            'content' => $this->template,
             'params' => $this->params
         ]);
 
