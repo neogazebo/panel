@@ -121,6 +121,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 ],
                                 [
                                     'attribute' => 'sna_upload_date',
+                                    'format' => ['date', 'php:d-m-Y H:i:s'],
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_upload_date));
                                     }
