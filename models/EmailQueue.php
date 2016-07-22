@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use app\components\helpers\Utc;
+use Carbon\Carbon;
+
 
 /**
  * This is the model class for table "tbl_email_queue".
@@ -47,8 +49,8 @@ class EmailQueue extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['emq_priority', 'emq_time', 'emq_sent'], 'integer'],
-            [['emq_cc', 'emq_bcc', 'emq_body', 'emq_body_plain', 'emq_attachment', 'emq_additional_header'], 'required'],
+            [['emq_priority', 'emq_sent'], 'integer'],
+            [['emq_body', 'emq_body_plain'], 'required'],
             [['emq_cc', 'emq_bcc', 'emq_body', 'emq_body_plain', 'emq_attachment', 'emq_additional_header'], 'string'],
             [['emq_subject', 'emq_from', 'emq_to', 'emq_aws_message_id'], 'string', 'max' => 100],
         ];
@@ -89,22 +91,27 @@ class EmailQueue extends \yii\db\ActiveRecord
         $additional_headers = array(), 
         $priority = 5
     ) {
+        $date = Carbon::now('Utc');
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $to = json_encode($to);
             $model = new EmailQueue;
             $model->emq_priority = $priority;
+            $model->emq_time = $date->toDateTimeString();
             $model->emq_from = $from;
             $model->emq_to = $to;
             $model->emq_cc = $cc;
             $model->emq_bcc = $bcc;
+            $model->emq_subject = $subject;
             $model->emq_body = $body;
             $model->emq_body_plain = $body_plain;
             // $model->emq_attachment = $attachment;
             $model->save();
+            
             $transaction->commit();
         } catch (Exception $e) {
             $transaction->rollBack();
+//            var_dump($model->getErrors());exit;
         }
     }
 
