@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 use app\models\User;
 
 /**
@@ -41,14 +42,16 @@ class SearchUser extends User
      */
     public function search($params)
     {
-        $query = User::find()->where('type = 1');
+        $query = User::find()->select([
+            '{{tbl_admin_user}}.*',
+            '{{auth_assignment}}.item_name as role_name'
+        ])->where('type = 1');
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'sort' => false,
-        ]);
+        $query->joinWith(['roles']);
+
+        $query->orderBy('id DESC');
 
         $this->load($params);
 
@@ -57,7 +60,6 @@ class SearchUser extends User
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'role' => $this->role,
@@ -75,9 +77,23 @@ class SearchUser extends User
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
-            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'tbl_admin_user.email', $this->email])
             ->andFilterWhere(['like', 'country', $this->country]);
-        $query->orderBy('id DESC');
+
+        /*
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => false,
+        ]);
+        */
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => $query->createCommand()->getRawSql(),
+            'sort' => false,
+            'key' => 'id',
+            'totalCount' => $query->count(),
+        ]);
+        
         return $dataProvider;
     }
 }
