@@ -94,6 +94,7 @@ class EmailQueue extends \yii\db\ActiveRecord
             $to = json_encode($to);
             $model = new EmailQueue;
             $model->emq_priority = $priority;
+            $model->emq_time = Utc::getNow();
             $model->emq_from = $from;
             $model->emq_to = $to;
             $model->emq_cc = $cc;

@@ -1,7 +1,7 @@
 <tbody>
     <tr>
         <td colspan="2">
-            <h1 style="font-weight: 100; font-size: 30px; line-height: 60px; margin: 20px 0 0;">Hi&nbsp;[username]</h1>
+            <h1 style="font-weight: 100; font-size: 30px; line-height: 60px; margin: 20px 0 0;">Hi&nbsp;<?= $params[0][1] ?></h1>
         </td>
         <td width="100" style="display: table-cell; overflow: hidden;" rowspan="3">&nbsp;</td>
     </tr>
@@ -9,7 +9,7 @@
         <td width="50">&nbsp;</td>
         <td>
         	<p>
-        		The Receipt that you uploaded for your Snap &amp; Earn from [business] @ <location> violates our Terms &amp; Conditions.
+        		The Receipt that you uploaded for your Snap &amp; Earn from <?= $params[1][1] ?> @ <?= $params[2][1] ?> violates our Terms &amp; Conditions.
         		Possible reasons for a receipt being invalid:
         	</p><br/>
         	<ol>

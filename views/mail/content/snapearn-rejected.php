@@ -31,7 +31,7 @@
                             <tr bgcolor="#f2f2f2" style="font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.75; color: #666666; font-weight: 200; display: block; width: 600px;">
                                 <td width="600" align="right">
                                     <table width="550" cellspacing="0" cellpadding="0" border="0">
-                                        <?= var_dump($params) ?>
+                                        <?= Yii::$app->controller->renderPartial($content, ['params' => $params]) ?>
                                     </table>
                                 </td>
                             </tr>
@@ -73,4 +73,3 @@
     </table>
 </body>
 </html>
-<?php exit ?>

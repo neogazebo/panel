@@ -1,14 +1,14 @@
 <tbody>
     <tr>
         <td colspan="2">
-            <h1 style="font-weight: 100; font-size: 30px; line-height: 60px; margin: 20px 0 0;">Hi&nbsp;[username]</h1>
+            <h1 style="font-weight: 100; font-size: 30px; line-height: 60px; margin: 20px 0 0;">Hi&nbsp;<?= $params[0][1] ?></h1>
         </td>
         <td width="100" style="display: table-cell; overflow: hidden;" rowspan="3">&nbsp;</td>
     </tr>
     <tr>
         <td width="50">&nbsp;</td>
         <td>
-            <p>The Receipt that you uploaded for your Snap &amp; Earn from [business] is invalid. Possible reasons for a receipt being invalid:</p>
+            <p>The Receipt that you uploaded for your Snap &amp; Earn from <?= $params[1][1] ?> is invalid. Possible reasons for a receipt being invalid:</p>
             <ol>
                 <li>The receipt was not uploaded from the correct outlet</li>
                 <li>The receipt was not uploaded within 72 hours of the transaction being performed</li>
