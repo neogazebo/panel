@@ -9,6 +9,7 @@ use kartik\widgets\DateTimePicker;
 use kartik\money\MaskMoney;
 
 $this->title = "Update SnapEarn";
+$model->sna_push = true;
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -26,6 +27,7 @@ $this->title = "Update SnapEarn";
             'labelOptions' => ['class' => 'control-label'],
         ],
     ]);
+    
 ?>
     <div class="row">
       <div class="col-md-6">
@@ -135,7 +137,7 @@ $this->title = "Update SnapEarn";
                   <div class="reject-form">
                       <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control']) ?>
                   </div>
-                  <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
+                    <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;','value' => 1])->label('Push Notification?') ?>
                     <?= $form->field($model, 'sna_com_id')->hiddenInput(['style' => 'display:none'])->label('') ?>
                     <div class="box-footer clearfix">
                       <div class="button-right pull-right">
@@ -298,6 +300,6 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
     $('.exs_m').on('click',function(){
         $('.modal-dialog').switchClass( 'modal-lg','modal-md');
     });
-
+    
 ", yii\web\View::POS_END, 'snapearn-form');
 ?>

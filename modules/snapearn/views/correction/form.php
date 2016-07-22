@@ -10,6 +10,7 @@ use kartik\widgets\DateTimePicker;
 use kartik\money\MaskMoney;
 
 $this->title = "Update SnapEarn";
+$model->sna_push = true;
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
@@ -119,28 +120,28 @@ $this->title = "Update SnapEarn";
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                     <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                     <div class="point-form">
-                      <?php
-                          // $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
-                          //     'options' => [
-                          //         'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s')
-                          //     ],
-                          //     'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
-                          //     'pluginOptions' => [
-                          //         'autoclose'=>true,
-                          //         'format' => 'yyyy-mm-dd hh:i:ss',
-                          //         'endDate' => date('Y-m-d h:i:s')
-                          //     ]
-                          // ]);
+                      <?=
+                           $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
+                               'options' => [
+                                   'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s')
+                               ],
+                               'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
+                               'pluginOptions' => [
+                                   'autoclose'=>true,
+                                   'format' => 'yyyy-mm-dd hh:i:ss',
+                                   'endDate' => date('Y-m-d h:i:s')
+                               ]
+                           ]);
                       ?>
-                      <div class="form-group field-snapearn-sna_transaction_time sna_status">
+                    <!-- <div class="form-group field-snapearn-sna_transaction_time sna_status">
                       <label class="control-label" >Transaction Time</label>
                           <div class="">
-                              <div class="form-control" readonly="true"><?= Yii::$app->formatter->asDateTime($model->sna_transaction_time,'php: Y-m-d H:i:s') ?></div>
+                              <div class="form-control" readonly="true"><?php // Yii::$app->formatter->asDateTime($model->sna_transaction_time,'php: Y-m-d H:i:s') ?></div>
                               <div>
                                   <div class="help-block"></div>
                               </div>
                           </div>
-                      </div>
+                      </div>-->
                       
                       <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                       <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>

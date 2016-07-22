@@ -32,15 +32,28 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                 'email',
                                 [
                                     'label' => 'Role',
+                                    /*
                                     'value' => function($data) {
                                         if(!empty($data->authAssignment))
                                             return $data->authAssignment->item_name;
+                                    }
+                                    */
+                                    'value' => function($data) {
+                                        $role = 'None';
+
+                                        if($data['role_name'])
+                                        {
+                                            $role = ucwords($data['role_name']);
+                                        }
+
+                                        return $role;
                                     }
                                 ],
                                 [
                                     'label' => 'Registered Since',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDateTime($data->create_time);
+                                        //return Yii::$app->formatter->asDateTime($data->create_time);
+                                        return Yii::$app->formatter->asDateTime($data['create_time']);
                                     }
                                 ],
                                 [
@@ -48,7 +61,8 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                     'template' => '<span class="pull-right actionColumn">{view}</span>',
                                     'buttons' => [
                                         'view' => function($url, $model) {
-                                            return Html::a('<i class="fa fa-pencil-square-o"></i>', ['detail?id=' . $model->id]);
+                                            //return Html::a('<i class="fa fa-pencil-square-o"></i>', ['detail?id=' . $model->id]);
+                                            return Html::a('<i class="fa fa-pencil-square-o"></i>', ['detail?id=' . $model['id']]);
                                         },
                                     ],
                                 ],

@@ -107,6 +107,7 @@ class DefaultController extends BaseController
                     $company->com_snapearn = 1;
                     $company->com_snapearn_checkin = 1;
                     $company->com_registered_to = 'EBC';
+                    $company->com_created_by = Yii::$app->user->id;
                     $mall_id = Yii::$app->request->post('mall_id');
                     if (!empty($mall_id)) {
                         $mall = Mall::findOne($mall_id)->mal_name;
@@ -212,16 +213,16 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
-        // working time start
         $model = SnapEarn::findOne($id);
         if (empty($model->member)) {
-            $this->setMessage('save', 'error', 'Manis user is not set!');
+            $this->setMessage('save', 'error', "Manis user is not set!, Please contact your web administrator this snap number <strong>' $id '</strong>");
             return $this->redirect(Url::to($this->getRememberUrl()));
-        }elseif (empty($model->newSuggestion)) {
-            $this->setMessage('save', 'error', "This Snap and Earn doesn't set any merchant or sugestion! ");
+        }elseif ((empty($model->newSuggestion)  && empty($model->sna_com_id))  || (!empty($model->sna_com_id) && empty($model->merchant))) {
+            $this->setMessage('save', 'error', "This Snap and Earn doesn't set any merchant or sugestion!, Please contact your web administrator this snap number <strong>' $id '</strong> ");
             return $this->redirect(Url::to($this->getRememberUrl()));
         }
 
+        // working time start
         $user = Yii::$app->user->id;
         $param = $id;
         $point = WorkingTime::POINT_APPROVAL;

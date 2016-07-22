@@ -370,7 +370,7 @@ class CorrectionController extends BaseController
     public function actionCancel($id)
     {
         $this->cancelWorking($id);
-        return $this->redirect([$this->getRememberUrl()]);
+        return $this->redirect(Url::to($this->getRememberUrl()));
     }
 
     protected function merchantPoint($params, $type = true)
