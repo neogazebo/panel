@@ -11,7 +11,7 @@
             <p>The Receipt that you uploaded for your Snap &amp; Earn from <?= $params[1][1] ?> is invalid. Possible reasons for a receipt being invalid:</p>
             <ol>
                 <li>The receipt was not uploaded from the correct outlet</li>
-                <li>The receipt was not uploaded within 72 hours of the transaction being performed</li>
+                <li>The receipt was not uploaded within 24 hours of the transaction being performed</li>
                 <li>The receipt was not uploaded from a participating outlet</li>
             </ol>
             <p>

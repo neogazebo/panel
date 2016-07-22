@@ -111,6 +111,10 @@ class TBackend extends TMail
                 $this->template = '//mail/template/snapearn/violates';
                 $this->subject = 'Receipt violates Manis T&Cs';
                 break;
+            case 8:
+                $this->template = '//mail/template/snapearn/uncompleted';
+                $this->subject = 'Receipt photo is incomplete';
+                break;
         }
         $this->body = Mail::BODY_SNAPEARN_REJECTED;
         return $this;
