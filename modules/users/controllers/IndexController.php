@@ -50,6 +50,16 @@ class IndexController extends BaseController
         ]);
     }
 
+    public function actionTerms()
+    {
+        return $this->renderPartial('terms');
+    }
+
+    public function actionPrivacy()
+    {
+        return $this->renderPartial('privacy');
+    }
+
     public function actionCancel()
     {
         return $this->redirect([$this->getRememberUrl()]);
