@@ -31,6 +31,13 @@ class DateRangeCarbon
         return $this->setTimeZone();
     }
 
+    public function getDay()
+    {
+        $dt = $this->setTimeZone();
+        $thisDay = $dt->startOfDay(). ' to '. $dt->endOfDay();
+        return $thisDay;
+    }
+
     // get daterange month active
     public function getThisMonth()
     {
