@@ -8,5 +8,5 @@ return [
     'EPAY_URL' => 'wstest.oriongateway.com:22836',
     'EPAY_URL_PATH' => '/willani/services/oglws',
     'WEBHOOK_MANIS_API' => 'https://apixv3.ebizu.com/v1/webhook/admin/after/approval',
-    'WEBHOOK_POINT_CORRECTION' => 'https://apixv3.ebizu.com/v1/account/point/correction',
+    'WEBHOOK_POINT_CORRECTION' => 'https://apixv3.ebizu.com/v1/webhook/account/point/correction',
 ];
