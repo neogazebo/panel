@@ -66,7 +66,6 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         }
         if (!empty($_GET['sna_daterange'])) {
             $sna_daterange = explode(' to ', ($_GET['sna_daterange']));
-            $timezone = $country == 'MY' ? 8 : 7;
             $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0] 00:00:00' AND '$sna_daterange[1] 23:59:59'");
         } else {
             $sna_daterange = explode(' to ', ($dt->getDay()));
@@ -172,7 +171,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
         } else {
-            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+            $sna_daterange = explode(' to ', ($dt->getThisWeek()));
         }
 
         $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
@@ -193,7 +192,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
         } else {
-            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+            $sna_daterange = explode(' to ', ($dt->getThisWeek()));
         }
 
         $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
@@ -215,7 +214,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
         } else {
-            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+            $sna_daterange = explode(' to ', ($dt->getThisWeek()));
         }
 
         $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
@@ -239,7 +238,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
         } else {
-            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+            $sna_daterange = explode(' to ', ($dt->getThisWeek()));
         }
 
         $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
@@ -264,7 +263,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
         } else {
-            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+            $sna_daterange = explode(' to ', ($dt->getThisWeek()));
         }
 
         $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
@@ -288,7 +287,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
         } else {
-            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+            $sna_daterange = explode(' to ', ($dt->getThisWeek()));
         }
 
         $this->andWhere("FROM_UNIXTIME(sna_review_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
@@ -318,7 +317,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
         } else {
-            $sna_daterange = explode(' to ', ($dt->getThisMonth()));
+            $sna_daterange = explode(' to ', ($dt->getThisWeek()));
         }
 
         $this->andWhere("DATE(FROM_UNIXTIME(sna_upload_date)) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
