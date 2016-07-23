@@ -80,7 +80,6 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_transaction_time'], 'required', 'when' => function($model) {
                 return $model->sna_status == 1;
             }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }",'on' => 'update'],
-            // [['sna_transaction_time'],'date', 'format' => 'Y-m-d H:m:s'],
             [['sna_com_id',
                 'sna_point',
                 'sna_status',
@@ -91,17 +90,17 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_cat_id'],
             'integer'],
             [['sna_status'],'globalValidation'],
-            [['sna_receipt_amount'],'number','min' => 1, 'when' => function($model) {
+            [['sna_receipt_amount'], 'number', 'min' => 1, 'when' => function($model) {
                 return $model->sna_status == 1;
-            }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }",'on' => 'update'],
+            }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }", 'on' => 'update'],
             [['sna_receipt_number'],
                 'string',
-                'max' => 20],
+                'max' => 35],
             [['sna_receipt_number'],
                 'approvePerday',
                 'when' => function($model) {
                     return $model->sna_status == 1;
-                }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }",'on' => 'update'],
+                }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }", 'on' => 'update'],
             [['sna_receipt_date'],
                 'string',
                 'max' => 10],
@@ -110,8 +109,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'when' => function($model) {
                     return $model->sna_status == 1;
                 },'on' => 'update'],
-            // [['sna_com_id'], 'checkMerchant','on' => 'update'],
-            [['sna_receipt_number'], 'validateReceipt','on' => 'update'],
+            [['sna_receipt_number'], 'validateReceipt', 'on' => 'update'],
             [['sna_receipt_image'],
                 'string',
                 'max' => 75],
