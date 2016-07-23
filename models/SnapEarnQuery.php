@@ -32,11 +32,8 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
 
     public function findCustome()
     {
-        $timezone = date_default_timezone_get();
-        $ch = curl_init('ipinfo.io/country');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $country = curl_exec($ch);
-
+        $dt = new DateRangeCarbon();
+        
         $this->leftJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
         if (!empty($_GET['sna_cty'])) {
             $sna_cty = $_GET['sna_cty'];
@@ -71,6 +68,9 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange = explode(' to ', ($_GET['sna_daterange']));
             $timezone = $country == 'MY' ? 8 : 7;
             $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0] 00:00:00' AND '$sna_daterange[1] 23:59:59'");
+        } else {
+            $sna_daterange = explode(' to ', ($dt->getDay()));
+            $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         }
         if (!empty($_GET['sna_join'])) {
             $sna_join = $_GET['sna_join'];
