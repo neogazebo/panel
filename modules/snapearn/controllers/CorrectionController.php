@@ -284,7 +284,7 @@ class CorrectionController extends BaseController
             if ($_POST['saveNext'] == 1) {
                 $nextUrl = SnapEarn::find()->saveNext($id, $ctr);
                 if (!empty($nextUrl))
-                    return $this->redirect(['correction/to-update?id=' . $nextUrl->sna_id]);
+                    return $this->redirect(['correction/to-correction?id=' . $nextUrl->sna_id]);
             }
             return $this->redirect([$this->getRememberUrl()]);
         } else {
