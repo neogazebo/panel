@@ -12,11 +12,6 @@ use app\components\helpers\DateRangeCarbon;
  */
 class SnapEarnQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
-    {
-        return $this->andWhere('[[status]]=1');
-    }*/
-
     /**
      * @inheritdoc
      * @return AccountDevice[]|array
@@ -40,17 +35,17 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $dt = new DateRangeCarbon();
         
         $this->leftJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
-        if(!empty($_GET['sna_cty'])) {
+        if (!empty($_GET['sna_cty'])) {
             $sna_cty = $_GET['sna_cty'];
-            $this->andWhere(['LIKE', 'tbl_account.acc_cty_id', $sna_cty]);
+            $this->andWhere('tbl_account.acc_cty_id = :country', [':country' => $sna_cty]);
         }
 
-        if(!empty($_GET['sna_member'])) {
+        if (!empty($_GET['sna_member'])) {
             $sna_member = $_GET['sna_member'];
             $this->andWhere(['LIKE', 'tbl_account.acc_screen_name', $sna_member]);
         }
 
-        if(!empty($_GET['sna_receipt'])) {
+        if (!empty($_GET['sna_receipt'])) {
             $sna_receipt = $_GET['sna_receipt'];
             $this->andWhere(['LIKE', 'sna_receipt_number', $sna_receipt]);
         }
@@ -67,7 +62,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                     $sna_status = 2;
                     break;
             }
-            $this->andWhere(['like','sna_status',$sna_status]);
+            $this->andWhere('sna_status = :status', [':status' => $sna_status]);
         }
         if (!empty($_GET['sna_daterange'])) {
             $sna_daterange = explode(' to ', ($_GET['sna_daterange']));
@@ -158,7 +153,6 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->where('
             sna_acc_id = :id
             AND sna_status = 1
-
         ', [
             ':id' => $userId
         ]);
@@ -171,14 +165,13 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
 
     public function uploadIdChart($filters = null)
     {
-        // echo $_GET['dash_daterange'];exit;
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_upload_date)) as tanggal, count(*) as jumlah');
-        if(!empty($_GET['dash_daterange'])){
+        if (!empty($_GET['dash_daterange'])) {
             $sna_daterange = explode(" to ", $_GET['dash_daterange']);
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
-        }else{
+        } else {
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
         }
 
@@ -195,11 +188,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_upload_date)) as tanggal, count(*) as jumlah');
-        if(!empty($_GET['dash_daterange'])){
+        if (!empty($_GET['dash_daterange'])) {
             $sna_daterange = explode(" to ", $_GET['dash_daterange']);
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
-        }else{
+        } else {
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
         }
 
@@ -217,11 +210,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
-        if(!empty($_GET['dash_daterange'])){
+        if (!empty($_GET['dash_daterange'])) {
             $sna_daterange = explode(" to ", $_GET['dash_daterange']);
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
-        }else{
+        } else {
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
         }
 
@@ -241,11 +234,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
-        if(!empty($_GET['dash_daterange'])){
+        if (!empty($_GET['dash_daterange'])) {
             $sna_daterange = explode(" to ", $_GET['dash_daterange']);
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
-        }else{
+        } else {
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
         }
 
@@ -266,11 +259,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
 
-        if(!empty($_GET['dash_daterange'])){
+        if (!empty($_GET['dash_daterange'])) {
             $sna_daterange = explode(" to ", $_GET['dash_daterange']);
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
-        }else{
+        } else {
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
         }
 
@@ -290,11 +283,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select('date(from_unixtime(sna_review_date)) as tanggal, count(*) as jumlah');
-        if(!empty($_GET['dash_daterange'])){
+        if (!empty($_GET['dash_daterange'])) {
             $sna_daterange = explode(" to ", $_GET['dash_daterange']);
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
-        }else{
+        } else {
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
         }
 
@@ -314,17 +307,17 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     {
         $dt = new DateRangeCarbon();
         $this->select(new Expression("
-            STR_TO_DATE(yearweek(from_unixtime(sna_upload_date),3),'%Y%d') as weeks, 
+            STR_TO_DATE(yearweek(from_unixtime(sna_upload_date), 3), '%Y%d') as weeks, 
             count(distinct sna_acc_id) as total_unique, 
-            count(distinct IF(acc_cty_id = 'ID', sna_acc_id, null))  as total_unique_user_id,
-            count(distinct IF(acc_cty_id = 'MY', sna_acc_id, null))  as total_unique_user_my
+            count(distinct IF(acc_cty_id = 'ID', sna_acc_id, null)) as total_unique_user_id,
+            count(distinct IF(acc_cty_id = 'MY', sna_acc_id, null)) as total_unique_user_my
             "));
-        $this->innerJoin('tbl_account','tbl_account.acc_id = tbl_snapearn.sna_acc_id');
-        if(!empty($_GET['dash_daterange'])){
+        $this->innerJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+        if (!empty($_GET['dash_daterange'])) {
             $sna_daterange = explode(" to ", $_GET['dash_daterange']);
             $sna_daterange[0] = $sna_daterange[0] . ' 00:00:00';
             $sna_daterange[1] = $sna_daterange[1] . ' 23:59:59';
-        }else{
+        } else {
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
         }
 
