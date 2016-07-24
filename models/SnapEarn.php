@@ -68,7 +68,7 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         return [
             [['sna_com_id',
-                'sna_receipt_date',
+//                'sna_receipt_date',
                 'sna_upload_date',
                 'sna_cat_id',
                 'sna_com_name'],
