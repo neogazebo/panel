@@ -129,12 +129,14 @@ class SnapEarn extends \yii\db\ActiveRecord
 
     public function globalValidation($data)
     {   $m = Company::findOne($this->sna_com_id);
-        $mPoint = $m->com_point;
-        if ($this->sna_status == 1) {
-            if (($mPoint - $this->sna_point) < 0 || $this->sna_point > $mPoint || empty($mPoint)) {
+        if (empty($m)) {
+           $this->addError($data, Yii::t('app', 'Please create merchant first! Thanks.')); 
+        } else {
+            if (($m->com_point - $this->sna_point) < 0 || ($this->sna_point > $m->com_point)) {
                 $this->addError($data, Yii::t('app', 'Points merchant is Not Enough !'));
             }
         }
+        
     }
 
     public function checkMerchant($data)
