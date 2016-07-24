@@ -286,7 +286,13 @@ class CorrectionController extends BaseController
                 if (!empty($nextUrl))
                     return $this->redirect(['correction/to-correction?id=' . $nextUrl->sna_id]);
             }
-            return $this->redirect([$this->getRememberUrl()]);
+            
+            if (!empty($this->getRememberUrl())) {
+                return $this->redirect(Url::to($this->getRememberUrl()));
+            } else {
+                return $this->redirect(['default/snapearn']);
+            }
+            
         } else {
             $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
         }
