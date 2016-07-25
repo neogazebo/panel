@@ -85,7 +85,13 @@ $this->title = 'Detail Working Hours';
                                     'format' => 'html',
                                     'value' => function($data){
                                         if ($data->wrk_type == 2) {
-                                            return ($data->wrk_rjct_number != 0) ? '<p class="text-yellow">'.$data->reason->sem_remark.'</p>' : '<a class=""><span class="not-set">(not set)</span></a>';
+                                            if ($data->wrk_rjct_number != 0 && $data->wrk_point == 4) {
+                                                return '<p class="text-yellow">'.$data->reason->sem_remark.' <strong class="text-red">+</strong></p>';
+                                            } elseif ($data->wrk_rjct_number != 0 && $data->wrk_point != 4) {
+                                                return '<p class="text-yellow">'.$data->reason->sem_remark.'</p>';
+                                            }else{
+                                                return  '<a class=""><span class="not-set">(not set)</span></a>';
+                                            }
                                         } else{
                                             return ($data->wrk_point == 4) ? '<p class="text-green">Approved <strong class="text-red">+</strong> </p>' : '<p class="text-green">Approved</p>';
                                         }

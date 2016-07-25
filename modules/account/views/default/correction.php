@@ -23,3 +23,8 @@ $form = ActiveForm::begin([
 </div>
 
 <?php ActiveForm::end(); ?>
+<?php
+$this->registerJs("
+$('.modal-title').text('Correction Point');
+");
+?>

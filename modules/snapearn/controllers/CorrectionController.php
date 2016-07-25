@@ -4,6 +4,7 @@ namespace app\modules\snapearn\controllers;
 
 use Yii;
 use yii\web\NotFoundHttpException;
+use yii\helpers\Url;
 use linslin\yii2\curl;
 use app\controllers\BaseController;
 use app\components\helpers\Utc;

@@ -30,6 +30,7 @@ use app\models\Module;
 use app\models\ModuleInstalled;
 use app\models\SystemMessage;
 use app\models\WorkingTime;
+use app\models\User;
 use yii\web\HttpException;
 use yii\web\ForbiddenHttpException;
 
@@ -635,6 +636,18 @@ class DefaultController extends BaseController
         $com_name = $company->com_name;
         $parsersData[] = array('[name]', htmlspecialchars_decode($com_name, ENT_QUOTES));
         $systemMessage->Parser($typeMessage, $categoryMessage, $email, $parsersData);
+    }
+    
+    public function actionUserList()
+    {
+    	if (Yii::$app->request->isAjax) {
+    		$model = User::find()->findUser();
+            $out = [];
+            foreach ($model as $d) {
+                $out[] = ['id' => $d->id,'value' => $d->username];
+            }
+            echo \yii\helpers\Json::encode($out);
+    	}
     }
 
     public function actionList()

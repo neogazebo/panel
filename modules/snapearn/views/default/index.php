@@ -6,6 +6,10 @@ use yii\bootstrap\Modal;
 use app\components\helpers\Utc;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
+use kartik\widgets\Typeahead;
+use kartik\widgets\TypeaheadBasic;
+use yii\helpers\ArrayHelper;
+
 
 $this->title = 'Snap & Earn List';
 
@@ -64,7 +68,35 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                         <div class="form-group">
                             <label for="member">Member</label><br>
                             <input name="sna_member" class="form-control" id="member" placeholder="Enter name" type="text" value="<?= (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '' ?>">
-                        </div> 
+                        </div>
+<!--                        <div class="form-group">
+                            <label>Operator</label>-->
+                            <?php 
+//                                Typeahead::widget([
+//                                    'name' => 'username',
+//                                    'options' => ['placeholder' => 'Find User'],
+//                                    'pluginOptions' => [
+//                                        'highlight' => true,
+//                                        'minLength' => 3
+//                                    ],
+//                                    'pluginEvents' => [
+//                                        "typeahead:select" => "function(ev, suggestion) { $('#ops_name').val(suggestion.id); }",
+//                                    ],
+//                                    'dataset' => [
+//                                        [
+//                                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+//                                            'display' => 'value',
+//                                            'remote' => [
+//                                                'url' => Url::to(['user-list']) . '?q=%QUERY',
+//                                                'wildcard' => '%QUERY'
+//                                            ],
+//                                            'limit' => 20
+//                                        ]
+//                                    ]
+//                                ]);
+                            ?>
+                            <!--</div>-->
+<!--                            <input type="hidden" name="ops_name" id="ops_name">-->
                         <?php endif; ?>  
                         <div class="form-group">
                             <label>&nbsp;</label><br>
