@@ -322,6 +322,6 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
 
         $this->andWhere("DATE(FROM_UNIXTIME(sna_upload_date)) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->groupBy(new Expression('yearweek(from_unixtime(sna_upload_date),3)'));
-        return $this;
+        return $this->asArray()->all();
     }
 }
