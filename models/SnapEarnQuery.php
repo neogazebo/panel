@@ -77,10 +77,16 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         }
         
         // operator filter
-//        if ($_GET['ops_name'] > 0) {
-//            $operatorId = $_GET['ops_name'];
-//            $this->andWhere("sna_review_by = :ops",[':ops' => $operatorId]);
-//        }
+        if (!empty($_GET['ops_name'])) {
+            $operatorId = $_GET['ops_name'];
+            $this->andWhere("sna_review_by = :ops",[':ops' => $operatorId]);
+        }
+        
+        // merchant filter
+        if (!empty($_GET['com_name'])) {
+            $merchantId = $_GET['com_name'];
+            $this->andWhere("sna_com_id = :com",[':com' => $merchantId]);
+        }
         
         $this->orderBy('sna_id DESC');
         return $this;

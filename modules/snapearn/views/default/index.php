@@ -26,82 +26,122 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <form class="form-inline" role="form" method="get" action="/snapearn">
-                        <div class="form-group">
-                        <label>Country</label>
-                        <select name="sna_cty" class="form-control select2" style="width: 100%;">
-                              <option value="" <?= (!empty($_GET['sna_cty']) == '' || empty($_GET['sna_cty'])) ? 'selected' : '' ?>>All</option>
-                              <option value="ID" <?= (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'ID') ? 'selected' : '' ?>>Indonesia</option>
-                              <option value="MY" <?= (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'MY') ? 'selected' : '' ?>>Malaysia</option>
-                        </select>
-                        </div>
-                        <div class="form-group">
-                        <label>Receipt Status</label>
-                        <select name="sna_status" class="form-control select2" style="width: 100%;">
-                              <option value="" <?= (!empty($_GET['sna_status']) && $_GET['sna_status'] == '' || empty($_GET['sna_status'])) ? 'selected' : '' ?>>All</option>
-                              <option value="NEW" <?= (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'NEW') ? 'selected' : '' ?>>New</option>
-                              <option value="APP" <?= (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'APP') ? 'selected' : '' ?>>Approved</option>
-                              <option value="REJ" <?= (!empty($_GET['sna_status']) && $_GET['sna_status']== 'REJ') ? 'selected' : '' ?>>Rejected</option>
-                        </select>
-                        </div>
-                        <!-- <div class="form-group">
-                        <label>Join Status</label>
-                        <select name="sna_join" class="form-control select2" style="width: 100%;">
-                              <option value="" <?php // (!empty($_GET['sna_join']) == '' || empty($_GET['sna_join'])) ? 'selected' : '' ?>>All</option>
-                              <option value="1" <?php // ($_GET['sna_join'] == '1') ? 'selected' : '' ?>>Joined</option>
-                              <option value="2" <?php // ($_GET['sna_join'] == '2') ? 'selected' : '' ?>>UnJoined</option>
-                        </select>
-                        </div> -->
-                        <div class="form-group">
-                            <label>Date range</label><br>
-                            <div class="input-group">
-                                <div class="input-group-addon" for="reservation">
-                                    <i class="fa fa-calendar"></i>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="form-group">
+                                <label>Country</label>
+                                <select name="sna_cty" class="form-control select2" style="width: 100%;">
+                                      <option value="" <?= (!empty($_GET['sna_cty']) == '' || empty($_GET['sna_cty'])) ? 'selected' : '' ?>>All</option>
+                                      <option value="ID" <?= (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'ID') ? 'selected' : '' ?>>Indonesia</option>
+                                      <option value="MY" <?= (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'MY') ? 'selected' : '' ?>>Malaysia</option>
+                                </select>
                                 </div>
-                                <input type="text" name="sna_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
+                                <div class="form-group">
+                                <label>Receipt Status</label>
+                                <select name="sna_status" class="form-control select2" style="width: 100%;">
+                                      <option value="" <?= (!empty($_GET['sna_status']) && $_GET['sna_status'] == '' || empty($_GET['sna_status'])) ? 'selected' : '' ?>>All</option>
+                                      <option value="NEW" <?= (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'NEW') ? 'selected' : '' ?>>New</option>
+                                      <option value="APP" <?= (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'APP') ? 'selected' : '' ?>>Approved</option>
+                                      <option value="REJ" <?= (!empty($_GET['sna_status']) && $_GET['sna_status']== 'REJ') ? 'selected' : '' ?>>Rejected</option>
+                                </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date range</label><br>
+                                    <div class="input-group">
+                                        <div class="input-group-addon" for="reservation">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" name="sna_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '' ?>">
+                                    </div>
+                                </div>
+                                <?php if ($visible) : ?>
+                                <div class="form-group">
+                                    <label for="receipt">Receipt</label><br>
+                                    <input name="sna_receipt" class="form-control" id="receipt" placeholder="Receipt number" type="text" value="<?= (!empty($_GET['sna_receipt'])) ? $_GET['sna_receipt'] : '' ?>">
+                                </div>  
+                                <div class="form-group">
+                                    <label for="member">Member</label><br>
+                                    <input name="sna_member" class="form-control" id="member" placeholder="Enter name" type="text" value="<?= (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '' ?>">
+                                </div>
                             </div>
                         </div>
-                        <?php if ($visible) : ?>
-                        <div class="form-group">
-                            <label for="receipt">Receipt</label><br>
-                            <input name="sna_receipt" class="form-control" id="receipt" placeholder="Receipt number" type="text" value="<?= (!empty($_GET['sna_receipt'])) ? $_GET['sna_receipt'] : '' ?>">
-                        </div>  
-                        <div class="form-group">
-                            <label for="member">Member</label><br>
-                            <input name="sna_member" class="form-control" id="member" placeholder="Enter name" type="text" value="<?= (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '' ?>">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="form-group">
+                                <label>Operator</label>
+                                <?php
+                                $ops = (!empty($_GET['operator'])) ? $_GET['operator'] : 'Operator';
+                                $mer = (!empty($_GET['merchant'])) ? $_GET['merchant'] : 'Merchant';
+                                ?>
+                                <?=
+                                    Typeahead::widget([
+                                        'id' => 'operator',
+                                        'name' => 'operator',
+                                        'options' => ['placeholder' => $ops],
+                                        'pluginOptions' => [
+                                            'highlight' => true,
+                                            'minLength' => 3
+                                        ],
+                                        'pluginEvents' => [
+                                            "typeahead:select" => "function(ev, suggestion) { "
+                                                . "$('#ops_name').val(suggestion.id); "
+                                                . "$(this).css('color','000');"
+                                            . "}",
+                                        ],
+                                        'dataset' => [
+                                            [
+                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                                'display' => 'value',
+                                                'remote' => [
+                                                    'url' => Url::to(['user-list']) . '?q=%QUERY',
+                                                    'wildcard' => '%QUERY'
+                                                ],
+                                                'limit' => 20
+                                            ]
+                                        ]
+                                    ]);
+                                ?>
+                            </div>
+                            <div class="form-group">
+                                <label>Merchant</label>
+                                <?=
+                                    Typeahead::widget([
+                                        'id' => 'merchant',
+                                        'name' => 'merchant',
+                                        'options' => ['placeholder' => $mer],
+                                        'pluginOptions' => [
+                                            'highlight' => true,
+                                            'minLength' => 3
+                                        ],
+                                        'pluginEvents' => [
+                                            "typeahead:select" => "function(ev, suggestion) { "
+                                                . "$('#com_name').val(suggestion.id); "
+                                                . "$(this).css('color','000');"
+                                            . "}",
+                                        ],
+                                        'dataset' => [
+                                            [
+                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                                'display' => 'value',
+                                                'remote' => [
+                                                    'url' => Url::to(['list']) . '?q=%QUERY',
+                                                    'wildcard' => '%QUERY'
+                                                ],
+                                                'limit' => 20
+                                            ]
+                                        ]
+                                    ]);
+                                ?>
+                            </div>
+                            <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
+                            <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
+                            <?php endif; ?>  
+                            <div class="form-group">
+                                <label>&nbsp;</label><br>
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                            </div>
                         </div>
-<!--                        <div class="form-group">
-                            <label>Operator</label>-->
-                            <?php 
-//                                Typeahead::widget([
-//                                    'name' => 'username',
-//                                    'options' => ['placeholder' => 'Find User'],
-//                                    'pluginOptions' => [
-//                                        'highlight' => true,
-//                                        'minLength' => 3
-//                                    ],
-//                                    'pluginEvents' => [
-//                                        "typeahead:select" => "function(ev, suggestion) { $('#ops_name').val(suggestion.id); }",
-//                                    ],
-//                                    'dataset' => [
-//                                        [
-//                                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-//                                            'display' => 'value',
-//                                            'remote' => [
-//                                                'url' => Url::to(['user-list']) . '?q=%QUERY',
-//                                                'wildcard' => '%QUERY'
-//                                            ],
-//                                            'limit' => 20
-//                                        ]
-//                                    ]
-//                                ]);
-                            ?>
-                            <!--</div>-->
-<!--                            <input type="hidden" name="ops_name" id="ops_name">-->
-                        <?php endif; ?>  
-                        <div class="form-group">
-                            <label>&nbsp;</label><br>
-                            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
-                        </div>
+                    </div>
                     </form>
                 </div>
                 <div class="box-body">
@@ -226,12 +266,32 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 </section>
 
 <?php
+
 $this->registerJs("
-    // $('#filtersearch').popover();
-    // $('#filtersearch').on('keypress', function(ev) {
-    //     if(ev.which == 13) {
-    //         window.location = baseUrl + 'snapearn/default?search=' + encodeURIComponent($(this).val());
-    //     }
-    // });
+    // get parameter from url params name
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+    
+    // set var 
+    var operator = getParameterByName('operator');
+        merchant = getParameterByName('merchant');
+    
+    // set value operator name
+    if (operator != '') {
+        $('#operator').val(operator);
+    }
+    
+    // set value merchant name
+    if (merchant != '') {
+        $('#merchant').val(merchant);
+        
+    }
 ", yii\web\View::POS_END, 'snapearn-list');
 ?>

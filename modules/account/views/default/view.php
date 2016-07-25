@@ -88,7 +88,7 @@ $this->registerCss("
         <div class="col-md-9">
             <div class="nav-tabs-custom box-primary">
                 <ul class="nav nav-tabs">
-                    <li class=""><a aria-expanded="false" href="#activity" data-toggle="tab">Activity</a></li>
+                    <li class="pull-right"><a aria-expanded="false" href="#activity" data-toggle="tab">Activity</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="activity">
