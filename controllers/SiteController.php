@@ -68,10 +68,11 @@ class SiteController extends Controller
             $checkRoute = \app\components\filters\AccessFilters::checkRoute();
             if ($checkRoute == 'merchantSG') {
                 $defaultRoute = Yii::$app->urlManager->createUrl(['merchant-signup']);
-            }elseif($checkRoute == 'snapearn') {
+            // } elseif($checkRoute == 'snapearn') {
+            } else {
                 $defaultRoute = Yii::$app->urlManager->createUrl(['snapearn']);
-            }else {
-                $defaultRoute = Yii::$app->urlManager->createUrl(['dashboard']);
+            // } else {
+            //     $defaultRoute = Yii::$app->urlManager->createUrl(['dashboard']);
             }
 
             return $this->redirect($defaultRoute);
