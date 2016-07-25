@@ -291,7 +291,7 @@ class CorrectionController extends BaseController
             if (!empty($this->getRememberUrl())) {
                 return $this->redirect(Url::to($this->getRememberUrl()));
             } else {
-                return $this->redirect(['default/snapearn']);
+                return $this->redirect(['/snapearn']);
             }
             
         } else {
@@ -377,7 +377,11 @@ class CorrectionController extends BaseController
     public function actionCancel($id)
     {
         $this->cancelWorking($id);
-        return $this->redirect(Url::to($this->getRememberUrl()));
+        if (!empty($this->getRememberUrl())) {
+            return $this->redirect(Url::to($this->getRememberUrl()));
+        } else {
+            return $this->redirect(['/snapearn']);
+        }
     }
 
     protected function merchantPoint($params, $type = true)
