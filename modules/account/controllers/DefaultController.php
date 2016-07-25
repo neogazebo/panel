@@ -314,7 +314,7 @@ class DefaultController extends BaseController
     {
         $model = $this->findModel($param);
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
+            if ($model->save(false)) {
                 return $this->redirect(['view', 'id' => $param]);
             }
         }
