@@ -3,9 +3,11 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+// use yii\data\ActiveDataProvider;
 use app\controllers\BaseController;
 use app\models\SnapEarn;
+
 /**
  *
  */
@@ -15,8 +17,9 @@ class DashboardController extends BaseController
     public function actionIndex()
     {
         $model = SnapEarn::find()->getUniqueUser();
-        $dataProvider = new ActiveDataProvider([
-            'query' => $model,
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $model,
+            // 'query' => $model,
             'pagination' => [
                 'pageSize' => 5
             ]
