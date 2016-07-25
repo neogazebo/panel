@@ -309,6 +309,17 @@ class DefaultController extends BaseController
 
         return $this->redirect(['index']);
     }
+    
+    public function actionChangeCountry($param) 
+    {
+        $model = $this->findModel($param);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $param]);
+            }
+        }
+        return $this->renderAjax('country',['model' => $model]);
+    }
 
     /**
      * Finds the Account model based on its primary key value.

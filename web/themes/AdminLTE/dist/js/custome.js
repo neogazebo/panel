@@ -6,7 +6,9 @@ $(function() {
 		}, 10000);
 	};
 	timeout();
-
+        
+        $('[data-toggle="tooltip"]').tooltip();
+        
 	var customAlert = function(status,message) {
 		var html = "<div class='row'><div class='col-xs-12 col-sm-12 col-lg-12'>";
 		if(status == 'success') {

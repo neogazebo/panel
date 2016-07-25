@@ -60,7 +60,7 @@ $this->registerCss("
                             <b>Currency </b> <a class="pull-right"><?= !empty($model->country) ? $model->country->cty_currency_name_iso3 : '' ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Country </b> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
+                            <b>Country </b> <button class="btn bg-yellow btn-xs modalButton" value="change-country?param=<?= $_GET['id'] ?>">Change <i class="fa fa-exchange"></i></button> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
                         </li>
                         <li class="list-group-item">
                             <b>Current Point </b> <a class="pull-right"><?= (!empty($model->lastPointMember())) ? Yii::$app->formatter->asDecimal($model->lastPointMember(),0) : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
@@ -604,7 +604,7 @@ $this->registerCss("
 <!-- widget to create render modal -->
 <?php
     Modal::begin([
-        'header' => '</button><h4 class="modal-title">Correction Point</h4>',
+        'header' => '</button><h4 class="modal-title"></h4>',
         'id' => 'modal',
         'size' => 'modal-md',
     ]);

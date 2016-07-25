@@ -75,6 +75,13 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_join = $_GET['sna_join'];
             $this->leftJoin('tbl_company', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
         }
+        
+        // operator filter
+//        if ($_GET['ops_name'] > 0) {
+//            $operatorId = $_GET['ops_name'];
+//            $this->andWhere("sna_review_by = :ops",[':ops' => $operatorId]);
+//        }
+        
         $this->orderBy('sna_id DESC');
         return $this;
     }
