@@ -288,10 +288,21 @@ $this->registerJs("
         $('#operator').val(operator);
     }
     
+    $('#operator').on('blur',function(){
+        if ($(this).val() === '') {
+            $('#ops_name').val('');
+        }
+    });
+
     // set value merchant name
     if (merchant != '') {
         $('#merchant').val(merchant);
-        
     }
+    
+    $('#merchant').on('blur',function(){
+        if ($(this).val() === '') {
+            $('#com_name').val('');
+        }
+    });
 ", yii\web\View::POS_END, 'snapearn-list');
 ?>
