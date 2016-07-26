@@ -45,6 +45,9 @@ $this->registerCss("
         border-bottom-left-radius: 3px;
     }
 ");
+
+$this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/AccountManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+
 ?>
 <section class="content">
     <div class="row">
@@ -585,6 +588,129 @@ $this->registerCss("
                                             'tableOptions' => ['class' => 'table table-hover']
                                         ]);
                                         ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- END timeline item -->
+
+                        <li>
+                            <i class="fa fa-diamond bg-blue"></i>
+                            <div class="timeline-item">
+                                <div class="box box-solid">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Point History</h3>
+                                        <div class="box-tools pull-right">
+                                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="box-body">
+                                        <div class="date-range-wrapper" style="margin-bottom: 20px;">
+                                            <form id="history-form" class="form-inline">
+                                                <div class="col-sm-12">
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <label>Filter by Date</label><br>
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon" for="reservation">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </div>
+                                                                <input type="text" name="history_daterange" class="form-control pull-right" id="the_daterange">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label>&nbsp;</label><br>
+                                                            <input class="member_id" type="hidden" name="member_id" value="<?= $model->acc_id; ?>">
+                                                            <button type="button" class="btn btn-primary btn-flat filter-history" data-op="filter"><i class="fa fa-filter button-op"></i> Filter</button>
+                                                            <button type="button" class="btn btn-primary btn-flat reset-history hide" data-op="reset"><i class="fa fa-refresh button-op"></i> Reset</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            
+                                            <div style="clear: both;"></div>
+
+                                        </div>
+
+                                        <div class="history-grid-wrapper">
+                                            <?=
+                                            GridView::widget([
+                                                'id' => 'list_point_history',
+                                                'options' => [
+                                                    'style' => 'font-size: 13px',
+                                                ],
+                                                'layout' => '{items} {summary} {pager}',
+                                                'dataProvider' => $pointHistoryProvider,
+                                                'pjax' => true,
+                                                'pjaxSettings' => [
+                                                    'neverTimeout' => true,
+                                                ],
+                                                'columns' => [
+                                                    [
+                                                        'label' => 'Merchant',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return $data['merchant'];
+                                                        }
+                                                    ],
+                                                    [
+                                                        'label' => 'Type',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return $data['type'] ? ucwords($data['type']) : null;
+                                                        }
+                                                    ],
+                                                    [
+                                                        'label' => 'Point',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return $data['point'];
+                                                        }
+                                                    ],
+                                                    [
+                                                        'label' => 'Method',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return ucwords($data['method']);
+                                                        }
+                                                    ],
+                                                    [
+                                                        'label' => 'Current Point',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return $data['current_point'];
+                                                        }
+                                                    ],
+                                                    [
+                                                        'label' => 'Total Point',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return $data['total_point'];
+                                                        }
+                                                    ],
+                                                    [
+                                                        'label' => 'Status',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return $data['status'] == 1 ? 'Approved' : null;
+                                                        }
+                                                    ],
+                                                    [
+                                                        'label' => 'Date',
+                                                        'format' => 'html',
+                                                        'value' => function($data) {
+                                                            return $data['created_date'];
+                                                        },
+                                                    ],
+                                                ],
+                                                'tableOptions' => ['class' => 'table table-hover']
+                                            ]);
+                                            ?>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>

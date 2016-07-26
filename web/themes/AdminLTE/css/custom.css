@@ -1,0 +1,5 @@
+.ajax-loading {
+    /*background: #fff url("../img/loading-circle.gif") no-repeat scroll center center !important;*/
+    opacity: 0.5;
+    z-index: 9999;
+}
