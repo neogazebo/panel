@@ -37,8 +37,26 @@ class BaseController extends Controller
             ],
 		];
     }
+    
+    // set up global session using params
+    public function setSession($name,$params)
+    {
+        return \Yii::$app->session->set($name,$params);
+    }
+    
+    // get global session using params
+    public function getSession($params)
+    {
+        return \Yii::$app->session->get($params);
+    }
+    
+    // destory global session using params
+    public function removeSession($params)
+    {
+        return \Yii::$app->session->remove($params);
+    }
 
-    public function setRememberUrl()
+        public function setRememberUrl()
     {
 		return \Yii::$app->session->set('rememberUrl', Yii::$app->request->url);
     }

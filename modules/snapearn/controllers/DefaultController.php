@@ -179,10 +179,10 @@ class DefaultController extends BaseController
         ]);
     }
 
-    public function actionAjaxExisting($id)
+    public function actionAjaxExisting($id,$to = null)
     {
         $model = $this->findModel($id);
-
+        $urlActive = (!empty($to)) ? 'correction/'.$to : 'default/update';
         if ($model->load(Yii::$app->request->post())) {
             $model->sna_com_id = (int)Yii::$app->request->post('com_id');
             $company = Company::findOne($model->sna_com_id);
@@ -190,22 +190,22 @@ class DefaultController extends BaseController
             $model->sna_cat_id = $cat_id;
             $model->sna_com_name = $company->com_name;
             if ($model->sna_com_id > 0) {
-                if ($model->save()) {
+                if ($model->save(false)) {
                     $this->setMessage('save', 'success', 'Merchant created successfully!');
-                    return $this->redirect(['update?id='.$id]);
+                    return $this->redirect([$urlActive.'?id='.$id]);
                 }else{
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
-                    return $this->redirect(['update?id='.$id]);
+                    return $this->redirect([$urlActive.'?id='.$id]);
                 }
             }else{
                 $this->setMessage('save', 'error', 'Merchant not selected!');
-                return $this->redirect(['update?id='.$id]);
+                return $this->redirect([$urlActive.'?id='.$id]);
             }
         }
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('existing', [
-                'model' => $model,
+                'model' => $model
             ]);
         }
         return $this->redirect(['update?id='.$id]);
