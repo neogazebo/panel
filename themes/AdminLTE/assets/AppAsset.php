@@ -33,6 +33,7 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
         'themes/AdminLTE/plugins/sweet-alert/sweetalert.css',
         'themes/AdminLTE/dist/css/custome.css',
+        'themes/AdminLTE/css/custom.css',
     ];
     public $js = [
         'themes/AdminLTE/dist/plugins/jQueryui/jquery-ui.min.js',

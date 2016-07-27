@@ -7,10 +7,17 @@ use yii\helpers\Url;
 use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use app\models\Company;
+use yii\widgets\Pjax;
+
+
+Pjax::begin();
 
 $form = ActiveForm::begin([
     'id' => 'create-form',
-    'options' => ['class' => 'form-group'],
+    'options' => [
+        'class' => 'form-group',
+        'data-pjax' => true
+        ],
     'enableClientValidation'=>true,
     'enableAjaxValidation' => true,
     'fieldConfig' => [
@@ -57,6 +64,7 @@ $form = ActiveForm::begin([
 
 <?php ActiveForm::end(); ?>
 <?php
+    Pjax::end();
 $this->registerJs("
     $('.modal-title').text('Existing Merchant');
     function stopRKey(evt) {

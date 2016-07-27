@@ -125,6 +125,16 @@ class DefaultController extends BaseController
             ]
         ]);
 
+        $member_point_history = LoyaltyPointHistory::find()->getMemberPointHistory($id);
+
+        $pointHistoryProvider =  new ActiveDataProvider([
+            'query' => $member_point_history,
+            'sort' => false,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'receiptProvider' => $receiptProvider,
@@ -134,6 +144,7 @@ class DefaultController extends BaseController
             'redeemProvider' => $redeemProvider,
             'offerProvider' => $offerProvider,
             'rewardProvider' => $rewardProvider,
+            'pointHistoryProvider' => $pointHistoryProvider,
         ]);
     }
 
@@ -335,5 +346,38 @@ class DefaultController extends BaseController
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionGetMemberFilteredHistory()
+    {
+        $op_type = Yii::$app->request->post('op_type');
+        $member_id = Yii::$app->request->post('member_id');
+        $daterange = Yii::$app->request->post('daterange');
+        $offset = Yii::$app->request->get('page');
+        $limit = Yii::$app->request->get('per-page');
+        
+        $results = LoyaltyPointHistory::find()->filterMemberPointHistory($member_id, $daterange, $op_type, $offset, $limit);
+
+        $pointAjaxHistoryProvider =  new ActiveDataProvider([
+            'query' => $results,
+            'sort' => false,
+            'pagination' => [
+                'pageSize' => $limit ? $limit : 10
+            ]
+        ]);
+
+        $output = $this->renderPartial('/partials/member_point_history', [
+            'pointAjaxHistoryProvider' => $pointAjaxHistoryProvider,
+            'el_id' => $op_type
+        ]);
+
+        $return_json = [
+            'status' => 'success', 
+            'output' => $output
+        ];
+        
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        return $return_json;
     }
 }
