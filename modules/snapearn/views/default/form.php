@@ -137,7 +137,8 @@ $model->sna_push = true;
                           ]);
                       ?>
 
-                      <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status','value' => '','placeholder' => $model->sna_receipt_number]) ?>
+                      <?php //$form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status','value' => '','placeholder' => $model->sna_receipt_number]) ?>
+                      <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status','value' => '','placeholder' => $model->sna_ops_receipt_number]) ?>
                       <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                       <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                   </div>
