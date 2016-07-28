@@ -74,7 +74,7 @@ $model->sna_push = true;
                 <div class="box-header with-border">
                   <h3 class="box-title">Form Approval</h3>
                   <div class="pull-right btn-merchant">
-                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['default/new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
+                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['default/new-merchant?id=' . $model->sna_id.'&to=correction']), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
                     <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['default/ajax-existing?id=' . $model->sna_id.'&to=correction']), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?>
                   </div>
                 </div>

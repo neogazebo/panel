@@ -46,8 +46,8 @@ $form = ActiveForm::begin([
 ]);
 ?>
 <div class="panel-body">
-    <?= $form->field($company, 'com_name')->textInput(['value' => $suggest->cos_name]) ?>
-    <?= $form->field($company, 'com_business_name')->textInput(['value' => $suggest->cos_name]) ?>
+    <?= $form->field($company, 'com_name')->textInput(['value' => (!empty($suggest)) ? $suggest->cos_name : '']) ?>
+    <?= $form->field($company, 'com_business_name')->textInput(['value' => (!empty($suggest)) ? $suggest->cos_name : '']) ?>
     <?= $form->field($company, 'com_email')->textInput() ?>
     <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList,['prompt' => '']); ?>
     <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
@@ -85,7 +85,7 @@ $form = ActiveForm::begin([
             'name' => 'merchant',
             'options' => [
                 'placeholder' => 'Mall Name',
-                'value' => $suggest->cos_mall
+                'value' => (!empty($suggest)) ? $suggest->cos_mall : ''
             ],
             'pluginOptions' => [
                 'highlight'=>true,

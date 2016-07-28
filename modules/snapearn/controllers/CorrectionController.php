@@ -50,7 +50,9 @@ class CorrectionController extends BaseController
             $wrk_id = $this->startWorking($user,$param,$point_type,$point);
         }
         
-        // create session company id
+        // destroy session com && create session company id
+        $this->removeSession('oldCompany');
+        $this->removeSession('ses_com_id');
         if (empty($this->getSession('oldCompany'))) {
             $model = $this->findModel($id);
             $mp = Company::find()->getCurrentPoint($model->sna_com_id);
@@ -115,6 +117,13 @@ class CorrectionController extends BaseController
                     $cp = $up->lph_total_point;
                 } else {
                     $cp = 0;
+                }
+                
+                $ses_com = $this->getSession('ses_com');
+                if (!empty($ses_com)) {
+                    $model->sna_com_id = $ses_com['sna_com_id'];
+                    $model->sna_cat_id = $ses_com['sna_cat_id'];
+                    $model->sna_com_name = $ses_com['sna_com_name'];
                 }
                 
                 $minusPointUser = [
@@ -292,6 +301,7 @@ class CorrectionController extends BaseController
                     
                     // destroy session
                     $this->removeSession('oldCompany');
+                    $this->removeSession('ses_com');
                     
                 } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
@@ -318,7 +328,10 @@ class CorrectionController extends BaseController
 
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
-
+        if (!empty($this->getSession('ses_com_id'))) {
+            $model->sna_com_id = $this->getSession('ses_com_id');
+        }
+        
         return $this->render('form', [
             'model' => $model,
             'id' => $id
@@ -395,6 +408,9 @@ class CorrectionController extends BaseController
     public function actionCancel($id)
     {
         $this->cancelWorking($id);
+        // destroy session
+        $this->removeSession('oldCompany');
+        $this->removeSession('ses_com_id');
         if (!empty($this->getRememberUrl())) {
             return $this->redirect(Url::to($this->getRememberUrl()));
         } else {
