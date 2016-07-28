@@ -61,8 +61,11 @@ class DefaultController extends BaseController
     	]);
     }
 
-    public function actionNewMerchant($id)
+    public function actionNewMerchant($id, $to = null)
     {
+        
+        $urlActive = (!empty($to)) ? 'correction/'.$to : 'default/update';
+        
         $model = new MerchantUser();
         $model->scenario = 'signup';
         $model->usr_password = md5('123456');
@@ -78,7 +81,7 @@ class DefaultController extends BaseController
                                     ])
                                     ->one();
         // create id mall sugestion default = empty
-        $suggest->cos_mall_id = '';
+//        $suggest->cos_mall_id = '';
         // if mall name not empty getting id mall
         if (!empty($suggest->cos_mall)) {
             $cos_mall_id = Mall::find()
@@ -121,7 +124,18 @@ class DefaultController extends BaseController
                         $snapearn->sna_com_id = $com_id;
                         $snapearn->sna_cat_id = $this->getCategoryId($cat_id);
                         $snapearn->sna_com_name = $company->com_name;
-                        $snapearn->save(false);
+                        
+                        if ($to == 'correction') {
+                            $params = [
+                                'sna_com_id' => $snapearn->sna_com_id,
+                                'sna_cat_id' => $snapearn->sna_cat_id,
+                                'sna_com_name' => $snapearn->sna_com_name
+                            ];
+                            $this->setSession('ses_com', $params);
+                        } else {
+                            $snapearn->save(false);
+                        }
+                        
 
                         $suggestion = CompanySuggestion::find()->where('cos_sna_id = :id', [':id' => $id])->one();
                         $suggestion->cos_com_id = $com_id;
@@ -183,24 +197,37 @@ class DefaultController extends BaseController
     {
         $model = $this->findModel($id);
         $urlActive = (!empty($to)) ? 'correction/'.$to : 'default/update';
+        
         if ($model->load(Yii::$app->request->post())) {
             $model->sna_com_id = (int)Yii::$app->request->post('com_id');
             $company = Company::findOne($model->sna_com_id);
             $cat_id = $this->getCategoryId($company->com_subcategory_id);
             $model->sna_cat_id = $cat_id;
             $model->sna_com_name = $company->com_name;
-            if ($model->sna_com_id > 0) {
-                if ($model->save(false)) {
-                    $this->setMessage('save', 'success', 'Merchant created successfully!');
-                    return $this->redirect([$urlActive.'?id='.$id]);
+            if ($to == 'correction') {
+                $params = [
+                    'sna_com_id' => $model->sna_com_id,
+                    'sna_cat_id' => $model->sna_cat_id,
+                    'sna_com_name' => $model->sna_com_name
+                ];
+                $this->setSession('ses_com', $params);
+                $this->setMessage('save', 'success', 'Merchant successfully saved!');
+                return $this->redirect([$urlActive.'?id='.$id]);
+            } else {
+                if ($model->sna_com_id > 0) {
+                    if ($model->save(false)) {
+                        $this->setMessage('save', 'success', 'Merchant successfully saved!');
+                        return $this->redirect([$urlActive.'?id='.$id]);
+                    }else{
+                        $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
+                        return $this->redirect([$urlActive.'?id='.$id]);
+                    }
                 }else{
-                    $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
+                    $this->setMessage('save', 'error', 'Merchant not selected!');
                     return $this->redirect([$urlActive.'?id='.$id]);
                 }
-            }else{
-                $this->setMessage('save', 'error', 'Merchant not selected!');
-                return $this->redirect([$urlActive.'?id='.$id]);
             }
+            
         }
 
         if (Yii::$app->request->isAjax) {
