@@ -38,6 +38,11 @@ class CorrectionController extends BaseController
 {
     public function actionToCorrection($id)
     {
+        
+        // destroy session com && create session company id
+        $this->removeSession('oldCompany');
+        $this->removeSession('ses_com');
+        
         // check time start this user and type
         $point_type = WorkingTime::CORRECTION_TYPE;
         $check_wrk = $this->checkingWrk($id, $point_type);
@@ -50,9 +55,7 @@ class CorrectionController extends BaseController
             $wrk_id = $this->startWorking($user,$param,$point_type,$point);
         }
         
-        // destroy session com && create session company id
-        $this->removeSession('oldCompany');
-        $this->removeSession('ses_com_id');
+        
         if (empty($this->getSession('oldCompany'))) {
             $model = $this->findModel($id);
             $mp = Company::find()->getCurrentPoint($model->sna_com_id);
@@ -412,7 +415,7 @@ class CorrectionController extends BaseController
         $this->cancelWorking($id);
         // destroy session
         $this->removeSession('oldCompany');
-        $this->removeSession('ses_com_id');
+        $this->removeSession('ses_com');
         if (!empty($this->getRememberUrl())) {
             return $this->redirect(Url::to($this->getRememberUrl()));
         } else {

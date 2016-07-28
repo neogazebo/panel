@@ -242,6 +242,8 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
+        $this->removeSession('oldCompany');
+        $this->removeSession('ses_com');
         $model = SnapEarn::findOne($id);
         if (empty($model->member)) {
             $this->setMessage('save', 'error', "Manis user is not set!, Please contact your web administrator this snap number <strong>' $id '</strong>");
