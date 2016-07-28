@@ -297,12 +297,13 @@ class CorrectionController extends BaseController
                     $type = $model->sna_status;
                     $sem_id = $model->sna_sem_id;
                     $this->endWorking($wrk->wrk_id,$type,$desc,$sem_id);
-                    // commit all
-                    $transaction->commit();
                     
                     // destroy session
                     $this->removeSession('oldCompany');
                     $this->removeSession('ses_com');
+                    // commit all
+                    $transaction->commit();
+                    
                     
                 } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
