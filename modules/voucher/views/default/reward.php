@@ -45,12 +45,24 @@ $this->title = 'Reward Reference';
 
                             </select>
                         </div>
+                        
                         <div class="form-group">
                             <label>Transaction Time</label>
                             <div>
                                 <input type="text" class="form-control" name="rwd_daterange" id="the_daterange" value="<?= (!empty($_GET['rwd_daterange'])) ? $_GET['rwd_daterange'] : '' ?>">
                             </div>
                         </div>
+                        <!--sample pagesize dynamic-->
+<!--                        <div class="form-group">
+                            <label>Limit</label>
+                            <div>
+                                <select class="form-control" name="limit">
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                        </div>-->
                         <div class="form-group">
                             <label>&nbsp;</label><br>
                             <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
