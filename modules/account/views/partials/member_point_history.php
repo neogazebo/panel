@@ -1,8 +1,8 @@
-<?
+<?php use kartik\grid\GridView; ?>
 
-use kartik\grid\GridView;
+<?= 
 
-echo GridView::widget([
+GridView::widget([
     'id' => $el_id,
     'options' => [
         'style' => 'font-size: 13px',

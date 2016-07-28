@@ -30,6 +30,10 @@ class DefaultController extends BaseController
             'query' => $model,
             'sort' => false,
             'pagination' => [
+                // if using dynamic size
+//                'defaultPageSize' => 20,
+//                'pageSize' => \Yii::$app->request->get('limit')
+                //using default pagesize
                 'pageSize' => 20
             ]
         ]);
