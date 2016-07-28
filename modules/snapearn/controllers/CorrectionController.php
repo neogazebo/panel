@@ -75,6 +75,7 @@ class CorrectionController extends BaseController
        
         // get com id from session
         $old = $this->getSession('oldCompany');
+        $ses_com = $this->getSession('ses_com');
         
         $point_type = WorkingTime::CORRECTION_TYPE;
         $check_wrk = $this->checkingWrk($id, $point_type);
@@ -118,9 +119,10 @@ class CorrectionController extends BaseController
                 } else {
                     $cp = 0;
                 }
-                
-                $ses_com = $this->getSession('ses_com');
+               
+                // check session new merchant
                 if (!empty($ses_com)) {
+                    var_dump($ses_com);exit;
                     $model->sna_com_id = $ses_com['sna_com_id'];
                     $model->sna_cat_id = $ses_com['sna_cat_id'];
                     $model->sna_com_name = $ses_com['sna_com_name'];
@@ -328,8 +330,8 @@ class CorrectionController extends BaseController
 
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
-        if (!empty($this->getSession('ses_com_id'))) {
-            $model->sna_com_id = $this->getSession('ses_com_id');
+        if (!empty($ses_com)) {
+            $model->sna_com_id = $ses_com['sna_com_id'];
         }
         
         return $this->render('form', [

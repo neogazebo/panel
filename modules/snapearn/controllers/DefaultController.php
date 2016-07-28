@@ -138,41 +138,42 @@ class DefaultController extends BaseController
                         
 
                         $suggestion = CompanySuggestion::find()->where('cos_sna_id = :id', [':id' => $id])->one();
-                        $suggestion->cos_com_id = $com_id;
-                        if ($suggestion->save(false)) {
-                            $com_id = $company->com_id;
-                            // $company->setTag();
-                            $fsc = new FeatureSubscriptionCompany();
-                            $this->assignFcs($fsc, $com_id, $company, $company->fes_id);
-                            if ($fsc->save()) {
-                                if ($company->com_in_mall = 1) {
-                                    $mam_model = new MallMerchant();
-                                    $mam_model->scenario= 'newMerchant';
-                                    $mam_model->mam_com_id = $company->com_id;
-                                    $mam_model->mam_mal_id = Yii::$app->request->post('mall_id');
-                                    $mam_model->save(false);
-                                }
-
-                                // SnapEarnPointDetail::savePoint($id, 8);
-
-                                $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
-
-                                $this->assignModule($com_id, $company);
-                                $this->assignEmail($com_id, $company);
-
-                                // Additional point to working time
-                                $param = $id;
-                                $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
-                                $this->addWorkPoint($param, $point);
-
-                                $transaction->commit();
-                                $this->setMessage('save', 'success', 'Your company has been registered!');
-                                return $this->render('success');
-
-                            } else {
-                                $transaction->rollback();
-                                throw new HttpException(404, 'Cant insert to subscription');
+                        if (!empty($suggestion)) {
+                            $suggestion->cos_com_id = $com_id;
+                            $suggestion->save(false);
+                        }
+                        $com_id = $company->com_id;
+                        // $company->setTag();
+                        $fsc = new FeatureSubscriptionCompany();
+                        $this->assignFcs($fsc, $com_id, $company, $company->fes_id);
+                        if ($fsc->save()) {
+                            if ($company->com_in_mall = 1) {
+                                $mam_model = new MallMerchant();
+                                $mam_model->scenario= 'newMerchant';
+                                $mam_model->mam_com_id = $company->com_id;
+                                $mam_model->mam_mal_id = Yii::$app->request->post('mall_id');
+                                $mam_model->save(false);
                             }
+
+                            // SnapEarnPointDetail::savePoint($id, 8);
+
+                            $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
+
+                            $this->assignModule($com_id, $company);
+                            $this->assignEmail($com_id, $company);
+
+                            // Additional point to working time
+                            $param = $id;
+                            $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
+                            $this->addWorkPoint($param, $point);
+
+                            $transaction->commit();
+                            $this->setMessage('save', 'success', 'Your company has been registered!');
+                            return $this->render('success');
+
+                        } else {
+                            $transaction->rollback();
+                            throw new HttpException(404, 'Cant insert to subscription');
                         }
                     } else {
                         $transaction->rollback();
