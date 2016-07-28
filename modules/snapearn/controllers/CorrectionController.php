@@ -122,7 +122,6 @@ class CorrectionController extends BaseController
                
                 // check session new merchant
                 if (!empty($ses_com)) {
-                    var_dump($ses_com);exit;
                     $model->sna_com_id = $ses_com['sna_com_id'];
                     $model->sna_cat_id = $ses_com['sna_cat_id'];
                     $model->sna_com_name = $ses_com['sna_com_name'];
