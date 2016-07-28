@@ -38,10 +38,9 @@ class CorrectionController extends BaseController
 {
     public function actionToCorrection($id)
     {
-        
         // destroy session com && create session company id
-        $this->removeSession('oldCompany');
-        $this->removeSession('ses_com');
+        $this->removeSession('oldCompany_'.$id);
+        $this->removeSession('ses_com_'.$id);
         
         // check time start this user and type
         $point_type = WorkingTime::CORRECTION_TYPE;
@@ -56,7 +55,7 @@ class CorrectionController extends BaseController
         }
         
         
-        if (empty($this->getSession('oldCompany'))) {
+        if (empty($this->getSession('oldCompany_'.$id))) {
             $model = $this->findModel($id);
             $mp = Company::find()->getCurrentPoint($model->sna_com_id);
             $params = [
@@ -66,7 +65,7 @@ class CorrectionController extends BaseController
                 'com_point' => $mp->com_point,
                 'ops_id' => \Yii::$app->user->id,
             ];
-            $this->setSession('oldCompany',$params);
+            $this->setSession('oldCompany_'.$id,$params);
         }
         return $this->redirect(['correction', 'id' => $id]);
     }
@@ -77,8 +76,8 @@ class CorrectionController extends BaseController
     	$model->scenario = 'correction';
        
         // get com id from session
-        $old = $this->getSession('oldCompany');
-        $ses_com = $this->getSession('ses_com');
+        $old = $this->getSession('oldCompany_'.$id);
+        $ses_com = $this->getSession('ses_com_'.$id);
         
         $point_type = WorkingTime::CORRECTION_TYPE;
         $check_wrk = $this->checkingWrk($id, $point_type);
@@ -89,8 +88,10 @@ class CorrectionController extends BaseController
         // validation superuser
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status == 0 && $superuser != 1) {
+            $this->cancelWorking($id);
             return $this->redirect(['default/to-update','id'=> $id]);
         }elseif ($model->sna_status != 0 && $superuser != 1) {
+            $this->cancelWorking($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         }
                                 
@@ -302,8 +303,8 @@ class CorrectionController extends BaseController
                     $this->endWorking($wrk->wrk_id,$type,$desc,$sem_id);
                     
                     // destroy session
-                    $this->removeSession('oldCompany');
-                    $this->removeSession('ses_com');
+                    $this->removeSession('oldCompany_'.$id);
+                    $this->removeSession('ses_com_'.$id);
                     // commit all
                     $transaction->commit();
                     
@@ -414,8 +415,8 @@ class CorrectionController extends BaseController
     {
         $this->cancelWorking($id);
         // destroy session
-        $this->removeSession('oldCompany');
-        $this->removeSession('ses_com');
+        $this->removeSession('oldCompany_'.$id);
+        $this->removeSession('ses_com_'.$id);
         if (!empty($this->getRememberUrl())) {
             return $this->redirect(Url::to($this->getRememberUrl()));
         } else {
