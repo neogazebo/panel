@@ -739,8 +739,10 @@ class DefaultController extends BaseController
 
     protected function getCategoryId($id)
     {
+        
         $parent_id = \app\models\CompanyCategory::findOne($id)->com_parent_category_id;
         return $parent_id;
+        
 //        $cats = [
 //            1 => [1, 7, 8, 9, 10, 58, 122, 125],
 //            2 => [24, 121],
