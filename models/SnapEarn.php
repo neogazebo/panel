@@ -123,7 +123,9 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_receipt_number',
                 'sna_receipt_amount',
                 'sna_com_id',
-                'sna_receipt_number'], 'safe','on' => 'correction']
+                'sna_receipt_number'], 'safe','on' => 'correction'],
+            [['sna_ops_receipt_number'],'required', 'on' => 'update'],
+            [['sna_ops_receipt_number'],'required', 'on' => 'correction'],
         ];
     }
 
@@ -280,6 +282,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_receipt_image' => 'Receipt Image',
             'sna_com_name' => 'Merchant Name',
             'sna_transaction_time' => 'Transaction Time',
+            'sna_ops_receipt_number' => 'Operator Receipt Number',
         ];
     }
 

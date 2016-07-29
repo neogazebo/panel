@@ -40,7 +40,7 @@ class LoyaltyPointHistoryQuery extends \yii\db\ActiveQuery
             ':id'=>$id
         ]);
         $this->orderBy('lph_id DESC');
-        $this->limit('1');
+        $this->limit(1);
         return $this->one();
     }
     
