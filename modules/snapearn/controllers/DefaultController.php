@@ -64,6 +64,9 @@ class DefaultController extends BaseController
     public function actionNewMerchant($id, $to = null)
     {
         
+        // remove session
+        $this->removeSession('ses_com_'.$id);
+        
         $urlActive = (!empty($to)) ? 'correction/'.$to : 'default/update';
         
         $model = new MerchantUser();
@@ -131,7 +134,7 @@ class DefaultController extends BaseController
                                 'sna_cat_id' => $snapearn->sna_cat_id,
                                 'sna_com_name' => $snapearn->sna_com_name
                             ];
-                            $this->setSession('ses_com', $params);
+                            $this->setSession('ses_com_'.$id, $params);
                         } else {
                             $snapearn->save(false);
                         }
@@ -196,6 +199,9 @@ class DefaultController extends BaseController
 
     public function actionAjaxExisting($id,$to = null)
     {
+        // remove session
+        $this->removeSession('ses_com_'.$id);
+        
         $model = $this->findModel($id);
         $urlActive = (!empty($to)) ? 'correction/'.$to : 'default/update';
         
@@ -211,10 +217,10 @@ class DefaultController extends BaseController
                     'sna_cat_id' => $model->sna_cat_id,
                     'sna_com_name' => $model->sna_com_name
                 ];
-                $this->setSession('ses_com', $params);
+                $this->setSession('ses_com_'.$id, $params);
                 $this->setMessage('save', 'success', 'Merchant successfully saved!');
                 return $this->redirect([$urlActive.'?id='.$id]);
-            } else {
+            }else {
                 if ($model->sna_com_id > 0) {
                     if ($model->save(false)) {
                         $this->setMessage('save', 'success', 'Merchant successfully saved!');
@@ -242,9 +248,7 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
-        $this->removeSession('oldCompany');
-        $this->removeSession('ses_com');
-        $model = SnapEarn::findOne($id);
+        $model = $this->findModel($id);
         if (empty($model->member)) {
             $this->setMessage('save', 'error', "Manis user is not set!, Please contact your web administrator this snap number <strong>' $id '</strong>");
             return $this->redirect(Url::to($this->getRememberUrl()));
@@ -273,8 +277,10 @@ class DefaultController extends BaseController
         // validation has reviewed
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status != 0 && $superuser != 1) {
+            $this->cancelWorking($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         } elseif ($model->sna_status != 0 && $superuser = 1) {
+            $this->cancelWorking($id);
             return $this->redirect(['correction/to-correction?id='.$id]);
         }
 
@@ -733,27 +739,31 @@ class DefaultController extends BaseController
 
     protected function getCategoryId($id)
     {
-        $cats = [
-            1 => [1, 7, 8, 9, 10, 58, 122, 125],
-            2 => [24, 121],
-            3 => [4, 23, 34, 36, 37],
-            4 => [13, 16, 43, 59, 120],
-            5 => [18, 38, 61],
-            6 => [15, 20, 41, 62, 63, 64, 119],
-            7 => [3, 14, 25, 26, 27, 31, 32, 33],
-            8 => [5, 39, 50, 60],
-            9 => [6, 12, 17, 19, 21],
-            10 => [28, 30],
-            11 => [35, 42],
-            12 => [2, 11, 22, 44, 123, 124, 126]
-        ];
-        foreach ($cats as $key => $val) {
-            $check = in_array($id,$val);
-            if ($check) {
-                return $key;
-            }
-        }
-        return null;
+        
+        $parent_id = \app\models\CompanyCategory::findOne($id)->com_parent_category_id;
+        return $parent_id;
+        
+//        $cats = [
+//            1 => [1, 7, 8, 9, 10, 58, 122, 125],
+//            2 => [24, 121],
+//            3 => [4, 23, 34, 36, 37],
+//            4 => [13, 16, 43, 59, 120],
+//            5 => [18, 38, 61],
+//            6 => [15, 20, 41, 62, 63, 64, 119],
+//            7 => [3, 14, 25, 26, 27, 31, 32, 33],
+//            8 => [5, 39, 50, 60],
+//            9 => [6, 12, 17, 19, 21],
+//            10 => [28, 30],
+//            11 => [35, 42],
+//            12 => [2, 11, 22, 44, 123, 124, 126]
+//        ];
+//        foreach ($cats as $key => $val) {
+//            $check = in_array($id,$val);
+//            if ($check) {
+//                return $key;
+//            }
+//        }
+//        return null;
         // dari bias
         // $maps = array(
         //     array(1, 7, 8, 9, 10, 58, 122),

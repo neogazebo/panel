@@ -86,7 +86,7 @@ $model->sna_push = true;
                       </li>
                       <?php endif; ?>
                       <li class="">
-                        <a href="#"><b><?= (empty($model->merchant)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
+                        <a href="#"><b><?= (empty($model->merchant)) ? 'Suggestion Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
                       </li>
                       <?php if (!empty($model->merchant)) : ?>
                       <li class="">
@@ -113,7 +113,7 @@ $model->sna_push = true;
                       <?php endif; ?>
                       <?php if (empty($model->merchant)) : ?>
                       <li>
-                        <a href="#"><b><?= (empty($model->sna_address)) ? 'Sugest Location' : 'Location' ?></b>
+                        <a href="#"><b><?= (empty($model->sna_address)) ? 'Suggestion Location' : 'Location' ?></b>
                           <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
                         </a>
                       </li>
@@ -148,7 +148,8 @@ $model->sna_push = true;
                           </div>
                       </div>-->
                       
-                      <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
+                      <?php //$form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
+                      <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                       <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                       <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                   </div>
