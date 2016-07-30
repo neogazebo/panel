@@ -109,7 +109,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'when' => function($model) {
                     return $model->sna_status == 1;
                 },'on' => 'update'],
-            [['sna_ops_receipt_number'], 'validateReceipt', 'on' => 'update'],
+            [['sna_ops_receipt_number'], 'validateReceipt'],
             [['sna_receipt_image'],
                 'string',
                 'max' => 75],
