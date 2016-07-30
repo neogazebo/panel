@@ -280,7 +280,6 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_receipt_image' => 'Receipt Image',
             'sna_com_name' => 'Merchant Name',
             'sna_transaction_time' => 'Transaction Time',
-            'sna_ops_receipt_number' => 'Operator Receipt Number',
         ];
     }
 
