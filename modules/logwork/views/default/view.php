@@ -92,8 +92,10 @@ $this->title = 'Detail Working Hours';
                                             }else{
                                                 return  '<a class=""><span class="not-set">(not set)</span></a>';
                                             }
-                                        } else{
+                                        } elseif ($data->wrk_type == 1) {
                                             return ($data->wrk_point == 4) ? '<p class="text-green">Approved <strong class="text-red">+</strong> </p>' : '<p class="text-green">Approved</p>';
+                                        } else {
+                                            return '<p class="text-primary">'.$data->wrk_description.'</p>';
                                         }
                                     }
                                 ],

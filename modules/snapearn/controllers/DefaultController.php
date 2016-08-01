@@ -166,10 +166,20 @@ class DefaultController extends BaseController
                             $this->assignEmail($com_id, $company);
 
                             // Additional point to working time
-                            $param = $id;
-                            $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
-                            $this->addWorkPoint($param, $point);
-
+//                            $param = $id;
+//                            $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
+//                            $this->addWorkPoint($param, $point);
+                            $wrk_ses = $this->getSession('wrk_ses_'.$id);
+                            if (!empty($wrk_ses)) {
+                                $ses = [];
+                                $ses['wrk_end'] = $this->workingTime($id);
+                                $ses['wrk_description'] = 'Add New Merchant';
+                                $ses['wrk_type'] = WorkingTime::ADD_NEW_MERCHANT_TYPE;
+                                $ses['wrk_rjct_number'] = ($snapearn->sna_sem_id != '') ? $snapearn->sna_sem_id : 0;
+                                $ses['wrk_point'] = WorkingTime::POINT_ADD_NEW_MERCHANT;
+                                $wrk_new_merchant = array_merge($wrk_ses,$ses);
+                                $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
+                            }
                             $transaction->commit();
                             $this->setMessage('save', 'success', 'Your company has been registered!');
                             return $this->render('success');
@@ -248,6 +258,7 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
+        $this->removeSession('wrk_ses_'.$id);
         $model = $this->findModel($id);
         if (empty($model->member)) {
             $this->setMessage('save', 'error', "Manis user is not set!, Please contact your web administrator this snap number <strong>' $id '</strong>");
@@ -257,21 +268,24 @@ class DefaultController extends BaseController
             return $this->redirect(Url::to($this->getRememberUrl()));
         }
 
-        // working time start
-        $user = Yii::$app->user->id;
-        $param = $id;
-        $point = WorkingTime::POINT_APPROVAL;
-        $point_type = WorkingTime::UPDATE_TYPE;
-        $wrk_id = $this->startWorking($user, $param, $point_type, $point);
+        // working time start session
+        $wrk_ses = [
+            'wrk_by' => Yii::$app->user->id,
+            'wrk_param_id' => $id,
+            'wrk_point_type' => WorkingTime::UPDATE_TYPE,
+            'wrk_start' => $this->workingTime()
+        ];
+        $this->setSession('wrk_ses_'.$id, $wrk_ses);
+        
         return $this->redirect(['update', 'id'=> $id]);
     }
 
     public function actionUpdate($id)
     {
     	$model = $this->findModel($id);
-        $point_type = WorkingTime::UPDATE_TYPE;
-        $check_wrk = $this->checkingWrk($id,$point_type);
-        if (empty($check_wrk)) {
+        
+        $get_sesssion = $this->getSession('wrk_ses_'.$id);
+        if (empty($get_sesssion)) {
             return $this->redirect(['to-update','id'=> $id]);
         }
         // validation has reviewed
@@ -460,7 +474,6 @@ class DefaultController extends BaseController
                             $customData = ['type' => 'snapearn'];
                             Activity::insertAct($model->sna_acc_id, 30, $params, $customData);
                         }
-
                         // create snapearn point detail
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
@@ -474,13 +487,28 @@ class DefaultController extends BaseController
                     $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
 
                     // end working time
-                    $wrk = WorkingTime::find()->findWorkExist($model->sna_id)->one();
-                    $desc = "Snapearn $snap_type";
-                    $type = $model->sna_status;
-                    $sem_id = $model->sna_sem_id;
-                    $this->endWorking($wrk->wrk_id, $type, $desc, $sem_id);
-
-                    $transaction->commit();
+                    $last_working_ses = $this->getSession('wrk_ses_'.$id);
+                    $ses_wrk_point = (!empty($last_working_ses['wrk_point'])) ? ($last_working_ses['wrk_point'] + WorkingTime::POINT_APPROVAL) : WorkingTime::POINT_APPROVAL;
+                    if (!empty($last_working_ses)) {
+                        $ses = [];
+                        $ses['wrk_end'] = $this->workingTime($id);
+                        $ses['wrk_description'] = "Snapearn $snap_type";
+                        $ses['wrk_type'] = $model->sna_status;
+                        $ses['wrk_rjct_number'] = ($model->sna_sem_id != '') ? $model->sna_sem_id : 0;
+                        $ses['wrk_point'] = $ses_wrk_point;
+                        $last_ses = array_merge($last_working_ses,$ses);
+                        $this->setSession('wrk_ses_'.$id, $last_ses);
+                        if ($this->saveWorking($id)) {
+                            $transaction->commit();
+                        } else {
+                            $transaction->rollBack();
+                            $this->setMessage('save', 'error', General::extractErrorModel($this->saveWorking($id)));
+                        }
+                    } else {
+                        $transaction->rollBack();
+                        $this->setMessage('save', 'error','Session working hour not set');
+                    }
+                    
                 } else {
                     $transaction->rollBack();
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
@@ -564,7 +592,13 @@ class DefaultController extends BaseController
 
     public function actionCancel($id)
     {
-        $this->cancelWorking($id);
+//        $this->cancelWorking($id);
+        $chek_sesion = $this->getSession('wrk_ses_'.$id);
+        if ($chek_sesion['wrk_point'] == 3) {
+            $this->saveWorking($id);
+        } else {
+            $this->removeSession('wrk_ses_'.$id);
+        }
         if (!empty($this->getRememberUrl())) {
             return $this->redirect(Url::to($this->getRememberUrl()));
         } else {

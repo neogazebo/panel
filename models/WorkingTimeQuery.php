@@ -44,6 +44,7 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             $this->andWhere("wrk_point_type = $point_type");
         }
         $this->andWhere("wrk_end IS NULL");
+        $this->andWhere('wrk_point != 3');
         return $this;
     }
 
