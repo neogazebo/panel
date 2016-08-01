@@ -4,6 +4,7 @@ namespace app\modules\logwork\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\helpers\Url;
 use app\models\WorkingTime;
 use app\models\SearchWorkingTime;
 use app\models\User;
@@ -97,7 +98,6 @@ class DefaultController extends BaseController
 
             $query = WorkingTime::find()->with('reason')->getReport($id, $model->date_range);
             $preview = '_preview';
-            $redirect = 'logwork/default/view?id=' . $id;
             $title = [
                 'username' => $user->username,
                 'country' => $user->country == 'ID' ? 'Indonesia' : 'Malaysia',
@@ -105,7 +105,13 @@ class DefaultController extends BaseController
                 'last_date' => Yii::$app->formatter->asDate($last_date),
             ];
 
-            return \app\components\helpers\PdfExport::export($title, $model, $query, $preview, $redirect);
+            $export = \app\components\helpers\PdfExport::export($title, $model, $query, $preview);
+            if (is_array($export)) {
+                $this->setMessage('save', 'error', $export['message']);
+                return $this->redirect(Url::to('/logwork/default/report?id=' . $id));
+            }
+
+            return $export;
         }
 
         $model->username = $id;

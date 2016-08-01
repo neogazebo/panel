@@ -3,11 +3,12 @@
 namespace app\components\helpers;
 
 use Yii;
+use yii\helpers\Url;
 use kartik\mpdf\Pdf;
 
 class PdfExport
 {
-	public static function export($title, $model, $query, $preview, $redirect, $snapearn = false)
+	public static function export($title, $model, $query, $preview, $snapearn = false)
 	{
         $filename = Yii::$app->basePath . '/web/runtime/' . uniqid() . '.csv';
 
@@ -18,11 +19,11 @@ class PdfExport
         }
 
         if ($snapearn == false) {
-            if($query->count() >= 1000) {
-                $this->setMessage('save', 'error', '
-                    Unable to print file, total data is too large. Please choose shorter <strong>Date range</strong>.
-                ');
-                return $this->redirect([$redirect]);
+            if($query->count() >= 1024) {
+                $result = [
+                    'message' => 'Unable to print file, total data is too large. Please choose shorter <strong>Date range</strong>.',
+                ];
+                return $result;
             }
             $query = $query->all();
         }
@@ -145,6 +146,7 @@ class PdfExport
                 'SetFooter' => ['{PAGENO}'],
             ]
         ]);
+
         // return the pdf output as per the destination setting
         return $pdf->render();
 	}
