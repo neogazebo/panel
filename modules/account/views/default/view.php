@@ -66,7 +66,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                             <b>Country </b> <button class="btn bg-yellow btn-xs modalButton" value="change-country?param=<?= $_GET['id'] ?>">Change <i class="fa fa-exchange"></i></button> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Current Point </b> <a class="pull-right"><?= (!empty($model->lastPointMember())) ? Yii::$app->formatter->asDecimal($model->lastPointMember(),0) : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
+                            <b>Current Point </b> <a class="pull-right"><?= (!empty($model->lastPointMember())) ? Yii::$app->formatter->asDecimal($model->lastPointMember(),0) : 0 ?></a>
                         </li>
                         <li class="list-group-item">
                             <b>Last Activity </b> <a class="pull-right"><?= (!empty($model->lastLogin())) ? Yii::$app->formatter->asDate($model->lastLogin()->adv_last_access) : '<a class="pull-right"><span class="not-set">(not set)</span></a>' ?></a>
