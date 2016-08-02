@@ -11,12 +11,12 @@ use app\components\helpers\Utc;
 $this->title = 'Detail Working Hours';
 ?>
 <section class="content-header ">
-    <h1><?= Html::encode($this->title).' of <strong>'.$username ?></strong></h1>
+    <h1><?= Html::encode($this->title) . ' of <strong>' . $username ?></strong></h1>
     <div class="row">
         <div class="col-sm-3">
             <ul class="nav nav-stacked">
                 <li><a href="#">Total Reviewed : <span class="pull-right badge bg-blue"><?= $total->total_reviewed ?></span></a></li>
-                <li><a href="#">Total Time : <span class="pull-right badge bg-aqua"><?= date('H:m:s',$total->total_record) ?></span></a></li>
+                <li><a href="#">Total Time : <span class="pull-right badge bg-aqua"><?= date('H:m:s', $total->total_record) ?></span></a></li>
             </ul>
         </div>
         <div class="col-sm-3">
@@ -40,9 +40,10 @@ $this->title = 'Detail Working Hours';
                 <div class="box-header with-border">
                     <div class="row">
                     <div class="col-sm-6">
-                        <div class="form-group">
-                        <label>&nbsp;</label><br>
-                        <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'pull-left btn btn-primary']) ?>
+                        <div class="form-group pull-left">
+                            <label>Report</label><br>
+                            <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'btn btn-success']) ?>
+                            <?= Html::a('<i class="fa fa-share"></i> Report Detail', ['report-detail', 'id' => $id], ['class' => 'btn btn-warning']) ?>
                         </div>
                     </div>
                     <div class="col-sm-6">

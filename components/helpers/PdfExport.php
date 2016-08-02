@@ -25,7 +25,7 @@ class PdfExport
                 ];
                 return $result;
             }
-            $query = $query->all();
+            $query = $query->asArray()->all();
         }
 
         $username = $title['username'];

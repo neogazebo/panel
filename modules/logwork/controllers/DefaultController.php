@@ -120,4 +120,38 @@ class DefaultController extends BaseController
             'user' => $user
         ]);
     }
+
+    public function actionReportDetail($id)
+    {
+        $user = User::findOne($id);
+        $model = new PdfForm();
+        if($model->load(Yii::$app->request->post())) {
+            $date = explode(' to ', $model->date_range);
+            $first_date = $date[0] . ' 00:00:00';
+            $last_date = $date[1] . ' 23:59:59';
+
+            $query = WorkingTime::find()->with('reason')->getReportDetail($id, $model->date_range);
+            $preview = '_detail';
+            $title = [
+                'username' => $user->username,
+                'country' => $user->country == 'ID' ? 'Indonesia' : 'Malaysia',
+                'first_date' => Yii::$app->formatter->asDate($first_date),
+                'last_date' => Yii::$app->formatter->asDate($last_date),
+            ];
+
+            $export = \app\components\helpers\PdfExport::export($title, $model, $query, $preview);
+            if (is_array($export)) {
+                $this->setMessage('save', 'error', $export['message']);
+                return $this->redirect(Url::to('/logwork/default/report-detail?id=' . $id));
+            }
+
+            return $export;
+        }
+
+        $model->username = $id;
+        return $this->render('report', [
+            'model' => $model,
+            'user' => $user
+        ]);
+    }
 }
