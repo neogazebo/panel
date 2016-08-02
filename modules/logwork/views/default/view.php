@@ -75,7 +75,7 @@ $this->title = 'Detail Working Hours';
                                     'label' => 'Date',
                                     'attribute' => 'wrk_end',
                                     'value' => function($data) {
-                                        return date('Y M d H:m:s',$data->wrk_end);
+                                        return Yii::$app->formatter->asDatetime(Utc::convert($data->wrk_updated));
                                     }
                                 ],
                                 [

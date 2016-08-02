@@ -420,6 +420,17 @@ class CorrectionController extends BaseController
 
     public function actionCancel($id)
     {
+        $this->checkSession($id);
+        
+        if (!empty($this->getRememberUrl())) {
+            return $this->redirect(Url::to($this->getRememberUrl()));
+        }
+        
+        return $this->redirect(['/snapearn']);
+    }
+    
+    protected function checkSession($id)
+    {
         $chek_sesion = $this->getSession('wrk_ses_'.$id);
         if (!empty($chek_sesion['wrk_point']) && $chek_sesion['wrk_point'] == 3) {
             $this->saveWorking($id);
@@ -427,12 +438,6 @@ class CorrectionController extends BaseController
         $this->removeSession('wrk_ses_'.$id);
         $this->removeSession('oldCompany_'.$id);
         $this->removeSession('ses_com_'.$id);
-        
-        if (!empty($this->getRememberUrl())) {
-            return $this->redirect(Url::to($this->getRememberUrl()));
-        }
-        
-        return $this->redirect(['/snapearn']);
     }
 
     protected function merchantPoint($params, $type = true)
