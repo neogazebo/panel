@@ -1,6 +1,3 @@
-<pre>
-	<?= var_dump($report); exit; ?>
-</pre>
 <h2 class="page-header">
 	<img src="<?= Yii::$app->homeUrl ?>themes/AdminLTE/dist/img/ebz_logo.png" class="image-logo" alt="" width="64" height="56" />
 	Snap &amp; Earn Report
