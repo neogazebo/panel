@@ -75,7 +75,6 @@ $this->title = 'Detail Working Hours';
                                     'label' => 'Date',
                                     'attribute' => 'wrk_end',
                                     'value' => function($data) {
-                                        date_default_timezone_set('UTC');
                                         return date('Y M d H:m:s',$data->wrk_end);
                                     }
                                 ],
@@ -107,7 +106,6 @@ $this->title = 'Detail Working Hours';
                                     'label' => 'Record Activity',
                                     'attribute' => 'wrk_time',
                                     'value' => function($data) {
-                                        date_default_timezone_set('UTC');
                                         return date('H:i:s', $data->wrk_time);
                                     }
                                 ]
