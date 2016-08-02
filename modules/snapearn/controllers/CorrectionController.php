@@ -430,9 +430,9 @@ class CorrectionController extends BaseController
         
         if (!empty($this->getRememberUrl())) {
             return $this->redirect(Url::to($this->getRememberUrl()));
-        } else {
-            return $this->redirect(['/snapearn']);
         }
+        
+        return $this->redirect(['/snapearn']);
     }
 
     protected function merchantPoint($params, $type = true)
