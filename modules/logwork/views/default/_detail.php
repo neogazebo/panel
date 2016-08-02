@@ -35,7 +35,7 @@
 			<td>
 				<?php
 				if ($rp['wrk_type'] == 2) {
-                        echo ($rp['wrk_rjct_number'] != 0) ? '<p class="text-yellow">' . $rp['reason']->sem_remark . '</p>' : 0;
+                        echo ($rp['wrk_rjct_number'] != 0) ? '<p class="text-yellow">' . $rp['reason']['sem_remark'] . '</p>' : 0;
                     } else{
                         echo ($rp['wrk_point'] == 4) ? '<p class="text-green">Approved <strong class="text-red">+</strong> </p>' : '<p class="text-green">Approved</p>';
                     }
