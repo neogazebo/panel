@@ -28,9 +28,9 @@
 		<?php foreach ($report as $rp): ?>
 		<tr>
 			<td><?= $rp['wrk_type'] == 1 ? 'Snap & Earn' : 'Merchant' ?></td>
-			<td><?= date('Y M dd H:m:s', $rp['wrk_start']) ?></td>
-			<td><?= date('Y M dd H:m:s', $rp['wrk_end']) ?></td>
-			<td><?= date('Y M dd H:m:s', $rp['wrk_time']) ?></td>
+			<td><?= Yii::$app->formatter->asDatetime($rp['wrk_start']) ?></td>
+			<td><?= Yii::$app->formatter->asDatetime($rp['wrk_end']) ?></td>
+			<td><?= Yii::$app->formatter->asDatetime($rp['wrk_time']) ?></td>
 			<td><?= $rp['wrk_point'] ?></td>
 			<td>
 				<?php
