@@ -72,12 +72,6 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             $first_date = $range[0] . ' 00:00:00';
             $last_date = $range[1] . ' 23:59:59';
             $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
-        } else {
-            $dt = new DateRangeCarbon();
-            $range = explode(" to ", $dt->getThisMonth());
-            $first_date = $range[0];
-            $last_date = $range[1];
-            $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
         }
 
         $this->andWhere('wrk_time IS NOT NULL');
