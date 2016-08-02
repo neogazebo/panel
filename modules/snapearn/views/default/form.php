@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\SnapEarn;
+use app\components\helpers\Utc;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
@@ -42,7 +43,7 @@ $model->sna_push = true;
                   <?= (!empty($model->member)) ? $model->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>' ?>
                 </a>
               </span>
-              <span class="description text-green">Receipt Upload : <?=  Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s') ?></span>
+              <span class="description text-green">Receipt Upload : <?=  Yii::$app->formatter->asDateTime($model->sna_upload_date) ?></span>
             </div>
             <?php else : ?>
               <div class="user-block">
@@ -52,7 +53,7 @@ $model->sna_push = true;
                   Detail Receipt
                 </a>
                 </span>
-                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s') ?></span>
+                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date) ?></span>
               </div>
             <?php endif; ?>
           </div>
