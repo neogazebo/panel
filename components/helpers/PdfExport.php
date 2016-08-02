@@ -18,9 +18,6 @@ class PdfExport
             $download_is = Pdf::DEST_DOWNLOAD;
         }
 
-        echo '<pre>';
-        var_dump($report); exit;
-
         if ($snapearn == false) {
             if($query->count() >= 1024) {
                 $result = [
