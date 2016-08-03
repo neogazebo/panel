@@ -303,7 +303,7 @@ class DefaultController extends BaseController
     	$model = $this->findModel($id);
         
         $get_sesssion = $this->getSession('wrk_ses_'.$id);
-        if ($get_sesssion != '') {
+        if ($get_sesssion == '') {
             return $this->redirect(['to-update','id'=> $id]);
         }
         // validation has reviewed
