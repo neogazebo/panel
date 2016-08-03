@@ -296,11 +296,11 @@ class CorrectionController extends BaseController
                     $last_working_ses = $this->getSession('wrk_ses_'.$id);
                     if (!empty($last_working_ses)) {
                         $ses = [];
-                        $type = $model->sna_status;
+                        $type = ($model->sna_sem_id != '') ? $model->sna_sem_id : WorkingTime::APP_TYPE;
                         $ses['wrk_end'] = $this->workingTime($id);
                         $ses['wrk_description'] = $this->getPoint($type)->spo_name;
-                        $ses['wrk_type'] = $type;
-                        $ses['wrk_rjct_number'] = ($model->sna_sem_id != '') ? $model->sna_sem_id : WorkingTime::APP_TYPE;
+                        $ses['wrk_type'] = $model->sna_status;
+                        $ses['wrk_rjct_number'] = $type;
                         $ses['wrk_point'] = $this->getPoint($type)->spo_point;
                         $last_ses = array_merge($last_working_ses,$ses);
                         $this->setSession('wrk_ses_'.$id, $last_ses);
