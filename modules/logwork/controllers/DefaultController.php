@@ -154,4 +154,5 @@ class DefaultController extends BaseController
             'user' => $user
         ]);
     }
+
 }

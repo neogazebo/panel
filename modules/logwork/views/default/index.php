@@ -22,6 +22,12 @@ $this->title = 'Working Hours';
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
+                    <div class="pull-left">
+                        <div class="form-group">
+                            <label>Configuration</label><br>
+                            <?= Html::a('<i class="fa fa-wrench"></i> Snap & Earn Point', ['/logwork/point'], ['class' => 'btn btn-danger']) ?>
+                        </div>
+                    </div>
                     <form role="form" class="form-inline" method="get" action="/logwork">
                         <div class="pull-right">
                             <div class="form-group">

@@ -39,30 +39,30 @@ $this->title = 'Detail Working Hours';
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group pull-left">
-                            <label>Report</label><br>
-                            <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'btn btn-success']) ?>
-                            <?= Html::a('<i class="fa fa-share"></i> Report Detail', ['report-detail', 'id' => $id], ['class' => 'btn btn-warning']) ?>
+                        <div class="col-sm-3">
+                            <div class="form-group pull-left">
+                                <label>Report</label><br>
+                                <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'btn btn-success']) ?>
+                                <?= Html::a('<i class="fa fa-share"></i> Report Detail', ['report-detail', 'id' => $id], ['class' => 'btn btn-warning']) ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <form class="form-inline pull-right" role="form" method="get" action="view">
-                            <div class="form-group">
-                                <label>Date range</label><br>
-                                <div class="input-group">
-                                    <div class="input-group-addon" for="reservation">
-                                        <i class="fa fa-calendar"></i>
+                        <div class="col-sm-6">
+                            <form class="form-inline pull-right" role="form" method="get" action="view">
+                                <div class="form-group">
+                                    <label>Date range</label><br>
+                                    <div class="input-group">
+                                        <div class="input-group-addon" for="reservation">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="hidden" name="id" value="<?= $_GET['id'] ?>">
+                                        <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ?>">
                                     </div>
-                                    <input type="hidden" name="id" value="<?= $_GET['id'] ?>">
-                                    <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ?>">
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label>&nbsp;</label><br>
-                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
-                            </div>
-                        </form>
+                                <div class="form-group">
+                                    <label>&nbsp;</label><br>
+                                    <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
