@@ -217,6 +217,22 @@ class DefaultController extends BaseController
             'model' => $model
         ]);
     }
+    
+    
+    public function actionBlockUser()
+    {
+        if (Yii::$app->request->isAjax){
+            $id = Yii::$app->request->get('id');
+            $model = $this->findModel($id);
+            $model->acc_status = ($model->acc_status == 0) ? 1 : 0;
+            if ($model->save(false)) {
+                // CLEAR CACHE WEBHOOK USER
+                $curl = new curl\Curl();
+                $curl->get(Yii::$app->params['WEBHOOK_BLOCK_USER'].'?data={"id":' . intval($id) . '}');
+                return $this->redirect(['default/view?id='.$id]);
+            }
+        }
+    }
 
     /**
     *

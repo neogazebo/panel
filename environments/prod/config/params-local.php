@@ -9,4 +9,5 @@ return [
     'EPAY_URL_PATH' => '/averni/services/oglws',
     'WEBHOOK_MANIS_API' => 'https://apimanis.ebizu.com/v1/webhook/admin/after/approval',
     'WEBHOOK_POINT_CORRECTION' => 'https://apimanis.ebizu.com/v1/webhook/account/point/correction',
+    'WEBHOOK_BLOCK_USER' => 'https://apimanis.ebizu.com/v1/webhook/account/clear/all',
 ];

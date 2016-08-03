@@ -8,7 +8,6 @@ use kartik\grid\GridView;
 
 $this->title = $model->acc_screen_name;
 $model->acc_gender = ($model->acc_gender == 1) ? 'Male' : 'Female';
-
 $this->registerCss("
     #gmap-waypoints {
         position: relative;
@@ -59,6 +58,11 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                     <p class="text-muted text-center">Age <?= (!empty($model->acc_birthdate)) ? date('Y') - date('Y', $model->acc_birthdate) .' , ' : ' ' ?> <?= $model->acc_gender  ?></p>
 
                     <ul class="list-group list-group-unbordered">
+                        <li class="list-group-item item-status">
+                            <b>Status </b> 
+                            <button class="btn btn-danger btn-xs confirmBlocked" value="block-user?id=<?= $_GET['id'] ?>">Change <i class="fa fa-exchange"></i></button>
+                            <a class="pull-right"><?= ($model->acc_status == 1) ? 'Active' : 'Blocked' ?></a>
+                        </li>
                         <li class="list-group-item">
                             <b>Currency </b> <a class="pull-right"><?= !empty($model->country) ? $model->country->cty_currency_name_iso3 : '' ?></a>
                         </li>
@@ -83,8 +87,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                         <li class="list-group-item">
                             <b>OS Version  </b> <a class="pull-right"><?= (!empty($model->activeDevice())) ? $model->activeDevice()->dvc_os_version : '<a class="pull-right"><span class="not-set">(not set)</span></a>'?></a>
                         </li>
-                    </ul>
-                    <?= Html::button('<i class="fa fa-dollar"></i> Point Correction', ['value' => Url::to(['correction?id=' . $model->acc_id]), 'class' => 'btn btn-primary modalButton']) ?>
+                    <?= Html::button('<i class="fa fa-dollar"></i> Point Correction', ['value' => Url::to(['correction?id=' . $model->acc_id]), 'class' => 'btn btn-flat btn-primary modalButton']) ?>
                 </div>
             </div>
         </div>
