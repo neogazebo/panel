@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+
 use yii\db\Expression;
 use app\components\helpers\DateRangeCarbon;
 
