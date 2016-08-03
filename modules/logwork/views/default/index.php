@@ -114,21 +114,21 @@ $this->title = 'Working Hours';
                                     'label' => 'Total Point',
                                     'attribute' => 'wrk_point',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_point);
+                                        return Yii::$app->formatter->asDecimal($data->total_point, 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Approved',
                                     'attribute' => 'wrk_type',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_approved);
+                                        return Yii::$app->formatter->asDecimal($data->total_approved, 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Rejected',
                                     'attribute' => 'wrk_type',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_rejected);
+                                        return Yii::$app->formatter->asDecimal($data->total_rejected, 0);
                                     }
                                 ],
                                 [
