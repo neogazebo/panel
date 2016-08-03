@@ -26,17 +26,17 @@ class DefaultController extends BaseController
 	public function actionReward()
 	{
 		$model = RedemptionReference::find()->findCostume();
-        $dataProvider =  new ActiveDataProvider([
-            'query' => $model,
-            'sort' => false,
-            'pagination' => [
-                // if using dynamic size
-//                'defaultPageSize' => 20,
-//                'pageSize' => \Yii::$app->request->get('limit')
-                //using default pagesize
-                'pageSize' => 20
-            ]
-        ]);
+                $dataProvider =  new ActiveDataProvider([
+                    'query' => $model,
+                    'sort' => false,
+                    'pagination' => [
+                        // if using dynamic size
+        //                'defaultPageSize' => 20,
+        //                'pageSize' => \Yii::$app->request->get('limit')
+                        //using default pagesize
+                        'pageSize' => 20
+                    ]
+                ]);
 		return $this->render('reward', [
 			'dataProvider' => $dataProvider
 		]);

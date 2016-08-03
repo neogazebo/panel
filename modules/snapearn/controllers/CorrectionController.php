@@ -41,19 +41,16 @@ class CorrectionController extends BaseController
         // destroy session com && create session company id
         $this->removeSession('oldCompany_'.$id);
         $this->removeSession('ses_com_'.$id);
+        $this->removeSession('wrk_ses_'.$id);
         
-        // check time start this user and type
-        $point_type = WorkingTime::CORRECTION_TYPE;
-        $check_wrk = $this->checkingWrk($id, $point_type);
-        if (empty($check_wrk)) {
-            // create new working time
-            $user = Yii::$app->user->id;
-            $param = $id;
-            $point = WorkingTime::POINT_APPROVAL;
-            $point_type = WorkingTime::CORRECTION_TYPE;
-            $wrk_id = $this->startWorking($user,$param,$point_type,$point);
-        }
-        
+        // working time start session
+        $wrk_ses = [
+            'wrk_by' => Yii::$app->user->id,
+            'wrk_param_id' => $id,
+            'wrk_point_type' => WorkingTime::CORRECTION_TYPE,
+            'wrk_start' => $this->workingTime()
+        ];
+        $this->setSession('wrk_ses_'.$id, $wrk_ses);
         
         if (empty($this->getSession('oldCompany_'.$id))) {
             $model = $this->findModel($id);
@@ -78,10 +75,9 @@ class CorrectionController extends BaseController
         // get com id from session
         $old = $this->getSession('oldCompany_'.$id);
         $ses_com = $this->getSession('ses_com_'.$id);
+        $get_sesssion = $this->getSession('wrk_ses_'.$id);
         
-        $point_type = WorkingTime::CORRECTION_TYPE;
-        $check_wrk = $this->checkingWrk($id, $point_type);
-        if (empty($check_wrk) || empty($old)) {
+        if (empty($old) || empty($get_sesssion)) {
             return $this->redirect(['to-correction','id'=> $id]);
         }
 
@@ -296,19 +292,30 @@ class CorrectionController extends BaseController
                     $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
 
                     // end working time
-                    $wrk = WorkingTime::find()->findWorkExist($model->sna_id)->one();
-                    $desc = "Correction S&E $snap_type";
-                    $type = $model->sna_status;
-                    $sem_id = $model->sna_sem_id;
-                    $this->endWorking($wrk->wrk_id,$type,$desc,$sem_id);
-                    
-                    // destroy session
-                    $this->removeSession('oldCompany_'.$id);
-                    $this->removeSession('ses_com_'.$id);
-                    // commit all
-                    $transaction->commit();
-                    
-                    
+                    $last_working_ses = $this->getSession('wrk_ses_'.$id);
+                    $ses_wrk_point = (!empty($last_working_ses['wrk_point'])) ? ($last_working_ses['wrk_point'] + WorkingTime::POINT_APPROVAL) : WorkingTime::POINT_APPROVAL;
+                    if (!empty($last_working_ses)) {
+                        $ses = [];
+                        $ses['wrk_end'] = $this->workingTime($id);
+                        $ses['wrk_description'] = "Correction $snap_type";
+                        $ses['wrk_type'] = $model->sna_status;
+                        $ses['wrk_rjct_number'] = ($model->sna_sem_id != '') ? $model->sna_sem_id : 0;
+                        $ses['wrk_point'] = $ses_wrk_point;
+                        $last_ses = array_merge($last_working_ses,$ses);
+                        $this->setSession('wrk_ses_'.$id, $last_ses);
+                        if ($this->saveWorking($id)) {
+                            // destroy session
+                            $this->removeSession('oldCompany_'.$id);
+                            $this->removeSession('ses_com_'.$id);
+                            $transaction->commit();
+                        } else {
+                            $transaction->rollBack();
+                            $this->setMessage('save', 'error', General::extractErrorModel($this->saveWorking($id)));
+                        }
+                    } else {
+                        $transaction->rollBack();
+                        $this->setMessage('save', 'error','Session working hour not set');
+                    }
                 } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
@@ -413,15 +420,24 @@ class CorrectionController extends BaseController
 
     public function actionCancel($id)
     {
-        $this->cancelWorking($id);
-        // destroy session
-        $this->removeSession('oldCompany_'.$id);
-        $this->removeSession('ses_com_'.$id);
+        $this->checkSession($id);
+        
         if (!empty($this->getRememberUrl())) {
             return $this->redirect(Url::to($this->getRememberUrl()));
-        } else {
-            return $this->redirect(['/snapearn']);
         }
+        
+        return $this->redirect(['/snapearn']);
+    }
+    
+    protected function checkSession($id)
+    {
+        $chek_sesion = $this->getSession('wrk_ses_'.$id);
+        if (!empty($chek_sesion['wrk_point']) && $chek_sesion['wrk_point'] == 3) {
+            $this->saveWorking($id);
+        }
+        $this->removeSession('wrk_ses_'.$id);
+        $this->removeSession('oldCompany_'.$id);
+        $this->removeSession('ses_com_'.$id);
     }
 
     protected function merchantPoint($params, $type = true)

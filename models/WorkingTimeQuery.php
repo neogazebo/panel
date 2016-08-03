@@ -44,22 +44,23 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             $this->andWhere("wrk_point_type = $point_type");
         }
         $this->andWhere("wrk_end IS NULL");
+        $this->andWhere('wrk_point != 3');
         return $this;
     }
 
     public function getWorker()
     {
-        $this->select("
-            wrk_id,
-            wrk_type,
-            wrk_by,
-            wrk_param_id,
-            SUM(wrk_time) AS total_record,
-            SUM(wrk_point) AS total_point,
-            SUM(wrk_type = 1) AS total_approved,
-            SUM(wrk_type = 2) AS total_rejected,
-            COUNT(IF(wrk_type = 2, wrk_id, null)) / COUNT(wrk_id) AS rejected_rate
-        ");
+        $this->select([
+            'wrk_id',
+            'wrk_type',
+            'wrk_by',
+            'wrk_param_id',
+            'SUM(wrk_time) AS total_record',
+            'SUM(wrk_point) AS total_point',
+            'SUM(wrk_type = 1) AS total_approved',
+            'SUM(wrk_type = 2) AS total_rejected',
+            'COUNT(IF(wrk_type = 2, wrk_id, NULL)) / COUNT(IF(wrk_type != 3, wrk_id, NULL)) AS rejected_rate'
+        ]);
         $this->where('wrk_end IS NOT NULL');
         if (!empty($_GET['wrk_by'])) {
             $this->andWhere('wrk_by = :id', [
@@ -71,16 +72,11 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             $first_date = $range[0] . ' 00:00:00';
             $last_date = $range[1] . ' 23:59:59';
             $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
-        } else {
-            $dt = new DateRangeCarbon();
-            $range = explode(" to ", $dt->getThisMonth());
-            $first_date = $range[0];
-            $last_date = $range[1];
-            $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
         }
 
         $this->andWhere('wrk_time IS NOT NULL');
         $this->groupBy('wrk_by');
+//        echo $this->createCommand()->sql;exit;
         return $this;
     }
 

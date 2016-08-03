@@ -28,6 +28,7 @@ class WorkingTime extends \yii\db\ActiveRecord
     const POINT_ADD_NEW_MERCHANT = 3;
     const CORRECTION_TYPE = 2;
     const UPDATE_TYPE = 1;
+    const ADD_NEW_MERCHANT_TYPE = 3;
 
     public $total_reviewed;
     public $total_record;
@@ -58,8 +59,8 @@ class WorkingTime extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['wrk_type'], 'required'],
-            [['wrk_type', 'wrk_by', 'wrk_param_id', 'wrk_start', 'wrk_end', 'wrk_time', 'wrk_created', 'wrk_updated','wrk_point_type','wrk_rjct_number'], 'integer'],
+            [['wrk_type','wrk_start', 'wrk_end', 'wrk_time'], 'required'],
+            [['wrk_type', 'wrk_by', 'wrk_param_id', 'wrk_created', 'wrk_updated','wrk_point_type','wrk_rjct_number'], 'integer'],
             [['wrk_description'], 'string', 'max' => 250],
         ];
     }
@@ -90,7 +91,7 @@ class WorkingTime extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['wrk_created'],
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['wrk_created','wrk_updated'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['wrk_updated'],
                 ],
             ],

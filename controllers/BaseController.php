@@ -86,70 +86,99 @@ class BaseController extends Controller
         return date_default_timezone_set('UTC');
     }
 
-    public function checkingWrk($param)
-    {
-        $model = WorkingTime::find()->findWorkExist($param)->one();
-        return $model;
-    }
-
-    public function startWorking($user,$param,$point_type,$point)
+//    public function checkingWrk($param)
+//    {
+//        $model = WorkingTime::find()->findWorkExist($param)->one();
+//        return $model;
+//    }
+//
+//    public function startWorking($user,$param,$point_type,$point)
+//    {
+//        $this->centralTimeZone();
+//        // checking existing worktime with this user and param id
+//    	$model = WorkingTime::find()->findWorkExist($param,$point_type)->one();
+//        // if there is no exists worktime create this one
+//        if (empty($model)) {
+//            $model = new WorkingTime();
+//            $model->wrk_by = $user;
+//            $model->wrk_param_id = $param;
+//            $model->wrk_point = $point;
+//            $model->wrk_point_type = $point_type;
+//            $model->wrk_start = microtime(true);
+//            if ($model->save(false)) {
+//                return $model->wrk_id;
+//            }
+//        }elseif (empty($model->wrk_end)) {
+//            $model->wrk_by = $user;
+//            $model->wrk_param_id = $param;
+//            $model->wrk_point = $point;
+//            $model->wrk_start = microtime(true);
+//            if ($model->save(false)) {
+//                return $model->wrk_id;
+//            }
+//        }
+//        return $model->wrk_id;
+//    }
+//
+//    public function addWorkPoint($param,$point)
+//    {
+//        $this->centralTimeZone();
+//        $model = WorkingTime::find()->findWorkExist($param)->one();
+//        if (!empty($model)) {
+//            $model->wrk_point = $model->wrk_point + $point;
+//            $model->save(false);
+//        }
+//    }
+//
+//    public function endWorking($id,$type,$desc,$sem_id = 0)
+//    {
+//        $this->centralTimeZone();
+//    	$model = WorkingTime::findOne($id);
+//        $model->wrk_type = (int)$type;
+//    	$model->wrk_description = $desc;
+//    	$model->wrk_end = microtime(true);
+//        $model->wrk_time = ($model->wrk_end - $model->wrk_start);
+//        $model->wrk_rjct_number = $sem_id;
+//    	$model->save(false);
+//    }
+    
+    public function workingTime()
     {
         $this->centralTimeZone();
-        // checking existing worktime with this user and param id
-    	$model = WorkingTime::find()->findWorkExist($param,$point_type)->one();
-        // if there is no exists worktime create this one
-        if (empty($model)) {
-            $model = new WorkingTime();
-            $model->wrk_by = $user;
-            $model->wrk_param_id = $param;
-            $model->wrk_point = $point;
-            $model->wrk_point_type = $point_type;
-            $model->wrk_start = microtime(true);
-            if ($model->save(false)) {
-                return $model->wrk_id;
-            }
-        }elseif (empty($model->wrk_end)) {
-            $model->wrk_by = $user;
-            $model->wrk_param_id = $param;
-            $model->wrk_point = $point;
-            $model->wrk_start = microtime(true);
-            if ($model->save(false)) {
-                return $model->wrk_id;
-            }
-        }
-        return $model->wrk_id;
+        return microtime(true);
     }
 
-    public function addWorkPoint($param,$point)
+    public function saveWorking($id)
     {
-        $this->centralTimeZone();
-        $model = WorkingTime::find()->findWorkExist($param)->one();
-        if (!empty($model)) {
-            $model->wrk_point = $model->wrk_point + $point;
-            $model->save(false);
-        }
-    }
-
-    public function endWorking($id,$type,$desc,$sem_id = 0)
-    {
-        $this->centralTimeZone();
-    	$model = WorkingTime::findOne($id);
-        $model->wrk_type = (int)$type;
-    	$model->wrk_description = $desc;
-    	$model->wrk_end = microtime(true);
+        $model = new WorkingTime();
+        $wrk_ses = $this->getSession('wrk_ses_'.$id);
+        $model->wrk_type = $wrk_ses['wrk_type'];
+        $model->wrk_by = $wrk_ses['wrk_by'];
+        $model->wrk_param_id = $wrk_ses['wrk_param_id'];
+        $model->wrk_start = $wrk_ses['wrk_start'];
+        $model->wrk_end = $this->workingTime();
         $model->wrk_time = ($model->wrk_end - $model->wrk_start);
-        $model->wrk_rjct_number = $sem_id;
-    	$model->save(false);
+        $model->wrk_description = $wrk_ses['wrk_description'];
+        $model->wrk_point = $wrk_ses['wrk_point'];
+        $model->wrk_point_type = $wrk_ses['wrk_point_type'];
+        $model->wrk_rjct_number = $wrk_ses['wrk_rjct_number'];
+        if ($model->save()) {
+            $this->removeSession('wrk_ses_'.$id);
+            return true;
+        } else {
+            return $model->getErrors();
+        }
+        return false;
     }
 
-    public function cancelWorking($id)
-    {
-        $model = WorkingTime::find()->where('wrk_param_id = :id AND wrk_by = :user',[
-                ':id' => $id,
-                ':user' => Yii::$app->user->id
-            ])->one();
-        $model->delete();
-
-    }
+//    public function cancelWorking($id)
+//    {
+//        $model = WorkingTime::find()->where('wrk_param_id = :id AND wrk_by = :user',[
+//                ':id' => $id,
+//                ':user' => Yii::$app->user->id
+//            ])->one();
+//        $model->delete();
+//
+//    }
 
 }
