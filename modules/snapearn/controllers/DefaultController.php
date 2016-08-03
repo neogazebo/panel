@@ -31,6 +31,7 @@ use app\models\ModuleInstalled;
 use app\models\SystemMessage;
 use app\models\WorkingTime;
 use app\models\User;
+use app\models\SnapearnPoint;
 use yii\web\HttpException;
 use yii\web\ForbiddenHttpException;
 
@@ -172,14 +173,17 @@ class DefaultController extends BaseController
                             $wrk_ses = $this->getSession('wrk_ses_'.$id);
                             if (!empty($wrk_ses)) {
                                 $ses = [];
+                                $type = WorkingTime::ADD_NEW_TYPE;
                                 $ses['wrk_end'] = $this->workingTime($id);
-                                $ses['wrk_description'] = 'Add New Merchant';
-                                $ses['wrk_type'] = WorkingTime::ADD_NEW_MERCHANT_TYPE;
-                                $ses['wrk_rjct_number'] = ($snapearn->sna_sem_id != '') ? $snapearn->sna_sem_id : 0;
-                                $ses['wrk_point'] = WorkingTime::POINT_ADD_NEW_MERCHANT;
+                                $ses['wrk_description'] = $this->getPoint($type)->spo_name;
+                                $ses['wrk_type'] = WorkingTime::ADD_MERCHANT_TYPE;
+                                $ses['wrk_rjct_number'] = $type;
+                                $ses['wrk_point'] = $this->getPoint($type)->spo_point;
                                 $wrk_new_merchant = array_merge($wrk_ses,$ses);
                                 $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
+                                $this->saveWorking($id);
                             }
+                            
                             $transaction->commit();
                             $this->setMessage('save', 'success', 'Your company has been registered!');
                             return $this->render('success');
@@ -221,6 +225,20 @@ class DefaultController extends BaseController
             $cat_id = $this->getCategoryId($company->com_subcategory_id);
             $model->sna_cat_id = $cat_id;
             $model->sna_com_name = $company->com_name;
+            
+            $wrk_ses = $this->getSession('wrk_ses_'.$id);
+            if (!empty($wrk_ses)) {
+                $type = WorkingTime::ADD_EXISTING_TYPE;
+                $ses['wrk_end'] = $this->workingTime($id);
+                $ses['wrk_description'] = $this->getPoint($type)->spo_name;
+                $ses['wrk_type'] = WorkingTime::ADD_MERCHANT_TYPE;
+                $ses['wrk_rjct_number'] = $type;
+                $ses['wrk_point'] = $this->getPoint($type)->spo_point;
+                $wrk_new_merchant = array_merge($wrk_ses,$ses);
+                $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
+                $this->saveWorking($id);
+            }
+            
             if ($to == 'correction') {
                 $params = [
                     'sna_com_id' => $model->sna_com_id,
@@ -285,7 +303,7 @@ class DefaultController extends BaseController
     	$model = $this->findModel($id);
         
         $get_sesssion = $this->getSession('wrk_ses_'.$id);
-        if (empty($get_sesssion)) {
+        if ($get_sesssion != '') {
             return $this->redirect(['to-update','id'=> $id]);
         }
         // validation has reviewed
@@ -488,26 +506,21 @@ class DefaultController extends BaseController
 
                     // end working time
                     $last_working_ses = $this->getSession('wrk_ses_'.$id);
-                    $ses_wrk_point = (!empty($last_working_ses['wrk_point'])) ? ($last_working_ses['wrk_point'] + WorkingTime::POINT_APPROVAL) : WorkingTime::POINT_APPROVAL;
                     if (!empty($last_working_ses)) {
                         $ses = [];
+                        $type = $model->sna_status;
                         $ses['wrk_end'] = $this->workingTime($id);
-                        $ses['wrk_description'] = "Snapearn $snap_type";
-                        $ses['wrk_type'] = $model->sna_status;
-                        $ses['wrk_rjct_number'] = ($model->sna_sem_id != '') ? $model->sna_sem_id : 0;
-                        $ses['wrk_point'] = $ses_wrk_point;
+                        $ses['wrk_description'] = $this->getPoint($type)->spo_name;
+                        $ses['wrk_type'] = $type;
+                        $ses['wrk_rjct_number'] = ($model->sna_sem_id != '') ? $model->sna_sem_id : WorkingTime::APP_TYPE;
+                        $ses['wrk_point'] = $this->getPoint($type)->spo_point;
                         $last_ses = array_merge($last_working_ses,$ses);
                         $this->setSession('wrk_ses_'.$id, $last_ses);
-                        if ($this->saveWorking($id)) {
-                            $transaction->commit();
-                        } else {
-                            $transaction->rollBack();
-                            $this->setMessage('save', 'error', General::extractErrorModel($this->saveWorking($id)));
-                        }
-                    } else {
-                        $transaction->rollBack();
-                        $this->setMessage('save', 'error','Session working hour not set');
+                        $this->saveWorking($id);
                     }
+                    
+                    $this->checkSession($id);
+                    $transaction->commit();
                     
                 } else {
                     $transaction->rollBack();
@@ -594,7 +607,7 @@ class DefaultController extends BaseController
     {
         $this->checkSession($id);
         
-        if (!empty($this->getRememberUrl())) {
+        if ($this->getRememberUrl() != '') {
             return $this->redirect(Url::to($this->getRememberUrl()));
         }
         
@@ -603,10 +616,6 @@ class DefaultController extends BaseController
     
     protected function checkSession($id)
     {
-        $chek_sesion = $this->getSession('wrk_ses_'.$id);
-        if (!empty($chek_sesion['wrk_point']) && $chek_sesion['wrk_point'] == 3) {
-            $this->saveWorking($id);
-        }
         $this->removeSession('wrk_ses_'.$id);
     }
 
@@ -773,6 +782,12 @@ class DefaultController extends BaseController
             }
             echo \yii\helpers\Json::encode($out);
         }
+    }
+    
+    protected function getPoint($id)
+    {
+        $model = SnapearnPoint::findOne($id);
+        return $model;
     }
 
     protected function getCategoryId($id)

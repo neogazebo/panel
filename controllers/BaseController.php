@@ -162,13 +162,7 @@ class BaseController extends Controller
         $model->wrk_point = $wrk_ses['wrk_point'];
         $model->wrk_point_type = $wrk_ses['wrk_point_type'];
         $model->wrk_rjct_number = $wrk_ses['wrk_rjct_number'];
-        if ($model->save()) {
-            $this->removeSession('wrk_ses_'.$id);
-            return true;
-        } else {
-            return $model->getErrors();
-        }
-        return false;
+        $model->save();
     }
 
 //    public function cancelWorking($id)
