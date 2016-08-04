@@ -10,4 +10,5 @@ return [
     'WEBHOOK_MANIS_API' => 'https://apixv3.ebizu.com/v1/webhook/admin/after/approval',
     'WEBHOOK_POINT_CORRECTION' => 'https://apixv3.ebizu.com/v1/webhook/account/point/correction',
     'WEBHOOK_BLOCK_USER' => 'https://apixv3.ebizu.com/v1/webhook/account/clear/all',
+    'EBDB' => 'ebdb-staging',
 ];

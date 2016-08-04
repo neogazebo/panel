@@ -55,25 +55,23 @@ class LoyaltyPointHistoryQuery extends \yii\db\ActiveQuery
 
     public function getMemberPointHistory($member_id)
     {
-        $query = (new Query)
-            ->select([
-                'com_name AS merchant',
-                'lpe_name AS type',
-                'lph_amount AS point',
-                'IF(lph_type = "C", "Credit", "Debit") AS method',
-                'FROM_UNIXTIME(lph_datetime) AS created_date',
-                'lph_total_point AS total_point',
-                'lph_current_point as current_point',
-                'lph_approve AS status'
-            ])
-            ->from('tbl_loyalty_point_history')
-            ->innerJoin('tbl_member', 'mem_id = lph_mem_id')
-            ->leftJoin('tbl_company', 'com_id = lph_com_id')
-            ->leftJoin('tbl_loyalty_point_type', 'lpe_id = lph_lpe_id')
-            ->where('lph_mem_id = :id', [':id' => $member_id])
+        $this
+//                ->select([
+//                'com_name AS merchant',
+//                'lpe_name AS type',
+//                'lph_amount AS point',
+//                'IF(lph_type = "C", "Credit", "Debit") AS method',
+//                'FROM_UNIXTIME(lph_datetime) AS created_date',
+//                'lph_total_point AS total_point',
+//                'lph_current_point as current_point',
+//                'lph_approve AS status'
+//            ])
+            ->innerJoin('tbl_account', 'acc_id = lph_acc_id')
+            ->with('merchant','type')
+            ->where('lph_acc_id = :id', [':id' => $member_id])
             ->orderBy('lph_datetime DESC');
 
-        return $query;
+        return $this;
     }
 
     public function filterMemberPointHistory($member_id, $date_range, $op_type, $offset, $limit)

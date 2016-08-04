@@ -657,56 +657,56 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                                                         'label' => 'Merchant',
                                                         'format' => 'html',
                                                         'value' => function($data) {
-                                                            return $data['merchant'];
+                                                            return $data->merchant->com_name;
                                                         }
                                                     ],
                                                     [
                                                         'label' => 'Type',
                                                         'format' => 'html',
                                                         'value' => function($data) {
-                                                            return $data['type'] ? ucwords($data['type']) : null;
+                                                            return $data->type->lpe_name ? ucwords($data->type->lpe_name) : null;
                                                         }
                                                     ],
                                                     [
                                                         'label' => 'Point',
                                                         'format' => 'html',
                                                         'value' => function($data) {
-                                                            return $data['point'];
+                                                            return $data->lph_amount;
                                                         }
                                                     ],
                                                     [
                                                         'label' => 'Method',
                                                         'format' => 'html',
                                                         'value' => function($data) {
-                                                            return ucwords($data['method']);
+                                                            return ($data->lph_type = 'C') ? 'Credit' : 'Debit';
                                                         }
                                                     ],
                                                     [
                                                         'label' => 'Current Point',
                                                         'format' => 'html',
                                                         'value' => function($data) {
-                                                            return $data['current_point'];
+                                                            return $data->lph_current_point;
                                                         }
                                                     ],
                                                     [
                                                         'label' => 'Total Point',
                                                         'format' => 'html',
                                                         'value' => function($data) {
-                                                            return $data['total_point'];
+                                                            return $data->lph_total_point;
                                                         }
                                                     ],
                                                     [
                                                         'label' => 'Status',
                                                         'format' => 'html',
                                                         'value' => function($data) {
-                                                            return $data['status'] == 1 ? 'Approved' : null;
+                                                            return ($data->lph_approve == 1) ? 'Approved' : 'test';
                                                         }
                                                     ],
                                                     [
                                                         'label' => 'Date',
                                                         'format' => 'html',
                                                         'value' => function($data) {
-                                                            return $data['created_date'];
+                                                            return Yii::$app->formatter->asDate($data->lph_datetime);
                                                         },
                                                     ],
                                                 ],
