@@ -30,9 +30,9 @@ class WorkingTime extends \yii\db\ActiveRecord
     const UPDATE_TYPE = 1;
     const ADD_MERCHANT_TYPE = 3;
     
-    const APP_TYPE = 10;
-    const ADD_NEW_TYPE = 8;
-    const ADD_EXISTING_TYPE = 9;
+    const APP_TYPE = 100;
+    const ADD_NEW_TYPE = 80;
+    const ADD_EXISTING_TYPE = 90;
 
     public $total_reviewed;
     public $total_record;
