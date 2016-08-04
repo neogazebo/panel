@@ -68,10 +68,14 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         }
         if (!empty($_GET['sna_daterange'])) {
             $sna_daterange = explode(' to ', ($_GET['sna_daterange']));
-            $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0] 00:00:00' AND '$sna_daterange[1] 23:59:59'");
+            $first = "(select sna_id from tbl_snapearn where sna_upload_date >= UNIX_TIMESTAMP('$sna_daterange[0] 00:00:00') limit 1)";
+            $second = "(select sna_id from tbl_snapearn where sna_upload_date <= UNIX_TIMESTAMP('$sna_daterange[1] 23:59:59') order by sna_id desc limit 1)";
+            $this->andWhere("sna_id BETWEEN $first AND $second");
         } else {
             $sna_daterange = explode(' to ', ($dt->getDay()));
-            $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
+            $first = "(select sna_id from tbl_snapearn where sna_upload_date >= UNIX_TIMESTAMP('$sna_daterange[0]') limit 1)";
+            $second = "(select sna_id from tbl_snapearn where sna_upload_date <= UNIX_TIMESTAMP('$sna_daterange[1]') order by sna_id desc limit 1)";
+            $this->andWhere("sna_id BETWEEN $first AND $second");
         }
         if (!empty($_GET['sna_join'])) {
             $sna_join = $_GET['sna_join'];
