@@ -75,7 +75,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             'required'],
             [['sna_push'],'safe'],
             [['sna_receipt_amount',
-                'sna_receipt_number',
+                'sna_ops_receipt_number',
                 'sna_receipt_image',
                 'sna_transaction_time'], 'required', 'when' => function($model) {
                 return $model->sna_status == 1;
@@ -93,10 +93,10 @@ class SnapEarn extends \yii\db\ActiveRecord
             [['sna_receipt_amount'], 'number', 'min' => 1, 'when' => function($model) {
                 return $model->sna_status == 1;
             }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }", 'on' => 'update'],
-            [['sna_receipt_number'],
+            [['sna_ops_receipt_number'],
                 'string',
                 'max' => 35],
-            [['sna_receipt_number'],
+            [['sna_ops_receipt_number'],
                 'approvePerday',
                 'when' => function($model) {
                     return $model->sna_status == 1;
@@ -109,7 +109,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'when' => function($model) {
                     return $model->sna_status == 1;
                 },'on' => 'update'],
-            [['sna_receipt_number'], 'validateReceipt', 'on' => 'update'],
+            [['sna_ops_receipt_number'], 'validateReceipt'],
             [['sna_receipt_image'],
                 'string',
                 'max' => 75],
@@ -122,8 +122,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             [['sna_transaction_time',
                 'sna_receipt_number',
                 'sna_receipt_amount',
-                'sna_com_id',
-                'sna_receipt_number'], 'safe','on' => 'correction']
+                'sna_com_id'], 'safe','on' => 'correction'],
         ];
     }
 
@@ -132,8 +131,10 @@ class SnapEarn extends \yii\db\ActiveRecord
         if (empty($m)) {
            $this->addError($data, Yii::t('app', 'Please create merchant first! Thanks.')); 
         } else {
-            if (($m->com_point - $this->sna_point) < 0 || ($this->sna_point > $m->com_point)) {
-                $this->addError($data, Yii::t('app', 'Points merchant is Not Enough !'));
+            if ($this->sna_status == 1) {
+                if (($m->com_point - $this->sna_point) < 0 || ($this->sna_point > $m->com_point)) {
+                    $this->addError($data, Yii::t('app', 'Points merchant is Not Enough !'));
+                }
             }
         }
         
@@ -179,7 +180,7 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         if ($this->sna_status == 1) {
             $query = self::find()
-                ->where(['sna_receipt_number' => trim($this->sna_receipt_number)])
+                ->where(['sna_ops_receipt_number' => trim($this->sna_ops_receipt_number)])
                 ->andWhere(['sna_com_id' => $this->sna_com_id])
                 ->andWhere(['=','sna_status',1])
                 ->count();
@@ -266,6 +267,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_acc_id' => 'Member',
             'sna_com_id' => 'Merchant ID',
             'sna_receipt_number' => 'Receipt Number',
+            'sna_ops_receipt_number' => 'Receipt Number',
             'sna_receipt_date' => 'Time',
             'sna_receipt_amount' => 'Amount',
             'sna_point' => 'Points',

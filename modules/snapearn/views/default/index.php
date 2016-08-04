@@ -175,7 +175,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                         return (!empty($data->member)) ? $data->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>';
                                     }
                                 ],
-                                'sna_receipt_number',
+                                'sna_ops_receipt_number',
                                 'sna_receipt_date',
                                 [
                                     'attribute' => 'sna_receipt_amount',

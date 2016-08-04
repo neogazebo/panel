@@ -73,12 +73,10 @@ $model->sna_push = true;
               <div class="box box-widget">
                 <div class="box-header with-border">
                   <h3 class="box-title">Form Approval</h3>
-                  <?php if (empty($model->business)) : ?>
                   <div class="pull-right btn-merchant">
-                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
-                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?>
+                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['default/new-merchant?id=' . $model->sna_id.'&to=correction']), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
+                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['default/ajax-existing?id=' . $model->sna_id.'&to=correction']), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?>
                   </div>
-                  <?php endif; ?>
                 </div>
                 <div class="box-body">
                     <ul class="nav nav-stacked update">
@@ -88,7 +86,7 @@ $model->sna_push = true;
                       </li>
                       <?php endif; ?>
                       <li class="">
-                        <a href="#"><b><?= (empty($model->merchant)) ? 'Sugest Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
+                        <a href="#"><b><?= (empty($model->merchant)) ? 'Suggestion Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
                       </li>
                       <?php if (!empty($model->merchant)) : ?>
                       <li class="">
@@ -99,7 +97,7 @@ $model->sna_push = true;
                             
                             <!--this validation if add point to merchant is only specific user-->
                             <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
-                              <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
+                              <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
                             <?php // else: ?>
                               <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
                             <?php // endif; ?>
@@ -115,7 +113,7 @@ $model->sna_push = true;
                       <?php endif; ?>
                       <?php if (empty($model->merchant)) : ?>
                       <li>
-                        <a href="#"><b><?= (empty($model->sna_address)) ? 'Sugest Location' : 'Location' ?></b>
+                        <a href="#"><b><?= (empty($model->sna_address)) ? 'Suggestion Location' : 'Location' ?></b>
                           <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
                         </a>
                       </li>
@@ -150,7 +148,8 @@ $model->sna_push = true;
                           </div>
                       </div>-->
                       
-                      <?= $form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
+                      <?php //$form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
+                      <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
                       <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                       <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                   </div>

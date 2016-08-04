@@ -29,6 +29,7 @@ use app\models\SystemMessage;
 use app\models\WorkingTime;
 use yii\web\HttpException;
 use yii\web\ForbiddenHttpException;
+use yii\web\Session;
 
 /**
 *
@@ -37,12 +38,35 @@ class CorrectionController extends BaseController
 {
     public function actionToCorrection($id)
     {
-        // working time start
-        $user = Yii::$app->user->id;
-        $param = $id;
-        $point = WorkingTime::POINT_APPROVAL;
+        // destroy session com && create session company id
+        $this->removeSession('oldCompany_'.$id);
+        $this->removeSession('ses_com_'.$id);
+        
+        // check time start this user and type
         $point_type = WorkingTime::CORRECTION_TYPE;
-        $wrk_id = $this->startWorking($user,$param,$point_type,$point);
+        $check_wrk = $this->checkingWrk($id, $point_type);
+        if (empty($check_wrk)) {
+            // create new working time
+            $user = Yii::$app->user->id;
+            $param = $id;
+            $point = WorkingTime::POINT_APPROVAL;
+            $point_type = WorkingTime::CORRECTION_TYPE;
+            $wrk_id = $this->startWorking($user,$param,$point_type,$point);
+        }
+        
+        
+        if (empty($this->getSession('oldCompany_'.$id))) {
+            $model = $this->findModel($id);
+            $mp = Company::find()->getCurrentPoint($model->sna_com_id);
+            $params = [
+                'sna_id' => $id,
+                'com_id' => $model->sna_com_id,
+                'sna_point' => $model->sna_point,
+                'com_point' => $mp->com_point,
+                'ops_id' => \Yii::$app->user->id,
+            ];
+            $this->setSession('oldCompany_'.$id,$params);
+        }
         return $this->redirect(['correction', 'id' => $id]);
     }
 
@@ -50,23 +74,28 @@ class CorrectionController extends BaseController
 	{
     	$model = $this->findModel($id);
     	$model->scenario = 'correction';
-
+       
+        // get com id from session
+        $old = $this->getSession('oldCompany_'.$id);
+        $ses_com = $this->getSession('ses_com_'.$id);
+        
         $point_type = WorkingTime::CORRECTION_TYPE;
         $check_wrk = $this->checkingWrk($id, $point_type);
-        if (empty($check_wrk)) {
+        if (empty($check_wrk) || empty($old)) {
             return $this->redirect(['to-correction','id'=> $id]);
         }
 
         // validation superuser
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status == 0 && $superuser != 1) {
+            $this->cancelWorking($id);
             return $this->redirect(['default/to-update','id'=> $id]);
         }elseif ($model->sna_status != 0 && $superuser != 1) {
+            $this->cancelWorking($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         }
-
+                                
         // get old point
-        $oldPoint = $model->sna_point;
         $ctr = $model->member->acc_cty_id;
 
         // ajax validation
@@ -94,20 +123,29 @@ class CorrectionController extends BaseController
                 } else {
                     $cp = 0;
                 }
+               
+                // check session new merchant
+                if (!empty($ses_com)) {
+                    $model->sna_com_id = $ses_com['sna_com_id'];
+                    $model->sna_cat_id = $ses_com['sna_cat_id'];
+                    $model->sna_com_name = $ses_com['sna_com_name'];
+                }
+                
                 $minusPointUser = [
                     'current_point' => $cp,
-                    'sna_point' => $oldPoint,
+                    'sna_point' => $old['sna_point'],
                     'sna_acc_id' => $model->sna_acc_id,
-                    'sna_com_id' => $model->sna_com_id,
+                    'sna_com_id' => $old['com_id'],
                     'sna_id' => $model->sna_id,
                     'desc' => 'Debet from Correction',
                 ];
                 $history = $this->savePoint($minusPointUser,'D');
+                
                 // param to configuration to give back point merchant
                 $addPointmerchant = [
-                    'com_point' => $mp->com_point,
-                    'sna_point' => $oldPoint,
-                    'sna_com_id' => $model->sna_com_id,
+                    'com_point' => $old['com_point'],
+                    'sna_point' => $old['sna_point'],
+                    'sna_com_id' => $old['com_id'],
                 ];
                 $point = $this->merchantPoint($addPointmerchant);
                 // end process rollback
@@ -139,16 +177,6 @@ class CorrectionController extends BaseController
                         } else {
                             $limitPoint = $config->ser_point_cap;
                         }
-                    }
-
-                    // get current point merchant
-                    $mp = Company::find()->getCurrentPoint($model->sna_com_id);
-                    $lph = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-
-                    if ($lph->lph_total_point > $oldPoint) {
-                        $cp = $lph->lph_total_point;
-                    } elseif ($lph->lph_total_point <= $oldPoint) {
-                        $cp = $oldPoint;
                     }
 
                     if ($model->sna_point > $limitPoint) {
@@ -273,8 +301,14 @@ class CorrectionController extends BaseController
                     $type = $model->sna_status;
                     $sem_id = $model->sna_sem_id;
                     $this->endWorking($wrk->wrk_id,$type,$desc,$sem_id);
-
+                    
+                    // destroy session
+                    $this->removeSession('oldCompany_'.$id);
+                    $this->removeSession('ses_com_'.$id);
+                    // commit all
                     $transaction->commit();
+                    
+                    
                 } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
@@ -300,7 +334,10 @@ class CorrectionController extends BaseController
 
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
-
+        if (!empty($ses_com)) {
+            $model->sna_com_id = $ses_com['sna_com_id'];
+        }
+        
         return $this->render('form', [
             'model' => $model,
             'id' => $id
@@ -377,6 +414,9 @@ class CorrectionController extends BaseController
     public function actionCancel($id)
     {
         $this->cancelWorking($id);
+        // destroy session
+        $this->removeSession('oldCompany_'.$id);
+        $this->removeSession('ses_com_'.$id);
         if (!empty($this->getRememberUrl())) {
             return $this->redirect(Url::to($this->getRememberUrl()));
         } else {
