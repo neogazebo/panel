@@ -18,55 +18,69 @@ $this->title = 'Reward Reference';
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <form class="form-inline" action="reward" method="get">
-                        <div class="form-group">
-                        <label>Username</label>
-                        <div>
-                            <input type="text" class="form-control" name="username" value="<?= (!empty($_GET['username'])) ? $_GET['username'] : '' ?>">
-                        </div>
-                        </div>
-                        <div class="form-group">
-                            <label>MSISDN</label>
-                            <div>
-                                <input type="text" class="form-control" name="rwd_msisdn" value="<?= (!empty($_GET['rwd_msisdn'])) ? $_GET['rwd_msisdn'] : '' ?>">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>CODE</label>
-                            <div>
-                                <input type="text" class="form-control" name="rwd_code" value="<?= (!empty($_GET['rwd_code'])) ? $_GET['rwd_code'] : '' ?>">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select name="rwd_status" class="form-control" style="width: 100%;">
-                                <option <?= (empty($_GET['rwd_status']) || $_GET['rwd_status'] == '') ? 'selected' : '' ?> value="">All</option>
-                                <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] === 'close') ? 'selected' : '' ?> value="close">Close</option>
-                                <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] === 'open') ? 'selected' : '' ?> value="open">Open</option>
 
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Transaction Time</label>
-                            <div>
-                                <input type="text" class="form-control" name="rwd_daterange" id="the_daterange" value="<?= (!empty($_GET['rwd_daterange'])) ? $_GET['rwd_daterange'] : '' ?>">
+                        <div>
+                            <div class="form-group">
+                                <label>Username</label>
+                                <div>
+                                    <input type="text" class="form-control" name="username" value="<?= (!empty($_GET['username'])) ? $_GET['username'] : '' ?>">
+                                </div>
                             </div>
-                        </div>
-                        <!--sample pagesize dynamic-->
-<!--                        <div class="form-group">
-                            <label>Limit</label>
-                            <div>
-                                <select class="form-control" name="limit">
-                                    <option value="20">20</option>
-                                    <option value="30">30</option>
-                                    <option value="50">50</option>
+                            <div class="form-group">
+                                <label>MSISDN</label>
+                                <div>
+                                    <input type="text" class="form-control" name="rwd_msisdn" value="<?= (!empty($_GET['rwd_msisdn'])) ? $_GET['rwd_msisdn'] : '' ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>CODE</label>
+                                <div>
+                                    <input type="text" class="form-control" name="rwd_code" value="<?= (!empty($_GET['rwd_code'])) ? $_GET['rwd_code'] : '' ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select name="rwd_status" class="form-control select2" style="width: 100%;">
+                                    <option <?= (empty($_GET['rwd_status']) || $_GET['rwd_status'] == '') ? 'selected' : '' ?> value="">All</option>
+                                    <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] === 'close') ? 'selected' : '' ?> value="close">Close</option>
+                                    <option <?= (!empty($_GET['rwd_status']) && $_GET['rwd_status'] === 'open') ? 'selected' : '' ?> value="open">Open</option>
+
                                 </select>
                             </div>
-                        </div>-->
-                        <div class="form-group">
-                            <label>&nbsp;</label><br>
-                            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                            
+                            <div class="form-group">
+                                <label>Transaction Time</label>
+                                <div>
+                                    <input type="text" class="form-control" name="rwd_daterange" id="the_daterange" value="<?= (!empty($_GET['rwd_daterange'])) ? $_GET['rwd_daterange'] : '' ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Country</label>
+                                <select name="acc_cty_id" class="form-control select2" style="width: 100%;">
+                                      <option value="All">All</option>
+                                      <option value="ID" <?= (!empty($_GET['acc_cty_id']) && $_GET['acc_cty_id'] == 'ID') ? 'selected' : '' ?>>Indonesia</option>
+                                      <option value="MY" <?= (!empty($_GET['acc_cty_id']) && $_GET['acc_cty_id'] == 'MY') ? 'selected' : '' ?>>Malaysia</option>
+                                </select>
+                            </div>
                         </div>
+                        
+                        <div>
+                            <div class="form-group">
+                                <label>Limit</label>
+                                <div>
+                                    <select class="form-control select2" name="limit">
+                                        <option value="20" <?= (!empty($_GET['limit']) && $_GET['limit'] == '20') ? 'selected' : '' ?>>20</option>
+                                        <option value="30" <?= (!empty($_GET['limit']) && $_GET['limit'] == '30') ? 'selected' : '' ?>>30</option>
+                                        <option value="50" <?= (!empty($_GET['limit']) && $_GET['limit'] == '50') ? 'selected' : '' ?>>50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>&nbsp;</label><br>
+                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                            </div>
+                        </div>
+                        
                     </form>
                 </div>
                 <div class="box-body">
