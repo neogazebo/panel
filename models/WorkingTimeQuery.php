@@ -62,6 +62,13 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             'COUNT(IF(wrk_type = 2, wrk_id, NULL)) / COUNT(IF(wrk_type != 3, wrk_id, NULL)) AS rejected_rate'
         ]);
         $this->where('wrk_end IS NOT NULL');
+        if (!empty($_GET['group'])) {
+            $this->andWhere('wrk_by IN (
+                SELECT spgd_usr_id 
+                FROM tbl_snapearn_group_detail 
+                WHERE spgd_spg_id = :id 
+            )', [':id' => $_GET['group']]);
+        }
         if (!empty($_GET['wrk_by'])) {
             $this->andWhere('wrk_by = :id', [
                 ':id' => $_GET['wrk_by']
@@ -76,7 +83,6 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
 
         $this->andWhere('wrk_time IS NOT NULL');
         $this->groupBy('wrk_by');
-//        echo $this->createCommand()->sql;exit;
         return $this;
     }
 
