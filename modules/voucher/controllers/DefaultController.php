@@ -34,7 +34,7 @@ class DefaultController extends BaseController
         //                'defaultPageSize' => 20,
         //                'pageSize' => \Yii::$app->request->get('limit')
                         //using default pagesize
-                        'pageSize' => 20
+                        'pageSize' => \Yii::$app->request->get('limit') ? \Yii::$app->request->get('limit') : 20
                     ]
                 ]);
 		return $this->render('reward', [
@@ -49,7 +49,7 @@ class DefaultController extends BaseController
             'query' => $model,
             'sort' => false,
             'pagination' => [
-                'pageSize' => 20
+                'pageSize' => \Yii::$app->request->get('limit') ? \Yii::$app->request->get('limit') : 20
             ]
         ]);
 		return $this->render('cash', [

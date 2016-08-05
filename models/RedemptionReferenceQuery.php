@@ -41,6 +41,7 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
         $status = Yii::$app->request->get('rwd_status');
         $code = Yii::$app->request->get('rwd_code');
         $daterange = Yii::$app->request->get('rwd_daterange');
+        $country = Yii::$app->request->get('acc_cty_id');
 
         if (!empty($username)){
             $this->andFilterWhere(['like', 'acc_screen_name', $username]);
@@ -58,8 +59,18 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
         if ($code)
             $this->andFilterWhere(['like','rdr_vod_code',$code]);
 
+        if($country)
+        {
+            if($country == 'ID' || $country == 'MY')
+            {
+                $this->andWhere(['acc_cty_id'=> $country]);
+            }
+        }
+
         $this->join('LEFT JOIN','tbl_account','tbl_account.acc_id = rdr_acc_id');
         $this->orderBy('rdr_datetime DESC');
+        //echo $this->createCommand()->getRawSql();
+        //exit;
         return $this;
     }   
 }

@@ -31,59 +31,59 @@ $this->title = 'Working Hours';
                     <form role="form" class="form-inline" method="get" action="/logwork">
                         <div class="pull-right">
                             <div class="form-group">
-                            <label>Username</label>
-                            <?= 
-                                Typeahead::widget([
-                                    'name' => 'username',
-                                    'options' => ['placeholder' => 'Find User'],
-                                    'pluginOptions' => [
-                                        'highlight' => true,
-                                        'minLength' => 3
-                                    ],
-                                    'pluginEvents' => [
-                                        "typeahead:select" => "function(ev, suggestion) { $('#wrk_by').val(suggestion.id); }",
-                                    ],
-                                    'dataset' => [
-                                        [
-                                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                                            'display' => 'value',
-                                            'remote' => [
-                                                'url' => Url::to(['user-list']) . '?q=%QUERY',
-                                                'wildcard' => '%QUERY'
-                                            ],
-                                            'limit' => 20
+                                <label>Snap &amp; Earn Group</label>
+                                <?= 
+                                    Typeahead::widget([
+                                        'name' => 'sna_group',
+                                        'options' => ['placeholder' => 'Find Group'],
+                                        'pluginOptions' => [
+                                            'highlight' => true,
+                                            'minLength' => 2
+                                        ],
+                                        'pluginEvents' => [
+                                            "typeahead:select" => "function(ev, suggestion) { $('#group').val(suggestion.id); }",
+                                        ],
+                                        'dataset' => [
+                                            [
+                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                                'display' => 'value',
+                                                'remote' => [
+                                                    'url' => Url::to('/snapearn/group/list') . '?q=%QUERY',
+                                                    'wildcard' => '%QUERY'
+                                                ],
+                                                'limit' => 20
+                                            ]
                                         ]
-                                    ]
-                                ]);
-                            ?>
+                                    ]);
+                                ?>
                             </div>
-                            <!-- <div class="form-group">
-                            <label>Devision</label> -->
-                            <?php 
-                                // Typeahead::widget([
-                                //     'name' => 'merchant',
-                                //     'options' => ['placeholder' => 'Devision'],
-                                //     'pluginOptions' => [
-                                //         'highlight'=>true,
-                                //         'minLength' => 3
-                                //     ],
-                                //     'pluginEvents' => [
-                                //         "typeahead:select" => "function(ev, suggestion) { $('#wrk_param_id').val(suggestion.id); }",
-                                //     ],
-                                //     'dataset' => [
-                                //         [
-                                //             'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                                //             'display' => 'value',
-                                //             'remote' => [
-                                //                 'url' => Url::to(['devision']) . '?q=%QUERY',
-                                //                 'wildcard' => '%QUERY'
-                                //             ],
-                                //             'limit' => 20
-                                //         ]
-                                //     ]
-                                // ]);
-                            ?>
-                            <!-- </div> -->
+                            <div class="form-group">
+                                <label>Username</label>
+                                <?= 
+                                    Typeahead::widget([
+                                        'name' => 'username',
+                                        'options' => ['placeholder' => 'Find User'],
+                                        'pluginOptions' => [
+                                            'highlight' => true,
+                                            'minLength' => 3
+                                        ],
+                                        'pluginEvents' => [
+                                            "typeahead:select" => "function(ev, suggestion) { $('#wrk_by').val(suggestion.id); }",
+                                        ],
+                                        'dataset' => [
+                                            [
+                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                                'display' => 'value',
+                                                'remote' => [
+                                                    'url' => Url::to(['user-list']) . '?q=%QUERY',
+                                                    'wildcard' => '%QUERY'
+                                                ],
+                                                'limit' => 20
+                                            ]
+                                        ]
+                                    ]);
+                                ?>
+                            </div>
                             <div class="form-group">
                                 <label>Date range</label><br>
                                 <div class="input-group">
@@ -94,6 +94,7 @@ $this->title = 'Working Hours';
                                 </div>
                             </div>
                             <div class="form-group">
+                                <input type="hidden" name="group" id="group">
                                 <input type="hidden" name="wrk_by" id="wrk_by">
                                 <input type="hidden" name="wrk_param_id" id="wrk_param_id">
                                 <label>&nbsp;</label><br>

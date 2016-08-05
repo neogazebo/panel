@@ -33,6 +33,7 @@ class DefaultController extends BaseController
                 'pageSize' => 20
             ]
         ]);
+
         return $this->render('index', [
             'dataProvider' => $dataProvider
         ]);
