@@ -174,7 +174,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                     }
                                 ],
                                 'sna_ops_receipt_number',
-                                'sna_receipt_date',
+//                                'sna_receipt_date',
                                 [
                                     'attribute' => 'sna_receipt_amount',
                                     'format' => ['decimal',2],
