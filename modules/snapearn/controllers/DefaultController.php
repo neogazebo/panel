@@ -547,8 +547,8 @@ class DefaultController extends BaseController
                 if (!empty($nextUrl))
                     return $this->redirect(['default/to-update?id=' . $nextUrl->sna_id]);
             }
-            if (!empty($this->getRememberUrl())) {
-                return $this->redirect(Url::to($this->getRememberUrl()));
+            if (!empty(Url::remember())) {
+                return $this->redirect(Url::previous());
             } else {
                 return $this->redirect(['/snapearn']);
             }
