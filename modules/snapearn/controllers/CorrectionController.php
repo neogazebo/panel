@@ -40,9 +40,7 @@ class CorrectionController extends BaseController
     public function actionToCorrection($id)
     {
         // destroy session com && create session company id
-        $this->removeSession('oldCompany_'.$id);
-        $this->removeSession('ses_com_'.$id);
-        $this->removeSession('wrk_ses_'.$id);
+        $this->checkSession($id);
         
         // working time start session
         $wrk_ses = [
@@ -415,11 +413,7 @@ class CorrectionController extends BaseController
     public function actionCancel($id)
     {
         $this->checkSession($id);
-        if ($this->getRememberUrl() != '') {
-            return $this->redirect(Url::to($this->getRememberUrl()));
-        }
-        
-        return $this->redirect(['/snapearn']);
+        Url::previous();
     }
     
     protected function checkSession($id)

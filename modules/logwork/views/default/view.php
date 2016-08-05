@@ -22,7 +22,13 @@ $this->title = 'Detail Working Hours';
         <div class="col-sm-3">
             <ul class="nav nav-stacked">
                 <li><a href="#">Total Approved : <span class="pull-right badge bg-green"><?= $total->total_approved ?></span></a></li>
-                <li><a href="#">Total Rejected : <span class="pull-right badge bg-yellow"><?= $total->total_rejected ?></span></a></li>
+                <li><a href="#">Total Rejected : <span class="pull-right badge bg-red"><?= $total->total_rejected ?></span></a></li>
+            </ul>
+        </div>
+        <div class="col-sm-3">
+            <ul class="nav nav-stacked">
+                <li><a href="#">Total Add New Merchant : <span class="pull-right badge bg-purple"><?= $total->total_addnew ?></span></a></li>
+                <li><a href="#">Total Add Existing Merchant : <span class="pull-right badge bg-yellow"><?= $total->total_addexisting ?></span></a></li>
             </ul>
         </div>
         <div class="col-sm-3">
@@ -39,14 +45,17 @@ $this->title = 'Detail Working Hours';
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <?= Html::a('<i class="fa fa-share"></i> Back', ['/logwork'], ['class' => 'btn btn-success']) ?>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
                             <div class="form-group pull-left">
                                 <label>Report</label><br>
                                 <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'btn btn-success']) ?>
                                 <?= Html::a('<i class="fa fa-share"></i> Report Detail', ['report-detail', 'id' => $id], ['class' => 'btn btn-warning']) ?>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
                             <form class="form-inline pull-right" role="form" method="get" action="view">
                                 <div class="form-group">
                                     <label>Date range</label><br>
@@ -79,6 +88,7 @@ $this->title = 'Detail Working Hours';
                                         return Yii::$app->formatter->asDatetime(Utc::convert($data->wrk_updated));
                                     }
                                 ],
+                                        'wrk_id',
                                 [
                                     'label' => 'Description',
                                     'attribute' => 'wrk_rjct_number',

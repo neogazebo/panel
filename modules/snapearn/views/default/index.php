@@ -149,12 +149,8 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                         <?= 
                         GridView::widget([
                             'id' => 'list_snapearn',
-                            'layout' => '{items} {summary} {pager}',
+                            'layout' => '{summary} {items} {pager}',
                             'dataProvider' => $dataProvider,
-                            // 'pjax' => true,
-                            // 'pjaxSettings' => [
-                            //     'neverTimeout' => true,
-                            // ],
                             'columns' => [
                                 [
                                     'label' => 'Merchant',

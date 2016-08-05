@@ -47,7 +47,7 @@ class DefaultController extends BaseController
 
     public function actionIndex()
     {
-        $this->setRememberUrl();
+        Url::remember();
         $model = SnapEarn::find()->findCustome();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
@@ -276,7 +276,7 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
-        $this->removeSession('wrk_ses_'.$id);
+        $this->checkSession($id);
         $model = $this->findModel($id);
         if (empty($model->member)) {
             $this->setMessage('save', 'error', "Manis user is not set!, Please contact your web administrator this snap number <strong>' $id '</strong>");
@@ -606,12 +606,6 @@ class DefaultController extends BaseController
     public function actionCancel($id)
     {
         $this->checkSession($id);
-        
-        if ($this->getRememberUrl() != '') {
-            return $this->redirect(Url::to($this->getRememberUrl()));
-        }
-        
-        return $this->redirect(['/snapearn']);
     }
     
     protected function checkSession($id)

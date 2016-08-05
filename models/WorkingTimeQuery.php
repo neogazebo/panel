@@ -106,12 +106,15 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
 
     public function totalDetail($id)
     {
-        $this->select("
-            count(wrk_id) AS total_reviewed,
-            SUM(wrk_time) AS total_record,
-            SUM(wrk_point) AS total_point,
-            SUM(wrk_type = 1) AS total_approved,
-            SUM(wrk_type = 2) AS total_rejected");
+        $this->select([
+            'COUNT(wrk_id) AS total_reviewed',
+            'SUM(wrk_time) AS total_record',
+            'SUM(wrk_point) AS total_point',
+            'SUM(wrk_type = 1) AS total_approved',
+            'SUM(wrk_type = 2) AS total_rejected',
+            'COUNT(IF(wrk_rjct_number = 80,wrk_id,NULL)) AS total_addnew',
+            'COUNT(IF(wrk_rjct_number = 90,wrk_id,NULL)) AS total_addexisting'
+            ]);
         $this->where('wrk_by = :user AND wrk_end IS NOT NULL', [
             ':user' => $id
         ]);
