@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
+use kartik\export\ExportMenu;
 
 $this->title = 'Reward Reference';
 ?>
@@ -64,7 +65,7 @@ $this->title = 'Reward Reference';
                             </div>
                         </div>
                         
-                        <div>
+                        <div class="margin-top-10">
                             <div class="form-group">
                                 <label>Limit</label>
                                 <div>
@@ -75,9 +76,17 @@ $this->title = 'Reward Reference';
                                     </select>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label>&nbsp;</label><br>
-                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                                <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                            </div>
+                        </div>
+
+                        <div class="margin-top-10">
+                            <div class="form-group">
+                                <label>Export</label><br>
+                                <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
                             </div>
                         </div>
                         

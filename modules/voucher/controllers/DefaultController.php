@@ -18,43 +18,61 @@ use yii\data\ActiveDataProvider;
  */
 class DefaultController extends BaseController
 {
-	public function actionIndex()
+    public function actionIndex()
 	{
 		return $this->render('index');
 	}
 
 	public function actionReward()
 	{
-		$model = RedemptionReference::find()->findCostume();
-                $dataProvider =  new ActiveDataProvider([
-                    'query' => $model,
-                    'sort' => false,
-                    'pagination' => [
-                        // if using dynamic size
-        //                'defaultPageSize' => 20,
-        //                'pageSize' => \Yii::$app->request->get('limit')
-                        //using default pagesize
-                        'pageSize' => \Yii::$app->request->get('limit') ? \Yii::$app->request->get('limit') : 20
-                    ]
-                ]);
-		return $this->render('reward', [
-			'dataProvider' => $dataProvider
-		]);
+        $this->processOutputType();
+        $this->processOutputSize();
+
+        $model = RedemptionReference::find()->findCostume();
+
+        $this->data_provider =  new ActiveDataProvider([
+            'query' => $model,
+            'sort' => false,
+            'pagination' => [
+                'pageSize' => $this->page_size
+            ]
+        ]); 
+
+        $columns = RedemptionReference::find()->getExcelColumns();
+        $column_styles = RedemptionReference::find()->getExcelColumnsStyles();
+
+        $filename = 'Reward-Reference-' . date('Y-m-d-H-i-s', time()) . '.xlsx';
+
+        $view_filename = 'reward';
+        $save_path = 'reward';
+
+        return $this->processOutput($view_filename, $columns, $column_styles, $save_path, $filename);
 	}
 
 	public function actionCash()
 	{
+        $this->processOutputType();
+        $this->processOutputSize();
+
 		$model = CashvoucherRedeemed::find()->list;
-        $dataProvider =  new ActiveDataProvider([
+
+        $this->data_provider =  new ActiveDataProvider([
             'query' => $model,
             'sort' => false,
             'pagination' => [
-                'pageSize' => \Yii::$app->request->get('limit') ? \Yii::$app->request->get('limit') : 20
+                'pageSize' => $this->page_size
             ]
         ]);
-		return $this->render('cash', [
-			'dataProvider' => $dataProvider
-		]);
+
+		$columns = CashvoucherRedeemed::find()->getExcelColumns();
+        $column_styles = CashvoucherRedeemed::find()->getExcelColumnsStyles();
+
+        $filename = 'Cash-Voucher-' . date('Y-m-d-H-i-s', time()) . '.xlsx';
+
+        $view_filename = 'cash';
+        $save_path = 'cash_voucher';
+
+        return $this->processOutput($view_filename, $columns, $column_styles, $save_path, $filename);
 	}
 
     public function actionUserList()

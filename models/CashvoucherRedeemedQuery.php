@@ -62,4 +62,60 @@ class CashvoucherRedeemedQuery extends \yii\db\ActiveQuery
         //exit;
         return $this;
     }   
+
+    public function getExcelColumns()
+    {
+        return  [
+            'A' => [
+                'name' => 'Screen Name',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'account',
+                'have_relations' => true,
+                'relation_name' => 'acc_screen_name'
+            ], 
+            'B' => [
+                'name' => 'Transaction Time',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'cvr_pvd_update_datetime',
+                'format' => function($data) {
+                    return Yii::$app->formatter->asDatetime(\app\components\helpers\Utc::convert($data));
+                }
+            ], 
+            'C' => [
+                'name' => 'Voucher Name',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'cvr_pvo_name',
+            ], 
+            'D' => [
+                'name' => 'Merchant',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'cvr_com_name',
+            ],
+            'E' => [
+                'name' => 'SN',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'cvr_pvd_sn',
+            ],
+            'F' => [
+                'name' => 'Code',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'cvr_pvd_code',
+            ]
+        ];
+    }
+
+    public function getExcelColumnsStyles()
+    {
+        return [
+            'font' => [
+                 'bold'  => true,
+            ]
+        ];
+    }
 }

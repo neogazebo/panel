@@ -396,4 +396,24 @@ class DefaultController extends BaseController
 
         return $return_json;
     }
+
+    public function actionExport()
+    {
+        $this->processOutputType();
+        $this->processOutputSize();
+
+        $model = Account::find()->all();
+
+        $this->data_provider = $model;
+
+        $columns = Account::find()->getExcelColumns();
+        $column_styles = Account::find()->getExcelColumnsStyles();
+
+        $filename = 'Members-' . date('Y-m-d-H-i-s', time()) . '.xlsx';
+
+        $view_filename = 'index';
+        $save_path = 'members';
+
+        return $this->processOutput($view_filename, $columns, $column_styles, $save_path, $filename);
+    }
 }

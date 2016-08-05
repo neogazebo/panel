@@ -51,7 +51,7 @@ $this->title = 'Cash Voucher';
                             </div>
                         </div>
 
-                        <div>
+                        <div class="margin-top-10">
                             <div class="form-group">
                                 <label>Limit</label>
                                 <div>
@@ -65,7 +65,14 @@ $this->title = 'Cash Voucher';
 
                             <div class="form-group">
                                 <label>&nbsp;</label><br>
-                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                                <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                            </div>
+                        </div>
+
+                        <div class="margin-top-10">
+                            <div class="form-group">
+                                <label>Export</label><br>
+                                <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
                             </div>
                         </div>
 
