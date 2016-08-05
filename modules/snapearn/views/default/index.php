@@ -1,11 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\bootstrap\Modal;
 use app\components\helpers\Utc;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
 use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
@@ -140,16 +139,9 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 <label>&nbsp;</label><br>
                                 <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="margin-top-10">
-                                <div class="form-group">
-                                    <label>Export</label><br>
-                                    <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
-                                </div>
+                            <div class="form-group">
+                                <label>Export</label><br>
+                                <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
                             </div>
                         </div>
                     </div>
@@ -159,9 +151,8 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                     <div class="table-responsive">
                         <?= 
                         GridView::widget([
-                            'id' => 'list_snapearn',
-                            'layout' => '{summary} {items} {pager}',
                             'dataProvider' => $dataProvider,
+                            'layout' => '{summary} {items} {pager}',
                             'columns' => [
                                 [
                                     'label' => 'Merchant',
