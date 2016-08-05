@@ -6,12 +6,19 @@ use Yii;
 use yii\web\Controller;
 use app\models\WorkingTime;
 use app\components\helpers\General;
+use PHPExcel;
+use PHPExcel_Writer_Excel2007;
+use PHPExcel_Style_Font;
 
 class BaseController extends Controller
 {
     public $page_size = 20;
     public $enableCsrfValidation = false;
     public $user;
+
+    protected $output_type;
+    protected $output;
+    protected $data_provider;
 
     public function beforeAction($action)
     {
@@ -175,4 +182,103 @@ class BaseController extends Controller
 //
 //    }
 
+    protected function processOutputType()
+    {
+        $this->output_type = Yii::$app->request->get('output_type');
+    }
+
+    protected function processOutputSize()
+    {
+        if($this->output_type)
+        {
+            if($this->output_type == 'excel')
+            {
+                $this->page_size = 0;
+            }
+        }
+    }
+
+    protected function processOutput($view_name, $excel_columns, $excel_column_styles, $save_path, $filename)
+    {
+        if($this->output_type)
+        {
+            if($this->output_type == 'view')
+            {
+                return $this->render($view_name, [
+                    'dataProvider' => $this->data_provider
+                ]);
+            }
+
+            return $this->exportToExcel($excel_columns, $excel_column_styles, $save_path, $filename);
+        }
+
+        return $this->render($view_name, [
+            'dataProvider' => $this->data_provider,
+        ]);
+    }
+
+    private function exportToExcel($columns, $column_styles, $save_path, $filename)
+    {   
+        // the data providers could be a model or query class
+        // so we have to check
+        $models = method_exists($this->data_provider,'getModels') ?  $this->data_provider->getModels() : $this->data_provider;
+
+        $excel = new PHPExcel();
+
+        $excel->setActiveSheetIndex(0);
+
+        foreach($columns as $key => $column)
+        {
+            $excel->getActiveSheet()->getColumnDimension($key)->setWidth($column['width']);
+            $excel->getActiveSheet()->getRowDimension($key)->setRowHeight($column['height']);
+            
+            $excel->getActiveSheet()->SetCellValue($key . '1', $column['name']);
+            $excel->getActiveSheet()->getStyle($key . '1')->applyFromArray($column_styles);
+            $excel->getActiveSheet()->getStyle($key)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        }
+
+        $row = 2;
+
+        foreach($models as $data)
+        {
+            foreach($columns as $key => $column)
+            {
+                $value = $data->{$column['db_column']};
+
+                if(isset($column['format']))
+                {
+                    $value = $column['format']($data->{$column['db_column']});
+                }
+
+                if(isset($column['have_relations']))
+                {
+                    $value = $data->{$column['db_column']} ? $data->{$column['db_column']}->{$column['relation_name']} : '';
+                }
+                
+                $excel->getActiveSheet()->SetCellValue($key . $row, $value);   
+            }
+
+            $row++;
+        }
+
+        $writer = new PHPExcel_Writer_Excel2007($excel);
+
+        $root_path = 'excel_report';
+
+        if (!is_dir($root_path)) 
+        {
+            mkdir($root_path);         
+        }
+
+        if (!is_dir($root_path . '/' . $save_path)) 
+        {
+            mkdir($root_path . '/' . $save_path);         
+        }
+
+        $excel_report_path = $root_path . '/' . $save_path . '/' . $filename;
+
+        $writer->save($excel_report_path);
+
+        Yii::$app->response->sendFile($excel_report_path);
+    }
 }

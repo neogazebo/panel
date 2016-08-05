@@ -48,18 +48,30 @@ class DefaultController extends BaseController
     public function actionIndex()
     {
         Url::remember();
+        $this->processOutputType();
+        $this->processOutputSize();
         $model = SnapEarn::find()->findCustome();
-        $dataProvider = new ActiveDataProvider([
+        
+        $this->data_provider = new ActiveDataProvider([
             'query' => $model,
             'sort' => false,
             'pagination' => [
-                'pageSize' => 20
+                'pageSize' => $this->page_size
             ]
         ]);
 
-        return $this->render('index', [
-        	'dataProvider' => $dataProvider
-    	]);
+        //var_dump($this->data_provider->getModels());
+        //die;
+
+        $columns = SnapEarn::find()->getExcelColumns();
+        $column_styles = SnapEarn::find()->getExcelColumnsStyles();
+
+        $filename = 'SNE-' . date('Y-m-d H:i:s', time()) . '.xlsx';
+
+        $view_filename = 'index';
+        $save_path = 'sne';
+
+        return $this->processOutput($view_filename, $columns, $column_styles, $save_path, $filename);
     }
 
     public function actionNewMerchant($id, $to = null)

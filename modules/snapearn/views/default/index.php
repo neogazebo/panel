@@ -138,7 +138,18 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                             <?php endif; ?>  
                             <div class="form-group">
                                 <label>&nbsp;</label><br>
-                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                                <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="margin-top-10">
+                                <div class="form-group">
+                                    <label>Export</label><br>
+                                    <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -191,7 +202,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                     'attribute' => 'sna_upload_date',
                                     'format' => ['date', 'php:d-m-Y H:i:s'],
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_upload_date));
+                                        return Yii::$app->formatter->asDateTime(\app\components\helpers\Utc::convert($data->sna_upload_date));
                                     }
                                 ],
                                 [

@@ -55,6 +55,7 @@ class ComposerStaticInitf3604ac49e84047474ea94ed2a17f03a
             'kartik\\grid\\' => 12,
             'kartik\\form\\' => 12,
             'kartik\\file\\' => 12,
+            'kartik\\export\\' => 14,
             'kartik\\depdrop\\' => 15,
             'kartik\\datetime\\' => 16,
             'kartik\\date\\' => 12,
@@ -204,6 +205,10 @@ class ComposerStaticInitf3604ac49e84047474ea94ed2a17f03a
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-fileinput',
         ),
+        'kartik\\export\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-export',
+        ),
         'kartik\\depdrop\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-depdrop',
@@ -268,6 +273,13 @@ class ComposerStaticInitf3604ac49e84047474ea94ed2a17f03a
     );
 
     public static $prefixesPsr0 = array (
+        'P' => 
+        array (
+            'PHPExcel' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes',
+            ),
+        ),
         'H' => 
         array (
             'HTMLPurifier' => 

@@ -148,7 +148,7 @@ $config = [
         // ],
         'array_helper' => [
             'class' => 'app\components\helpers\ArrayHelper',
-        ],
+        ]
     ],
     'params' => $params,
 ];

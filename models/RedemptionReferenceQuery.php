@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 
+use app\components\helpers\Utc;
+
 /**
  * This is the ActiveQuery class for [[RedemptionReference]].
  *
@@ -69,8 +71,80 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
 
         $this->join('LEFT JOIN','tbl_account','tbl_account.acc_id = rdr_acc_id');
         $this->orderBy('rdr_datetime DESC');
-        //echo $this->createCommand()->getRawSql();
-        //exit;
         return $this;
     }   
+
+    public function getExcelColumns()
+    {
+        return  [
+            'A' => [
+                'name' => 'Username',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'account',
+                'have_relations' => true,
+                'relation_name' => 'acc_screen_name'
+            ], 
+            'B' => [
+                'name' => 'Transaction Time',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'rdr_datetime',
+                'format' => function($data) {
+                    return Yii::$app->formatter->asDatetime(Utc::convert($data));
+                }
+            ], 
+            'C' => [
+                'name' => 'Name',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'rdr_name',
+            ], 
+            'D' => [
+                'name' => 'MSISDN',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'rdr_msisdn',
+            ],
+            'E' => [
+                'name' => 'Reference Code',
+                'width' => 100,
+                'height' => 5,
+                'db_column' => 'rdr_reference_code',
+            ],
+            'F' => [
+                'name' => 'SN',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'rdr_vod_sn',
+            ],
+            'G' => [
+                'name' => 'Code',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'rdr_vod_code',
+            ],
+            'H' => [
+                'name' => 'Point',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'rdr_vou_value',
+            ],
+            'I' => [
+                'name' => 'Status',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'rdr_status',
+            ]
+        ];
+    }
+
+    public function getExcelColumnsStyles()
+    {
+        return [
+            'font' => [
+                 'bold'  => true,
+            ]
+        ];
+    }
 }
