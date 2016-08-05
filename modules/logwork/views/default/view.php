@@ -45,20 +45,21 @@ $this->title = 'Detail Working Hours';
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-1">
                             <div class="form-group">
-                                <?= Html::a('<i class="fa fa-share"></i> Back', ['/logwork'], ['class' => 'btn btn-success']) ?>
+                                <label>&nbsp;</label><br />
+                                <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['/logwork'], ['class' => 'btn btn-warning']) ?>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-11">
                             <div class="form-group pull-left">
-                                <label>Report</label><br>
+                                <label>Report</label><br />
                                 <?= Html::a('<i class="fa fa-share"></i> Report', ['report', 'id' => $id], ['class' => 'btn btn-success']) ?>
-                                <?= Html::a('<i class="fa fa-share"></i> Report Detail', ['report-detail', 'id' => $id], ['class' => 'btn btn-warning']) ?>
+                                <?= Html::a('<i class="fa fa-share"></i> Report Detail', ['report-detail', 'id' => $id], ['class' => 'btn btn-info']) ?>
                             </div>
                             <form class="form-inline pull-right" role="form" method="get" action="view">
                                 <div class="form-group">
-                                    <label>Date range</label><br>
+                                    <label>Date range</label><br />
                                     <div class="input-group">
                                         <div class="input-group-addon" for="reservation">
                                             <i class="fa fa-calendar"></i>

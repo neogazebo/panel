@@ -47,7 +47,7 @@ $this->title = '"' . $title->spg_name . '" List';
                         <div class="clearfix"></div>    
                     </div>
                     <div class="box-footer">
-                        <?= Html::a('<i class="fa fa-arrow-left"></i> Back', ['index'], ['class' => 'btn btn-primary']) ?>
+                        <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['index'], ['class' => 'btn btn-warning']) ?>
                         <?= Html::submitButton('<i class="fa fa-check"></i> Save', ['class' => 'btn btn-primary pull-right']) ?>
                     </div>
                 </form>
