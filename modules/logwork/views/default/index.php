@@ -27,10 +27,6 @@ $this->title = 'Working Hours';
                             <label>Configuration</label><br>
                             <?= Html::a('<i class="fa fa-wrench"></i> &nbsp; Working Hour Point', ['/logwork/point'], ['class' => 'btn btn-flat btn-danger']) ?>
                         </div>
-                        <div class="form-group">
-                            <label>Report</label><br>
-                            <?= Html::a('<i class="fa fa-print"></i> &nbsp; Report Point', ['point-report'], ['class' => 'btn btn-flat btn-default']) ?>
-                        </div>
                     </div>
                     <form role="form" class="form-inline" method="get" action="/logwork">
                         <div class="pull-right">
