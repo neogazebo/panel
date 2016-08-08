@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use kartik\export\ExportMenu;
 
 $this->title = 'Reward Reference';
+$visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
