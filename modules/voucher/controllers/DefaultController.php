@@ -19,14 +19,14 @@ use yii\data\ActiveDataProvider;
 class DefaultController extends BaseController
 {
     public function actionIndex()
-	{
-		return $this->render('index');
-	}
+    {
+        return $this->render('index');
+    }
 
-	public function actionReward()
-	{
+    public function actionReward()
+    {
         $this->processOutputType();
-        $this->processOutputSize();
+        $this->processOutputSize(\Yii::$app->request->get('limit'));
 
         $model = RedemptionReference::find()->findCostume();
 
@@ -34,7 +34,7 @@ class DefaultController extends BaseController
             'query' => $model,
             'sort' => false,
             'pagination' => [
-                'pageSize' => $this->page_size
+                'pageSize' => \Yii::$app->request->get('limit')
             ]
         ]); 
 
@@ -47,24 +47,24 @@ class DefaultController extends BaseController
         $save_path = 'reward';
 
         return $this->processOutput($view_filename, $columns, $column_styles, $save_path, $filename);
-	}
+    }
 
-	public function actionCash()
-	{
+    public function actionCash()
+    {
         $this->processOutputType();
-        $this->processOutputSize();
+        $this->processOutputSize(\Yii::$app->request->get('limit'));
 
-		$model = CashvoucherRedeemed::find()->list;
+        $model = CashvoucherRedeemed::find()->list;
 
         $this->data_provider =  new ActiveDataProvider([
             'query' => $model,
             'sort' => false,
             'pagination' => [
-                'pageSize' => $this->page_size
+                'pageSize' => \Yii::$app->request->get('limit')
             ]
         ]);
 
-		$columns = CashvoucherRedeemed::find()->getExcelColumns();
+        $columns = CashvoucherRedeemed::find()->getExcelColumns();
         $column_styles = CashvoucherRedeemed::find()->getExcelColumnsStyles();
 
         $filename = 'Cash-Voucher-' . date('Y-m-d-H-i-s', time()) . '.xlsx';
@@ -73,7 +73,7 @@ class DefaultController extends BaseController
         $save_path = 'cash_voucher';
 
         return $this->processOutput($view_filename, $columns, $column_styles, $save_path, $filename);
-	}
+    }
 
     public function actionUserList()
     {

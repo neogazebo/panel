@@ -187,13 +187,16 @@ class BaseController extends Controller
         $this->output_type = Yii::$app->request->get('output_type');
     }
 
-    protected function processOutputSize()
+    protected function processOutputSize($size =  0)
     {
+        if (!empty($size)) {
+            $this->page_size = $size;
+        }
         if($this->output_type)
         {
             if($this->output_type == 'excel')
             {
-                $this->page_size = 0;
+                $this->page_size = 20;
             }
         }
     }

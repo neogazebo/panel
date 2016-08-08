@@ -155,5 +155,13 @@ class DefaultController extends BaseController
             'user' => $user
         ]);
     }
+    
+    public function actionPointReport()
+    {
+        $model = WorkingTime::find()->all();
+        return $this->render('reporting',[
+            'model' => $model
+        ]);
+    }
 
 }

@@ -63,9 +63,6 @@ $this->title = 'Reward Reference';
                                       <option value="MY" <?= (!empty($_GET['acc_cty_id']) && $_GET['acc_cty_id'] == 'MY') ? 'selected' : '' ?>>Malaysia</option>
                                 </select>
                             </div>
-                        </div>
-                        
-                        <div class="margin-top-10">
                             <div class="form-group">
                                 <label>Limit</label>
                                 <div>
@@ -73,6 +70,9 @@ $this->title = 'Reward Reference';
                                         <option value="20" <?= (!empty($_GET['limit']) && $_GET['limit'] == '20') ? 'selected' : '' ?>>20</option>
                                         <option value="30" <?= (!empty($_GET['limit']) && $_GET['limit'] == '30') ? 'selected' : '' ?>>30</option>
                                         <option value="50" <?= (!empty($_GET['limit']) && $_GET['limit'] == '50') ? 'selected' : '' ?>>50</option>
+                                        <option value="100" <?= (!empty($_GET['limit']) && $_GET['limit'] == '100') ? 'selected' : '' ?>>100</option>
+                                        <option value="150" <?= (!empty($_GET['limit']) && $_GET['limit'] == '150') ? 'selected' : '' ?>>150</option>
+                                        <option value="200" <?= (!empty($_GET['limit']) && $_GET['limit'] == '200') ? 'selected' : '' ?>>200</option>
                                     </select>
                                 </div>
                             </div>
@@ -82,14 +82,11 @@ $this->title = 'Reward Reference';
                                 <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                             </div>
                         </div>
-
-                        <div class="margin-top-10">
-                            <div class="form-group">
-                                <label>Export</label><br>
-                                <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
-                            </div>
+                       
+                        <div class="form-group">
+                            <label>Export</label><br>
+                            <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
                         </div>
-                        
                     </form>
                 </div>
                 <div class="box-body">
