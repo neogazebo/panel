@@ -31,11 +31,11 @@ $total_point = 0;
 	<tbody>
 		<?php foreach ($report as $rp): ?>
 		<tr>
-			<td><?= $rp['ACTIVITY'] ?></td>
-			<td style="text-align: center;"><?= date('H:i:s', $rp['TOTAL_TIME']); $total_time += $rp['TOTAL_TIME']; ?></td>
-			<td style="text-align: right;"><?= Yii::$app->formatter->asDecimal($rp['TOTAL'], 0); $total_activities += $rp['TOTAL']; ?></td>
-			<td style="text-align: right;"><?= Yii::$app->formatter->asDecimal($rp['POINT'], 0) ?></td>
-			<td style="text-align: right;"><?= Yii::$app->formatter->asDecimal($rp['TOTAL_POINT'], 0); $total_point += $rp['TOTAL_POINT']; ?></td>
+			<td><?= $rp['spo_name'] ?></td>
+			<td style="text-align: center;"><?= date('H:i:s', $rp['total_time']); $total_time += $rp['total_time']; ?></td>
+			<td style="text-align: right;"><?= Yii::$app->formatter->asDecimal($rp['activity'], 0); $total_activities += $rp['activity']; ?></td>
+			<td style="text-align: right;"><?= Yii::$app->formatter->asDecimal($rp['spo_point'], 0) ?></td>
+			<td style="text-align: right;"><?= Yii::$app->formatter->asDecimal($rp['total_point'], 0); $total_point += $rp['total_point']; ?></td>
 		</tr>
 		<?php endforeach ?>
 	</tbody>

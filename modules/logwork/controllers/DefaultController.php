@@ -96,8 +96,7 @@ class DefaultController extends BaseController
             $date = explode(' to ', $model->date_range);
             $first_date = $date[0] . ' 00:00:00';
             $last_date = $date[1] . ' 23:59:59';
-
-            $query = WorkingTime::find()->with('reason')->getReport($id, $model->date_range);
+            $query = \app\models\SnapearnPoint::find()->getReport($id, $model->date_range);
             $preview = '_preview';
             $title = [
                 'username' => $user->username,

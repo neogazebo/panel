@@ -7,6 +7,8 @@ use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Modal;
+use kartik\widgets\Select2; // or kartik\select2\Select2
+use yii\web\JsExpression;
 
 $this->title = "New Merchant";
 
@@ -53,29 +55,52 @@ $form = ActiveForm::begin([
     <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
 
     <?= $form->field($company, 'com_address')->textInput(); ?>
+    <?php 
+//        $form->field($company, 'com_city')->widget(Typeahead::classname(),[
+//            'name' => 'merchant',
+//            'options' => ['placeholder' => 'City, Region, Country'],
+//            'pluginOptions' => [
+//                'highlight'=>true,
+//                'minLength' => 3
+//            ],
+//            'pluginEvents' => [
+//                "typeahead:select" => "function(ev, suggestion) { $(this).val(suggestion.id); }",
+//            ],
+//            'dataset' => [
+//                [
+//                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+//                    'display' => 'value',
+//                    'remote' => [
+//                        'url' => Url::to(['city-list']) . '?q=%QUERY',
+//                        'wildcard' => '%QUERY'
+//                    ],
+//                    'limit' => 20
+//                ]
+//            ]
+//        ]);
+    ?>
+    
     <?=
-        $form->field($company, 'com_city')->widget(Typeahead::classname(),[
-            'name' => 'merchant',
-            'options' => ['placeholder' => 'City, Region, Country'],
-            'pluginOptions' => [
-                'highlight'=>true,
-                'minLength' => 3
+        $form->field($company, 'com_city')->widget(Select2::classname(), [
+//        'initValueText' => $cityDesc, // set the initial display text
+        'options' => ['placeholder' => 'City, Region, Country'],
+        'pluginOptions' => [
+                'allowClear' => true,
+                'minimumInputLength' => 3,
+                'language' => [
+                    'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                ],
+                'ajax' => [
+                    'url' => Url::to(['city-list']),
+                    'dataType' => 'json',
+                    'data' => new JsExpression('function(params) { alert(param); }')
+                ],
+                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                'templateResult' => new JsExpression('function(city) { return city.value; }'),
+                'templateSelection' => new JsExpression('function (city) { return city.value; }'),
             ],
-            'pluginEvents' => [
-                "typeahead:select" => "function(ev, suggestion) { $(this).val(suggestion.id); }",
-            ],
-            'dataset' => [
-                [
-                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                    'display' => 'value',
-                    'remote' => [
-                        'url' => Url::to(['city-list']) . '?q=%QUERY',
-                        'wildcard' => '%QUERY'
-                    ],
-                    'limit' => 20
-                ]
-            ]
         ]);
+    
     ?>
     <input id="com_city" type="hidden" name="com_city" value="">
     <input id="mall_id" type="hidden" name="mall_id" value="">

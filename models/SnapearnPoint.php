@@ -19,6 +19,10 @@ use yii\behaviors\TimestampBehavior;
  */
 class SnapearnPoint extends \yii\db\ActiveRecord
 {
+    public $activity;
+    public $total_point;
+    public $total_time;
+//    public $total_
     /**
      * @inheritdoc
      */
@@ -81,5 +85,10 @@ class SnapearnPoint extends \yii\db\ActiveRecord
             'spo_updated_by' => 'Updated By',
             'spo_updated_date' => 'Updated Date',
         ];
+    }
+    
+    public static function find()
+    {
+        return new SnapearnPointQuery(get_called_class());
     }
 }

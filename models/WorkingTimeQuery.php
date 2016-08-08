@@ -12,29 +12,6 @@ use Yii;
 
 class WorkingTimeQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
-    {
-        return $this->andWhere('[[status]]=1');
-    }*/
-
-    /**
-     * @inheritdoc
-     * @return WorkingTime[]|array
-     */
-    public function all($db = null)
-    {
-        return parent::all($db);
-    }
-
-    /**
-     * @inheritdoc
-     * @return WorkingTime|array|null
-     */
-    public function one($db = null)
-    {
-        return parent::one($db);
-    }
-
     public function findWorkExist($param, $point_type = 0)
     {
         $user = Yii::$app->user->id;
@@ -128,33 +105,33 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         return $this->one();
     }
 
-    public function getReport($id, $date)
-    {
-        $date = explode(' to ', $date);
-        $first_date = $date[0] . ' 00:00:00';
-        $last_date = $date[1] . ' 23:59:59';
-
-        $this->select([
-            'wrk_description AS ACTIVITY',
-            'SUM(wrk_time) AS TOTAL_TIME',
-            'COUNT(wrk_description) AS TOTAL',
-            'wrk_point AS POINT',
-            'SUM(wrk_point) AS TOTAL_POINT',
-        ]);
-        $this->where('
-            wrk_by = :user
-            AND wrk_end IS NOT NULL
-            AND DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN :first_date AND :last_date
-            AND wrk_time IS NOT NULL
-        ', [
-            ':user' => $id,
-            ':first_date' => $first_date,
-            ':last_date' => $last_date,
-        ]);
-        $this->groupBy('wrk_description');
-        $this->orderBy('wrk_id DESC');
-        return $this;
-    }
+//    public function getReport($id, $date)
+//    {
+//        $date = explode(' to ', $date);
+//        $first_date = $date[0] . ' 00:00:00';
+//        $last_date = $date[1] . ' 23:59:59';
+//
+//        $this->select([
+//            'wrk_description AS ACTIVITY',
+//            'SUM(wrk_time) AS TOTAL_TIME',
+//            'COUNT(wrk_description) AS TOTAL',
+//            'wrk_point AS POINT',
+//            'SUM(wrk_point) AS TOTAL_POINT',
+//        ]);
+//        $this->where('
+//            wrk_by = :user
+//            AND wrk_end IS NOT NULL
+//            AND DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN :first_date AND :last_date
+//            AND wrk_time IS NOT NULL
+//        ', [
+//            ':user' => $id,
+//            ':first_date' => $first_date,
+//            ':last_date' => $last_date,
+//        ]);
+//        $this->groupBy('wrk_description');
+//        $this->orderBy('wrk_id1 DESC');
+//        return $this;
+//    }
 
     public function getReportDetail($id, $date)
     {

@@ -97,9 +97,9 @@ $this->title = 'Detail Working Hours';
                                     'value' => function($data){
                                         if ($data->wrk_type == 2) {
                                             if ($data->wrk_rjct_number != 0 && $data->wrk_point == 4) {
-                                                return '<p class="text-yellow">'.$data->reason->sem_remark.' <strong class="text-red">+</strong></p>';
+                                                return '<p class="text-yellow">'.$data->reason->spo_name.' <strong class="text-red">+</strong></p>';
                                             } elseif ($data->wrk_rjct_number != 0 && $data->wrk_point != 4) {
-                                                return '<p class="text-yellow">'.$data->reason->sem_remark.'</p>';
+                                                return '<p class="text-yellow">'.$data->reason->spo_name.'</p>';
                                             }else{
                                                 return  '<a class=""><span class="not-set">(not set)</span></a>';
                                             }

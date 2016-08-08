@@ -111,8 +111,7 @@ class WorkingTime extends \yii\db\ActiveRecord
 
     public function getReason()
     {
-        return $this->hasOne(SnapEarnRemark::ClassName(),['sem_id' => 'wrk_rjct_number']);
-
+        return $this->hasOne(SnapearnPoint::ClassName(),['spo_id' => 'wrk_rjct_number']);
     }
 
     public function getTime($userId)
