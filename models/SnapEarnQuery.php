@@ -36,7 +36,6 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     public function findCustome()
     {
         $dt = new DateRangeCarbon();
-        
         $this->leftJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
         if (!empty($_GET['sna_cty'])) {
             $sna_cty = $_GET['sna_cty'];
@@ -67,6 +66,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             }
             $this->andWhere('sna_status = :status', [':status' => $sna_status]);
         }
+        
         if (!empty($_GET['sna_daterange'])) {
             $sna_daterange = explode(' to ', ($_GET['sna_daterange']));
             $first = "(select sna_id from tbl_snapearn where sna_upload_date >= UNIX_TIMESTAMP('$sna_daterange[0] 00:00:00') limit 1)";
@@ -78,6 +78,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $second = "(select sna_id from tbl_snapearn where sna_upload_date <= UNIX_TIMESTAMP('$sna_daterange[1]') order by sna_id desc limit 1)";
             $this->andWhere("sna_id BETWEEN $first AND $second");
         }
+        
         if (!empty($_GET['sna_join'])) {
             $sna_join = $_GET['sna_join'];
             $this->leftJoin('tbl_company', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
