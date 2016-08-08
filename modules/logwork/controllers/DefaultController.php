@@ -103,6 +103,7 @@ class DefaultController extends BaseController
                 'country' => $user->country == 'ID' ? 'Indonesia' : 'Malaysia',
                 'first_date' => Yii::$app->formatter->asDate($first_date),
                 'last_date' => Yii::$app->formatter->asDate($last_date),
+                'brand' => $user->country == 'ID' ? 'PT Ebizu Prima Indonesia' : 'Ebizu Sdn Bhd ',
             ];
 
             $export = \app\components\helpers\PdfExport::export($title, $model, $query, $preview);
