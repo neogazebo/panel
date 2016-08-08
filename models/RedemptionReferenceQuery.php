@@ -50,10 +50,14 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
         }
         if (!empty($msisdn))
             $this->andFilterWhere(['like', 'rdr_msisdn', $msisdn]);
-        if ($status == 'open' || $status == 'close')
+        
+        if ($status == 'open' || $status == 'close') {
+            $stats = ($status == 'open') ? 0 : 1;
             $this->andWhere('rdr_status = :status', [
-                ':status' => $status
+                ':status' => $stats
                 ]);
+        }
+            
         if (!empty($daterange)) {
             $daterange = explode(' to ', $daterange);
             $this->andWhere("FROM_UNIXTIME(rdr_datetime) BETWEEN '$daterange[0] 00:00:00' AND '$daterange[1] 23:59:59'");
