@@ -64,3 +64,6 @@ web/index.php
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 curut.txt
+
+# excel report
+web/excel_report/*
