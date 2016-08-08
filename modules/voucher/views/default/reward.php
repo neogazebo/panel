@@ -22,7 +22,7 @@ $this->title = 'Reward Reference';
 
                         <div>
                             <div class="form-group">
-                                <label>Username</label>
+                                <label>Member</label>
                                 <div>
                                     <input type="text" class="form-control" name="username" value="<?= (!empty($_GET['username'])) ? $_GET['username'] : '' ?>">
                                 </div>
