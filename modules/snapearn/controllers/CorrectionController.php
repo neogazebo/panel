@@ -139,7 +139,7 @@ class CorrectionController extends BaseController
                     'sna_id' => $model->sna_id,
                     'desc' => 'Debet from Correction',
                 ];
-                $history = $this->savePoint($minusPointUser,'D');
+                $this->savePoint($minusPointUser,'D');
                 
                 // param to configuration to give back point merchant
                 $addPointmerchant = [
@@ -147,7 +147,7 @@ class CorrectionController extends BaseController
                     'sna_point' => $old['sna_point'],
                     'sna_com_id' => $old['com_id'],
                 ];
-                $point = $this->merchantPoint($addPointmerchant);
+                $this->merchantPoint($addPointmerchant);
                 // end process rollback
 
                 // get current point merchant
@@ -191,13 +191,13 @@ class CorrectionController extends BaseController
                         'sna_id' => $model->sna_id,
                         'desc' => 'Credit from Correction',
                     ];
+                    $this->savePoint($params);
                     $merchantParams = [
                         'com_point' => $merchant_point->com_point,
                         'sna_point' => $model->sna_point,
                         'sna_com_id' => $model->sna_com_id,
                     ];
-                    $history = $this->savePoint($params);
-                    $point = $this->merchantPoint($merchantParams, false);
+                    $this->merchantPoint($merchantParams, false);
                     
                     $model->sna_sem_id = '';
                     // if rejected action
