@@ -118,7 +118,7 @@ class CorrectionController extends BaseController
                 // configuration to get real point user before reviews
                 $mp = Company::find()->getCurrentPoint($model->sna_com_id);
                 $up = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                if($up !== NULL) {
+                if($up !== 0) {
                     $cp = $up->lph_total_point;
                 } else {
                     $cp = 0;
@@ -153,7 +153,7 @@ class CorrectionController extends BaseController
                 // get current point merchant
                 $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                 $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                if ($point_history !== NULL) {
+                if ($point_history !== 0) {
                     $current_point = $point_history->lph_total_point;
                 } else {
                     $current_point = 0;
@@ -182,6 +182,23 @@ class CorrectionController extends BaseController
                     if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
                     }
+                    
+                    $params = [
+                        'current_point' => $current_point,
+                        'sna_point' => $model->sna_point,
+                        'sna_acc_id' => $model->sna_acc_id,
+                        'sna_com_id' => $model->sna_com_id,
+                        'sna_id' => $model->sna_id,
+                        'desc' => 'Credit from Correction',
+                    ];
+                    $merchantParams = [
+                        'com_point' => $merchant_point->com_point,
+                        'sna_point' => $model->sna_point,
+                        'sna_com_id' => $model->sna_com_id,
+                    ];
+                    $history = $this->savePoint($params);
+                    $point = $this->merchantPoint($merchantParams, false);
+                    
                     $model->sna_sem_id = '';
                     // if rejected action
                 } elseif ($model->sna_status == 2) {
@@ -195,21 +212,6 @@ class CorrectionController extends BaseController
                 $snap_type = '';
                 if ($model->save()) {
                     if ($model->sna_status == 1) {
-                        $params = [
-                            'current_point' => $current_point,
-                            'sna_point' => $model->sna_point,
-                            'sna_acc_id' => $model->sna_acc_id,
-                            'sna_com_id' => $model->sna_com_id,
-                            'sna_id' => $model->sna_id,
-                            'desc' => 'Credit from Correction',
-                        ];
-                        $merchantParams = [
-                            'com_point' => $merchant_point->com_point,
-                            'sna_point' => $model->sna_point,
-                            'sna_com_id' => $model->sna_com_id,
-                        ];
-                        $history = $this->savePoint($params);
-                        $point = $this->merchantPoint($merchantParams, false);
 
                         if ($model->sna_push == 1) {
                             $params = [$model->sna_acc_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
