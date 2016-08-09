@@ -101,8 +101,8 @@ class DefaultController extends BaseController
             $title = [
                 'username' => $user->username,
                 'country' => $user->country == 'ID' ? 'Indonesia' : 'Malaysia',
-                'first_date' => Yii::$app->formatter->asDate($first_date),
-                'last_date' => Yii::$app->formatter->asDate($last_date),
+                'first_date' => $date[0],
+                'last_date' => $date[1],
                 'brand' => $user->country == 'ID' ? 'PT Ebizu Prima Indonesia' : 'Ebizu Sdn Bhd ',
             ];
 
