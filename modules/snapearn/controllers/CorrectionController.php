@@ -113,7 +113,7 @@ class CorrectionController extends BaseController
                 // configuration to get real point user before reviews
                 $mp = Company::find()->getCurrentPoint($model->sna_com_id);
                 $up = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                if($up !== NULL) {
+                if($up !== 0) {
                     $cp = $up->lph_total_point;
                 } else {
                     $cp = 0;
@@ -134,7 +134,7 @@ class CorrectionController extends BaseController
                     'sna_id' => $model->sna_id,
                     'desc' => 'Debet from Correction',
                 ];
-                $history = $this->savePoint($minusPointUser,'D');
+                $this->savePoint($minusPointUser,'D');
                 
                 // param to configuration to give back point merchant
                 $addPointmerchant = [
@@ -142,20 +142,20 @@ class CorrectionController extends BaseController
                     'sna_point' => $old['sna_point'],
                     'sna_com_id' => $old['com_id'],
                 ];
-                $point = $this->merchantPoint($addPointmerchant);
+                $this->merchantPoint($addPointmerchant);
                 // end process rollback
-
-                // get current point merchant
-                $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
-                $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                if ($point_history !== NULL) {
-                    $current_point = $point_history->lph_total_point;
-                } else {
-                    $current_point = 0;
-                }
 
                 // if approved action
                 if ($model->sna_status == 1) {
+                    
+                    // get current point merchant
+                    $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
+                    $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
+                    if ($point_history !== 0) {
+                        $current_point = $point_history->lph_total_point;
+                    } else {
+                        $current_point = 0;
+                    }
                     // get limited point per country
                     $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 
@@ -177,45 +177,39 @@ class CorrectionController extends BaseController
                     if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
                     }
+                    
+                    $paramsPoint = [
+                        'current_point' => $current_point,
+                        'sna_point' => $model->sna_point,
+                        'sna_acc_id' => $model->sna_acc_id,
+                        'sna_com_id' => $model->sna_com_id,
+                        'sna_id' => $model->sna_id,
+                        'desc' => 'Credit from Correction',
+                    ];
+                    $this->savePoint($paramsPoint);
+                    $merchantParams = [
+                        'com_point' => $merchant_point->com_point,
+                        'sna_point' => $model->sna_point,
+                        'sna_com_id' => $model->sna_com_id,
+                    ];
+                    $this->merchantPoint($merchantParams, false);
+                    
                     $model->sna_sem_id = '';
+
+                    if ($model->sna_push == 1) {
+                        $paramsA = [$model->sna_acc_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
+                        $customData = ['type' => 'snapearn'];
+                        Activity::insertAct($model->sna_acc_id, 31, $paramsA, $customData);
+                    }
+
+                    // create snapearn point detail
+                    $this->setMessage('save', 'success', 'Snap and Earn successfully approved!');
+                    $snap_type = 'approved';
                     // if rejected action
                 } elseif ($model->sna_status == 2) {
                     $username = $model->member->acc_screen_name;
                     $email = $model->member->acc_facebook_email;
                     $model->sna_point = 0;
-                    // $model->sna_receipt_amount = 0;
-                }
-
-                // execution save to snapearn
-                $snap_type = '';
-                if ($model->save()) {
-                    if ($model->sna_status == 1) {
-                        $params = [
-                            'current_point' => $current_point,
-                            'sna_point' => $model->sna_point,
-                            'sna_acc_id' => $model->sna_acc_id,
-                            'sna_com_id' => $model->sna_com_id,
-                            'sna_id' => $model->sna_id,
-                            'desc' => 'Credit from Correction',
-                        ];
-                        $merchantParams = [
-                            'com_point' => $merchant_point->com_point,
-                            'sna_point' => $model->sna_point,
-                            'sna_com_id' => $model->sna_com_id,
-                        ];
-                        $history = $this->savePoint($params);
-                        $point = $this->merchantPoint($merchantParams, false);
-
-                        if ($model->sna_push == 1) {
-                            $params = [$model->sna_acc_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
-                            $customData = ['type' => 'snapearn'];
-                            Activity::insertAct($model->sna_acc_id, 31, $params, $customData);
-                        }
-
-                        // create snapearn point detail
-                        $this->setMessage('save', 'success', 'Snap and Earn successfully approved!');
-                        $snap_type = 'approved';
-                    } elseif ($model->sna_status == 2) {
                         // send email to member
                         $business = '';
                         $location = '';
@@ -277,12 +271,14 @@ class CorrectionController extends BaseController
                             Activity::insertAct($model->sna_acc_id, 30, $params, $customData);
                         }
 
-                        // create snapearn point detail
-                        // SnapEarnPointDetail::savePoint($id, $model->sna_sem_id);
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
                     }
 
+                // execution save to snapearn
+                $snap_type = '';
+                if ($model->save()) {
+                    
                     // webhook for manis v3
                     // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
                     $curl = new curl\Curl();
@@ -309,6 +305,7 @@ class CorrectionController extends BaseController
                     $this->checkSession($id);
                     $transaction->commit();
                 } else {
+                    $transaction->rollBack();
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                 }
             } catch (Exception $e) {
@@ -385,29 +382,32 @@ class CorrectionController extends BaseController
         }
     }
 
-    protected function savePoint($params, $type = 'C')
+    protected function savePoint($paramsPoint, $type = 'C')
     {
         $valid = 365;
         $time = time();
-        if($type == 'C')
-            $total_point = $params['current_point'] + $params['sna_point'];
-        else
-            $total_point = $params['current_point'] - $params['sna_point'];
+        if($type == 'C') {
+            $total_point = $paramsPoint['current_point'] + $paramsPoint['sna_point'];
+        }else{
+            $total_point = $paramsPoint['current_point'] - $paramsPoint['sna_point'];
+        }
+        
         $history = new LoyaltyPointHistory();
         $history->setScenario('snapEarnUpdate');
-        $history->lph_acc_id = $params['sna_acc_id'];
-        $history->lph_com_id = $params['sna_com_id'];
+        $history->lph_acc_id = $paramsPoint['sna_acc_id'];
+        $history->lph_com_id = $paramsPoint['sna_com_id'];
         $history->lph_lpt_id = 56;
-        $history->lph_amount = $params['sna_point'];
-        $history->lph_param =  (string)$params['sna_id'];
+        $history->lph_amount = $paramsPoint['sna_point'];
+        $history->lph_param =  (string)$paramsPoint['sna_id'];
         $history->lph_type = $type;
         $history->lph_datetime = $time;
         $history->lph_total_point = $total_point;
         $history->lph_expired = $time + $valid * 86400;
-        $history->lph_current_point = $params['sna_point'];
-        $history->lph_description = $params['desc'];
-        if($history->save())
+        $history->lph_current_point = $paramsPoint['sna_point'];
+        $history->lph_description = $paramsPoint['desc'];
+        if(!$history->save()){
             $this->setMessage('save', 'error', General::extractErrorModel($history->getErrors()));
+        }
     }
 
     public function actionCancel($id)
@@ -432,15 +432,17 @@ class CorrectionController extends BaseController
     protected function merchantPoint($params, $type = true)
     {
         // update merchant point
-        if($type == true)
+        if($type == true) {
             $com_point = $params['com_point'] + $params['sna_point'];
-        else
+        }else{
             $com_point = $params['com_point'] - $params['sna_point'];
+        }
         $point = Company::findOne($params['sna_com_id']);
         $point->setScenario('snapEarnUpdate');
         $point->com_point = $com_point;
-        if($point->save(false))
+        if(!$point->save(false)) {
             $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
+        }
     }
 
 }
