@@ -10,6 +10,11 @@ use kartik\export\ExportMenu;
 
 $this->title = 'Reward Reference';
 $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
+$this->registerCss("
+    .summary {
+        float : none !important;
+    }
+");
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
@@ -97,7 +102,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                             'options' => [
                                 'style' => 'font-size: 13px'
                             ],
-                            'layout' => '{items} {summary} {pager}',
+                            'layout' => '{summary} {items} {pager}',
                             'dataProvider' => $dataProvider,
                             'pjax' => true,
                             'pjaxSettings' => [

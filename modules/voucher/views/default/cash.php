@@ -4,6 +4,11 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 $this->title = 'Cash Voucher';
+$this->registerCss("
+    .summary {
+        float : none !important;
+    }
+");
 ?>
 <section class="content-header ">
     <h1><?= $this->title ?></h1>
@@ -78,12 +83,8 @@ $this->title = 'Cash Voucher';
                 <div class="box-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
-                            'id' => 'redemption-reference',
-                            'options' => [
-                                'style' => 'font-size: 13px'
-                            ],
-                            'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
+                            'layout' => '{summary} {items} {pager}',
                             'pjax' => true,
                             'pjaxSettings' => [
                                 'neverTimeout' => true,
