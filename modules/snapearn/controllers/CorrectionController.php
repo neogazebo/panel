@@ -183,7 +183,7 @@ class CorrectionController extends BaseController
                         $model->sna_point = $limitPoint;
                     }
                     
-                    $params = [
+                    $paramsPoint = [
                         'current_point' => $current_point,
                         'sna_point' => $model->sna_point,
                         'sna_acc_id' => $model->sna_acc_id,
@@ -191,7 +191,7 @@ class CorrectionController extends BaseController
                         'sna_id' => $model->sna_id,
                         'desc' => 'Credit from Correction',
                     ];
-                    $this->savePoint($params);
+                    $this->savePoint($paramsPoint);
                     $merchantParams = [
                         'com_point' => $merchant_point->com_point,
                         'sna_point' => $model->sna_point,
@@ -214,9 +214,9 @@ class CorrectionController extends BaseController
                     if ($model->sna_status == 1) {
 
                         if ($model->sna_push == 1) {
-                            $params = [$model->sna_acc_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
+                            $paramsA = [$model->sna_acc_id, $model->sna_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
                             $customData = ['type' => 'snapearn'];
-                            Activity::insertAct($model->sna_acc_id, 31, $params, $customData);
+                            Activity::insertAct($model->sna_acc_id, 31, $paramsA, $customData);
                         }
 
                         // create snapearn point detail
@@ -388,27 +388,27 @@ class CorrectionController extends BaseController
         }
     }
 
-    protected function savePoint($params, $type = 'C')
+    protected function savePoint($paramsPoint, $type = 'C')
     {
         $valid = 365;
         $time = time();
         if($type == 'C')
-            $total_point = $params['current_point'] + $params['sna_point'];
+            $total_point = $paramsPoint['current_point'] + $paramsPoint['sna_point'];
         else
-            $total_point = $params['current_point'] - $params['sna_point'];
+            $total_point = $paramsPoint['current_point'] - $paramsPoint['sna_point'];
         $history = new LoyaltyPointHistory();
         $history->setScenario('snapEarnUpdate');
-        $history->lph_acc_id = $params['sna_acc_id'];
-        $history->lph_com_id = $params['sna_com_id'];
+        $history->lph_acc_id = $paramsPoint['sna_acc_id'];
+        $history->lph_com_id = $paramsPoint['sna_com_id'];
         $history->lph_lpt_id = 56;
-        $history->lph_amount = $params['sna_point'];
-        $history->lph_param =  (string)$params['sna_id'];
+        $history->lph_amount = $paramsPoint['sna_point'];
+        $history->lph_param =  (string)$paramsPoint['sna_id'];
         $history->lph_type = $type;
         $history->lph_datetime = $time;
         $history->lph_total_point = $total_point;
         $history->lph_expired = $time + $valid * 86400;
-        $history->lph_current_point = $params['sna_point'];
-        $history->lph_description = $params['desc'];
+        $history->lph_current_point = $paramsPoint['sna_point'];
+        $history->lph_description = $paramsPoint['desc'];
         if($history->save())
             $this->setMessage('save', 'error', General::extractErrorModel($history->getErrors()));
     }
