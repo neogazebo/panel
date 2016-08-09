@@ -10,10 +10,12 @@ $total_point = 0;
 </head>
 <body style="font-family: 'Source Sans Pro';">
 <div class="col-sm-4">
-    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;margin-bottom: 20px;font-style: normal;line-height: 1.42857143;">
-        <b style="font-weight: normal">Username : </b> <?= $username  ?><br>
-        <b style="font-weight: normal">Period : </b> <?= $first_date ?> to <?= $last_date ?>
-    </p>
+    <address>
+        <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;margin-bottom: 20px;font-style: normal;line-height: 1.42857143;">
+            <b style="font-weight: normal">Username : </b> <?= $username  ?><br>
+            <b style="font-weight: normal">Period : </b> <?= $first_date ?> to <?= $last_date ?>
+        </p>
+    </address>
 </div>
 
 <table>

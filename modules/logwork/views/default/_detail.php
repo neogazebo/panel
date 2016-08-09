@@ -1,15 +1,9 @@
-<h2 class="page-header">
-	<img src="<?= Yii::$app->homeUrl ?>themes/AdminLTE/dist/img/ebz_logo.png" class="image-logo" alt="" width="64" height="56" />
-	Snap &amp; Earn Detail Report
-	<small class="pull-right">
-		<?= $first_date ?> to <?= $last_date ?>
-	</small>
-</h2>
+<body style="font-family: 'Source Sans Pro';">
 <div class="col-sm-4">
 	<address>
-		<p class="text-muted well well-sm no-shadow" style="margin-top: 10px">
+		<p class="text-muted well well-sm no-shadow" style="margin-top: 10px;margin-bottom: 20px;font-style: normal;line-height: 1.42857143;">
 			<strong>Username: </strong> <?= $username ?><br />
-			<strong>Country: </strong> <?= $country ?>
+			<strong>Period: </strong> <?= $first_date ?> to <?= $last_date ?>
 		</p>
 	</address>
 </div>
@@ -45,3 +39,4 @@
 		<?php endforeach ?>
 	</tbody>
 </table>
+</body>
