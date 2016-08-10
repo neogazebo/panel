@@ -9,7 +9,7 @@ use app\components\helpers\Utc;
 use kartik\widgets\DateTimePicker;
 use kartik\money\MaskMoney;
 
-$this->title = "Update SnapEarn";
+$this->title = "Update Snap & Earn";
 $model->sna_push = true;
 ?>
 <section class="content-header">
@@ -36,23 +36,21 @@ $model->sna_push = true;
           <div class="box-header with-border">
             <?php if (Yii::$app->user->identity->level == 1) : ?>
             <div class="user-block">
-              <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'].$model->member->acc_photo : $this->theme->baseUrl.'/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
+              <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'] . $model->member->acc_photo : $this->theme->baseUrl . '/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
               <span class="username">
-                <a href="#">
                   <?= $model->member->acc_screen_name ?>
-                </a>
               </span>
-              <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date,'dd-mm-Y HH:mm:ss') ?></span>
+              <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'd MMM Y H:i:s') ?></span>
             </div>
             <?php else : ?>
               <div class="user-block">
-               <img class="img-circle" src="<?= $this->theme->baseUrl.'/dist/img/manis.png'?>" alt="manis receipt">
+               <img class="img-circle" src="<?= $this->theme->baseUrl . '/dist/img/manis.png'?>" alt="manis receipt">
               <span class="username">
                 <a href="#">
                   Detail Receipt
                 </a>
                 </span>
-                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date,'dd-mm-Y HH:mm:ss') ?></span>
+                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'd MMM Y H:i:s') ?></span>
               </div>
             <?php endif; ?>
             <div class="box-tools">
@@ -79,47 +77,43 @@ $model->sna_push = true;
                   </div>
                 </div>
                 <div class="box-body">
-                    <ul class="nav nav-stacked update">
-                      <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                      <li class="">
-                        <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
-                      </li>
-                      <?php endif; ?>
-                      <li class="">
-                        <a href="#"><b><?= (empty($model->merchant)) ? 'Suggestion Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
-                      </li>
-                      <?php if (!empty($model->merchant)) : ?>
-                      <li class="">
-                        <a href="#"><b>Merchant Point</b>
-                            
-                              <!--start-->
-                          <?php if ($model->merchant->com_point < 1000) :?>
-                            
-                            <!--this validation if add point to merchant is only specific user-->
-                            <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
-                              <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
-                            <?php // else: ?>
-                              <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
-                            <?php // endif; ?>
-                            
-                          <?php endif; ?>
-                            <!--end--> 
-                            
-                          <span class="pull-right text-light-blue">
-                            <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
-                          </span>
-                        </a>
-                      </li>
-                      <?php endif; ?>
-                      <?php if (empty($model->merchant)) : ?>
-                      <li>
-                        <a href="#"><b><?= (empty($model->sna_address)) ? 'Suggestion Location' : 'Location' ?></b>
-                          <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
-                        </a>
-                      </li>
+                  <ul class="nav nav-stacked update">
+                    <?php if(Yii::$app->user->identity->superuser == 1): ?>
+                    <li class="">
+                      <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
+                    </li>
                     <?php endif; ?>
-                        <li></li>
-                    </ul>
+                    <li class="">
+                      <a href="#"><b><?= (empty($model->merchant)) ? 'Suggestion Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
+                    </li>
+                    <?php if (!empty($model->merchant)) : ?>
+                    <li class="">
+                      <a href="#"><b>Merchant Point</b>
+                        <!--start-->
+                        <?php if ($model->merchant->com_point < 1000) :?>
+                          <!--this validation if add point to merchant is only specific user-->
+                          <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
+                            <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
+                          <?php // else: ?>
+                            <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
+                          <?php // endif; ?>
+                        <?php endif; ?>
+                        <!--end--> 
+                        <span class="pull-right text-light-blue">
+                          <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
+                        </span>
+                      </a>
+                    </li>
+                    <?php endif; ?>
+                    <?php if (empty($model->merchant)) : ?>
+                    <li>
+                      <a href="#"><b><?= (empty($model->sna_address)) ? 'Suggestion Location' : 'Location' ?></b>
+                        <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
+                      </a>
+                    </li>
+                  <?php endif; ?>
+                      <li></li>
+                  </ul>
                   <form role="form">
                     <?= $form->field($model, 'sna_status')->dropDownList($model->statuscorrection, ['class' => 'form-control status']) ?>
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
@@ -175,7 +169,6 @@ $model->sna_push = true;
     <?php ActiveForm::end(); ?>
 </section>
 
-
 <!-- widget to create render modal -->
 <?php
     Modal::begin([
@@ -214,28 +207,23 @@ $this->registerCss("
         height: 28px;
         z-index: 5000;
     }
-
     .nav-stacked {
         padding: 0px 0px 10px 0px;
     }
-
     .nav-stacked > li > a {
         border-radius: 0;
         border-top: 0;
         border-left: 0px solid transparent;
         color: #444;
     }
-
     .nav.update > li > a {
         position: relative;
         display: block;
         padding: 10px 0px;
     }
-
     .form-div {
         padding-top: 10px;
     }
-
     .point-form { display: none; }
     .reject-form { display: none; }
 ");
@@ -286,11 +274,11 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
         }
     }).trigger('change');
 
-    $('#snapearn-sna_receipt_amount').change(function(){
+    $('#snapearn-sna_receipt_amount').change(function() {
         pointConvert();
     });
 
-    function pointConvert(){
+    function pointConvert() {
         var amount = Math.floor($('#snapearn-sna_receipt_amount').val());
         // $('#snapearn-sna_point').val(point);
         $.ajax({
@@ -304,20 +292,17 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
         });
     }
 
-    $('.saveNext').click(function(){
+    $('.saveNext').click(function() {
         $('#saveNext').val(1);
     });
-    $('.submit-button, .reset-button').click(function(){
+    $('.submit-button, .reset-button').click(function() {
         $('#saveNext').val(0);
     });
-
-    $('.new_m').on('click',function(){
+    $('.new_m').on('click',function() {
         $('.modal-dialog').switchClass( 'modal-md', 'modal-lg');
     });
-
-    $('.exs_m').on('click',function(){
+    $('.exs_m').on('click',function() {
         $('.modal-dialog').switchClass( 'modal-lg','modal-md');
     });
-
 ", yii\web\View::POS_END, 'snapearn-form');
 ?>
