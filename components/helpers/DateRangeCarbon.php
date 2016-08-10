@@ -15,13 +15,13 @@ class DateRangeCarbon
     private function setTimeZone()
     {
         switch(Yii::$app->user->identity->country) {
-			case 'ID':
-				$dt = Carbon::now('Asia/Jakarta');
-				break;
-			case 'MYR':
-				$dt = Carbon::now('Asia/Kuala_Lumpur');
-				break;
-		}
+            case 'ID':
+                $dt = Carbon::now('Asia/Jakarta');
+                break;
+            case 'MYR':
+                $dt = Carbon::now('Asia/Kuala_Lumpur');
+                break;
+        }
         return $dt;
     }
 
@@ -29,6 +29,13 @@ class DateRangeCarbon
     public function getTestDate()
     {
         return $this->setTimeZone();
+    }
+
+    public function getDay()
+    {
+        $dt = Carbon::now();
+        $thisDay = $dt->startOfDay(). ' to '. $dt->endOfDay();
+        return $thisDay;
     }
 
     // get daterange month active

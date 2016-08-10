@@ -25,18 +25,25 @@ use app\components\helpers\Html;
  * @property integer $sna_cat_id
  * @property string $sna_receipt_image
  * @property string $sna_com_name
+ * @property string $sna_address
  */
 class SnapEarn extends \yii\db\ActiveRecord
 {
     const STATUS_REJECTED = 2;
     const STATUS_APPROVED = 1;
     const LIMIT_RECEIPT = 2;
-    public $sna_push = true;
+    public $sna_push;
     public $total_cat = null;
     public $categoryName;
     public $amount;
     public $country;
     public $total_amount;
+    public $tanggal;
+    public $jumlah;
+    public $weeks;
+    public $total_unique;
+    public $total_unique_user_id;
+    public $total_unique_user_my;
 
     /**
      * @inheritdoc
@@ -61,40 +68,39 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         return [
             [['sna_com_id',
-                'sna_receipt_date',
+//                'sna_receipt_date',
                 'sna_upload_date',
                 'sna_cat_id',
                 'sna_com_name'],
             'required'],
+            [['sna_push'],'safe'],
             [['sna_receipt_amount',
-                'sna_receipt_number',
+                'sna_ops_receipt_number',
                 'sna_receipt_image',
                 'sna_transaction_time'], 'required', 'when' => function($model) {
                 return $model->sna_status == 1;
             }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }",'on' => 'update'],
-            // [['sna_transaction_time'],'date', 'format' => 'Y-m-d H:m:s'],
             [['sna_com_id',
                 'sna_point',
                 'sna_status',
                 'sna_upload_date',
-                'sna_approved_datetime',
                 'sna_review_date',
-                'sna_approved_by',
                 'sna_review_by',
-                'sna_rejected_datetime',
-                'sna_rejected_by',
                 'sna_sem_id',
                 'sna_cat_id'],
             'integer'],
-            [['sna_receipt_amount'],'double'],
-            [['sna_receipt_number'],
+            [['sna_status'],'globalValidation'],
+            [['sna_receipt_amount'], 'number', 'min' => 1, 'when' => function($model) {
+                return $model->sna_status == 1;
+            }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }", 'on' => 'update'],
+            [['sna_ops_receipt_number'],
                 'string',
-                'max' => 20],
-            [['sna_receipt_number'],
+                'max' => 35],
+            [['sna_ops_receipt_number'],
                 'approvePerday',
                 'when' => function($model) {
                     return $model->sna_status == 1;
-                }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }",'on' => 'update'],
+                }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }", 'on' => 'update'],
             [['sna_receipt_date'],
                 'string',
                 'max' => 10],
@@ -103,12 +109,11 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'when' => function($model) {
                     return $model->sna_status == 1;
                 },'on' => 'update'],
-            // [['sna_com_id'], 'checkMerchant','on' => 'update'],
-            [['sna_receipt_number'], 'validateReceipt','on' => 'update'],
+            [['sna_ops_receipt_number'], 'validateReceipt'],
             [['sna_receipt_image'],
                 'string',
                 'max' => 75],
-            [['sna_com_name'],
+            [['sna_com_name','sna_address'],
                 'string',
                 'max' => 100],
             [['sna_com_id'], 'checkMerchant', 'when' => function($model) {
@@ -117,9 +122,22 @@ class SnapEarn extends \yii\db\ActiveRecord
             [['sna_transaction_time',
                 'sna_receipt_number',
                 'sna_receipt_amount',
-                'sna_com_id',
-                'sna_receipt_number'], 'safe','on' => 'correction']
+                'sna_com_id'], 'safe','on' => 'correction'],
         ];
+    }
+
+    public function globalValidation($data)
+    {   $m = Company::findOne($this->sna_com_id);
+        if (empty($m)) {
+           $this->addError($data, Yii::t('app', 'Please create merchant first! Thanks.')); 
+        } else {
+            if ($this->sna_status == 1) {
+                if (($m->com_point - $this->sna_point) < 0 || ($this->sna_point > $m->com_point)) {
+                    $this->addError($data, Yii::t('app', 'Points merchant is Not Enough !'));
+                }
+            }
+        }
+        
     }
 
     public function checkMerchant($data)
@@ -162,9 +180,9 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         if ($this->sna_status == 1) {
             $query = self::find()
-                ->where(['sna_receipt_number' => $this->sna_receipt_number])
+                ->where(['sna_ops_receipt_number' => trim($this->sna_ops_receipt_number)])
                 ->andWhere(['sna_com_id' => $this->sna_com_id])
-                ->andWhere(['<>','sna_status',0])
+                ->andWhere(['=','sna_status',1])
                 ->count();
             if($query >= 1)
                 $this->addError($data, Yii::t('app', 'This number receipt has taken'));
@@ -186,6 +204,11 @@ class SnapEarn extends \yii\db\ActiveRecord
     public function getStatus()
     {
         return [0 => 'New', 1 => 'Approved', 2 => 'Rejected'];
+    }
+
+    public function getStatuscorrection()
+    {
+        return [1 => 'Approved', 2 => 'Rejected'];
     }
 
     public function getEmail()
@@ -244,15 +267,12 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_acc_id' => 'Member',
             'sna_com_id' => 'Merchant ID',
             'sna_receipt_number' => 'Receipt Number',
-            'sna_receipt_date' => 'Receipt Date',
-            'sna_receipt_amount' => 'Receipt Amount',
-            'sna_point' => 'Point',
+            'sna_ops_receipt_number' => 'Receipt Number',
+            'sna_receipt_date' => 'Time',
+            'sna_receipt_amount' => 'Amount',
+            'sna_point' => 'Points',
             'sna_status' => 'Status',
             'sna_upload_date' => 'Upload Date',
-            'sna_approved_datetime' => 'Approved Datetime',
-            'sna_approved_by' => 'Approved By',
-            'sna_rejected_datetime' => 'Rejected Datetime',
-            'sna_rejected_by' => 'Rejected By',
             'sna_review_date' => 'Review Date',
             'sna_review_by' => 'Review By',
             'sna_sem_id' => 'Remark',

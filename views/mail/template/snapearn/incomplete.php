@@ -1,6 +1,6 @@
 <tbody>
     <tr>
-    <td colspan="2"><h1 style="font-weight: 100; font-size: 30px; line-height: 60px; margin: 20px 0 0;">Hi&nbsp;[username]</h1></td>
+    <td colspan="2"><h1 style="font-weight: 100; font-size: 30px; line-height: 60px; margin: 20px 0 0;">Hi&nbsp;<?= $params[0][1] ?></h1></td>
     <td width="100" style="display: table-cell; overflow: hidden;" rowspan="3">&nbsp;</td>
     </tr>
     <tr>
@@ -15,9 +15,10 @@
                 <li>Merchant Name</li>
                 <li>Transaction Amount</li>
                 <li>Receipt Number</li>
+                <li>Merchant address/ location</li>
             </ol>
             <p>Below is a sample photo as a guideline.</p><br/>
-            <img src="[picture]" width="70%" /><br/>
+            <img src="<?= $params[1][1] ?>" width="70%" /><br/>
             <p>
                 Best Regards,<br/>
                 getmanis.com team

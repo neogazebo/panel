@@ -37,8 +37,26 @@ class BaseController extends Controller
             ],
 		];
     }
+    
+    // set up global session using params
+    public function setSession($name,$params)
+    {
+        return \Yii::$app->session->set($name,$params);
+    }
+    
+    // get global session using params
+    public function getSession($params)
+    {
+        return \Yii::$app->session->get($params);
+    }
+    
+    // destory global session using params
+    public function removeSession($params)
+    {
+        return \Yii::$app->session->remove($params);
+    }
 
-    public function setRememberUrl()
+        public function setRememberUrl()
     {
 		return \Yii::$app->session->set('rememberUrl', Yii::$app->request->url);
     }
@@ -112,7 +130,7 @@ class BaseController extends Controller
         }
     }
 
-    public function endWorking($id,$type,$desc)
+    public function endWorking($id,$type,$desc,$sem_id = 0)
     {
         $this->centralTimeZone();
     	$model = WorkingTime::findOne($id);
@@ -120,6 +138,7 @@ class BaseController extends Controller
     	$model->wrk_description = $desc;
     	$model->wrk_end = microtime(true);
         $model->wrk_time = ($model->wrk_end - $model->wrk_start);
+        $model->wrk_rjct_number = $sem_id;
     	$model->save(false);
     }
 

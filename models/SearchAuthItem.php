@@ -47,6 +47,7 @@ class SearchAuthItem extends AuthItem
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => false,
         ]);
 
         $this->load($params);
@@ -70,7 +71,7 @@ class SearchAuthItem extends AuthItem
             ->andFilterWhere(['like', 'rule_name', $this->rule_name])
             ->andFilterWhere(['like', 'data', $this->data])
             ->andFilterWhere(['like', 'created_by', $this->created_by]);
-        $query->orderBy('created_by DESC');
+        $query->orderBy('created_at DESC');
         return $dataProvider;
     }
 }

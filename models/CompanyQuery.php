@@ -43,20 +43,18 @@ class CompanyQuery extends \yii\db\ActiveQuery
     public function searchExistingMerchant()
     {
         $search = $_GET['q'];
-        $keyword = preg_split("/[\s,]+/", $search);
         $this->select('com_id, com_name');
-        foreach ($keyword as $key) {
-            $this->andWhere('
-                com_name LIKE :get 
-                AND com_type = :type 
-            ', [
-                ':get' => '%' . $key . '%',
-                ':type' => 0,
-            ]);
+        $keyword = preg_split("/[\s,]+/",$search);
+        $this->select('com_id, com_name');
+        $this->leftJoin('tbl_company_category','tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
+        foreach($keyword as $key){
+            $this->andWhere('com_name LIKE "%'.$key.'%" ');
         }
+        $this->andWhere('tbl_company_category.com_category_type = :type',[
+            'type' => 1
+        ]);
         $this->andWhere('com_status != 2');
         $this->orderBy('com_name');
-        $this->limit(20);
         return $this->all();
     }
 }

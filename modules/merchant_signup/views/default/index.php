@@ -75,7 +75,7 @@ $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('s
                                                 <i class="fa fa-caret-square-o-down"></i> Review
                                             ', [
                                                 '/merchant-signup/default/review/?id=' . $model->id
-                                            ], ['class' => 'btn btn-info btn-xs']);
+                                            ], ['class' => 'btn btn-warning btn-xs']);
                                         },
                                         /* 'xreview' => function($url, $model) {
                                             if($model->mer_reviewed == 0)

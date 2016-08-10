@@ -3,10 +3,12 @@ $(function() {
 	function timeout() {
 		setTimeout(function() {
 			$(".alert-dismissable").hide();
-		}, 5000);
+		}, 10000);
 	};
 	timeout();
-
+        
+        $('[data-toggle="tooltip"]').tooltip();
+        
 	var customAlert = function(status,message) {
 		var html = "<div class='row'><div class='col-xs-12 col-sm-12 col-lg-12'>";
 		if(status == 'success') {
@@ -217,7 +219,8 @@ function topFour(data) {
     // You can switch between pie and douhnut using the method below.
     pieChart.Doughnut(PieData, pieOptions);
   };
-  function startChart(selector = null){
+
+  function startChart(selector){
 	  var div = $('#pieChart');
 		 url = $(div).data('url');
 		 id = $(div).data('key');
@@ -226,17 +229,17 @@ function topFour(data) {
 			 url: url,
 			 data: {
 				 id : id,
-				 data : selector
+				 data : selector ? selector : ''
 			 },success: function(results) {
 			 var data = jQuery.parseJSON(results);
 			 var html = "<ul class='nav nav-stacked'>";
 			 for (var i = 0; i < data.length; i++) {
 				 var total = data[i].currency+'. '+(data[i].total)+data[i].k;
-				 if (data[i].value == 0 ) {
-					 total = '.00';
+				 if (data[i].total == 0 ) {
+					 total = 'N/A';
 				 }
 				 $("#testing").text(total);
-				 html += "<li><a href='#'>"+data[i].label+"<span class='pull-right badge ' style='background-color:"+data[i].color+"'>"+data[i].currency+'. '+data[i].value+data[i].k+"</span></a></li>";
+				 html += "<li><a href='#'>"+data[i].label+"<span class='pull-right badge ' style='background-color:"+data[i].color+"'>"+data[i].currency+'. '+data[i].amount+data[i].k+"</span></a></li>";
 			 }
 			 html += "</ul>";
 			 $('.chart-notes').html(html);

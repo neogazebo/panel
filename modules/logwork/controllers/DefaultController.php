@@ -4,6 +4,7 @@ namespace app\modules\logwork\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\helpers\Url;
 use app\models\WorkingTime;
 use app\models\SearchWorkingTime;
 use app\models\User;
@@ -23,12 +24,11 @@ class DefaultController extends BaseController
      * @return string
      */
     public function actionIndex()
-    {        
-    	// $searchModel = new SearchWorkingTime();
-     //    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    {
         $model = WorkingTime::find()->getWorker();
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 20
             ]
@@ -40,10 +40,12 @@ class DefaultController extends BaseController
 
     public function actionView($id)
     {
-        $model = WorkingTime::find()->detailPoint($id);
+        $model = WorkingTime::find()->with('reason')->detailPoint($id);
+        $total = WorkingTime::find()->totalDetail($id);
         $username = User::findOne($id)->username;
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => 20
             ]
@@ -51,7 +53,8 @@ class DefaultController extends BaseController
         return $this->render('view',[
             'dataProvider' => $dataProvider,
             'id' => $id,
-            'username' => $username
+            'username' => $username,
+            'total' => $total
         ]);
     }
 
@@ -68,7 +71,7 @@ class DefaultController extends BaseController
     public function actionUserList()
     {
     	if (Yii::$app->request->isAjax) {
-    		$model = User::find()->searchUser();
+    		$model = User::find()->findUser();
             $out = [];
             foreach ($model as $d) {
                 $out[] = ['id' => $d->id,'value' => $d->username];
@@ -93,9 +96,8 @@ class DefaultController extends BaseController
             $first_date = $date[0] . ' 00:00:00';
             $last_date = $date[1] . ' 23:59:59';
 
-            $query = WorkingTime::find()->getReport($id, $model->date_range);
+            $query = WorkingTime::find()->with('reason')->getReport($id, $model->date_range);
             $preview = '_preview';
-            $redirect = 'logwork/default/view?id=' . $id;
             $title = [
                 'username' => $user->username,
                 'country' => $user->country == 'ID' ? 'Indonesia' : 'Malaysia',
@@ -103,7 +105,13 @@ class DefaultController extends BaseController
                 'last_date' => Yii::$app->formatter->asDate($last_date),
             ];
 
-            return \app\components\helpers\PdfExport::export($title, $model, $query, $preview, $redirect);
+            $export = \app\components\helpers\PdfExport::export($title, $model, $query, $preview);
+            if (is_array($export)) {
+                $this->setMessage('save', 'error', $export['message']);
+                return $this->redirect(Url::to('/logwork/default/report?id=' . $id));
+            }
+
+            return $export;
         }
 
         $model->username = $id;

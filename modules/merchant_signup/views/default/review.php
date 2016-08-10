@@ -166,7 +166,7 @@ $model_company->com_in_mall = true;
                             <div class="row">
                                 <div class="col-sm-12">
                                     <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Copy to Company', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary pull-right']) ?>
-                                    <button type="reset" class="pull-left btn" onclick="window.location = '<?= Yii::$app->urlManager->createUrl('business/index') ?>'"><i class="fa fa-times"></i> Cancel</button>
+                                    <button type="reset" class="pull-left btn" onclick="window.location = '<?= Yii::$app->urlManager->createUrl('merchant-signup') ?>'"><i class="fa fa-times"></i> Cancel</button>
                                 </div>
                             </div>
                         </div>

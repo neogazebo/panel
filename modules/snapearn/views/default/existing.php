@@ -7,10 +7,17 @@ use yii\helpers\Url;
 use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use app\models\Company;
+use yii\widgets\Pjax;
+
+
+Pjax::begin();
 
 $form = ActiveForm::begin([
     'id' => 'create-form',
-    'options' => ['class' => 'form-group'],
+    'options' => [
+        'class' => 'form-group',
+        'data-pjax' => true
+        ],
     'enableClientValidation'=>true,
     'enableAjaxValidation' => true,
     'fieldConfig' => [
@@ -21,10 +28,12 @@ $form = ActiveForm::begin([
 
 ?>
 <div class="modal-body">
-	<?= 
+	<?=
         Typeahead::widget([
             'name' => 'merchant',
-            'options' => ['placeholder' => 'Filter as you type ...','required' => 'required'],
+            'options' => ['placeholder' => 'Filter as you type ...'],
+            'useHandleBars' => false,
+            'scrollable' => true,
             'pluginOptions' => [
                 'highlight'=>true,
                 'minLength' => 3
@@ -55,6 +64,7 @@ $form = ActiveForm::begin([
 
 <?php ActiveForm::end(); ?>
 <?php
+    Pjax::end();
 $this->registerJs("
     $('.modal-title').text('Existing Merchant');
     function stopRKey(evt) {
@@ -63,6 +73,6 @@ $this->registerJs("
         if ((evt.keyCode == 13) && (node.type=='text'))  {return false;}
     }
 
-    document.onkeypress = stopRKey; 
+    document.onkeypress = stopRKey;
 ");
 ?>

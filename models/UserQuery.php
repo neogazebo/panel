@@ -54,4 +54,34 @@ class UserQuery extends \yii\db\ActiveQuery
         $this->andWhere('username LIKE "%'.$search.'%" ');
         return $this->all();
     }
+
+    public function findUser()
+    {
+        $search = $_GET['q'];
+        $this->select('id, username');
+        $this->andWhere('username LIKE "%'.$search.'%" ');
+        return $this->all();
+    }
+
+    public function getRoles()
+    {
+        $user = Yii::$app->user->getIdentity(); 
+        return $user->roles;
+    }
+
+    public function getRoleNames()
+    {
+        $role_names = [];
+        $roles = $this->getRoles();
+        
+        if($roles)
+        {
+            foreach ($roles as $role) 
+            {
+                array_push($role_names, $role->item_name);
+            }
+        }
+
+        return $role_names;
+    }
 }

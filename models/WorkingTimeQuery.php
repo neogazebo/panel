@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\helpers\DateRangeCarbon;
 /**
  * This is the ActiveQuery class for [[WorkingTime]].
  *
@@ -60,14 +61,22 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             COUNT(IF(wrk_type = 2, wrk_id, null)) / COUNT(wrk_id) AS rejected_rate
         ");
         $this->where('wrk_end IS NOT NULL');
-        if (!empty($_POST['wrk_by'])) {
+        if (!empty($_GET['wrk_by'])) {
             $this->andWhere('wrk_by = :id', [
-                ':id' => $_POST['wrk_by']
+                ':id' => $_GET['wrk_by']
             ]);
         }
-        if (!empty($_POST['wrk_daterange'])) {
-            $range = explode(" to ", $_POST['wrk_daterange']);
-            $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
+        if (!empty($_GET['wrk_daterange'])) {
+            $range = explode(" to ", $_GET['wrk_daterange']);
+            $first_date = $range[0] . ' 00:00:00';
+            $last_date = $range[1] . ' 23:59:59';
+            $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
+        } else {
+            $dt = new DateRangeCarbon();
+            $range = explode(" to ", $dt->getThisMonth());
+            $first_date = $range[0];
+            $last_date = $range[1];
+            $this->andWhere("DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
         }
 
         $this->andWhere('wrk_time IS NOT NULL');
@@ -81,14 +90,37 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             ':user' => $id
         ]);
 
-        if (!empty($_POST['wrk_daterange'])) {
-            $range = explode(" to ", $_POST['wrk_daterange']);
-            $this->andWhere("date(FROM_UNIXTIME(wrk_updated)) BETWEEN '$range[0]' AND '$range[1]'");
+        if (!empty($_GET['wrk_daterange'])) {
+            $range = explode(" to ", $_GET['wrk_daterange']);
+            $first_date = $range[0] . ' 00:00:00';
+            $last_date = $range[1] . ' 23:59:59';
+            $this->andWhere("date(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
         }
 
         $this->andWhere('wrk_time IS NOT NULL');
         $this->orderBy('wrk_id DESC');
         return $this;
+    }
+
+    public function totalDetail($id)
+    {
+        $this->select("
+            count(wrk_id) AS total_reviewed,
+            SUM(wrk_time) AS total_record,
+            SUM(wrk_point) AS total_point,
+            SUM(wrk_type = 1) AS total_approved,
+            SUM(wrk_type = 2) AS total_rejected");
+        $this->where('wrk_by = :user AND wrk_end IS NOT NULL', [
+            ':user' => $id
+        ]);
+        if (!empty($_GET['wrk_daterange'])) {
+            $range = explode(" to ", $_GET['wrk_daterange']);
+            $first_date = $range[0] . ' 00:00:00';
+            $last_date = $range[1] . ' 23:59:59';
+            $this->andWhere("date(FROM_UNIXTIME(wrk_updated)) BETWEEN '$first_date' AND '$last_date'");
+        }
+        $this->andWhere('wrk_time IS NOT NULL');
+        return $this->one();
     }
 
     public function getReport($id, $date)
@@ -98,9 +130,9 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         $last_date = $date[1] . ' 23:59:59';
 
         $this->where('
-            wrk_by = :user 
-            AND wrk_end IS NOT NULL 
-            AND DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN :first_date AND :last_date 
+            wrk_by = :user
+            AND wrk_end IS NOT NULL
+            AND DATE(FROM_UNIXTIME(wrk_updated)) BETWEEN :first_date AND :last_date
             AND wrk_time IS NOT NULL
         ', [
             ':user' => $id,

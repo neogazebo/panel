@@ -37,9 +37,9 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionIndex() 
+    public function actionIndex()
     {
-        return $this->redirect(Yii::$app->urlManager->createUrl(['epay/index/']));
+        return $this->redirect(Yii::$app->urlManager->createUrl(['dashboard']));
     }
 
     public function actions()
@@ -68,10 +68,11 @@ class SiteController extends Controller
             $checkRoute = \app\components\filters\AccessFilters::checkRoute();
             if ($checkRoute == 'merchantSG') {
                 $defaultRoute = Yii::$app->urlManager->createUrl(['merchant-signup']);
-            }elseif($checkRoute == 'snapearn') {
+            // } elseif($checkRoute == 'snapearn') {
+            } else {
                 $defaultRoute = Yii::$app->urlManager->createUrl(['snapearn']);
-            }else {
-                $defaultRoute = Yii::$app->urlManager->createUrl(['epay/index']);
+            // } else {
+            //     $defaultRoute = Yii::$app->urlManager->createUrl(['dashboard']);
             }
 
             return $this->redirect($defaultRoute);

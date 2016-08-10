@@ -50,7 +50,7 @@ class TMail
 
     public function view()
     {
-        return Yii::$app->controller->renderPartial($this->template, ['content' => $this->body, 'params' => $this->params]);
+        return Yii::$app->controller->renderPartial($this->body, ['content' => $this->template, 'params' => $this->params]);
     }
 }
 
@@ -110,6 +110,10 @@ class TBackend extends TMail
             case 7:
                 $this->template = '//mail/template/snapearn/violates';
                 $this->subject = 'Receipt violates Manis T&Cs';
+                break;
+            case 8:
+                $this->template = '//mail/template/snapearn/uncompleted';
+                $this->subject = 'Receipt photo is incomplete';
                 break;
         }
         $this->body = Mail::BODY_SNAPEARN_REJECTED;

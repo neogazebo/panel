@@ -9,7 +9,7 @@ $config = [
     'id' => 'ebizu-bs',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'defaultRoute' => 'snapearn/default',
+    'defaultRoute' => 'snapearn',
     'modules' => [
         'snapearn' => [
             'class' => 'app\modules\snapearn\Snapearn',
@@ -38,6 +38,12 @@ $config = [
         'logwork' => [
             'class' => 'app\modules\logwork\Logwork',
         ],
+        'voucher' => [
+            'class' => 'app\modules\voucher\Voucher',
+        ],
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module',
+        ]
     ],
     'components' => [
         'request' => [
@@ -105,8 +111,8 @@ $config = [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'dd MMM yyyy',
-            'decimalSeparator' => ',',
-            'thousandSeparator' => ','
+            'thousandSeparator' => ',',
+            'decimalSeparator' => '.',
         ],
         'format' => [
             'class' => 'app\components\extensions\Formatter',

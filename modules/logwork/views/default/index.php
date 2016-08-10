@@ -22,13 +22,13 @@ $this->title = 'Working Hours';
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <form role="form" class="form-inline" method="post" action="/logwork">
+                    <form role="form" class="form-inline" method="get" action="/logwork">
                         <div class="pull-right">
                             <div class="form-group">
                             <label>Username</label>
                             <?= 
                                 Typeahead::widget([
-                                    'name' => 'merchant',
+                                    'name' => 'username',
                                     'options' => ['placeholder' => 'Find User'],
                                     'pluginOptions' => [
                                         'highlight' => true,
@@ -84,7 +84,7 @@ $this->title = 'Working Hours';
                                     <div class="input-group-addon" for="reservation">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="">
+                                    <input type="text" name="wrk_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ?>">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -151,7 +151,7 @@ $this->title = 'Working Hours';
                                     'template' => '<span class="pull-right actionColumn">{detail} </span>',
                                     'buttons' => [
                                         'detail' => function($url,$model) {
-                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model->wrk_by]);
+                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model->wrk_by,'wrk_daterange' => (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ]);
                                         },
                                     ]
                                 ]

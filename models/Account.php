@@ -55,10 +55,18 @@ class Account extends \yii\db\ActiveRecord
             [['acc_facebook_email', 'acc_screen_name'], 'string', 'max' => 50],
             [['acc_google_id', 'acc_google_email', 'acc_google_token'], 'string', 'max' => 1],
             [['acc_cty_id'], 'string', 'max' => 2],
+            [['acc_cty_id'], 'checkMandatory'],
             [['acc_photo'], 'string', 'max' => 35],
             [['acc_address'], 'string', 'max' => 200],
             [['acc_facebook_id'], 'unique'],
         ];
+    }
+
+    public function checkMandatory($data)
+    {
+        $model = Country::findOne($this->acc_cty_id);
+        if (empty($model) || empty($this->acc_cty_id))
+            $this->addError($data, Yii::t('app', 'Country has been required!'));
     }
 
     public function getCountry()
@@ -81,15 +89,15 @@ class Account extends \yii\db\ActiveRecord
     public function lastLocation()
     {
         $model = AccountDevice::find()->getLastLocatione($this->acc_id);
-        $location = (!empty($model->all())) ? $model->all() : '0';
+        $location = $model->all();
         return $location;
     }
 
     public function lastLogin()
     {
         $model = AccountDevice::find()->getLastLocatione($this->acc_id);
-        $location = (!empty($model->one())) ? $model->one() : '0';
-        return $location->adv_last_access;
+        $location = $model->one();
+        return $location;
     }
 
     public function lastSnapUpload()
@@ -129,5 +137,10 @@ class Account extends \yii\db\ActiveRecord
             'acc_address' => 'Address',
             'acc_gender' => 'Gender',
         ];
+    }
+
+    public static function find()
+    {
+        return new AccountQuery(get_called_class());
     }
 }

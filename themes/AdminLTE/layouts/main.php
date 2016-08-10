@@ -3,7 +3,9 @@
 use yii\helpers\Html;
 use yii\debug\Toolbar;
 use app\themes\AdminLTE\assets\AppAsset;
+use app\models\User;
 
+$roles = User::find()->getRoleNames();
 AppAsset::register($this);
 $this->beginPage();
 $this->registerCss("
@@ -84,8 +86,11 @@ $this->registerCss("
                                     <li class="user-header">
                                         <img src="<?= $this->theme->baseUrl ?>/dist/img/ebz_logo.png" class="img-circle" alt="User Image">
                                         <p>
-                                            <?= Yii::$app->user->identity->username ?>
-                                            <small>Admin User since <?= (isset(Yii::$app->user->identity)) ? Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) : '' ?></small>
+                                            <?= (!empty(Yii::$app->user)) ? Yii::$app->user->identity->username : '' ?>
+                                            <!--<small>Admin User since <?= (isset(Yii::$app->user->identity)) ? Yii::$app->formatter->asDate(Yii::$app->user->identity->create_time) : '' ?></small>-->
+                                            <?php foreach($roles as $role): ?>
+                                                <small>- <?php echo ucwords($role); ?></small>
+                                            <?php endforeach; ?>
                                         </p>
                                     </li>
                                     <!-- Menu Footer-->

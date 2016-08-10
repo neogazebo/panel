@@ -38,8 +38,10 @@ class DefaultController extends BaseController
     public function actionIndex()
     {
         $this->setRememberUrl();
-        if(Yii::$app->request->get('search')) {
+        if(Yii::$app->request->get('search')) 
+        {
             $search = Yii::$app->request->get('search');
+        
             $model = MerchantSignup::find()
                 ->where('
                     mer_bussines_name LIKE :search OR 
@@ -48,11 +50,17 @@ class DefaultController extends BaseController
                     mer_login_email LIKE :search OR 
                     mer_address LIKE :search OR 
                     mer_pic_name LIKE :search 
-                ', [':search' => '%' . $search . '%']);
-        } else
-    		$model = MerchantSignup::find();
+                ', [':search' => '%' . $search . '%']
+                )->orderBy(['id' => SORT_DESC]);
+        } 
+        else
+    	{
+            $model = MerchantSignup::find()->orderBy(['id' => SORT_DESC]);
+        }
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
+            'sort' => false,
             'pagination' => [
                 'pageSize' => $this->_pageSize,
             ],

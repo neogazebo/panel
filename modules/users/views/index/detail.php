@@ -47,7 +47,7 @@ $this->title = '"' . $title . '" Roles';
                         <div class="clearfix"></div>    
                     </div>
                     <div class="box-footer">
-                        <?= Html::a('<i class="fa fa-times"></i> Cancel', ['cancel'], ['class' => 'btn btn-warning']) ?>
+                        <?= Html::a('<i class="fa fa-arrow-left"></i> Back', ['cancel'], ['class' => 'btn btn-primary']) ?>
                         <?= Html::submitButton('<i class="fa fa-check"></i> Save', ['class' => 'btn btn-primary pull-right']) ?>
                     </div>
                 </form>
