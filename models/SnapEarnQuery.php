@@ -2,8 +2,11 @@
 
 namespace app\models;
 
+use Yii;
+
 use yii\db\Expression;
 use app\components\helpers\DateRangeCarbon;
+use app\components\helpers\Utc;
 
 /**
  * This is the ActiveQuery class for [[AccountDevice]].
@@ -33,7 +36,6 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     public function findCustome()
     {
         $dt = new DateRangeCarbon();
-        
         $this->leftJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
         if (!empty($_GET['sna_cty'])) {
             $sna_cty = $_GET['sna_cty'];
@@ -64,13 +66,19 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             }
             $this->andWhere('sna_status = :status', [':status' => $sna_status]);
         }
+        
         if (!empty($_GET['sna_daterange'])) {
             $sna_daterange = explode(' to ', ($_GET['sna_daterange']));
-            $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0] 00:00:00' AND '$sna_daterange[1] 23:59:59'");
+            $first = "(select sna_id from tbl_snapearn where sna_upload_date >= UNIX_TIMESTAMP('$sna_daterange[0] 00:00:00') limit 1)";
+            $second = "(select sna_id from tbl_snapearn where sna_upload_date <= UNIX_TIMESTAMP('$sna_daterange[1] 23:59:59') order by sna_id desc limit 1)";
+            $this->andWhere("sna_id BETWEEN $first AND $second");
         } else {
             $sna_daterange = explode(' to ', ($dt->getDay()));
-            $this->andWhere("FROM_UNIXTIME(sna_upload_date) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
+            $first = "(select sna_id from tbl_snapearn where sna_upload_date >= UNIX_TIMESTAMP('$sna_daterange[0]') limit 1)";
+            $second = "(select sna_id from tbl_snapearn where sna_upload_date <= UNIX_TIMESTAMP('$sna_daterange[1]') order by sna_id desc limit 1)";
+            $this->andWhere("sna_id BETWEEN $first AND $second");
         }
+        
         if (!empty($_GET['sna_join'])) {
             $sna_join = $_GET['sna_join'];
             $this->leftJoin('tbl_company', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
@@ -336,5 +344,114 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->andWhere("DATE(FROM_UNIXTIME(sna_upload_date)) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->groupBy(new Expression('yearweek(from_unixtime(sna_upload_date),3)'));
         return $this->asArray()->all();
+    }
+
+    public function getExcelColumns()
+    {
+        return  [
+            'A' => [
+                'name' => 'Merchant',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'merchant',
+                'have_relations' => true,
+                'relation_name' => 'com_name'
+            ], 
+            'B' => [
+                'name' => 'Member',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'member',
+                'have_relations' => true,
+                'relation_name' => 'acc_screen_name'
+            ], 
+            'C' => [
+                'name' => 'Ops Receipt Number',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_ops_receipt_number',
+            ], 
+            'D' => [
+                'name' => 'Receipt Date',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_receipt_date',
+            ],
+            'E' => [
+                'name' => 'Receipt Amount',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_receipt_amount',
+            ],
+            'F' => [
+                'name' => 'Point',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_point',
+            ],
+            'G' => [
+                'name' => 'Upload Date',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_upload_date',
+                'format' => function($data) {
+                    return Yii::$app->formatter->asDateTime(Utc::convert($data));
+                }
+            ],
+            'H' => [
+                'name' => 'Review Date',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_review_date',
+                'format' => function($data) {
+                    return Yii::$app->formatter->asDateTime(Utc::convert($data));
+                }
+            ],
+            'I' => [
+                'name' => 'Operator',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'review',
+                'have_relations' => true,
+                'relation_name' => 'username'
+            ],
+            'J' => [
+                'name' => 'Status',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_status',
+                'format' => function($data) {
+                    if ($data == 1) 
+                    {
+                        return "Approved";
+                    } 
+                    elseif ($data == 2) 
+                    {
+                        return "Rejected";
+                    } 
+                    else 
+                    {
+                        return "New";
+                    }
+                }
+            ],
+            'K' => [
+                'name' => 'Description',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'remark',
+                'have_relations' => true,
+                'relation_name' => 'sem_remark'
+            ]
+        ];
+    }
+
+    public function getExcelColumnsStyles()
+    {
+        return [
+            'font' => [
+                 'bold'  => true,
+            ]
+        ];
     }
 }

@@ -217,6 +217,22 @@ class DefaultController extends BaseController
             'model' => $model
         ]);
     }
+    
+    
+    public function actionBlockUser()
+    {
+        if (Yii::$app->request->isAjax){
+            $id = Yii::$app->request->get('id');
+            $model = $this->findModel($id);
+            $model->acc_status = ($model->acc_status == 0) ? 1 : 0;
+            if ($model->save(false)) {
+                // CLEAR CACHE WEBHOOK USER
+                $curl = new curl\Curl();
+                $curl->get(Yii::$app->params['WEBHOOK_BLOCK_USER'].'?data={"id":' . intval($id) . '}');
+                return $this->redirect(['default/view?id='.$id]);
+            }
+        }
+    }
 
     /**
     *
@@ -269,56 +285,6 @@ class DefaultController extends BaseController
             }
             echo \yii\helpers\Json::encode($out);
         }
-    }
-
-    /**
-     * Creates a new Account model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Account();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->acc_id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Account model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->acc_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Account model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
     
     public function actionChangeCountry($param) 
@@ -379,5 +345,25 @@ class DefaultController extends BaseController
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         return $return_json;
+    }
+
+    public function actionExport()
+    {
+        $this->processOutputType();
+        $this->processOutputSize();
+
+        $model = Account::find()->all();
+
+        $this->data_provider = $model;
+
+        $columns = Account::find()->getExcelColumns();
+        $column_styles = Account::find()->getExcelColumnsStyles();
+
+        $filename = 'Members-' . date('Y-m-d-H-i-s', time()) . '.xlsx';
+
+        $view_filename = 'index';
+        $save_path = 'members';
+
+        return $this->processOutput($view_filename, $columns, $column_styles, $save_path, $filename);
     }
 }

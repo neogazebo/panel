@@ -25,13 +25,14 @@ class PdfExport
                 ];
                 return $result;
             }
-            $query = $query->all();
+            $query = $query->asArray()->all();
         }
 
         $username = $title['username'];
         $country = $title['country'];
         $first_date = $title['first_date'];
         $last_date = $title['last_date'];
+        $brand = $title['brand'];
 
         $content = Yii::$app->controller->renderPartial($preview, [
             'username' => $username,
@@ -56,93 +57,90 @@ class PdfExport
             'content' => $content,
             // format content from your own css file if needed or use the
             // enhanced bootstrap css built by Krajee for mPDF formatting
-            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+//            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            'cssFile' => '@web/themes/AdminLTE/dist/css/AdminLTE.css',
             // any css to be embedded if required
-            'cssInline' => '
+            'cssInline' => "
                 body {
-                    margin: 0;
-                    padding: 0;
-                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                    font-size: 12px;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+                    font-weight: 400;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                }
+                html, body {
+                    min-height: 100%;
+                }
+                body {
+                    font-family: 'Helvetica Neue';
+                    font-size: 9pt;
                     line-height: 1.42857143;
                     color: #333;
-                    background-color: #fff
+                    background-color: #fff;
                 }
-                h3 {
-                    font-size: 20px;
-                    font-weight: 500;
-                    line-height: 1.1;
-                    color: inherit
+                page-header {
+                    margin: 10px 0 20px 0;
+                    font-size: 22px;
                 }
                 table {
-                    background-color: transparent;
-                    border-spacing: 0;
                     border-collapse: collapse;
-                }
-                th {
-                    text-align: left
-                }
-                .panel {
-                    margin-bottom: 20px;
-                    background-color: #fff;
-                    border: 1px solid transparent;
-                    border-radius: 4px;
-                    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-                    box-shadow: 0 1px 1px rgba(0, 0, 0, .05)
-                }
-                .panel-default {
-                    border-color: #ddd
-                }
-                .panel-default > .panel-heading {
-                    color: #333;
-                    background-color: #f5f5f5;
-                    border-color: #ddd;
-                }
-                .panel-heading {
-                    padding: 10px 15px;
-                    border-bottom: 1px solid transparent;
-                    border-top-left-radius: 3px;
-                    border-top-right-radius: 3px
-                }
-                .panel > .table-responsive {
-                    margin-bottom: 0;
-                    border: 0
-                }
-                .panel-body {
-                    padding: 15px
-                }
-                .table-responsive {
-                    min-height: .01%;
-                    overflow-x: auto
-                }
-                .panel > .table-responsive:last-child > .table:last-child, .panel > .table:last-child {
-                    border-bottom-right-radius: 3px;
-                    border-bottom-left-radius: 3px;
-                }
-                .panel > .panel-collapse > .table, .panel > .table, .panel > .table-responsive > .table {
-                    margin-bottom: 0
-                }
-                .table {
                     width: 100%;
-                    max-width: 100%;
-                    margin-bottom: 20px
                 }
-                .table > thead > tr > th {
-                    vertical-align: bottom;
-                    border-bottom: 2px solid #ddd
+
+                th, td {
+                    text-align: left;
+                    padding: 8px;
                 }
-                .table-condensed > tbody > tr > td, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > td, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > thead > tr > th {
-                    padding: 5px
+
+                tr:nth-child(even){background-color: #f2f2f2}
+
+                th {
+                    background-color: #00c0ef;
+                    color: white;
+                    font-weight : normal;
                 }
-                .table-striped > tbody > tr:nth-of-type(odd) {
-                    background-color: #f9f9f9
+                
+                tfoot > tr {
+                    background-color: #777;
+                    color: white;
+                    font-weight : normal;
                 }
-            ',
+                
+                .no-shadow {
+                    box-shadow: none !important;
+                }
+                .well-sm {
+                    padding: 9px;
+                    border-radius: 3px;
+                }
+                .well {
+                    min-height: 20px;
+                    padding: 19px;
+                    margin-bottom: 20px;
+                    background-color: #f5f5f5;
+                    border: 1px solid #e3e3e3;
+                    border-radius: 4px;
+                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+                    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+                }
+                .text-muted {
+                    color: #777;
+                }
+                p {
+                    margin: 0 0 10px;
+                }
+                .col-sm-4 {
+                    width: 44,33333%;
+                }
+            ",
              // set mPDF properties on the fly
             // 'options' => ['title' => $title],
              // call mPDF methods on the fly
             'methods' => [
-                // 'SetHeader' => [$title],
+                'SetHeader' => [
+                    $brand.'|| '.$username.'/Report/{DATE Y/m/j/H:m:s}'
+                ],
                 'SetFooter' => ['{PAGENO}'],
             ]
         ]);

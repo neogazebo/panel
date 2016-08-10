@@ -7,6 +7,8 @@ use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Modal;
+use kartik\widgets\Select2; // or kartik\select2\Select2
+use yii\web\JsExpression;
 
 $this->title = "New Merchant";
 

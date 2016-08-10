@@ -66,3 +66,6 @@ web/index.php
 curut.txt
 
 .ebextensions/03-composer.config
+=======
+# excel report
+web/excel_report/*

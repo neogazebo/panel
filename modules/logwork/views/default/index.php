@@ -22,62 +22,68 @@ $this->title = 'Working Hours';
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
+                    <div class="pull-left form-inline">
+                        <div class="form-group">
+                            <label>Configuration</label><br>
+                            <?= Html::a('<i class="fa fa-wrench"></i> &nbsp; Working Hour Point', ['/logwork/point'], ['class' => 'btn btn-flat btn-danger']) ?>
+                        </div>
+                    </div>
                     <form role="form" class="form-inline" method="get" action="/logwork">
                         <div class="pull-right">
                             <div class="form-group">
-                            <label>Username</label>
-                            <?= 
-                                Typeahead::widget([
-                                    'name' => 'username',
-                                    'options' => ['placeholder' => 'Find User'],
-                                    'pluginOptions' => [
-                                        'highlight' => true,
-                                        'minLength' => 3
-                                    ],
-                                    'pluginEvents' => [
-                                        "typeahead:select" => "function(ev, suggestion) { $('#wrk_by').val(suggestion.id); }",
-                                    ],
-                                    'dataset' => [
-                                        [
-                                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                                            'display' => 'value',
-                                            'remote' => [
-                                                'url' => Url::to(['user-list']) . '?q=%QUERY',
-                                                'wildcard' => '%QUERY'
-                                            ],
-                                            'limit' => 20
+                                <label>Snap &amp; Earn Group</label>
+                                <?= 
+                                    Typeahead::widget([
+                                        'name' => 'sna_group',
+                                        'options' => ['placeholder' => 'Find Group'],
+                                        'pluginOptions' => [
+                                            'highlight' => true,
+                                            'minLength' => 2
+                                        ],
+                                        'pluginEvents' => [
+                                            "typeahead:select" => "function(ev, suggestion) { $('#group').val(suggestion.id); }",
+                                        ],
+                                        'dataset' => [
+                                            [
+                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                                'display' => 'value',
+                                                'remote' => [
+                                                    'url' => Url::to('/snapearn/group/list') . '?q=%QUERY',
+                                                    'wildcard' => '%QUERY'
+                                                ],
+                                                'limit' => 20
+                                            ]
                                         ]
-                                    ]
-                                ]);
-                            ?>
+                                    ]);
+                                ?>
                             </div>
-                            <!-- <div class="form-group">
-                            <label>Devision</label> -->
-                            <?php 
-                                // Typeahead::widget([
-                                //     'name' => 'merchant',
-                                //     'options' => ['placeholder' => 'Devision'],
-                                //     'pluginOptions' => [
-                                //         'highlight'=>true,
-                                //         'minLength' => 3
-                                //     ],
-                                //     'pluginEvents' => [
-                                //         "typeahead:select" => "function(ev, suggestion) { $('#wrk_param_id').val(suggestion.id); }",
-                                //     ],
-                                //     'dataset' => [
-                                //         [
-                                //             'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                                //             'display' => 'value',
-                                //             'remote' => [
-                                //                 'url' => Url::to(['devision']) . '?q=%QUERY',
-                                //                 'wildcard' => '%QUERY'
-                                //             ],
-                                //             'limit' => 20
-                                //         ]
-                                //     ]
-                                // ]);
-                            ?>
-                            <!-- </div> -->
+                            <div class="form-group">
+                                <label>Username</label>
+                                <?= 
+                                    Typeahead::widget([
+                                        'name' => 'username',
+                                        'options' => ['placeholder' => 'Find User'],
+                                        'pluginOptions' => [
+                                            'highlight' => true,
+                                            'minLength' => 3
+                                        ],
+                                        'pluginEvents' => [
+                                            "typeahead:select" => "function(ev, suggestion) { $('#wrk_by').val(suggestion.id); }",
+                                        ],
+                                        'dataset' => [
+                                            [
+                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                                'display' => 'value',
+                                                'remote' => [
+                                                    'url' => Url::to(['user-list']) . '?q=%QUERY',
+                                                    'wildcard' => '%QUERY'
+                                                ],
+                                                'limit' => 20
+                                            ]
+                                        ]
+                                    ]);
+                                ?>
+                            </div>
                             <div class="form-group">
                                 <label>Date range</label><br>
                                 <div class="input-group">
@@ -88,6 +94,7 @@ $this->title = 'Working Hours';
                                 </div>
                             </div>
                             <div class="form-group">
+                                <input type="hidden" name="group" id="group">
                                 <input type="hidden" name="wrk_by" id="wrk_by">
                                 <input type="hidden" name="wrk_param_id" id="wrk_param_id">
                                 <label>&nbsp;</label><br>
@@ -99,7 +106,7 @@ $this->title = 'Working Hours';
                 <div class="box-body">
                     <div class="table-responsive">
                         <?= GridView::widget([
-                            'layout' => '{items} {summary} {pager}',
+                            'layout' => '{summary} {items} {pager}',
                             'dataProvider' => $dataProvider,
                             'columns' => [
                                 ['class' => 'yii\grid\SerialColumn'],
@@ -114,21 +121,21 @@ $this->title = 'Working Hours';
                                     'label' => 'Total Point',
                                     'attribute' => 'wrk_point',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_point);
+                                        return Yii::$app->formatter->asDecimal($data->total_point, 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Approved',
                                     'attribute' => 'wrk_type',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_approved);
+                                        return Yii::$app->formatter->asDecimal($data->total_approved, 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Rejected',
                                     'attribute' => 'wrk_type',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_rejected);
+                                        return Yii::$app->formatter->asDecimal($data->total_rejected, 0);
                                     }
                                 ],
                                 [

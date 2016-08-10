@@ -2,10 +2,14 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=db.ebizu.com;dbname=ebdb',
-    'username' => 'admin',
-    'password' => 'EB!zu-43bizu*@',
-    'charset' => 'utf8',
+    'masterConfig' => [
+        'username' => 'admin',
+        'password' => 'EB!zu-43bizu*@',
+        'charset' => 'utf8',
+    ],
+    'masters' => [
+        ['dsn' => 'mysql:host=db.ebizu.com;dbname=ebdb'],
+    ],
     'slaveConfig' => [
 		'username' => 'admin',
 		'password' => 'EB!zu-43bizu*@',

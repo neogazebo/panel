@@ -20,7 +20,7 @@ $this->title = 'Redemption Reference';
                             'options' => [
                                 'style' => 'font-size: 13px'
                             ],
-                            'layout' => '{items} {summary} {pager}',
+                            'layout' => '{summary} {items} {pager}',
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'pjax' => true,

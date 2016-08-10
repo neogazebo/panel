@@ -1,11 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\bootstrap\Modal;
 use app\components\helpers\Utc;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
 use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
@@ -138,8 +137,14 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                             <?php endif; ?>  
                             <div class="form-group">
                                 <label>&nbsp;</label><br>
-                                <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                                <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                             </div>
+                            <?php if ($visible) : ?>
+                            <div class="form-group">
+                                <label>Export</label><br>
+                                <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                            </div>
+                            <?php endif; ?>  
                         </div>
                     </div>
                     </form>
@@ -148,13 +153,8 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                     <div class="table-responsive">
                         <?= 
                         GridView::widget([
-                            'id' => 'list_snapearn',
-                            'layout' => '{items} {summary} {pager}',
                             'dataProvider' => $dataProvider,
-                            // 'pjax' => true,
-                            // 'pjaxSettings' => [
-                            //     'neverTimeout' => true,
-                            // ],
+                            'layout' => '{summary} {items} {pager}',
                             'columns' => [
                                 [
                                     'label' => 'Merchant',
@@ -176,7 +176,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                     }
                                 ],
                                 'sna_ops_receipt_number',
-                                'sna_receipt_date',
+//                                'sna_receipt_date',
                                 [
                                     'attribute' => 'sna_receipt_amount',
                                     'format' => ['decimal',2],
@@ -195,7 +195,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                     'attribute' => 'sna_upload_date',
                                     'format' => ['date', 'php:d-m-Y H:i:s'],
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_upload_date));
+                                        return Yii::$app->formatter->asDateTime(\app\components\helpers\Utc::convert($data->sna_upload_date));
                                     }
                                 ],
                                 [

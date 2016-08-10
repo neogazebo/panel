@@ -28,6 +28,11 @@ class WorkingTime extends \yii\db\ActiveRecord
     const POINT_ADD_NEW_MERCHANT = 3;
     const CORRECTION_TYPE = 2;
     const UPDATE_TYPE = 1;
+    const ADD_MERCHANT_TYPE = 3;
+    
+    const APP_TYPE = 100;
+    const ADD_NEW_TYPE = 80;
+    const ADD_EXISTING_TYPE = 90;
 
     public $total_reviewed;
     public $total_record;
@@ -35,6 +40,8 @@ class WorkingTime extends \yii\db\ActiveRecord
     public $total_rejected;
     public $total_approved;
     public $rejected_rate;
+    public $total_addnew;
+    public $total_addexisting;
 
     /**
      * @inheritdoc
@@ -58,8 +65,8 @@ class WorkingTime extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['wrk_type'], 'required'],
-            [['wrk_type', 'wrk_by', 'wrk_param_id', 'wrk_start', 'wrk_end', 'wrk_time', 'wrk_created', 'wrk_updated','wrk_point_type','wrk_rjct_number'], 'integer'],
+            [['wrk_type','wrk_start', 'wrk_end', 'wrk_time'], 'required'],
+            [['wrk_type', 'wrk_by', 'wrk_param_id', 'wrk_created', 'wrk_updated','wrk_point_type','wrk_rjct_number'], 'integer'],
             [['wrk_description'], 'string', 'max' => 250],
         ];
     }
@@ -90,7 +97,7 @@ class WorkingTime extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['wrk_created'],
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['wrk_created','wrk_updated'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['wrk_updated'],
                 ],
             ],
@@ -104,8 +111,7 @@ class WorkingTime extends \yii\db\ActiveRecord
 
     public function getReason()
     {
-        return $this->hasOne(SnapEarnRemark::ClassName(),['sem_id' => 'wrk_rjct_number']);
-
+        return $this->hasOne(SnapearnPoint::ClassName(),['spo_id' => 'wrk_rjct_number']);
     }
 
     public function getTime($userId)

@@ -3,21 +3,26 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "tbl_snapearn_point".
  *
- * @property integer $snp_id
- * @property string $snp_name
- * @property integer $snp_point
- * @property integer $snp_created_by
- * @property integer $snp_created_date
- * @property integer $snp_updated_by
- * @property integer $snp_updated_date
- * @property integer $snp_status
+ * @property integer $spo_id
+ * @property string $spo_name
+ * @property integer $spo_point
+ * @property integer $spo_created_by
+ * @property integer $spo_created_date
+ * @property integer $spo_updated_by
+ * @property integer $spo_updated_date
  */
 class SnapearnPoint extends \yii\db\ActiveRecord
 {
+    public $activity;
+    public $total_point;
+    public $total_time;
+//    public $total_
     /**
      * @inheritdoc
      */
@@ -27,14 +32,43 @@ class SnapearnPoint extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb()
+    {
+        return Yii::$app->get('db2');
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['spo_created_date', 'spo_updated_date'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['spo_updated_date'],
+                ],
+                // if you're using datetime instead of UNIX timestamp:
+                'value' => new \yii\db\Expression('NOW()'),
+            ],
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['snp_point', 'snp_created_by', 'snp_created_date', 'snp_updated_by', 'snp_updated_date', 'snp_status'], 'integer'],
-            [['snp_name'], 'string', 'max' => 64],
+            [['spo_point', 'spo_created_by', 'spo_created_date', 'spo_updated_by', 'spo_updated_date'], 'integer'],
+            [['spo_name', 'spo_point'], 'required'],
+            [['spo_name'], 'string', 'max' => 255],
         ];
+    }
+
+    public function getUserCreated()
+    {
+        return $this->hasOne(User::className(), ['id' => 'spo_created_by']);
     }
 
     /**
@@ -43,21 +77,16 @@ class SnapearnPoint extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'snp_id' => 'Snp ID',
-            'snp_name' => 'Snp Name',
-            'snp_point' => 'Snp Point',
-            'snp_created_by' => 'Snp Created By',
-            'snp_created_date' => 'Snp Created Date',
-            'snp_updated_by' => 'Snp Updated By',
-            'snp_updated_date' => 'Snp Updated Date',
-            'snp_status' => 'Snp Status',
+            'spo_id' => 'ID',
+            'spo_name' => 'Name',
+            'spo_point' => 'Point',
+            'spo_created_by' => 'Created By',
+            'spo_created_date' => 'Created Date',
+            'spo_updated_by' => 'Updated By',
+            'spo_updated_date' => 'Updated Date',
         ];
     }
-
-    /**
-     * @inheritdoc
-     * @return SnapearnPointQuery the active query used by this AR class.
-     */
+    
     public static function find()
     {
         return new SnapearnPointQuery(get_called_class());

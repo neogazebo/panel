@@ -74,13 +74,3 @@ $dataProvider->sort->attributes['member.mem_screen_name'] = [
         </div>
     </div>
 </section>
-
-<?php
-$this->registerJs("
-    $('#filtersearch').on('keypress', function(ev) {
-        if(ev.which == 13) {
-            window.location = baseUrl + 'mobile/log/index/?search=' + encodeURIComponent($(this).val());
-        }
-    });
-", yii\web\View::POS_END, 'mobile-pulsa-log');
-?>

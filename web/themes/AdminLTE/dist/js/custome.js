@@ -256,3 +256,37 @@ $("#filter_chart").change(function(){
 	var selector = $(this).val();
 	startChart(selector);
 });
+
+function confirmBlocked(){
+    $(".confirmBlocked").on('click',function(){
+        var user = $('.profile-username').text();
+        var urlVal = $(this).val();
+        var text = $(this).text();
+        var param = $(this).data('key');
+        swal({
+            title: "Are you sure?",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+        },
+        function(){
+            blocked(user,urlVal,text,param);
+        });
+    });
+}
+confirmBlocked();
+function blocked(user,urlVal,text,param){
+    $.get(urlVal,{param : param}).done(function(results){
+        var data = jQuery.parseJSON(results);
+        var str = data.action;
+        str = str.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+            return letter.toUpperCase();
+        });
+        if (data.status = 'success') {
+            swal("Changed!", user+" status changed", "success");
+        } else {
+            swal("Changed!", "Process Error", "error");
+        }
+    });
+}

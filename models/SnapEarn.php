@@ -287,4 +287,9 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         return new SnapEarnQuery(get_called_class());
     }
+
+    public static function getDashboardModel()
+    {
+        return new SnapEarnDashboardQuery(get_called_class());
+    }
 }

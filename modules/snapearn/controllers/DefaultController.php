@@ -31,6 +31,7 @@ use app\models\ModuleInstalled;
 use app\models\SystemMessage;
 use app\models\WorkingTime;
 use app\models\User;
+use app\models\SnapearnPoint;
 use yii\web\HttpException;
 use yii\web\ForbiddenHttpException;
 
@@ -46,19 +47,31 @@ class DefaultController extends BaseController
 
     public function actionIndex()
     {
-        $this->setRememberUrl();
+        Url::remember();
+        $this->processOutputType();
+        $this->processOutputSize();
         $model = SnapEarn::find()->findCustome();
-        $dataProvider = new ActiveDataProvider([
+        
+        $this->data_provider = new ActiveDataProvider([
             'query' => $model,
             'sort' => false,
             'pagination' => [
-                'pageSize' => 20
+                'pageSize' => $this->page_size
             ]
         ]);
 
-        return $this->render('index', [
-        	'dataProvider' => $dataProvider
-    	]);
+        //var_dump($this->data_provider->getModels());
+        //die;
+
+        $columns = SnapEarn::find()->getExcelColumns();
+        $column_styles = SnapEarn::find()->getExcelColumnsStyles();
+
+        $filename = 'SNE-' . date('Y-m-d H:i:s', time()) . '.xlsx';
+
+        $view_filename = 'index';
+        $save_path = 'sne';
+
+        return $this->processOutput($view_filename, $columns, $column_styles, $save_path, $filename);
     }
 
     public function actionNewMerchant($id, $to = null)
@@ -166,10 +179,23 @@ class DefaultController extends BaseController
                             $this->assignEmail($com_id, $company);
 
                             // Additional point to working time
-                            $param = $id;
-                            $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
-                            $this->addWorkPoint($param, $point);
-
+//                            $param = $id;
+//                            $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
+//                            $this->addWorkPoint($param, $point);
+                            $wrk_ses = $this->getSession('wrk_ses_'.$id);
+                            if (!empty($wrk_ses)) {
+                                $ses = [];
+                                $type = WorkingTime::ADD_NEW_TYPE;
+                                $ses['wrk_end'] = $this->workingTime($id);
+                                $ses['wrk_description'] = $this->getPoint($type)->spo_name;
+                                $ses['wrk_type'] = WorkingTime::ADD_MERCHANT_TYPE;
+                                $ses['wrk_rjct_number'] = $type;
+                                $ses['wrk_point'] = $this->getPoint($type)->spo_point;
+                                $wrk_new_merchant = array_merge($wrk_ses,$ses);
+                                $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
+                                $this->saveWorking($id);
+                            }
+                            
                             $transaction->commit();
                             $this->setMessage('save', 'success', 'Your company has been registered!');
                             return $this->render('success');
@@ -211,6 +237,20 @@ class DefaultController extends BaseController
             $cat_id = $this->getCategoryId($company->com_subcategory_id);
             $model->sna_cat_id = $cat_id;
             $model->sna_com_name = $company->com_name;
+            
+            $wrk_ses = $this->getSession('wrk_ses_'.$id);
+            if (!empty($wrk_ses)) {
+                $type = WorkingTime::ADD_EXISTING_TYPE;
+                $ses['wrk_end'] = $this->workingTime($id);
+                $ses['wrk_description'] = $this->getPoint($type)->spo_name;
+                $ses['wrk_type'] = WorkingTime::ADD_MERCHANT_TYPE;
+                $ses['wrk_rjct_number'] = $type;
+                $ses['wrk_point'] = $this->getPoint($type)->spo_point;
+                $wrk_new_merchant = array_merge($wrk_ses,$ses);
+                $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
+                $this->saveWorking($id);
+            }
+            
             if ($to == 'correction') {
                 $params = [
                     'sna_com_id' => $model->sna_com_id,
@@ -248,6 +288,7 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
+        $this->checkSession($id);
         $model = $this->findModel($id);
         if (empty($model->member)) {
             $this->setMessage('save', 'error', "Manis user is not set!, Please contact your web administrator this snap number <strong>' $id '</strong>");
@@ -257,30 +298,33 @@ class DefaultController extends BaseController
             return $this->redirect(Url::to($this->getRememberUrl()));
         }
 
-        // working time start
-        $user = Yii::$app->user->id;
-        $param = $id;
-        $point = WorkingTime::POINT_APPROVAL;
-        $point_type = WorkingTime::UPDATE_TYPE;
-        $wrk_id = $this->startWorking($user, $param, $point_type, $point);
+        // working time start session
+        $wrk_ses = [
+            'wrk_by' => Yii::$app->user->id,
+            'wrk_param_id' => $id,
+            'wrk_point_type' => WorkingTime::UPDATE_TYPE,
+            'wrk_start' => $this->workingTime()
+        ];
+        $this->setSession('wrk_ses_'.$id, $wrk_ses);
+        
         return $this->redirect(['update', 'id'=> $id]);
     }
 
     public function actionUpdate($id)
     {
     	$model = $this->findModel($id);
-        $point_type = WorkingTime::UPDATE_TYPE;
-        $check_wrk = $this->checkingWrk($id,$point_type);
-        if (empty($check_wrk)) {
+        
+        $get_sesssion = $this->getSession('wrk_ses_'.$id);
+        if ($get_sesssion == '') {
             return $this->redirect(['to-update','id'=> $id]);
         }
         // validation has reviewed
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status != 0 && $superuser != 1) {
-            $this->cancelWorking($id);
+            $this->checkSession($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         } elseif ($model->sna_status != 0 && $superuser = 1) {
-            $this->cancelWorking($id);
+            $this->checkSession($id);
             return $this->redirect(['correction/to-correction?id='.$id]);
         }
 
@@ -347,7 +391,7 @@ class DefaultController extends BaseController
                     $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                     $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
                     if ($point_history !== NULL) {
-                        $current_point = $point_history->lph_total_point;
+                        $current_point = $point_history['lph_total_point'];
                     } else {
                         $current_point = 0;
                     }
@@ -460,7 +504,6 @@ class DefaultController extends BaseController
                             $customData = ['type' => 'snapearn'];
                             Activity::insertAct($model->sna_acc_id, 30, $params, $customData);
                         }
-
                         // create snapearn point detail
                         $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
                         $snap_type = 'rejected';
@@ -474,13 +517,23 @@ class DefaultController extends BaseController
                     $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
 
                     // end working time
-                    $wrk = WorkingTime::find()->findWorkExist($model->sna_id)->one();
-                    $desc = "Snapearn $snap_type";
-                    $type = $model->sna_status;
-                    $sem_id = $model->sna_sem_id;
-                    $this->endWorking($wrk->wrk_id, $type, $desc, $sem_id);
-
+                    $last_working_ses = $this->getSession('wrk_ses_'.$id);
+                    if (!empty($last_working_ses)) {
+                        $ses = [];
+                        $type = ($model->sna_sem_id != '') ? $model->sna_sem_id : WorkingTime::APP_TYPE;
+                        $ses['wrk_end'] = $this->workingTime($id);
+                        $ses['wrk_description'] = $this->getPoint($type)->spo_name;
+                        $ses['wrk_type'] = $model->sna_status;
+                        $ses['wrk_rjct_number'] = $type;
+                        $ses['wrk_point'] = $this->getPoint($type)->spo_point;
+                        $last_ses = array_merge($last_working_ses,$ses);
+                        $this->setSession('wrk_ses_'.$id, $last_ses);
+                        $this->saveWorking($id);
+                    }
+                    
+                    $this->checkSession($id);
                     $transaction->commit();
+                    
                 } else {
                     $transaction->rollBack();
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
@@ -494,15 +547,15 @@ class DefaultController extends BaseController
                 if (!empty($nextUrl))
                     return $this->redirect(['default/to-update?id=' . $nextUrl->sna_id]);
             }
-            if (!empty($this->getRememberUrl())) {
-                return $this->redirect(Url::to($this->getRememberUrl()));
+            if (!empty(Url::remember())) {
+                return $this->redirect(Url::previous());
             } else {
                 return $this->redirect(['/snapearn']);
             }
         } else {
             $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
         }
-
+                                
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
 
@@ -564,12 +617,12 @@ class DefaultController extends BaseController
 
     public function actionCancel($id)
     {
-        $this->cancelWorking($id);
-        if (!empty($this->getRememberUrl())) {
-            return $this->redirect(Url::to($this->getRememberUrl()));
-        } else {
-            return $this->redirect(['/snapearn']);
-        }
+        $this->checkSession($id);
+    }
+    
+    protected function checkSession($id)
+    {
+        $this->removeSession('wrk_ses_'.$id);
     }
 
     protected function findModel($id)
@@ -735,6 +788,12 @@ class DefaultController extends BaseController
             }
             echo \yii\helpers\Json::encode($out);
         }
+    }
+    
+    protected function getPoint($id)
+    {
+        $model = SnapearnPoint::findOne($id);
+        return $model;
     }
 
     protected function getCategoryId($id)
