@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\Query;
 
 /**
@@ -46,12 +47,33 @@ class LoyaltyPointHistoryQuery extends \yii\db\ActiveQuery
     
     public function getCurrentPoint($id)
     {
-        $this->andWhere('lph_acc_id = :acc_id',[
-            ':acc_id'=>$id
-        ]);
-        $this->orderBy('lph_id DESC');
-        $this->limit(1);
-        return $this->one();
+//        echo $id;exit;
+        $db2 = Yii::$app->db2;
+        $rows = $db2->useMaster(function($db) use ($id){
+            return $db->createCommand("SELECT lph_total_point FROM tbl_loyalty_point_history WHERE lph_acc_id=:id ORDER BY lph_id DESC limit 1")
+                    ->bindValue(':id',$id)
+                    ->queryOne();
+        });
+        return $rows;
+        
+//        $rest = Yii::$app->db2
+//                ->useMaster
+//                ->createCommand("SELECT lph_total_point FROM tbl_loyalty_point_history WHERE lph_acc_id = :id ORDER BY lph_id DESC LIMIT 1")
+//                ->queryOne();
+//        return $rest;
+//        $rows = \Yii::$app->db2->useMaster(function ($db) {
+//            return $db->createCommand('SELECT lph_total_point'
+//                    . 'FROM tbl_loyalty_point_history'
+//                    . "WHERE lph_acc_id = $id"
+//                    . 'ORDER BY lph_id DESC'
+//                    . 'LIMIT 1');
+//        });
+//        $this->andWhere('lph_acc_id = :acc_id',[
+//            ':acc_id'=>$id
+//        ]);
+//        $this->orderBy('lph_id DESC');
+//        $this->limit(1);
+//        return $this->one();
     }
 
     public function getMemberPointHistory($member_id)

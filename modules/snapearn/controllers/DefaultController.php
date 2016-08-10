@@ -391,7 +391,7 @@ class DefaultController extends BaseController
                     $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                     $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
                     if ($point_history !== NULL) {
-                        $current_point = $point_history->lph_total_point;
+                        $current_point = $point_history['lph_total_point'];
                     } else {
                         $current_point = 0;
                     }

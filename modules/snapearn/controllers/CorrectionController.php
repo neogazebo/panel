@@ -114,7 +114,7 @@ class CorrectionController extends BaseController
                 $mp = Company::find()->getCurrentPoint($model->sna_com_id);
                 $up = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
                 if($up !== 0) {
-                    $cp = $up->lph_total_point;
+                    $cp = $up['lph_total_point'];
                 } else {
                     $cp = 0;
                 }
@@ -152,7 +152,7 @@ class CorrectionController extends BaseController
                     $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                     $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
                     if ($point_history !== 0) {
-                        $current_point = $point_history->lph_total_point;
+                        $current_point = $point_history['lph_total_point'];
                     } else {
                         $current_point = 0;
                     }
