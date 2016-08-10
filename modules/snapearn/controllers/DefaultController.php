@@ -321,10 +321,10 @@ class DefaultController extends BaseController
         // validation has reviewed
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status != 0 && $superuser != 1) {
-            $this->cancelWorking($id);
+            $this->checkSession($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         } elseif ($model->sna_status != 0 && $superuser = 1) {
-            $this->cancelWorking($id);
+            $this->checkSession($id);
             return $this->redirect(['correction/to-correction?id='.$id]);
         }
 
@@ -555,7 +555,7 @@ class DefaultController extends BaseController
         } else {
             $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
         }
-
+                                
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
 

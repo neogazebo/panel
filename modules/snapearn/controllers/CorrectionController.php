@@ -83,10 +83,10 @@ class CorrectionController extends BaseController
         // validation superuser
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status == 0 && $superuser != 1) {
-            $this->cancelWorking($id);
+            $this->checkSession($id);
             return $this->redirect(['default/to-update','id'=> $id]);
         }elseif ($model->sna_status != 0 && $superuser != 1) {
-            $this->cancelWorking($id);
+            $this->checkSession($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         }
                                 
