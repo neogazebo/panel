@@ -2,10 +2,15 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=manisdb.ebizu.com;dbname=manisv3_db',
-    'username' => 'manis',
-    'password' => 'EB!zu-43bizu*@',
-    'charset' => 'utf8',
+    'masterConfig' => [
+        'dsn' => 'mysql:host=manisdb.ebizu.com;dbname=manisv3_db',
+        'username' => 'manis',
+        'password' => 'EB!zu-43bizu*@',
+        'charset' => 'utf8',
+    ],
+    'masters' => [
+        ['dsn' => 'mysql:host=manisdb.ebizu.com;dbname=manisv3_db'],
+    ],
     'slaveConfig' => [
 		'username' => 'manis',
 		'password' => 'EB!zu-43bizu*@',
