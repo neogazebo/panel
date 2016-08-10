@@ -26,7 +26,7 @@ class DateRangeCarbon
     }
 
     // testing date
-    public function getTestDate()
+    public function getTimezone()
     {
         return $this->setTimeZone();
     }

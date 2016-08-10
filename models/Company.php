@@ -44,6 +44,11 @@ class Company extends EbizuActiveRecord
     {
         return 'tbl_company';
     }
+    
+    public static function getDb()
+    {
+        return Yii::$app->get('db');
+    }
 
     public function rules()
     {

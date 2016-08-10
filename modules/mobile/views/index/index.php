@@ -76,13 +76,3 @@ $this->title = 'Mobile Pulsa';
         </div>
     </div>
 </section>
-
-<?php
-$this->registerJs("
-    $('#filtersearch').on('keypress', function(ev) {
-        if(ev.which == 13) {
-            window.location = baseUrl + 'mobile/index/index/?search=' + encodeURIComponent($(this).val());
-        }
-    });
-", yii\web\View::POS_END, 'epay-buy');
-?>

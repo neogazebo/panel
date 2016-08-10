@@ -20,10 +20,20 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box box-primary">
                 <div class="box-header with-border"></div><!-- /.box-header -->
                 <div class="box-body">
+
+                    <form class="form-inline" action="account/default/export" method="get">
+                        <div class="margin-bottom-10">
+                            <div class="form-group">
+                                <label></label><br>
+                                <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="table-responsive">
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
-                            'layout' => '{items} {summary} {pager}',
+                            'layout' => '{summary} {items} {pager}',
                             'filterModel' => $searchModel,
                             'columns' => [
                                 [

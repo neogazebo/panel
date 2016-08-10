@@ -146,6 +146,9 @@ $config = [
         // 'loggedin' => [
         //     'class' => 'app\components\extensions\Loggedin',
         // ],
+        'array_helper' => [
+            'class' => 'app\components\helpers\ArrayHelper',
+        ]
     ],
     'params' => $params,
 ];

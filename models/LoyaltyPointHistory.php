@@ -131,6 +131,10 @@ class LoyaltyPointHistory extends \yii\db\ActiveRecord
         return $this->hasOne(Company::className(), ['com_id' => 'lph_com_id']);
     }
 
+    public function getType()
+    {
+        return $this->hasOne(LoyaltyPointType::className(),['lpe_id' => 'lph_lpe_id']);
+    }
     /**
      * @inheritdoc
      * @return LoyaltyPointHistoryQuery the active query used by this AR class.
@@ -139,4 +143,11 @@ class LoyaltyPointHistory extends \yii\db\ActiveRecord
     {
         return new LoyaltyPointHistoryQuery(get_called_class());
     }
+    
+    
+    public function test()
+    {
+        return \Yii::$app->db->createCommand('SELECT com_name, lph_parent FROM manisv3_db.tbl_loyalty_point_history LEFT JOIN manisv3_db.tbl_account ac ON ac.acc_id = lph_acc_id LEFT JOIN tbl_company a ON a.com_id = lph_com_id WHERE lph_acc_id = 2')->queryAll();
+    }
+    
 }

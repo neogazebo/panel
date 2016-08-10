@@ -2,8 +2,11 @@
 
 namespace app\models;
 
+use Yii;
+
 use yii\db\Expression;
 use app\components\helpers\DateRangeCarbon;
+use app\components\helpers\Utc;
 
 /**
  * This is the ActiveQuery class for [[AccountDevice]].
@@ -341,5 +344,114 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         $this->andWhere("DATE(FROM_UNIXTIME(sna_upload_date)) BETWEEN '$sna_daterange[0]' AND '$sna_daterange[1]'");
         $this->groupBy(new Expression('yearweek(from_unixtime(sna_upload_date),3)'));
         return $this->asArray()->all();
+    }
+
+    public function getExcelColumns()
+    {
+        return  [
+            'A' => [
+                'name' => 'Merchant',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'merchant',
+                'have_relations' => true,
+                'relation_name' => 'com_name'
+            ], 
+            'B' => [
+                'name' => 'Member',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'member',
+                'have_relations' => true,
+                'relation_name' => 'acc_screen_name'
+            ], 
+            'C' => [
+                'name' => 'Ops Receipt Number',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_ops_receipt_number',
+            ], 
+            'D' => [
+                'name' => 'Receipt Date',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_receipt_date',
+            ],
+            'E' => [
+                'name' => 'Receipt Amount',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_receipt_amount',
+            ],
+            'F' => [
+                'name' => 'Point',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_point',
+            ],
+            'G' => [
+                'name' => 'Upload Date',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_upload_date',
+                'format' => function($data) {
+                    return Yii::$app->formatter->asDateTime(Utc::convert($data));
+                }
+            ],
+            'H' => [
+                'name' => 'Review Date',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_review_date',
+                'format' => function($data) {
+                    return Yii::$app->formatter->asDateTime(Utc::convert($data));
+                }
+            ],
+            'I' => [
+                'name' => 'Operator',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'review',
+                'have_relations' => true,
+                'relation_name' => 'username'
+            ],
+            'J' => [
+                'name' => 'Status',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'sna_status',
+                'format' => function($data) {
+                    if ($data == 1) 
+                    {
+                        return "Approved";
+                    } 
+                    elseif ($data == 2) 
+                    {
+                        return "Rejected";
+                    } 
+                    else 
+                    {
+                        return "New";
+                    }
+                }
+            ],
+            'K' => [
+                'name' => 'Description',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'remark',
+                'have_relations' => true,
+                'relation_name' => 'sem_remark'
+            ]
+        ];
+    }
+
+    public function getExcelColumnsStyles()
+    {
+        return [
+            'font' => [
+                 'bold'  => true,
+            ]
+        ];
     }
 }

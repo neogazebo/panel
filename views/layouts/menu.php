@@ -98,6 +98,11 @@ use app\components\filters\AccessFilters;
         </a>
         <ul class="treeview-menu">
             <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('snapearn/group/index') ?>">
+                    <i class="fa fa-circle-o"></i> Snap &amp; Earn Group
+                </a>
+            </li>
+            <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('users/index') ?>">
                     <i class="fa fa-circle-o"></i> User
                 </a>

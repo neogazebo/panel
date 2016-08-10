@@ -83,7 +83,7 @@ $this->title = 'Role List';
                                         'view' => function($url, $model) {
                                             return Html::a('<i class="fa fa-search"></i>', ['detail?name=' . $model->name]);
                                         },
-                                        'update' => function($url,$model) {
+                                        'update' => function($url, $model) {
                                             return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?name='.$model->name]), 'class' => 'modalButton']);
                                         },
                                         // 'delete' => function($url,$model) {

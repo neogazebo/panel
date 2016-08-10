@@ -1,47 +1,55 @@
-<h2 class="page-header">
-	<img src="<?= Yii::$app->homeUrl ?>themes/AdminLTE/dist/img/ebz_logo.png" class="image-logo" alt="" width="64" height="56" />
-	Snap &amp; Earn Report
-	<small class="pull-right">
-		<?= $first_date ?> to <?= $last_date ?>
-	</small>
-</h2>
+<?php
+$total_time = 0;
+$total_activities = 0;
+$total_point = 0;
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body style="font-family: 'Source Sans Pro';">
 <div class="col-sm-4">
-	<address>
-		<p class="text-muted well well-sm no-shadow" style="margin-top: 10px">
-			<strong>Username: </strong> <?= $username ?><br />
-			<strong>Country: </strong> <?= $country ?>
-		</p>
-	</address>
+    <address>
+        <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;margin-bottom: 20px;font-style: normal;line-height: 1.42857143;">
+            <b style="font-weight: normal">Username : </b> <?= $username  ?><br>
+            <b style="font-weight: normal">Period : </b> <?= $first_date ?> to <?= $last_date ?>
+        </p>
+    </address>
 </div>
-<table class="col-xs-12 table table-striped">
-	<thead>
-		<tr>
-			<th>Type</th>
-			<th>Start</th>
-			<th>End</th>
-			<th>Time Spent</th>
-			<th>Description</th>
-			<th>Point Type</th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php foreach ($report as $rp): ?>
-		<tr>
-			<td><?= $rp->wrk_type == 1 ? 'Snap & Earn' : 'Merchant' ?></td>
-			<td><?= date('Y M dd H:m:s',$rp->wrk_start) ?></td>
-			<td><?= date('Y M dd H:m:s',$rp->wrk_end) ?></td>
-			<td><?= date('Y M dd H:m:s',$rp->wrk_time) ?></td>
-			<td><?= $rp->wrk_point ?></td>
-			<td>
-				<?php
-				if ($rp->wrk_type == 2) {
-                        echo ($rp->wrk_rjct_number != 0) ? '<p class="text-yellow">'.$rp->reason->sem_remark.'</p>' : '<a class=""><span class="not-set">(not set)</span></a>';
-                    } else{
-                        echo ($rp->wrk_point == 4) ? '<p class="text-green">Approved <strong class="text-red">+</strong> </p>' : '<p class="text-green">Approved</p>';
-                    }
-				?>
-			</td>
-		</tr>
-		<?php endforeach ?>
-	</tbody>
+
+<table>
+    <thead>
+    <tr>
+        <th>Activity</th>
+        <th>Total Time</th>
+        <th>Total Activity</th>
+        <th>Point</th>
+        <th>Total Point</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($report as $rp): ?>
+    <tr>
+            <td><?= $rp['spo_name'] ?></td>
+            <td><?= date('H:i:s', $rp['total_time']); $total_time += $rp['total_time']; ?></td>
+            <td><?= Yii::$app->formatter->asDecimal($rp['activity'], 0); $total_activities += $rp['activity']; ?></td>
+            <td><?= Yii::$app->formatter->asDecimal($rp['spo_point'], 0) ?></td>
+            <td><?= Yii::$app->formatter->asDecimal($rp['total_point'], 0); $total_point += $rp['total_point']; ?></td>
+    </tr>
+    <?php endforeach ?>
+    </tbody>
+    <tfoot style="border-top: 2px solid #777">
+    <tr>
+        <td style="font-weight: bold;">TOTAL</td>
+        <td style="font-weight: bold;"><?= date('H:i:s', $total_time); ?></td>
+        <td style="font-weight: bold;"><?= Yii::$app->formatter->asDecimal($total_activities, 0); ?></td>
+        <td style="font-weight: bold;">&nbsp;</td>
+        <td style="font-weight: bold;"><?= Yii::$app->formatter->asDecimal($total_point, 0); ?></td>
+    </tr> 
+     </tfoot>
 </table>
+
+</body>
+</html>
+
