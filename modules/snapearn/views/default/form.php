@@ -43,7 +43,7 @@ $model->sna_push = true;
                   <?= (!empty($model->member)) ? $model->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>' ?>
                 </a>
               </span>
-              <span class="description text-green">Receipt Upload : <?=  Yii::$app->formatter->asDateTime($model->sna_upload_date,'dd-mm-Y HH:mm:ss') ?></span>
+              <span class="description text-green">Receipt Upload : <?=  Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
             </div>
             <?php else : ?>
               <div class="user-block">
@@ -53,7 +53,7 @@ $model->sna_push = true;
                   Detail Receipt
                 </a>
                 </span>
-                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date,'dd-mm-Y HH:mm:ss') ?></span>
+                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
               </div>
             <?php endif; ?>
           </div>
