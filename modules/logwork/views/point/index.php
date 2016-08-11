@@ -19,9 +19,9 @@ $this->title = 'Snap & Earn Point';
                     <div class="pull-left">
                         <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['/logwork'], ['class' => 'btn btn-warning']) ?>  
                     </div>
-                    <div class="pull-right">
+<!--                    <div class="pull-right">
                         <?php//= Html::button('<i class="fa fa-plus-square"></i> New Point', ['value' => Url::to(['create']), 'class' => 'btn btn-primary modalButton']); ?>  
-                    </div>
+                    </div>-->
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">
@@ -51,16 +51,16 @@ $this->title = 'Snap & Earn Point';
                                         }
                                     ],
                                     'userCreated.username',
-                                    [
-                                        'class' => 'yii\grid\ActionColumn',
-                                        'template' => '<span class="pull-right actionColumn">{update}</span>',
-                                        'buttons' => [
-                                            'update' => function($url, $model) {
-                                                // return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?id='.$model->spo_id]), 'class' => 'modalButton']);
-                                                // return Html::a('<i class="fa fa-pencil"></i>', ['update', 'id' => $model->spo_id]);
-                                            },
-                                        ]
-                                    ]
+//                                    [
+//                                        'class' => 'yii\grid\ActionColumn',
+//                                        'template' => '<span class="pull-right actionColumn">{update}</span>',
+//                                        'buttons' => [
+//                                            'update' => function($url, $model) {
+//                                                // return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?id='.$model->spo_id]), 'class' => 'modalButton']);
+//                                                // return Html::a('<i class="fa fa-pencil"></i>', ['update', 'id' => $model->spo_id]);
+//                                            },
+//                                        ]
+//                                    ]
                                 ],
                                 'tableOptions' => ['class' => 'table table-striped table-hover']
                             ]);

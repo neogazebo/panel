@@ -1,3 +1,7 @@
+<?php
+use app\components\helpers\Utc;
+?>
+
 <body style="font-family: 'Source Sans Pro';">
 <div class="col-sm-4">
 	<address>
@@ -15,26 +19,28 @@
 			<th>End</th>
 			<th>Time Spent</th>
 			<th>Description</th>
-			<th>Point Type</th>
+			<th>Point</th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php foreach ($report as $rp): ?>
 		<tr>
-			<td><?= $rp['wrk_type'] == 1 ? 'Snap & Earn' : 'Merchant' ?></td>
-			<td><?= date('Y M d H:m:s', $rp['wrk_start']) ?></td>
-			<td><?= date('Y M d H:m:s', $rp['wrk_end']) ?></td>
-			<td><?= date('H:i:s', $rp['wrk_time']) ?></td>
-			<td><?= $rp['wrk_point'] ?></td>
+			<td><?= $rp['wrk_type'] == 3 ? 'Add Merchant' : 'S&E Approval' ?></td>
+                        <td>
+                            <?= Yii::$app
+                                ->formatter
+                                ->asDatetime(Utc::convert(strtotime(date('Y-m-d H:i:s', $rp['wrk_start']))),'php:d-m-Y H:i:s') 
+                            ?>
+                        </td>
 			<td>
-				<?php
-				if ($rp['wrk_type'] == 2) {
-                        echo ($rp['wrk_rjct_number'] != 0) ? '<p class="text-yellow">' . $rp['reason']['spo_name'] . '</p>' : 0;
-                    } else{
-                        echo ($rp['wrk_point'] == 4) ? '<p class="text-green">Approved <strong class="text-red">+</strong> </p>' : '<p class="text-green">Approved</p>';
-                    }
-				?>
-			</td>
+                            <?= Yii::$app
+                                ->formatter
+                                ->asDatetime(Utc::convert(strtotime(date('Y-m-d H:i:s', $rp['wrk_end']))),'php:d-m-Y H:i:s') 
+                            ?>
+                        </td>
+			<td><?= date('H:i:s', $rp['wrk_time']) ?></td>
+			<td><?= $rp['spo_name'] ?></td>
+                        <td><?= $rp['wrk_point'] ?></td>
 		</tr>
 		<?php endforeach ?>
 	</tbody>
