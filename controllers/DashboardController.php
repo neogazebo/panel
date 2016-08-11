@@ -16,9 +16,9 @@
 
         public function actionIndex()
         {
-            //$model = SnapEarn::find()->getUniqueUser();
-            $data = SnapEarn::getDashboardModel()->getReceiptUploadUniqueUser();
-            $model = SnapEarn::getDashboardModel()->getReceiptUploadData($data);
+            $model = SnapEarn::find()->getUniqueUser();
+            //$data = SnapEarn::getDashboardModel()->getReceiptUploadUniqueUser();
+            //$model = SnapEarn::getDashboardModel()->getReceiptUploadData($data);
 
             $dataProvider = new ArrayDataProvider([
                 'allModels' => $model,
@@ -37,6 +37,7 @@
         {
             if (Yii::$app->request->isAjax)
             {
+                /*
                 $upload_data = SnapEarn::getDashboardModel()->getUploadChartData();
                 $idChrt = SnapEarn::getDashboardModel()->getUploadDataByCountry($upload_data, 'ID');
                 $myChrt = SnapEarn::getDashboardModel()->getUploadDataByCountry($upload_data, 'MY');
@@ -79,20 +80,18 @@
                 {
                     $out[]['rjtMy'] = $rjtMy['jumlah'];
                 }
+                */
 
                 $filters = '';
 
-                /*
                 $idChrt = SnapEarn::find()->uploadIdChart($filters)->all();
                 $myChrt = SnapEarn::find()->uploadMyChart($filters)->all();
                 $appIdChart = SnapEarn::find()->approveIdChart($filters)->all();
                 $appMyChart = SnapEarn::find()->approveMyChart($filters)->all();
                 $rjtIdChart = SnapEarn::find()->rejectIdChart($filters)->all();
                 $rjtMyChart = SnapEarn::find()->rejectMyChart($filters)->all();
-                */
-
+                
                 // get upload receipt Indonesia
-                /*
                 foreach ($idChrt as $l) {
                     $out[]['labels'] = $l->tanggal;
                     $out[]['id'] = $l->jumlah;
@@ -118,10 +117,6 @@
                 foreach ($rjtMyChart as $rjtMy) {
                     $out[]['rjtMy'] = $rjtMy->jumlah;
                 }
-                */
-
-                //var_dump($out);
-                //die;
 
                 echo \yii\helpers\Json::encode($out);
             }
