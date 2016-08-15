@@ -284,7 +284,15 @@ class CorrectionController extends BaseController
                     $curl = new curl\Curl();
                     $curl->get(Yii::$app->params['WEBHOOK_MANIS_API'].'?data={"acc_id":' . intval($model->sna_acc_id) . ',"sna_id":' . intval($model->sna_id) . ',"sna_status":' . intval($model->sna_status) . '}');
                     
-                    $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
+                    // $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
+
+                    $activities = [
+                        'Snap Earn',
+                        'Snapearn ' . ($model->sna_status == 1 ? 'APPROVED' : 'REJECTED') . ' in ' . $model->member->acc_facebook_email . ' on ' . $model->business->com_name . ' at ' . date('d M Y H:i:s', $model->sna_transaction_time),
+                        SnapEarn::className(),
+                        $model->sna_id
+                    ];
+                    $this->saveLog($activities);
 
                     // end working time
                     $last_working_ses = $this->getSession('wrk_ses_'.$id);

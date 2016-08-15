@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\WorkingTime;
+use app\models\Logging;
 use app\components\helpers\General;
 use PHPExcel;
 use PHPExcel_Writer_Excel2007;
@@ -86,6 +87,19 @@ class BaseController extends Controller
 				Yii::$app->session->setFlash($type, $customText !== null ? Yii::t('app', $customText) : Yii::$app->params['flashmsg']['delete'][$type]);
 				break;
 		}
+    }
+
+    public function saveLog($activities)
+    {
+        // ['activity', 'desc', 'item', 'item_id']
+        $model = new Logging;
+        $model->log_usr_id = Yii::$app->user->id;
+        $model->log_activity = $activities[0];
+        $model->log_datetime = \app\components\helpers\Utc::getNow();
+        $model->log_description = $activities[1];
+        $model->log_item = $activities[2];
+        $model->log_item_id = $activities[3];
+        $model->save();
     }
 
     protected function centralTimeZone()
