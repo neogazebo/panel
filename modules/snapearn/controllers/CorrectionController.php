@@ -210,70 +210,70 @@ class CorrectionController extends BaseController
                     $username = $model->member->acc_screen_name;
                     $email = $model->member->acc_facebook_email;
                     $model->sna_point = 0;
-                        // send email to member
-                        $business = '';
-                        $location = '';
-                        if (empty($model->sna_com_id)) {
-                            $business = $model->newSuggestion->cos_name;
-                            $location = $model->newSuggestion->cos_location;
-                        } else {
-                            $business = Company::findOne($model->sna_com_id)->com_name;
-                            $location = Company::findOne($model->sna_com_id)->com_address;
-                        }
-
-                        if (!empty($model->sna_sem_id)) {
-                            $params = [];
-                            $picture = Yii::$app->params['businessUrl'] . 'receipt/receipt_sample.jpg';
-
-                            switch ($model->sna_sem_id) {
-                                case 1:
-                                    $params[] = ['[username]', $username];
-                                    $params[] = ['[picture]', $picture];
-                                    break;
-                                case 2:
-                                    $params[] = ['[username]', $username];
-                                    $params[] = ['[picture]', $picture];
-                                    break;
-                                case 3:
-                                    $params[] = ['[username]', $username];
-                                    $params[] = ['[picture]', $picture];
-                                    break;
-                                case 4:
-                                    $params[] = ['[username]', $username];
-                                    $params[] = ['[business]', $business];
-                                    break;
-                                case 5:
-                                    $params[] = ['[username]', $username];
-                                    break;
-                                case 6:
-                                    $params[] = ['[username]', $username];
-                                    $params[] = ['[business]', $business];
-                                    break;
-                                case 7:
-                                    $params[] = ['[username]', $username];
-                                    $params[] = ['[business]', $business];
-                                    $params[] = ['[location]', $location];
-                                    break;
-                            }
-
-                            Yii::$app
-                                ->AdminMail
-                                ->backend($model->member->acc_facebook_email, $params)
-                                ->snapearnRejected($model->sna_sem_id)
-                                ->send()
-                                ->view();
-                        }
-
-                        //if push notification checked then send to activity
-                        if ($model->sna_push == 1) {
-                            $params = [$model->sna_acc_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
-                            $customData = ['type' => 'snapearn'];
-                            Activity::insertAct($model->sna_acc_id, 30, $params, $customData);
-                        }
-
-                        $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
-                        $snap_type = 'rejected';
+                    // send email to member
+                    $business = '';
+                    $location = '';
+                    if (empty($model->sna_com_id)) {
+                        $business = $model->newSuggestion->cos_name;
+                        $location = $model->newSuggestion->cos_location;
+                    } else {
+                        $business = Company::findOne($model->sna_com_id)->com_name;
+                        $location = Company::findOne($model->sna_com_id)->com_address;
                     }
+
+                    if (!empty($model->sna_sem_id)) {
+                        $params = [];
+                        $picture = Yii::$app->params['businessUrl'] . 'receipt/receipt_sample.jpg';
+
+                        switch ($model->sna_sem_id) {
+                            case 1:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[picture]', $picture];
+                                break;
+                            case 2:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[picture]', $picture];
+                                break;
+                            case 3:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[picture]', $picture];
+                                break;
+                            case 4:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                break;
+                            case 5:
+                                $params[] = ['[username]', $username];
+                                break;
+                            case 6:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                break;
+                            case 7:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                $params[] = ['[location]', $location];
+                                break;
+                        }
+
+                        Yii::$app
+                            ->AdminMail
+                            ->backend($model->member->acc_facebook_email, $params)
+                            ->snapearnRejected($model->sna_sem_id)
+                            ->send()
+                            ->view();
+                    }
+
+                    //if push notification checked then send to activity
+                    if ($model->sna_push == 1) {
+                        $params = [$model->sna_acc_id, $model->sna_com_id, $_SERVER['REMOTE_ADDR']];
+                        $customData = ['type' => 'snapearn'];
+                        Activity::insertAct($model->sna_acc_id, 30, $params, $customData);
+                    }
+
+                    $this->setMessage('save', 'success', 'Snap and Earn successfully rejected!');
+                    $snap_type = 'rejected';
+                }
 
                 // execution save to snapearn
                 $snap_type = '';

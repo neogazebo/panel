@@ -281,7 +281,7 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
         pointConvert();
     });
 
-    function pointConvert(){
+    function pointConvert() {
         var amount = Math.floor($('#snapearn-sna_receipt_amount').val());
         // $('#snapearn-sna_point').val(point);
         $.ajax({
