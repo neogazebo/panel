@@ -137,7 +137,6 @@ class SnapEarn extends \yii\db\ActiveRecord
                 }
             }
         }
-        
     }
 
     public function checkMerchant($data)
