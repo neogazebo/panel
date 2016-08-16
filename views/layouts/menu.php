@@ -27,6 +27,22 @@ use app\components\filters\AccessFilters;
     <?php if (AccessFilters::getMenu('merchant-signup')) : ?>
     <li class="treeview">
         <a href="#">
+            <i class="fa fa-university"></i>
+            <span>Merchant HQ Management</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('merchant-hq') ?>">
+                    <i class="fa fa-circle-o"></i> List
+                </a>
+            </li>
+        </ul>
+    </li>
+    <?php endif; ?>
+    <?php if (AccessFilters::getMenu('merchant-signup')) : ?>
+    <li class="treeview">
+        <a href="#">
             <i class="fa fa-th-list"></i>
             <span>Merchant Signup</span>
             <i class="fa fa-angle-left pull-right"></i>

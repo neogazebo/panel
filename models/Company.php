@@ -57,8 +57,9 @@ class Company extends EbizuActiveRecord
             [['com_name', 'com_business_name', 'com_category_id', 'com_agent_code', 'com_par_id'], 'required', 'on' => 'partner'],
             [['com_par_id', 'com_email'], 'safe', 'on' => 'snapEarnUpdate'],
             [['com_email'], 'unique'],
-            [['com_name', 'com_email','com_subcategory_id'], 'required'],
+            [['com_name','com_subcategory_id'], 'required'],
             [['com_email'], 'email'],
+            [['com_email'], 'required', 'except' => 'new-hq'],
             [['com_business_name'], 'required', 'on' => 'signup'],
             [['com_point'], 'required', 'on' => 'point'],
             ['com_status', 'required', 'on' => 'change_status'],
@@ -152,7 +153,9 @@ class Company extends EbizuActiveRecord
                 'com_par_id',
                 'com_par_createdby',
                 'tag',
+                'com_is_parent',
             ], 'safe'],
+            [['com_name'], 'unique', 'on' => 'new-hq'],
             [['mall_id'], 'required', 'when' => function($model) {
                 return $this ->com_in_mall == 1;
             }, 'whenClient' => "function (attribute, value) {

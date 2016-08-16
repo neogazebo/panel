@@ -57,4 +57,9 @@ class CompanyQuery extends \yii\db\ActiveQuery
         $this->orderBy('com_name');
         return $this->all();
     }
+
+    public function getParentMerchants()
+    {
+        return $this->where('com_is_parent = 1')->orderBy(['com_id' => SORT_DESC]);
+    }
 }
