@@ -195,7 +195,7 @@ class DefaultController extends BaseController
 
                             $activities = [
                                 'Snap Earn - Add New Merchant',
-                                'Snapearn - Add New Merchant, ' . $company->com_email . ' on ' . $company->com_name . ' at ' . date('d M Y H:i:s', $company->com_created_date),
+                                'Snapearn - Add New Merchant, ' . $company->com_email . ' on ' . $company->com_name,
                                 Company::className(),
                                 $company->com_id
                             ];
@@ -269,7 +269,7 @@ class DefaultController extends BaseController
                     if ($model->save(false)) {
                         $activities = [
                             'Snap Earn - Add Existing Merchant',
-                            'Snapearn (' . $model->sna_id . ') - Add Existing Merchant, ' . $company->com_email . ' on ' . $company->com_name . ' at ' . date('d M Y H:i:s', $company->com_created_date),
+                            'Snapearn (' . $model->sna_id . ') - Add Existing Merchant, ' . $company->com_email . ' on ' . $company->com_name,
                             SnapEarn::className(),
                             $company->com_id
                         ];
@@ -528,7 +528,7 @@ class DefaultController extends BaseController
 
                     $activities = [
                         'Snap Earn',
-                        'Snapearn ' . ($model->sna_status == 1 ? 'APPROVED' : 'REJECTED') . ' in ' . $model->member->acc_facebook_email . ' on ' . $model->business->com_name . ' at ' . date('d M Y H:i:s', $model->sna_transaction_time),
+                        'Snapearn ' . ($model->sna_status == 1 ? 'APPROVED' : 'REJECTED') . ' in ' . $model->member->acc_facebook_email . ' on ' . $model->business->com_name,
                         SnapEarn::className(),
                         $model->sna_id
                     ];
@@ -588,6 +588,14 @@ class DefaultController extends BaseController
         $model = Company::findOne($id);
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save(false)) {
+                $activities = [
+                    'Merchant',
+                    'Merchant (' . $model->com_name . ') - Add (' . $model->com_point . ') Point',
+                    Company::className(),
+                    $model->com_id
+                ];
+                $this->saveLog($activities);
+
                 return $this->redirect(['update?id='.$sna_id]);
             }
         }
@@ -682,8 +690,17 @@ class DefaultController extends BaseController
         $history->lph_expired = $time + $valid * 86400;
         $history->lph_current_point = $params['sna_point'];
         $history->lph_description = $params['desc'];
-        if($history->save())
+        if($history->save()) {
+            $activities = [
+                'Point History',
+                'Point ' . $history->lph_total_point . ' (' . $history->lph_type . ') has been added to ' . $history->merchant->com_email,
+                LoyaltyPointHistory::className(),
+                $history->lph_param
+            ];
+            $this->saveLog($activities);
+
             $this->setMessage('save', 'error', General::extractErrorModel($history->getErrors()));
+        }
     }
 
     protected function merchantPoint($params, $type = true)
@@ -695,9 +712,19 @@ class DefaultController extends BaseController
             $com_point = $params['com_point'] - $params['sna_point'];
         $point = Company::findOne($params['sna_com_id']);
         $point->setScenario('snapEarnUpdate');
+        $pointBefore = $point->com_point;
         $point->com_point = $com_point;
-        if($point->save(false))
+        if($point->save(false)) {
+            $activities = [
+                'Change Point',
+                'Merchant Point (' . $pointBefore . ') changed to ' . $point->com_point . ' has been added to ' . $point->com_email,
+                Company::className(),
+                $point->com_id
+            ];
+            $this->saveLog($activities);
+
             $this->setMessage('save', 'error', General::extractErrorModel($point->getErrors()));
+        }
     }
 
     protected function assignFcs($fsc, $com_id, $company, $fes_code)
