@@ -60,9 +60,6 @@ class DefaultController extends BaseController
             ]
         ]);
 
-        //var_dump($this->data_provider->getModels());
-        //die;
-
         $columns = SnapEarn::find()->getExcelColumns();
         $column_styles = SnapEarn::find()->getExcelColumnsStyles();
 
@@ -76,7 +73,6 @@ class DefaultController extends BaseController
 
     public function actionNewMerchant($id, $to = null)
     {
-        
         // remove session
         $this->removeSession('ses_com_'.$id);
         
@@ -92,19 +88,19 @@ class DefaultController extends BaseController
         $company->scenario  = 'point';
         // get merchant suggestion
         $suggest = CompanySuggestion::find()
-                                    ->where('cos_sna_id = :id',[
-                                        ':id' => $id
-                                    ])
-                                    ->one();
+            ->where('cos_sna_id = :id',[
+                ':id' => $id
+            ])
+            ->one();
         // create id mall sugestion default = empty
 //        $suggest->cos_mall_id = '';
         // if mall name not empty getting id mall
         if (!empty($suggest->cos_mall)) {
             $cos_mall_id = Mall::find()
-                                    ->where('mal_name = :mal',[
-                                        ':mal' => $suggest->cos_mall
-                                    ])
-                                    ->one();
+                ->where('mal_name = :mal',[
+                    ':mal' => $suggest->cos_mall
+                ])
+                ->one();
             if (isset($cos_mall_id)) {
                 $suggest->cos_mall_id = $cos_mall_id->mall_id;
             }
@@ -128,11 +124,13 @@ class DefaultController extends BaseController
                     $company->com_snapearn_checkin = 1;
                     $company->com_registered_to = 'EBC';
                     $company->com_created_by = Yii::$app->user->id;
+
                     $mall_id = Yii::$app->request->post('mall_id');
                     if (!empty($mall_id)) {
                         $mall = Mall::findOne($mall_id)->mal_name;
-                        $company->com_name = $company->com_name .' @ '.$mall;
+                        $company->com_name = $company->com_name .' @ ' . $mall;
                     }
+
                     if ($company->save()) {
                         $com_id = $company->com_id;
                         $cat_id = $company->com_subcategory_id;
@@ -151,7 +149,6 @@ class DefaultController extends BaseController
                         } else {
                             $snapearn->save(false);
                         }
-                        
 
                         $suggestion = CompanySuggestion::find()->where('cos_sna_id = :id', [':id' => $id])->one();
                         if (!empty($suggestion)) {
@@ -173,15 +170,15 @@ class DefaultController extends BaseController
 
                             // SnapEarnPointDetail::savePoint($id, 8);
 
-                            $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
+                            // $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
 
                             $this->assignModule($com_id, $company);
                             $this->assignEmail($com_id, $company);
 
                             // Additional point to working time
-//                            $param = $id;
-//                            $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
-//                            $this->addWorkPoint($param, $point);
+                            // $param = $id;
+                            // $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
+                            // $this->addWorkPoint($param, $point);
                             $wrk_ses = $this->getSession('wrk_ses_'.$id);
                             if (!empty($wrk_ses)) {
                                 $ses = [];
@@ -195,11 +192,18 @@ class DefaultController extends BaseController
                                 $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
                                 $this->saveWorking($id);
                             }
+
+                            $activities = [
+                                'Snap Earn - Add New Merchant',
+                                'Snapearn - Add New Merchant, ' . $company->com_email . ' on ' . $company->com_name . ' at ' . date('d M Y H:i:s', $company->com_created_date),
+                                Company::className(),
+                                $company->com_id
+                            ];
+                            $this->saveLog($activities);
                             
                             $transaction->commit();
                             $this->setMessage('save', 'success', 'Your company has been registered!');
                             return $this->render('success');
-
                         } else {
                             $transaction->rollback();
                             throw new HttpException(404, 'Cant insert to subscription');
@@ -260,21 +264,28 @@ class DefaultController extends BaseController
                 $this->setSession('ses_com_'.$id, $params);
                 $this->setMessage('save', 'success', 'Merchant successfully saved!');
                 return $this->redirect([$urlActive.'?id='.$id]);
-            }else {
+            } else {
                 if ($model->sna_com_id > 0) {
                     if ($model->save(false)) {
+                        $activities = [
+                            'Snap Earn - Add Existing Merchant',
+                            'Snapearn (' . $model->sna_id . ') - Add Existing Merchant, ' . $company->com_email . ' on ' . $company->com_name . ' at ' . date('d M Y H:i:s', $company->com_created_date),
+                            SnapEarn::className(),
+                            $company->com_id
+                        ];
+                        $this->saveLog($activities);
+
                         $this->setMessage('save', 'success', 'Merchant successfully saved!');
                         return $this->redirect([$urlActive.'?id='.$id]);
-                    }else{
+                    } else {
                         $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
                         return $this->redirect([$urlActive.'?id='.$id]);
                     }
-                }else{
+                } else {
                     $this->setMessage('save', 'error', 'Merchant not selected!');
                     return $this->redirect([$urlActive.'?id='.$id]);
                 }
             }
-            
         }
 
         if (Yii::$app->request->isAjax) {
@@ -292,10 +303,10 @@ class DefaultController extends BaseController
         $model = $this->findModel($id);
         if (empty($model->member)) {
             $this->setMessage('save', 'error', "Manis user is not set!, Please contact your web administrator this snap number <strong>' $id '</strong>");
-            return $this->redirect(Url::to($this->getRememberUrl()));
-        }elseif ((empty($model->newSuggestion)  && empty($model->sna_com_id))  || (!empty($model->sna_com_id) && empty($model->merchant))) {
-            $this->setMessage('save', 'error', "This Snap and Earn doesn't set any merchant or sugestion!, Please contact your web administrator this snap number <strong>' $id '</strong> ");
-            return $this->redirect(Url::to($this->getRememberUrl()));
+            return $this->redirect(Url::previous());
+        } elseif ((empty($model->newSuggestion)  && empty($model->sna_com_id))  || (!empty($model->sna_com_id) && empty($model->merchant))) {
+            $this->setMessage('save', 'error', "This Snap and Earn doesn't set any merchant or suggestion!, Please contact your web administrator this snap id <strong>' $id '</strong>");
+            return $this->redirect(Url::previous());
         }
 
         // working time start session
@@ -334,8 +345,7 @@ class DefaultController extends BaseController
         // there might be data that has no member (member not set)
         $ctr = 'ID';
 
-        if($model->member)
-        {
+        if($model->member) {
             $ctr = $model->member->acc_cty_id;
         }
 
@@ -577,14 +587,13 @@ class DefaultController extends BaseController
     {
         $model = Company::findOne($id);
         if ($model->load(Yii::$app->request->post())) {
-            
             if ($model->save(false)) {
                 return $this->redirect(['update?id='.$sna_id]);
             }
         }
         return $this->renderAjax('point',[
-                    'model' => $model
-                ]);
+            'model' => $model
+        ]);
     }
 
     public function actionAjaxSnapearnPoint()

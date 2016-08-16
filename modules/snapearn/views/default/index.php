@@ -142,7 +142,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                             <?php if ($visible) : ?>
                             <div class="form-group">
                                 <label>Export</label><br>
-                                <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                                <button name="output_type" value="excel" type="submit" class="btn btn-info btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
                             </div>
                             <?php endif; ?>  
                         </div>
@@ -161,8 +161,11 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                     'attribute' => 'sna_com_id',
                                     'format' => 'html',
                                     'value' => function($data) {
+                                        if (!empty($data->newSuggestion))
+                                            return $data->newSuggestion->cos_name . ' <span class="badge bg-yellow">suggestion</span>';
+
                                         if (!empty($data->merchant)) {
-                                            return $data->merchant->com_name . ($data->merchant->com_joined == 1 ? ' <i class="fa fa-check"></i>' : '');
+                                            return $data->merchant->com_name . ($data->merchant->com_joined == 1 ? ' <span class="badge bg-info">joined</span>' : '') . ($data->merchant->com_premium == 1 ? ' <span class="badge bg-green">premium</span>' : '');
                                         }
                                     }
                                 ],
