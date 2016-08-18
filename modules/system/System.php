@@ -1,16 +1,16 @@
 <?php
 
-    namespace app\modules\merchant_hq;
+    namespace app\modules\system;
 
     /**
      * MerchantSignup module definition class
      */
-    class MerchantHq extends \yii\base\Module
+    class System extends \yii\base\Module
     {
         /**
          * @inheritdoc
          */
-        public $controllerNamespace = 'app\modules\merchant_hq\controllers';
+        public $controllerNamespace = 'app\modules\system\controllers';
 
         /**
          * @inheritdoc

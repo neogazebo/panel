@@ -60,6 +60,19 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
     public function getParentMerchants()
     {
-        return $this->where('com_is_parent = 1')->orderBy(['com_id' => SORT_DESC]);
+        $parents = $this->select('com_id, com_name, com_created_date, com_subcategory_id')->where('com_is_parent = :is_parent', [':is_parent' => 1])->orderBy(['com_id' => SORT_DESC]);
+        return $parents;
+    }
+
+    public function getChildMerchants($parent_id)
+    {
+        $children = $this->select('com_id, com_name')->where('com_hq_id = :hq_id', [':hq_id' => $parent_id])->orderBy(['com_id' => SORT_DESC]);
+        return $children;
+    }
+
+    public function getAllChildMerchants()
+    {
+        $command = \Yii::$app->getDb()->createCommand('SELECT com_id, com_name FROM tbl_company WHERE com_hq_id = :hq_id', [':hq_id' => 0]);
+        return $command->queryAll();
     }
 }

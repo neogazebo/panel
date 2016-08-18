@@ -44,25 +44,34 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Merc
                                         'attribute' => 'com_created_date',
                                         'format' => 'html',
                                         'value' => function($data) {
-                                            return Yii::$app->formatter->asDatetime($data->spg_created_date, "php:d M Y");
+                                            return Yii::$app->formatter->asDatetime($data->com_created_date, "php:d M Y H:i:s");
                                         }
                                     ],
-                                    'com_subcategory_id',
+                                    [
+                                        'label' => 'Category',
+                                        'attribute' => 'com_subcategory_id',
+                                        'format' => 'html',
+                                        'value' => function($data) {
+                                            return $data->category->com_category;
+                                        }
+                                    ],
                                     [
                                         'header' => 'Actions',
                                         'class' => 'yii\grid\ActionColumn',
-                                        'template' => '<span class="pull-right actionColumn">{list} {update}</span>',
+                                        'template' => '<span class="actionColumn">{list} {update}</span>',
                                         'buttons' => [
                                             'list' => function($url, $model) {
-                                                return Html::a('<i class="fa fa-group"></i>', ['user-list', 'id' => $model->spg_id]);
+                                                return Html::a('<i class="fa fa-group"></i>', ['/system/merchant-hq/list', 'id' => $model->com_id]);
                                             },
-                                            'update' => function($url, $model) {
-                                                return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?id='.$model->spg_id]), 'class' => 'modalButton']);
+                                            'update' => function($url, $model) use ($categories) {
+                                                $output = Html::button('<i class="fa fa-pencil-square-o"></i>', ['class' => 'modalButton', 'data-toggle' => 'modal', 'data-target' => '#edit-hq-modal-' . $model->com_id, 'data-backdrop' => 'static', 'data-keyboard' => 'false']);
+                                                $output .= $this->render('/merchant-hq/partials/modal-edit', ['categories' => $categories, 'id' => $model->com_id, 'com_name' => $model->com_name, 'com_subcategory_id' => $model->com_subcategory_id]);
+                                                return $output;
                                             },
-                                        ]
+                                        ],
                                     ]
                                 ],
-                                'tableOptions' => ['class' => 'table table-striped table-hover']
+                                'tableOptions' => ['class' => 'table table-striped table-hover'],
                             ]);
                             ?>  
                     </div>
@@ -72,4 +81,4 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Merc
     </div>
 </section>
 
-<?= $this->render('/partials/modal', ['categories' => $categories]) ?>
+<?= $this->render('/merchant-hq/partials/modal-save', ['categories' => $categories]) ?>
