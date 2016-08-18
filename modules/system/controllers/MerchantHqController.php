@@ -1,102 +1,95 @@
 <?php
+namespace app\modules\system\controllers;
 
-    namespace app\modules\system\controllers;
+use Yii;
+use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
+use yii\web\Response;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use app\controllers\BaseController;
 
-    use Yii;
-    use yii\filters\VerbFilter;
-    use yii\data\ActiveDataProvider;
-    use yii\web\Response;
-    use yii\web\Controller;
-    use yii\web\NotFoundHttpException;
-    use app\controllers\BaseController;
+use app\models\Company;
 
-    use app\models\Company;
-
-    class MerchantHqController extends BaseController
+class MerchantHqController extends BaseController
+{
+    public function actionIndex()
     {
-        public function actionIndex()
-        {
-            $company = new Company();
-            $data = Company::find()->getParentMerchants();
+        $company = new Company();
+        $data = Company::find()->getParentMerchants();
 
-            $dataProvider = new ActiveDataProvider([
-                'query' => $data,
-                'pagination' => [
-                    'pageSize' => 20
-                ]
-            ]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $data,
+            'pagination' => [
+                'pageSize' => 20
+            ]
+        ]);
 
-            return $this->render('index', [
-                'dataProvider' => $dataProvider,
-                'categories' => $company->categoryListData
-            ]);
-        }
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'categories' => $company->categoryListData
+        ]);
+    }
 
-        public function actionOp()
-        {
-            $op = Yii::$app->request->post('op');
-            $id = Yii::$app->request->post('com_id');
+    public function actionOp()
+    {
+        $op = Yii::$app->request->post('op');
+        $id = Yii::$app->request->post('com_id');
+        
+        switch ($op)  {
+            case 'add':
+                $model = new Company();
+                $scenario = 'new-hq';
+                break;
             
-            switch ($op) 
-            {
-                case 'add':
-                    $model = new Company();
-                    $scenario = 'new-hq';
-                    break;
-                
-                case 'edit':
-                    $model = Company::findOne($id);
-                    $scenario = 'update-hq';
-                    break;
-            }
-
-            $transaction = Yii::$app->db->beginTransaction();
-
-            try
-            {
-                $model->setScenario($scenario);
-
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-                if($model->load(Yii::$app->request->post(), '')) 
-                {
-                    if($model->save()) 
-                    {
-                        $transaction->commit();
-                        return $this->jsonOutput(0, 'success', null);
-                    }
-
-                    return $this->jsonOutput(9000, 'error', $model->getErrors());
-                }
-            }
-            catch(\Exception $e)
-            {
-                $transaction->rollback();
-                return $this->jsonOutput(1000, 'error', $e->getMessage());
-            }
+            case 'edit':
+                $model = Company::findOne($id);
+                $scenario = 'update-hq';
+                break;
         }
 
-        public function actionList($id)
-        {
-            $model = Company::findOne($id);
-            //$merchant_children = Company::find()->getChildMerchants($id);
-            $all_merchant_children = Company::find()->getAllChildMerchants();
+        $transaction = Yii::$app->db->beginTransaction();
 
-            return $this->render('list', [
-                'model' => $model,
-                //'merchant_children' => $merchant_children,
-                'all_merchant_children' => $all_merchant_children
-            ]);
-        }
+        try {
+            $model->setScenario($scenario);
 
-        public function actionSearch()
-        {
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            $keyword = Yii::$app->request->post('keyword');
-            $hq_id = Yii::$app->request->post('hq_id');
 
-            $data = Company::find()->searchMerchant($keyword, $hq_id);
-            $output = $this->renderPartial('partials/search_result', ['data' => $data]);
-            return $this->jsonOutput(0, 'success', null, $output);
+            if($model->load(Yii::$app->request->post(), '')) {
+                if($model->save()) {
+                    $transaction->commit();
+                    return $this->jsonOutput(0, 'success', null);
+                }
+
+                return $this->jsonOutput(9000, 'error', $model->getErrors());
+            }
+        } catch(\Exception $e) {
+            $transaction->rollback();
+            return $this->jsonOutput(1000, 'error', $e->getMessage());
         }
     }
+
+    public function actionList($id)
+    {
+        $model = Company::findOne($id);
+        //$merchant_children = Company::find()->getChildMerchants($id);
+        $all_merchant_children = Company::find()->getAllChildMerchants();
+
+        return $this->render('list', [
+            'model' => $model,
+            //'merchant_children' => $merchant_children,
+            'all_merchant_children' => $all_merchant_children
+        ]);
+    }
+
+    public function actionSearch()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $keyword = Yii::$app->request->post('keyword');
+        $hq_id = Yii::$app->request->post('hq_id');
+
+        $data = Company::find()->searchMerchant($keyword, $hq_id);
+        $output = $this->renderPartial('partials/search_result', ['data' => $data]);
+        return $this->jsonOutput(0, 'success', null, $output);
+    }
+}
