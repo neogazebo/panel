@@ -88,4 +88,15 @@
                 'all_merchant_children' => $all_merchant_children
             ]);
         }
+
+        public function actionSearch()
+        {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $keyword = Yii::$app->request->post('keyword');
+            $hq_id = Yii::$app->request->post('hq_id');
+
+            $data = Company::find()->searchMerchant($keyword, $hq_id);
+            $output = $this->renderPartial('partials/search_result', ['data' => $data]);
+            return $this->jsonOutput(0, 'success', null, $output);
+        }
     }

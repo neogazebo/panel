@@ -77,6 +77,8 @@ function save(op_url, form_data, modal_instance)
 
 $(document).ready(function() {
 
+    $('#search-merchant').multiselect();
+
 	$('#add-hq-modal, .edit-hq-modal').on('show.bs.modal', function (e) {
 		$('.com-name-error').html('');
         $('.com-category-error').html('');
@@ -133,6 +135,53 @@ $(document).ready(function() {
         {
             save(op_url, form_data, modal_instance);
         }
+    });
+    
+    var timer;
+
+    $('.search-merchant').keyup(function() {
+
+        clearTimeout(timer);
+
+        var ms = 400;
+        var keyword = $(this).val();
+        var hq_id = $('.com_id').val();
+
+        if(keyword.length >= 3)
+        {
+            timer = setTimeout(function() {
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '/system/merchant-hq/search',
+                    data: {
+                        'keyword': keyword,
+                        'hq_id': hq_id
+                    },
+                    /*
+                    beforeSend: function() {
+                    $('.modal-dialog').waitMe({
+                    effect : 'stretch',
+                    text : 'Saving...',
+                    bg : 'rgba(255,255,255,0.7)',
+                    color : '#000',
+                    sizeW : '',
+                    sizeH : ''
+                    });
+                    },
+                    complete: function(){
+                    $('.modal-dialog').waitMe('hide');
+                    },
+                    */
+                    success: function(data) {
+                        $('#search-merchant').html(data.data);
+
+                    }
+                });
+            }, ms);
+            
+        }
+
     });
 
 });

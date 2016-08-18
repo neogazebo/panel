@@ -75,4 +75,16 @@ class CompanyQuery extends \yii\db\ActiveQuery
         $command = \Yii::$app->getDb()->createCommand('SELECT com_id, com_name FROM tbl_company WHERE com_hq_id = :hq_id', [':hq_id' => 0]);
         return $command->queryAll();
     }
+
+    public function searchMerchant($keyword, $hq_id)
+    {
+        $this->select('com_id, com_name');
+        $this->andWhere('com_name LIKE "%' . $keyword . '%"');
+        $this->andWhere('com_hq_id = 0');
+        $this->andWhere('com_status != 2');
+        $this->andWhere('com_is_parent IS null');
+        $this->orderBy('com_name');
+
+        return $this->all();
+    }
 }
