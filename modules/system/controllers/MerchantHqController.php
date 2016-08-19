@@ -1,18 +1,14 @@
 <?php
-
     namespace app\modules\system\controllers;
 
     use Yii;
     use yii\filters\VerbFilter;
     use yii\data\ActiveDataProvider;
-    use yii\web\Response;
     use yii\web\Controller;
     use yii\web\NotFoundHttpException;
     use app\controllers\BaseController;
 
     use app\models\Company;
-
-    use app\components\helpers\JsonHelper;
 
     use app\modules\system\processors\merchant_hq\MerchantHqSaveProcessor;
     use app\modules\system\processors\merchant_hq\MerchantHqChildrenSaveProcessor;

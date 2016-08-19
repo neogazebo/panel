@@ -6,13 +6,9 @@ use yii\helpers\Url;
 use yii\bootstrap\Modal;
 
 $this->title = 'Merchant HQ Management Dashboard';
-
 $this->registerCssFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/waitme/waitMe.css');
-
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/waitme/waitMe.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/MerchantHqManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-
 ?>
 <section class="content-header">
     <h1><?= $this->title ?></h1>
