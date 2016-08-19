@@ -60,20 +60,18 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
     public function getParentMerchants()
     {
-        $parents = $this->select('com_id, com_name, com_created_date, com_subcategory_id')->where('com_is_parent = :is_parent', [':is_parent' => 1])->orderBy(['com_id' => SORT_DESC]);
+        return $this->select('com_id, com_name, com_created_date, com_subcategory_id')->where('com_is_parent = :is_parent', [':is_parent' => 1])->orderBy(['com_id' => SORT_DESC]);
         return $parents;
     }
 
     public function getChildMerchants($parent_id)
     {
-        $children = $this->select('com_id, com_name')->where('com_hq_id = :hq_id', [':hq_id' => $parent_id])->orderBy(['com_id' => SORT_DESC]);
-        return $children;
+        return $this->select('com_id, com_name')->where('com_hq_id = :hq_id', [':hq_id' => $parent_id])->orderBy(['com_id' => SORT_DESC]);
     }
 
     public function getAllChildMerchants()
     {
-        $command = \Yii::$app->getDb()->createCommand('SELECT com_id, com_name FROM tbl_company WHERE com_hq_id = :hq_id', [':hq_id' => 0]);
-        return $command->queryAll();
+        return \Yii::$app->getDb()->createCommand('SELECT com_id, com_name FROM tbl_company WHERE com_hq_id = :hq_id', [':hq_id' => 0]);
     }
 
     public function searchMerchant($keyword, $hq_id)
@@ -82,9 +80,52 @@ class CompanyQuery extends \yii\db\ActiveQuery
         $this->andWhere('com_name LIKE "%' . $keyword . '%"');
         $this->andWhere('com_hq_id = 0');
         $this->andWhere('com_status != 2');
-        $this->andWhere('com_is_parent IS null');
+        $this->andWhere('com_is_parent = 0');
         $this->orderBy('com_name');
 
         return $this->all();
+    }
+
+    public function saveMerchantChildren($parent_id, $children)
+    {
+        foreach($children as $child)
+        {
+            $company = Company::findOne($child);
+            $company->com_hq_id = $parent_id;
+            $company->save(false);
+        }
+    }
+
+    public function getChildMerchantsId($parent_id)
+    {
+        $result = [];
+
+        $children = $this->getChildMerchants($parent_id)->all();
+
+        if($children)
+        {
+            foreach($children as $child)
+            {
+                array_push($result, $child->com_id);
+            }
+        }
+
+        return $result;
+    }
+
+    public function getChildrenNames($children)
+    {
+        $result = [];
+
+        if($children)
+        {
+            foreach($children as $child)
+            {
+                $company = Company::findOne($child);
+                array_push($result, $company->com_name);
+            }
+        }
+
+        return $result;
     }
 }

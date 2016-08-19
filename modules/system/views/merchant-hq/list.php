@@ -6,7 +6,7 @@ use yii\web\View;
 use yii\bootstrap\modal;
 use yii\helpers\Url;
 
-$this->title = '"' . $model->com_name . '" List';
+$this->title = '"' . $model->com_name . '" Merchants List';
 
 $this->registerCssFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/waitme/waitMe.css');
 
@@ -24,29 +24,27 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Merc
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border"></div>
-                <form id="addChild" action="<?= Url::to(['add']) ?>" data-key="<?= $model->com_name; ?>" method="post">
+                <form id="add-merchant-child">
                     <div class="box-body">
                         <div id="searchList" class="col-sm-6">
                             <h2><?= $this->title ?></h2>
-                            <input class="form-control" type="text" placeholder="Search registered merchants..." name="q">
-                            <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
-                            
+                            <select name="children[]" id="search_merchant_to" class="form-control" size="8" multiple="multiple">
+                                <?php foreach($merchant_children as $children): ?>
+                                    <option value="<?= $children->com_id ?>"><?= $children->com_name ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-sm-1" style="margin-top: 43px">
                             <h2></h2>
-                            <button type="button" id="search_rightAll" class="btn btn-default btn-block"><i class="fa fa-backward"></i></button>
-                            <button type="button" id="search_rightSelected" class="btn btn-default btn-block"><i class="fa fa-chevron-left"></i></button>
-                            <button type="button" id="search_leftSelected" class="btn btn-default btn-block"><i class="fa fa-chevron-right"></i></button>
-                            <button type="button" id="search_leftAll" class="btn btn-default btn-block"><i class="fa fa-forward"></i></button>
+                            <button type="button" id="search_merchant_rightAll" class="btn btn-default btn-block"><i class="fa fa-backward"></i></button>
+                            <button type="button" id="search_merchant_rightSelected" class="btn btn-default btn-block"><i class="fa fa-chevron-left"></i></button>
+                            <button type="button" id="search_merchant_leftSelected" class="btn btn-default btn-block"><i class="fa fa-chevron-right"></i></button>
+                            <button type="button" id="search_merchant_leftAll" class="btn btn-default btn-block"><i class="fa fa-forward"></i></button>
                         </div>
                         <div id="searchSelected" class="col-sm-5">
-                            <h2>Operator List</h2>
-                            <input class="form-control search-merchant" type="text" placeholder="Search unregistered merchants..." name="q">
-                            <select id="search-merchant" name="from[]" class="form-control" size="8" multiple="multiple">
-                            
-                            </select>
-                            <input type="hidden" name="List" value="<?= $this->title ?>">
+                            <h2>Merchants List</h2>
+                            <input id="search-merchant" class="form-control" type="text" placeholder="Search unregistered merchants..." name="q">
+                            <select id="search_merchant" name="from[]" class="form-control" size="8" multiple="multiple"></select>
                         </div>
                         <div class="clearfix"></div>    
                     </div>

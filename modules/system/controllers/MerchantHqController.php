@@ -12,6 +12,12 @@
 
     use app\models\Company;
 
+    use app\components\helpers\JsonHelper;
+
+    use app\modules\system\processors\merchant_hq\MerchantHqSaveProcessor;
+    use app\modules\system\processors\merchant_hq\MerchantHqChildrenSaveProcessor;
+    use app\modules\system\processors\merchant_hq\MerchantHqChildrenSearchProcessor;
+
     class MerchantHqController extends BaseController
     {
         public function actionIndex()
@@ -34,69 +40,32 @@
 
         public function actionOp()
         {
-            $op = Yii::$app->request->post('op');
-            $id = Yii::$app->request->post('com_id');
-            
-            switch ($op) 
-            {
-                case 'add':
-                    $model = new Company();
-                    $scenario = 'new-hq';
-                    break;
-                
-                case 'edit':
-                    $model = Company::findOne($id);
-                    $scenario = 'update-hq';
-                    break;
-            }
-
-            $transaction = Yii::$app->db->beginTransaction();
-
-            try
-            {
-                $model->setScenario($scenario);
-
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-                if($model->load(Yii::$app->request->post(), '')) 
-                {
-                    if($model->save()) 
-                    {
-                        $transaction->commit();
-                        return $this->jsonOutput(0, 'success', null);
-                    }
-
-                    return $this->jsonOutput(9000, 'error', $model->getErrors());
-                }
-            }
-            catch(\Exception $e)
-            {
-                $transaction->rollback();
-                return $this->jsonOutput(1000, 'error', $e->getMessage());
-            }
+            $processor = new MerchantHqSaveProcessor();
+            return $processor->process();
         }
 
         public function actionList($id)
         {
             $model = Company::findOne($id);
-            //$merchant_children = Company::find()->getChildMerchants($id);
+            $merchant_children = Company::find()->getChildMerchants($id)->all();
             $all_merchant_children = Company::find()->getAllChildMerchants();
 
             return $this->render('list', [
                 'model' => $model,
-                //'merchant_children' => $merchant_children,
+                'merchant_children' => $merchant_children,
                 'all_merchant_children' => $all_merchant_children
             ]);
         }
 
         public function actionSearch()
         {
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            $keyword = Yii::$app->request->post('keyword');
-            $hq_id = Yii::$app->request->post('hq_id');
+            $processor = new MerchantHqChildrenSearchProcessor();
+            return $processor->process();
+        }
 
-            $data = Company::find()->searchMerchant($keyword, $hq_id);
-            $output = $this->renderPartial('partials/search_result', ['data' => $data]);
-            return $this->jsonOutput(0, 'success', null, $output);
+        public function actionSaveChild()
+        {
+            $processor = new MerchantHqChildrenSaveProcessor();
+            return $processor->process();
         }
     }

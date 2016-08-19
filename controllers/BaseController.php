@@ -299,12 +299,13 @@ class BaseController extends Controller
         Yii::$app->response->sendFile($excel_report_path);
     }
 
-    protected function jsonOutput($code, $status, $message)
+    protected function jsonOutput($code, $status, $message, $data = null)
     {
         return [
             'error' => $code,
             'status' => $status,
-            'message' => $message
+            'message' => $message,
+            'data' => $data
         ];
     }
 }

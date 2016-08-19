@@ -75,9 +75,55 @@ function save(op_url, form_data, modal_instance)
     });
 }
 
+function op_confirm(com_id, children)
+{
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: '/system/merchant-hq/save-child',
+        beforeSend: function() {
+            $('.box').waitMe({
+                effect : 'stretch',
+                text : 'Saving...',
+                bg : 'rgba(255,255,255,0.7)',
+                color : '#000',
+                sizeW : '',
+                sizeH : ''
+            });
+        },
+        complete: function(){
+            $('.box').waitMe('hide');
+        },
+        data: {
+            'com_id': com_id,
+            'op_confirmation': true,
+            'children': children
+        },
+        success: function(data) {
+
+            if(!data.error)
+            {
+                swal({
+                    title: 'Operation Status',   
+                    html: true,
+                    text: 'Data is successfully saved',
+                    type: "success",
+                },
+                function() {   
+                    window.location.reload();
+                });
+            }
+        }
+    });
+}
+
 $(document).ready(function() {
 
-    $('#search-merchant').multiselect();
+    $('#search_merchant').multiselect({
+        search: {
+            right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+        }
+    });
 
 	$('#add-hq-modal, .edit-hq-modal').on('show.bs.modal', function (e) {
 		$('.com-name-error').html('');
@@ -139,11 +185,11 @@ $(document).ready(function() {
     
     var timer;
 
-    $('.search-merchant').keyup(function() {
+    $('#search-merchant').keyup(function() {
 
         clearTimeout(timer);
 
-        var ms = 400;
+        var ms = 300;
         var keyword = $(this).val();
         var hq_id = $('.com_id').val();
 
@@ -158,30 +204,122 @@ $(document).ready(function() {
                         'keyword': keyword,
                         'hq_id': hq_id
                     },
-                    /*
                     beforeSend: function() {
-                    $('.modal-dialog').waitMe({
-                    effect : 'stretch',
-                    text : 'Saving...',
-                    bg : 'rgba(255,255,255,0.7)',
-                    color : '#000',
-                    sizeW : '',
-                    sizeH : ''
-                    });
+                        $('#search-merchant').addClass('search-process');
                     },
                     complete: function(){
-                    $('.modal-dialog').waitMe('hide');
+                        $('#search-merchant').removeClass('search-process');
                     },
-                    */
                     success: function(data) {
-                        $('#search-merchant').html(data.data);
 
+                        if(!data.error)
+                        {
+                            $("#search_merchant").html(data.data);
+                            $("#search_merchant").multiselect('destroy');
+                            $("#search_merchant").multiselect();
+                        }
+                        else
+                        {
+                            swal({
+                                title: 'System Error',   
+                                html: true,
+                                text: data.message,
+                                type: "error",
+                            });
+                        }
                     }
                 });
             }, ms);
             
         }
 
+    });
+
+    $('#add-merchant-child').submit(function(e) {
+
+        e.preventDefault();
+
+        var op_url = '/system/merchant-hq/save-child';
+
+        var form_data = new FormData(this);
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: op_url,
+            data: form_data,
+            processData: false,
+            contentType: false,
+            beforeSend: function() {
+                $('.box').waitMe({
+                    effect : 'stretch',
+                    text : 'Analyzing operation...',
+                    bg : 'rgba(255,255,255,0.7)',
+                    color : '#000',
+                    sizeW : '',
+                    sizeH : ''
+                });
+            },
+            complete: function(){
+                $('.box').waitMe('hide');
+            },
+            success: function(data) {
+
+                if(!data.error)
+                {
+                    swal({
+                        title: 'Success',   
+                        html: true,
+                        text: 'Data is successfully saved',
+                        type: "success",
+                    },
+                    function() {   
+                        window.location.reload();
+                    });
+                }
+                else
+                {
+                    if(data.error == 1000)
+                    {
+                        swal({
+                            title: 'Operation Status',   
+                            html: true,
+                            text: data.message,
+                            type: "warning",
+                        });
+                    }
+
+                    if(data.error == 2000 || data.error == 3000)
+                    {
+                        swal({
+                            title: "Are you sure?",   
+                            text: data.message,
+                            html: true,   
+                            type: "warning",   
+                            showCancelButton: true,   
+                            confirmButtonColor: "#DD6B55",   
+                            confirmButtonText: "Yes",   
+                            cancelButtonText: "Cancel",   
+                            closeOnConfirm: true,   
+                            closeOnCancel: true 
+                        }, 
+                        function(isConfirm) {   
+                            if(isConfirm) 
+                            {
+                                var com_id = $('.com_id').val();
+                                var children = $('#search_merchant_to').val();
+                                op_confirm(com_id, children);
+                            }
+                            else
+                            {
+                                window.location.reload();
+                            }
+                        });
+                    }
+                }
+                
+            }
+        });
     });
 
 });
