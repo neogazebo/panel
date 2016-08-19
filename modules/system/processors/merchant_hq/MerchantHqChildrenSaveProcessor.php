@@ -86,20 +86,16 @@
                         //add and/or remove
                         if(!$op_confirmation)
                         {
-                            if($removed)
+                            if(!$removed)
                             {
-                                $children_names = Company::find()->getChildrenNames($changes);
+                                $removed_children_names = null;
+                            }
+                            
+                            $message = Yii::$app->controller->renderPartial('partials/child_op_combo', [
+                                'added_merchants' => $children_names, 
+                                'removed_merchants' => $removed_children_names, 
+                            ]);
 
-                                $message = Yii::$app->controller->renderPartial('partials/child_op_combo', [
-                                    'added_merchants' => $children_names, 
-                                    'removed_merchants' => $removed_children_names, 
-                                ]);
-                            }
-                            else
-                            {
-                                $message = Yii::$app->controller->renderPartial('partials/child_op', ['data' => $children_names, 'op' => 'add']);
-                            }
-                                                            
                             return $this->json_helper->jsonOutput(self::CHILDREN_OP_CONFIRMATION_CODE, 'error', $message);
                         }
 
