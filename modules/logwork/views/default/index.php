@@ -112,7 +112,7 @@ $this->title = 'Working Hours';
                                 ['class' => 'yii\grid\SerialColumn'],
                                 [
                                     'label' => 'Username',
-                                    'attribute' => 'wrk_by',
+                                    'attribute' => 'user.username',
                                     'value' => function($data) {
                                         return $data->user->username;
                                     }
