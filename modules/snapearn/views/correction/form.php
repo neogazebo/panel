@@ -38,7 +38,7 @@ $model->sna_push = true;
             <div class="user-block">
               <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'] . $model->member->acc_photo : $this->theme->baseUrl . '/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
               <span class="username">
-                  <a href="/account/default/view?id=<?= $model->member->acc_id ?>" target="_blank">
+                  <a href="<?= Yii::$app->homeUrl ?>account/default/view?id=<?= $model->member->acc_id ?>" target="_blank">
                       <?= (!empty($model->member)) ? $model->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>' ?>
                   </a>
               </span>
