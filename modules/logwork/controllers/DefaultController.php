@@ -26,21 +26,11 @@ class DefaultController extends BaseController
     public function actionIndex()
     {
         $model = WorkingTime::find()->getWorker();
-        $sort = new \yii\data\Sort([
-                'attributes' => [
-                    'user.username' => [
-                        'asc' => ['user.username' => SORT_ASC],
-                        'desc' => ['user.username' => SORT_DESC]
-                    ],
-                ],
-            ]);
-        
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
-            'sort' => $sort,
             'pagination' => [
                 'pageSize' => 20
-            ]
+            ],
         ]);
 
         return $this->render('index', [

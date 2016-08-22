@@ -38,7 +38,14 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             'SUM(wrk_type = 2) AS total_rejected',
             'COUNT(IF(wrk_type = 2, wrk_id, NULL)) / COUNT(IF(wrk_type != 3, wrk_id, NULL)) AS rejected_rate'
         ]);
-        // $this->with('user');
+        $cty = Yii::$app->request->get('country');
+        if (!empty($cty)) {
+            $this->with(['user' => function(\yii\db\ActiveQuery $query) use ($cty){
+                $query->andWhere('country = :cty',[':cty' => $cty]);
+            }]);
+        } else {
+            $this->with('user');
+        }
         $this->where('wrk_end IS NOT NULL');
         if (!empty($_GET['group'])) {
             $this->andWhere('wrk_by IN (
