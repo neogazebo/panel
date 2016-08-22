@@ -4,8 +4,10 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use app\components\helpers\Utc;
 
 $this->title = 'Merchant HQ Management Dashboard';
+
 $this->registerCssFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/waitme/waitMe.css');
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/waitme/waitMe.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/MerchantHqManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
@@ -40,7 +42,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Merc
                                         'attribute' => 'com_created_date',
                                         'format' => 'html',
                                         'value' => function($data) {
-                                            return Yii::$app->formatter->asDatetime($data->com_created_date, "php:d M Y H:i:s");
+                                            return Yii::$app->formatter->asDatetime(Utc::convert($data->com_created_date), "php:d M Y H:i:s");
                                         }
                                     ],
                                     [

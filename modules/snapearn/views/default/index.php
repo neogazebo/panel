@@ -107,7 +107,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                     Typeahead::widget([
                                         'id' => 'merchant',
                                         'name' => 'merchant',
-                                        'options' => ['placeholder' => $mer],
+                                        //'options' => ['placeholder' => $mer],
                                         'pluginOptions' => [
                                             'highlight' => true,
                                             'minLength' => 3
