@@ -1,4 +1,4 @@
-<div style="height: 400px; overflow:auto;">
+<div style="height: 200px; overflow:auto;">
 	<p>You are about to add and/or remove these merchants:</p>
 
 	<br>

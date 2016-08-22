@@ -128,4 +128,17 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
         return $result;
     }
+
+    public function checkCompanyIsParent($com_id)
+    {
+        $company = Company::findOne($com_id);
+        $is_parent = $company->com_is_parent;
+
+        if($is_parent)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

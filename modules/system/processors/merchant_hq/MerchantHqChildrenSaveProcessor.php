@@ -22,16 +22,18 @@
                 $merchant_children = Company::find()->getChildMerchants($parent_id)->all();
                 $merchant_children_id = Company::find()->getChildMerchantsId($parent_id);
 
-                // if parent don't have any children yet and children post data is empty
+                // if parent don't have any children yet
                 if(!$merchant_children)
                 {
                     $children_names = Company::find()->getChildrenNames($children);
 
+                    // if children post data is empty
                     if(!$children)
                     {
                         throw new \Exception("Please fill the merchants data", self::SYSTEM_ERROR_CODE);
                     }
                     
+                    // if user have not confirm the operation yet
                     if(!$op_confirmation)
                     {
                         $message = Yii::$app->controller->renderPartial('partials/child_op', ['data' => $children_names, 'op' => 'add']);
@@ -67,6 +69,7 @@
                     
                     if($changes)
                     {
+                        // check also removed data
                         $removed = array_diff($merchant_children_id, $children);
                         $removed_children_names = Company::find()->getChildrenNames($removed);
 
@@ -83,7 +86,6 @@
 
                         $children_names = Company::find()->getChildrenNames($changes);
 
-                        //add and/or remove
                         if(!$op_confirmation)
                         {
                             if(!$removed)
