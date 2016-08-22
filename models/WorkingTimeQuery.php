@@ -25,7 +25,7 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         return $this;
     }
 
-    public function getWorker()
+    public function getWorker($params)
     {
         $this->select([
             'wrk_id',
@@ -36,17 +36,20 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             'SUM(wrk_point) AS total_point',
             'SUM(wrk_type = 1) AS total_approved',
             'SUM(wrk_type = 2) AS total_rejected',
-            'COUNT(IF(wrk_type = 2, wrk_id, NULL)) / COUNT(IF(wrk_type != 3, wrk_id, NULL)) AS rejected_rate'
+            'COUNT(IF(wrk_type = 2, wrk_id, NULL)) / COUNT(IF(wrk_type != 3, wrk_id, NULL)) AS rejected_rate',
         ]);
-        $cty = Yii::$app->request->get('country');
-        if (!empty($cty)) {
-            $this->with(['user' => function(\yii\db\ActiveQuery $query) use ($cty){
-                $query->andWhere('country = :cty',[':cty' => $cty]);
-            }]);
-        } else {
-            $this->with('user');
-        }
+        
         $this->where('wrk_end IS NOT NULL');
+        
+        if ($params != NULL) {
+            $id = [];
+            $i = 0;
+            foreach ($params->asArray()->all() as $key) {
+                $id[] = (int)$key['id'];
+            }
+            $this->andWhere(['wrk_by' => $id]);
+        }
+
         if (!empty($_GET['group'])) {
             $this->andWhere('wrk_by IN (
                 SELECT spgd_usr_id 

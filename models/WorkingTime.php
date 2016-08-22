@@ -106,14 +106,7 @@ class WorkingTime extends \yii\db\ActiveRecord
 
     public function getUser()
     {
-        $sortItem = Yii::$app->request->get('sort');
-        
-        $sort = 'SORT_DESC';
-        if (!empty($sortItem)){
-            $sort = 'SORT_ASC';
-        }
-
-        return $this->hasOne(User::ClassName(),['id' => 'wrk_by'])->orderBy(['username' => $sort]);
+        return $this->hasOne(User::ClassName(),['id' => 'wrk_by']);
     }
 
     public function getReason()

@@ -98,8 +98,8 @@ $this->title = 'Working Hours';
                                     <label>Country</label>
                                      <select class="form-control" name="country">
                                          <option value="" <?= (empty($_GET['country'])) ? 'selected' : '' ?>>All</option>
-                                         <option value="ID" <?= ($_GET['country'] == 'ID') ? 'selected' : '' ?>>Indonesia</option>
-                                         <option value="MYR" <?= ($_GET['country'] == 'MYR') ? 'selected' : '' ?>>Malaysia</option>
+                                         <option value="ID" <?= (!empty($_GET['country']) && $_GET['country'] == 'ID') ? 'selected' : '' ?>>Indonesia</option>
+                                         <option value="MYR" <?= (!empty($_GET['country']) && $_GET['country'] == 'MYR') ? 'selected' : '' ?>>Malaysia</option>
                                      </select>
                                  </div>
                             </div>
@@ -118,47 +118,42 @@ $this->title = 'Working Hours';
                         <?= GridView::widget([
                             'layout' => '{summary} {items} {pager}',
                             'dataProvider' => $dataProvider,
-                            // 'rowOptions' => function ($model, $index, $widget, $grid) {
-                            //         if (empty($model->user->username)) {
-                            //             return ['style' => 'display: none'];
-                            //         }
-                            //     },
                             'columns' => [
                                 ['class' => 'yii\grid\SerialColumn'],
                                 [
                                     'label' => 'Username',
-                                    'attribute' => 'wrk_by',
+                                    'attribute' => 'user.username',
                                     'value' => function($data) {
-                                        if (!empty($data->user))
-                                            return $data->user->username;
+                                        if (!empty($data['user']))
+                                            return $data['user']['username'];
                                     }
                                 ],
                                 [
                                     'label' => 'Total Point',
                                     // 'attribute' => 'wrk_point',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_point, 0);
+                                        return Yii::$app->formatter->asDecimal($data['total_point'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Approved',
                                     // 'attribute' => 'wrk_type',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_approved, 0);
+                                        return Yii::$app->formatter->asDecimal($data['total_approved'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Rejected',
                                     // 'attribute' => 'wrk_type',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_rejected, 0);
+                                        return Yii::$app->formatter->asDecimal($data['total_rejected'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Rejection Rate',
                                     // 'attribute' => 'wrk_type',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asPercent($data->rejected_rate);
+                                        return Yii::$app->formatter->asPercent($data['rejected_rate']);
                                     }
                                 ],
                                 [
@@ -166,7 +161,7 @@ $this->title = 'Working Hours';
                                     // 'attribute' => 'wrk_time',
                                     'value' => function($data) {
                                         date_default_timezone_set('UTC');
-                                        return date('H:i:s', $data->total_record);
+                                        return date('H:i:s', $data['total_record']);
                                     }
                                 ],
                                 [
@@ -174,7 +169,7 @@ $this->title = 'Working Hours';
                                     'template' => '<span class="pull-right actionColumn">{detail} </span>',
                                     'buttons' => [
                                         'detail' => function($url,$model) {
-                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model->wrk_by,'wrk_daterange' => (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ]);
+                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model['wrk_by'],'wrk_daterange' => (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ]);
                                         },
                                     ]
                                 ]
