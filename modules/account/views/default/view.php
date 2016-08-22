@@ -646,6 +646,9 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                                                 'options' => [
                                                     'style' => 'font-size: 13px',
                                                 ],
+                                                'rowOptions' => function($model,$key,$index,$grid){
+                                                    return ['style' => 'cursor: pointer;' ,'onclick' => 'LinkToSnap('.$model->lph_param.')'];
+                                                },
                                                 'layout' => '{items} {summary} {pager}',
                                                 'dataProvider' => $pointHistoryProvider,
                                                 'pjax' => true,
@@ -747,3 +750,12 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
 ?>
 <div id="modalContent"></div>
 <?php Modal::end(); ?>
+<?php
+$customScript = <<< SCRIPT
+    function LinkToSnap(params) {
+        var id = params;
+        window.open('/snapearn/correction/to-correction?id=' + id, '_blank');
+    };
+SCRIPT;
+$this->registerJs($customScript, \yii\web\View::POS_END);
+?>

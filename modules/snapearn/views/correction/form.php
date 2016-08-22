@@ -38,7 +38,9 @@ $model->sna_push = true;
             <div class="user-block">
               <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'] . $model->member->acc_photo : $this->theme->baseUrl . '/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
               <span class="username">
-                  <?= $model->member->acc_screen_name ?>
+                  <a href="/account/default/view?id=<?= $model->member->acc_id ?>" target="_blank">
+                      <?= (!empty($model->member)) ? $model->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>' ?>
+                  </a>
               </span>
               <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
             </div>
@@ -111,6 +113,14 @@ $model->sna_push = true;
                         <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
                       </a>
                     </li>
+                  <?php endif; ?>
+                  <?php if(Yii::$app->user->identity->superuser == 1): ?>
+                      <li>
+                        <a href="#"><b>Operator </b>
+                          <span class="pull-right text-light-blue"><?= (!empty($model->sna_review_by)) ? $model->review->username : '<a class=""><span class="not-set">(not set)</span></a>' ?>
+                          </span>
+                        </a>
+                      </li>
                   <?php endif; ?>
                       <li></li>
                   </ul>
