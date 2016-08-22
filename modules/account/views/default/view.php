@@ -197,6 +197,9 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                                                 'options' => [
                                                     'style' => 'font-size: 13px',
                                                 ],
+                                                'rowOptions' => function($model,$key,$index,$grid){
+                                                    return ['style' => 'cursor: pointer;' ,'onclick' => 'LinkToSnap('.$model->sna_id.')'];
+                                                },
                                                 'layout' => '{items} {summary} {pager}',
                                                 'dataProvider' => $receiptProvider,
                                                 'pjax' => true,
