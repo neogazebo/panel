@@ -38,12 +38,10 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
             'SUM(wrk_type = 2) AS total_rejected',
             'COUNT(IF(wrk_type = 2, wrk_id, NULL)) / COUNT(IF(wrk_type != 3, wrk_id, NULL)) AS rejected_rate',
         ]);
-        
         $this->where('wrk_end IS NOT NULL');
         
-        if ($params != NULL) {
+        if (!empty($params)) {
             $id = [];
-            $i = 0;
             foreach ($params->asArray()->all() as $key) {
                 $id[] = (int)$key['id'];
             }

@@ -28,8 +28,8 @@ class DefaultController extends BaseController
     {
         $params = NULL;
         $country = Yii::$app->request->get('country');
-        if (!empty($country)){
-            $params = User::find()->with('worktime')->where("country = :cty", [':cty' => $country]);
+        if (!empty($country)) {
+            $params = User::find()->with('worktime')->where('country = :cty', [':cty' => $country]);
         }
         $model = WorkingTime::find()->with('user')->getWorker($params)->asArray()->all();
         
