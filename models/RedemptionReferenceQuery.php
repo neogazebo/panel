@@ -39,6 +39,7 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
     public function findCostume()
     {
         $username = Yii::$app->request->get('username');
+        $r_name = Yii::$app->request->get('r_name');
         $msisdn = Yii::$app->request->get('rwd_msisdn');
         $status = Yii::$app->request->get('rwd_status');
         $code = Yii::$app->request->get('rwd_code');
@@ -47,6 +48,9 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
 
         if (!empty($username)){
             $this->andFilterWhere(['like', 'acc_screen_name', $username]);
+        }
+        if (!empty($r_name)){
+            $this->andFilterWhere(['like', 'rdr_name', $r_name]);
         }
         if (!empty($msisdn))
             $this->andFilterWhere(['like', 'rdr_msisdn', $msisdn]);

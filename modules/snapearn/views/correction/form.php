@@ -81,9 +81,15 @@ $model->sna_push = true;
                 <div class="box-body">
                   <ul class="nav nav-stacked update">
                     <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                    <li class="">
-                      <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
-                    </li>
+                      <li>
+                        <a href="#"><b>Operator </b>
+                          <span class="pull-right text-light-blue"><?= (!empty($model->sna_review_by)) ? $model->review->username : '<a class=""><span class="not-set">(not set)</span></a>' ?>
+                          </span>
+                        </a>
+                      </li>
+                      <li class="">
+                        <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
+                      </li>
                     <?php endif; ?>
                     <li class="">
                       <a href="#"><b><?= (empty($model->merchant)) ? 'Suggestion Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
@@ -113,14 +119,6 @@ $model->sna_push = true;
                         <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
                       </a>
                     </li>
-                  <?php endif; ?>
-                  <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                      <li>
-                        <a href="#"><b>Operator </b>
-                          <span class="pull-right text-light-blue"><?= (!empty($model->sna_review_by)) ? $model->review->username : '<a class=""><span class="not-set">(not set)</span></a>' ?>
-                          </span>
-                        </a>
-                      </li>
                   <?php endif; ?>
                       <li></li>
                   </ul>
