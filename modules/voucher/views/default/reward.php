@@ -99,7 +99,7 @@ $this->registerCss("
                        
                             <div class="form-group">
                                 <label>Export</label><br>
-                                <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                                <button name="output_type" value="excel" type="submit" class="btn btn-info btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
                             </div>
                             </div>
                         </div>
