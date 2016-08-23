@@ -9,13 +9,12 @@ use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
 
-
 $this->title = 'Snap & Earn List';
 
 $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
 $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 ?>
-<section class="content-header ">
+<section class="content-header">
     <h1><?= $this->title?></h1>
 </section>
 
@@ -182,14 +181,14 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 //                                'sna_receipt_date',
                                 [
                                     'attribute' => 'sna_receipt_amount',
-                                    'format' => ['decimal',2],
+                                    'format' => ['decimal', 2],
                                     'value' => function($data) {
                                         return $data->sna_receipt_amount;
                                     }
                                 ],
                                 [
                                     'attribute' => 'sna_point',
-                                    'format' => ['decimal',0],
+                                    'format' => ['decimal', 0],
                                     'value' => function($data) {
                                         return $data->sna_point;
                                     }
@@ -245,14 +244,14 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right actionColumn">{update} {corection}</span>',
+                                    'template' => '<span class="pull-right actionColumn">{update}</span>',
                                     'buttons' => [
                                         'update' => function($url,$model) {
                                             $superuser = Yii::$app->user->identity->superuser;
                                             if ($model->sna_status == 0) {
                                                 return Html::a('<i class="fa fa-pencil-square-o"></i>', ['to-update', 'id' => $model->sna_id]);
                                             } elseif($model->sna_status != 0 && $superuser == 1) {
-                                                return Html::a('<i class="fa fa-pencil-square-o btn-correction"></i>',['correction/to-correction','id' => $model->sna_id]);
+                                                return Html::a('<i class="fa fa-pencil-square-o btn-correction"></i>', ['correction/to-correction','id' => $model->sna_id]);
                                             }
                                         },
                                     ],
@@ -269,7 +268,6 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 </section>
 
 <?php
-
 $this->registerJs("
     // get parameter from url params name
     function getParameterByName(name, url) {
