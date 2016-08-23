@@ -115,6 +115,17 @@ $(document).ready(function() {
         }
     });
 
+    $(".table").tablesorter({ 
+        // pass the headers argument and assing a object 
+        headers: { 
+            // assign the secound column (we start counting zero) 
+            3: { 
+                // disable it by setting the property sorter to false 
+                sorter: false 
+            }, 
+        } 
+    }); 
+
 	$('#add-hq-modal, .edit-hq-modal').on('show.bs.modal', function (e) {
 		$('.com-name-error').html('');
         $('.com-category-error').html('');

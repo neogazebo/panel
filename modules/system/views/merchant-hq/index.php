@@ -9,7 +9,9 @@ use app\components\helpers\Utc;
 $this->title = 'Merchant HQ List';
 
 $this->registerCssFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/waitme/waitMe.css');
+$this->registerCssFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/css/tablesorter-custom.css');
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/waitme/waitMe.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/tablesorter/dist/js/jquery.tablesorter.min.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/MerchantHqManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 ?>
 <section class="content-header">
@@ -35,10 +37,11 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Merc
                                 'dataProvider' => $dataProvider,
                                 'columns' => [
                                     [
-                                        'label' => 'HQ Name',
+                                        'header' => 'HQ Name',
                                         'attribute' => 'com_name',
                                     ],
                                     [
+                                        'header' => 'Created At',
                                         'attribute' => 'com_created_date',
                                         'format' => 'html',
                                         'value' => function($data) {
@@ -46,7 +49,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Merc
                                         }
                                     ],
                                     [
-                                        'label' => 'Category',
+                                        'header' => 'Category',
                                         'attribute' => 'com_subcategory_id',
                                         'format' => 'html',
                                         'value' => function($data) {
