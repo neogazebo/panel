@@ -135,6 +135,8 @@ $this->registerCss($customCss);
                                 [
                                     'label' => 'Username',
                                     'attribute' => 'user.username',
+                                    'contentOptions' => ['style' => 'text-align: left'],
+                                    'headerOptions' => ['style' => 'text-align: left'],
                                     'value' => function($data) {
                                         if (!empty($data['user']))
                                             return $data['user']['username'];
