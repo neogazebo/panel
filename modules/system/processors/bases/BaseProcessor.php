@@ -4,9 +4,10 @@ namespace app\modules\system\processors\bases;
 
 use Yii;
 use yii\web\Response;
+use app\controllers\BaseController;
 use app\components\helpers\JsonHelper;
 
-abstract class BaseProcessor
+abstract class BaseProcessor extends BaseController
 {
     protected $json_helper;
 

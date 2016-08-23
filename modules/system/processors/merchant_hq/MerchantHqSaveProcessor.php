@@ -17,12 +17,20 @@ class MerchantHqSaveProcessor extends BaseProcessor
             case 'add':
                 $model = new Company();
                 $scenario = 'new-hq';
+                $title = 'Company - Add New Merchant HQ';
                 break;
             case 'edit':
                 $model = Company::findOne($id);
                 $scenario = 'update-hq';
+                $title = 'Company - Update Merchant HQ';
                 break;
         }
+        $activities = [
+            $title,
+            $title . ' ' . $model->com_email . ' on ' . $model->com_name,
+            Company::className(),
+            $model->com_id
+        ];
 
         $transaction = Yii::$app->db->beginTransaction();
 
@@ -31,6 +39,7 @@ class MerchantHqSaveProcessor extends BaseProcessor
 
             if($model->load(Yii::$app->request->post(), '')) {
                 if($model->save()) {
+                    $this->saveLog($activities);
                     $transaction->commit();
                     return $this->json_helper->jsonOutput(0, 'success', null);
                 }

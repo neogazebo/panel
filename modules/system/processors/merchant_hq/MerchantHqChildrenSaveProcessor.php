@@ -89,7 +89,7 @@ class MerchantHqChildrenSaveProcessor extends BaseProcessor
                     Company::find()->saveMerchantChildren($parent_id, $changes);
 
                     if($removed)
-                        Company::find()->saveMerchantChildren(0, $removed);
+                        Company::find()->saveMerchantChildren($parent_id, $removed, true);
 
                     $transaction->commit();
                     return $this->json_helper->jsonOutput(0, 'success', null);

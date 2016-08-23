@@ -1,7 +1,10 @@
+/*
+ * function merchant-hq
+*/
+
 function showError(message, error_field)
 {
-	for (var error in message) 
-	{
+	for (var error in message) {
 		$(error_field).html('<p style="color: #F00; "><em>' + message[error] + '</em></p>');
 	}
 }
@@ -25,13 +28,11 @@ function save(op_url, form_data, modal_instance)
                 sizeH : ''
             });
         },
-        complete: function(){
+        complete: function() {
             $('.modal-dialog').waitMe('hide');
         },
         success: function(data) {
-
-            if(!data.error)
-            {
+            if(!data.error) {
                 $(modal_instance).modal('hide');
 
                 swal({
@@ -43,26 +44,18 @@ function save(op_url, form_data, modal_instance)
                 function() {   
                     window.location.reload();
                 });
-            }
-            else
-            {
+            } else {
                 var msg = '';
 
-                if(data.error == 9000)
-                {
+                if(data.error == 9000) {
                     if(data.message.com_name)
-                    {
                         showError(data.message.com_name, '.com-name-error');
-                    }
 
                     if(data.message.com_subcategory_id)
-                    {
                         showError(data.message.com_subcategory_id, '.com-category-error');
-                    }
                 }
                 
-                if(data.error == 1000)
-                {
+                if(data.error == 1000) {
                     swal({
                         title: 'System Error',   
                         html: true,
@@ -100,9 +93,7 @@ function op_confirm(com_id, children)
             'children': children
         },
         success: function(data) {
-
-            if(!data.error)
-            {
+            if(!data.error) {
                 swal({
                     title: 'Operation Status',   
                     html: true,
@@ -118,7 +109,6 @@ function op_confirm(com_id, children)
 }
 
 $(document).ready(function() {
-
     $('#search_merchant').multiselect({
         search: {
             right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
@@ -133,14 +123,12 @@ $(document).ready(function() {
 	})
 
 	$('.manage-hq').submit(function(e) {
-
         e.preventDefault();
 
-        var op = $(this).data('op');
-        var op_url = '/system/merchant-hq/op';
+        var op = $(this).data('op'),
+            op_url = '/system/merchant-hq/op';
 
-        switch(op)
-        {
+        switch(op) {
             case 'add':
                 var modal_instance = '#add-hq-modal';
                 break;
@@ -154,8 +142,7 @@ $(document).ready(function() {
 
         form_data.append('op', op);
 
-        if(op == 'edit')
-        {
+        if(op == 'edit') {
             var com_name_edited = $(this).find('.com_name_temp').val();
 
             swal({
@@ -169,16 +156,12 @@ $(document).ready(function() {
                 cancelButtonText: "Cancel",   
                 closeOnConfirm: true,   
                 closeOnCancel: true 
-            }, 
-            function(isConfirm) {   
-                if (isConfirm) 
-                {     
+            },
+            function(isConfirm) {
+                if (isConfirm)
                     save(op_url, form_data, modal_instance);
-                } 
             });
-        }
-        else
-        {
+        } else {
             save(op_url, form_data, modal_instance);
         }
     });
@@ -186,15 +169,13 @@ $(document).ready(function() {
     var timer;
 
     $('#search-merchant').keyup(function() {
-
         clearTimeout(timer);
 
-        var ms = 300;
-        var keyword = $(this).val();
-        var hq_id = $('.com_id').val();
+        var ms = 300,
+            keyword = $(this).val(),
+            hq_id = $('.com_id').val();
 
-        if(keyword.length >= 3)
-        {
+        if(keyword.length >= 3) {
             timer = setTimeout(function() {
                 $.ajax({
                     type: 'POST',
@@ -211,15 +192,11 @@ $(document).ready(function() {
                         $('#search-merchant').removeClass('search-process');
                     },
                     success: function(data) {
-
-                        if(!data.error)
-                        {
+                        if(!data.error) {
                             $("#search_merchant").html(data.data);
                             $("#search_merchant").multiselect('destroy');
                             $("#search_merchant").multiselect();
-                        }
-                        else
-                        {
+                        } else {
                             swal({
                                 title: 'System Error',   
                                 html: true,
@@ -230,18 +207,14 @@ $(document).ready(function() {
                     }
                 });
             }, ms);
-            
         }
-
     });
 
     $('#add-merchant-child').submit(function(e) {
-
         e.preventDefault();
 
-        var op_url = '/system/merchant-hq/save-child';
-
-        var form_data = new FormData(this);
+        var op_url = '/system/merchant-hq/save-child',
+            form_data = new FormData(this);
 
         $.ajax({
             type: 'POST',
@@ -264,9 +237,7 @@ $(document).ready(function() {
                 $('.box').waitMe('hide');
             },
             success: function(data) {
-
-                if(!data.error)
-                {
+                if(!data.error) {
                     swal({
                         title: 'Success',   
                         html: true,
@@ -276,11 +247,8 @@ $(document).ready(function() {
                     function() {   
                         window.location.reload();
                     });
-                }
-                else
-                {
-                    if(data.error == 1000)
-                    {
+                } else {
+                    if(data.error == 1000) {
                         swal({
                             title: 'Operation Status',   
                             html: true,
@@ -289,8 +257,7 @@ $(document).ready(function() {
                         });
                     }
 
-                    if(data.error == 2000 || data.error == 3000)
-                    {
+                    if(data.error == 2000 || data.error == 3000) {
                         swal({
                             title: "Are you sure?",   
                             text: data.message,
@@ -304,22 +271,17 @@ $(document).ready(function() {
                             closeOnCancel: true 
                         }, 
                         function(isConfirm) {   
-                            if(isConfirm) 
-                            {
+                            if(isConfirm) {
                                 var com_id = $('.com_id').val();
                                 var children = $('#search_merchant_to').val();
                                 op_confirm(com_id, children);
-                            }
-                            else
-                            {
+                            } else {
                                 window.location.reload();
                             }
                         });
                     }
                 }
-                
             }
         });
     });
-
 });

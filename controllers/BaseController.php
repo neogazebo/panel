@@ -92,14 +92,7 @@ class BaseController extends Controller
     public function saveLog($activities)
     {
         // ['activity', 'desc', 'item', 'item_id']
-        $model = new Logging;
-        $model->log_usr_id = Yii::$app->user->id;
-        $model->log_activity = $activities[0];
-        $model->log_datetime = \app\components\helpers\Utc::getNow();
-        $model->log_description = $activities[1];
-        $model->log_item = $activities[2];
-        $model->log_item_id = $activities[3];
-        $model->save();
+        Logging::saveLog($activities);
     }
 
     protected function centralTimeZone()

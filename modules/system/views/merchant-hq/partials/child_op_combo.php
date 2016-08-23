@@ -6,25 +6,26 @@
 	<p>Added Merchants:</p>
 
 	<?php if($added_merchants): ?>
-		<ol>
-			<?php foreach($added_merchants as $added): ?>
-				<li><strong><?= $added; ?></strong></li>
-			<?php endforeach; ?>
-		</ol>
+		<?php $merchants = ''; ?>
+		<?php foreach($added_merchants as $added): ?>
+			<?php $merchants .= $added . ', '; ?>
+		<?php endforeach; ?>
+		<strong><?= rtrim($merchants, ', ') ?></strong>
 	<?php else: ?>
 		<p>None</p>
 	<?php endif; ?>
 
-	<br>
+	<br />
+	<br />
 
 	<p>Removed Merchants:</p>
 
 	<?php if($removed_merchants): ?>
-		<ol>
-			<?php foreach($removed_merchants as $removed): ?>
-				<li><strong><?= $removed; ?></strong></li>
-			<?php endforeach; ?>
-		</ol>
+		<?php $rmerchants = ''; ?>
+		<?php foreach($removed_merchants as $removed): ?>
+			<?php $rmerchants .= $removed . ', '; ?>
+		<?php endforeach; ?>
+		<strong><?= rtrim($rmerchants, ', ') ?></strong>
 	<?php else: ?>
 		<p>None</p>
 	<?php endif; ?>

@@ -17,7 +17,8 @@ class MerchantHqChildrenSearchProcessor extends BaseProcessor
             $data = Company::find()->searchMerchant($keyword, $hq_id);
             $output = Yii::$app->controller->renderPartial('partials/search_result', ['data' => $data]);
             return $this->json_helper->jsonOutput(0, 'success', null, $output);
-        } catch(\Exception $e)
+        } catch(\Exception $e) {
             return $this->json_helper->jsonOutput(self::SYSTEM_ERROR_CODE, 'error', $e->getMessage());
+        }
     }
 }
