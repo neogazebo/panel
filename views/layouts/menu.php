@@ -126,7 +126,7 @@ use app\components\filters\AccessFilters;
         <ul class="treeview-menu">
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
-                    <i class="fa fa-circle-o"></i> Merchant HQ Management
+                    <i class="fa fa-circle-o"></i> Merchant HQ
                 </a>
             </li>
             

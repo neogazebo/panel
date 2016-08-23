@@ -254,6 +254,19 @@ class CorrectionController extends BaseController
                                 $params[] = ['[business]', $business];
                                 $params[] = ['[location]', $location];
                                 break;
+                            case 8:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                break;
+                            case 9:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                break;
+                            case 10:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                $params[] = ['[location]', $location];
+                                break;
                         }
 
                         Yii::$app

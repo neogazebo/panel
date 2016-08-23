@@ -12,6 +12,18 @@ use yii\helpers\ArrayHelper;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Working Hours';
+$customCss = <<< SCRIPT
+    .table > thead > tr > th, 
+    .table > tbody > tr > th, 
+    .table > tfoot > tr > th, 
+    .table > thead > tr > td, 
+    .table > tbody > tr > td, 
+    .table > tfoot > tr > td  {
+        border-top: 1px solid #f4f4f4;
+        text-align: right;
+    }
+SCRIPT;
+$this->registerCss($customCss);
 ?>
 <section class="content-header ">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -123,42 +135,39 @@ $this->title = 'Working Hours';
                                 [
                                     'label' => 'Username',
                                     'attribute' => 'user.username',
+                                    'headerOptions' => ['style' => 'text-align: left'],
+                                    'contentOptions' => ['style' => 'text-align: left'],
                                     'value' => function($data) {
                                         if (!empty($data['user']))
                                             return $data['user']['username'];
                                     }
                                 ],
                                 [
-                                    'label' => 'Total Point',
-                                    // 'attribute' => 'wrk_point',
-                                    'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data['total_point'], 0);
-                                    }
-                                ],
-                                [
                                     'label' => 'Total Approved',
-                                    // 'attribute' => 'wrk_type',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asDecimal($data['total_approved'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Rejected',
-                                    // 'attribute' => 'wrk_type',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asDecimal($data['total_rejected'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Rejection Rate',
-                                    // 'attribute' => 'wrk_type',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asPercent($data['rejected_rate']);
                                     }
                                 ],
                                 [
+                                    'label' => 'Total Point',
+                                    'value' => function($data) {
+                                        return Yii::$app->formatter->asDecimal($data['total_point'], 0);
+                                    }
+                                ],
+                                [
                                     'label' => 'Total Work Time',
-                                    // 'attribute' => 'wrk_time',
                                     'value' => function($data) {
                                         date_default_timezone_set('UTC');
                                         return date('H:i:s', $data['total_record']);

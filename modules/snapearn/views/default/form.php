@@ -250,7 +250,6 @@ $this->registerJs("
 
         if($(this).val() == 1) {
             pointConvert();
-            $('.tooltip').show().tooltipster();
 
             if (com_id == 0) {
                 $('.field-snapearn-sna_receipt_amount').addClass('has-error');

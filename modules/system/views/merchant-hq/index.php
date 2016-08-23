@@ -6,7 +6,7 @@ use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use app\components\helpers\Utc;
 
-$this->title = 'Merchant HQ Management Dashboard';
+$this->title = 'Merchant HQ List';
 
 $this->registerCssFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/waitme/waitMe.css');
 $this->registerCssFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/css/tablesorter-custom.css');
@@ -25,7 +25,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Merc
                 <div class="box-header with-border">
                     <div class="pull-right">
                         <?php //echo Html::button('<i class="fa fa-plus-square"></i> New Group', ['value' => Url::to(['create']), 'class' => 'btn btn-primary modalButton']); ?>
-                        <button type="button" class="btn btn-primary modalButton" data-toggle="modal" data-target="#add-hq-modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus-square"></i>&nbsp;&nbsp; Add New HQ</button>
+                        <button type="button" class="btn btn-primary modalButton" data-toggle="modal" data-target="#add-hq-modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus-square"></i>&nbsp;Add New HQ</button>
                     </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
