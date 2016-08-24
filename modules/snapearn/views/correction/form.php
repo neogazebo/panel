@@ -101,7 +101,7 @@ $model->sna_push = true;
                         <?php if ($model->merchant->com_point < 1000) :?>
                           <!--this validation if add point to merchant is only specific user-->
                           <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
-                            <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
+                            <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id.'&type=2', 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
                           <?php // else: ?>
                             <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
                           <?php // endif; ?>

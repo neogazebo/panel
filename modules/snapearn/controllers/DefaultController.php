@@ -511,14 +511,30 @@ class DefaultController extends BaseController
                                     $params[] = ['[business]', $business];
                                     $params[] = ['[location]', $location];
                                     break;
+                                case 11:
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[business]', $business];
+                                    break;
+                                case 12:
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[business]', $business];
+                                    break;
+                                case 13:
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[business]', $business];
+                                    break;
+                                case 14:
+                                    $params[] = ['[username]', $username];
+                                    $params[] = ['[business]', $business];
+                                    break;
                             }
-
-                            Yii::$app
-                                ->AdminMail
-                                ->backend($model->member->acc_facebook_email, $params)
-                                ->snapearnRejected($model->sna_sem_id)
-                                ->send()
-                                ->view();
+                            // hide sementara
+                            // Yii::$app
+                            //     ->AdminMail
+                            //     ->backend($model->member->acc_facebook_email, $params)
+                            //     ->snapearnRejected($model->sna_sem_id)
+                            //     ->send()
+                            //     ->view();
                         }
 
                         //if push notification checked then send to activity
@@ -596,7 +612,7 @@ class DefaultController extends BaseController
         ]);
     }
 
-    public function actionShortPoint($id,$sna_id)
+    public function actionShortPoint($id,$sna_id, $type = null)
     {
         $model = Company::findOne($id);
         if ($model->load(Yii::$app->request->post())) {
@@ -608,7 +624,9 @@ class DefaultController extends BaseController
                     $model->com_id
                 ];
                 $this->saveLog($activities);
-
+                if ($type == 2) {
+                    return $this->redirect(['correction/correction?id='.$sna_id]);
+                }
                 return $this->redirect(['update?id='.$sna_id]);
             }
         }

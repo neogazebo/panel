@@ -92,7 +92,8 @@ class BaseController extends Controller
     public function saveLog($activities)
     {
         // ['activity', 'desc', 'item', 'item_id']
-        Logging::saveLog($activities);
+        $loging = new Logging;
+        $loging->saveLog($activities);
     }
 
     protected function centralTimeZone()

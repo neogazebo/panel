@@ -267,14 +267,30 @@ class CorrectionController extends BaseController
                                 $params[] = ['[business]', $business];
                                 $params[] = ['[location]', $location];
                                 break;
+                            case 11:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                break;
+                            case 12:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                break;
+                            case 13:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                break;
+                            case 14:
+                                $params[] = ['[username]', $username];
+                                $params[] = ['[business]', $business];
+                                break;
                         }
-
-                        Yii::$app
-                            ->AdminMail
-                            ->backend($model->member->acc_facebook_email, $params)
-                            ->snapearnRejected($model->sna_sem_id)
-                            ->send()
-                            ->view();
+                        // hide sementara
+                        // Yii::$app
+                        //     ->AdminMail
+                        //     ->backend($model->member->acc_facebook_email, $params)
+                        //     ->snapearnRejected($model->sna_sem_id)
+                        //     ->send()
+                        //     ->view();
                     }
 
                     //if push notification checked then send to activity
