@@ -32,12 +32,19 @@ class DefaultController extends BaseController
             $params = User::find()->with('worktime')->where("country = :cty",[':cty' => $country]);
         }
         $model = WorkingTime::find()->with('user')->getWorker($params)->asArray()->all();
-        
+        for ($i=0; $i < count($model); $i++) { 
+            $model[$i]['user']['username'] = ucfirst($model[$i]['user']['username']);
+        }
         $dataProvider = new ArrayDataProvider([
                 'key' => 'wrk_id',
                 'allModels' => $model,
                 'sort' => [
-                    'attributes' => ['user.username'],
+                    'attributes' => [
+                        'user.username' => [
+                            'asc' => ['user.username' => SORT_ASC],
+                            'desc' => ['user.username' => SORT_DESC]
+                        ]
+                    ],
                 ],
             ]);
 
