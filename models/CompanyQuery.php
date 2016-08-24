@@ -34,7 +34,7 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
     public function getCurrentPoint($com_id)
     {
-        $this->andWhere('com_id = :com_id',[
+        $this->andWhere('com_id = :com_id', [
             ':com_id'=>$com_id
         ]);
         return $this->one();
@@ -44,13 +44,14 @@ class CompanyQuery extends \yii\db\ActiveQuery
     {
         $search = $_GET['q'];
         $this->select('com_id, com_name');
-        $keyword = preg_split("/[\s,]+/",$search);
+        $keyword = preg_split("/[\s,]+/", $search);
+
         $this->select('com_id, com_name');
-        $this->leftJoin('tbl_company_category','tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
-        foreach($keyword as $key){
-            $this->andWhere('com_name LIKE "%'.$key.'%" ');
+        $this->leftJoin('tbl_company_category', 'tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
+        foreach($keyword as $key) {
+            $this->andWhere('com_name LIKE "%' . $key . '%" ');
         }
-        $this->andWhere('tbl_company_category.com_category_type = :type',[
+        $this->andWhere('tbl_company_category.com_category_type = :type', [
             'type' => 1
         ]);
         $this->andWhere('com_status != 2');
@@ -60,8 +61,7 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
     public function getParentMerchants()
     {
-        return $this->select('com_id, com_name, com_created_date, com_subcategory_id')->where('com_is_parent = :is_parent', [':is_parent' => 1])->orderBy(['com_id' => SORT_DESC]);
-        return $parents;
+        return $this->select('com_id, com_name, com_created_date, com_subcategory_id')->joinWith('category')->where('com_is_parent = :is_parent', [':is_parent' => 1])->orderBy(['com_id' => SORT_DESC]);
     }
 
     public function getChildMerchants($parent_id)
@@ -76,36 +76,51 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
     public function searchMerchant($keyword, $hq_id)
     {
+        $keyword = str_replace(' ', '%', $keyword);
         $this->select('com_id, com_name');
-        $this->andWhere('com_name LIKE "%' . $keyword . '%"');
-        $this->andWhere('com_hq_id = 0');
-        $this->andWhere('com_status != 2');
-        $this->andWhere('com_is_parent = 0');
+        $this->andWhere('
+            com_name LIKE "%' . $keyword . '%" 
+            AND com_hq_id = 0 
+            AND com_status != 2 
+            AND com_is_parent = 0
+        ', [
+            ':name' => '%' . $keyword . '%'
+        ]);
         $this->orderBy('com_name');
 
         return $this->all();
     }
 
-    public function saveMerchantChildren($parent_id, $children)
+    public function saveMerchantChildren($parent_id, $children, $removed = false)
     {
-        foreach($children as $child)
-        {
+        $parent = Company::findOne($parent_id);
+        if ($removed == true)
+            $is_removed = 'removed';
+        else
+            $is_removed = 'saved';
+
+        foreach($children as $child) {
             $company = Company::findOne($child);
             $company->com_hq_id = $parent_id;
             $company->save(false);
+
+            $activities = [
+                'Company',
+                'Company - ' . $is_removed . ' Merchant HQ Children with parent is ' . $parent->com_email . ', ' . $parent->com_name . ' (' . $parent_id . ') and child is (' . $child . ') ' . $company->com_name . ' (' . $company->com_email . ')',
+                Company::className(),
+                $company->com_id
+            ];
+            Logging::saveLog($activities);
         }
     }
 
     public function getChildMerchantsId($parent_id)
     {
         $result = [];
-
         $children = $this->getChildMerchants($parent_id)->all();
 
-        if($children)
-        {
-            foreach($children as $child)
-            {
+        if($children) {
+            foreach($children as $child) {
                 array_push($result, $child->com_id);
             }
         }
@@ -117,10 +132,8 @@ class CompanyQuery extends \yii\db\ActiveQuery
     {
         $result = [];
 
-        if($children)
-        {
-            foreach($children as $child)
-            {
+        if($children) {
+            foreach($children as $child) {
                 $company = Company::findOne($child);
                 array_push($result, $company->com_name);
             }
@@ -134,8 +147,7 @@ class CompanyQuery extends \yii\db\ActiveQuery
         $company = Company::findOne($com_id);
         $is_parent = $company->com_is_parent;
 
-        if($is_parent)
-        {
+        if($is_parent) {
             return true;
         }
 
