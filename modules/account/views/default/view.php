@@ -243,6 +243,13 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                                                         }
                                                     ],
                                                     [
+                                                        'label' => 'Operator',
+                                                        'value' => function($data){
+                                                            if (!empty($data->sna_review_by))
+                                                                return $data->review->username;
+                                                        }
+                                                    ],
+                                                    [
                                                         'label' => 'Status',
                                                         'attribute' => 'sna_status',
                                                         'format' => 'html',
@@ -649,9 +656,6 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                                                 'options' => [
                                                     'style' => 'font-size: 13px',
                                                 ],
-                                                'rowOptions' => function($model,$key,$index,$grid){
-                                                    return ['style' => 'cursor: pointer;' ,'onclick' => 'LinkToSnap('.$model->lph_param.')'];
-                                                },
                                                 'layout' => '{items} {summary} {pager}',
                                                 'dataProvider' => $pointHistoryProvider,
                                                 'pjax' => true,

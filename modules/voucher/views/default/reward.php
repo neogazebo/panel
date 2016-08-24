@@ -1,12 +1,14 @@
 <?php
 
-use yii\helpers\Html;
+use kartik\export\ExportMenu;
 use kartik\grid\GridView;
-use yii\helpers\Url;
+use kartik\select2\Select2;
 use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
-use kartik\export\ExportMenu;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 $this->title = 'Reward Reference';
 $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
@@ -36,7 +38,24 @@ $this->registerCss("
                             <div class="form-group">
                                 <label>Reward Name</label>
                                 <div>
-                                    <input type="text" class="form-control" name="r_name" value="<?= (!empty($_GET['r_name'])) ? $_GET['r_name'] : '' ?>">
+                                    <?=
+                                        Select2::widget([
+                                            'name' => 'r_name',
+                                            // 'data' => $data,
+                                            'options' => [
+                                                'placeholder' => 'Reward name ...',
+                                            ],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                                'minimumInputLength' => 3,
+                                                'ajax' => [
+                                                    'url' => Url::to(['get-reward']),
+                                                    'dataType' => 'json',
+                                                    'data' => new JsExpression('function(params) {return {q:params.term};}')
+                                                ],
+                                            ],
+                                        ]);
+                                    ?>
                                 </div>
                             </div>
                             <div class="form-group">

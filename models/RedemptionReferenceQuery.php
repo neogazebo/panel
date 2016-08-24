@@ -151,4 +151,13 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
             ]
         ];
     }
+
+    public function getReward($q = null)
+    {
+        $this->select('rdr_name as id,rdr_name as text');
+        $this->where("rdr_name <> ''");
+        $this->andWhere('rdr_name LIKE :r_name', [':r_name' => '%' . $q. '%']);
+        $this->groupBy('rdr_name');
+        return $this;
+    }
 }
