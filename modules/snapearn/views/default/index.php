@@ -13,6 +13,10 @@ $this->title = 'Snap & Earn List';
 
 $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
 $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
+
+$this->registerJs("var search_mechant_url = '" . Url::to(['list']) . "';", \yii\web\View::POS_BEGIN);
+$this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/SnapEarnManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+
 ?>
 <section class="content-header">
     <h1><?= $this->title?></h1>
@@ -101,9 +105,11 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 ?>
                             </div>
                             <div class="form-group">
-                                <label>Merchant</label>
-                                <?=
-                                    Typeahead::widget([
+                                <label>Merchant</label><br>
+                                <?php 
+
+                                    /*
+                                    echo Typeahead::widget([
                                         'id' => 'merchant',
                                         'name' => 'merchant',
                                         //'options' => ['placeholder' => $mer],
@@ -129,10 +135,15 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                             ]
                                         ]
                                     ]);
+                                    */
                                 ?>
+
+                                <select class="form-control select2 search-merchant" style="width: 250px;" name="com_name">
+                                  
+                                </select>
                             </div>
                             <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
-                            <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
+                            <!--<input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">-->
                             <?php endif; ?>  
                             <div class="form-group">
                                 <label>&nbsp;</label><br>

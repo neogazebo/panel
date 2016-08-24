@@ -112,7 +112,8 @@ $(document).ready(function() {
     $('#search_merchant').multiselect({
         search: {
             right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
-        }
+        },
+        'keepRenderingSort': true
     });
 
     $(".table").tablesorter({ 
@@ -178,17 +179,24 @@ $(document).ready(function() {
     });
     
     var timer;
+    var x;
 
-    $('#search-merchant').keyup(function() {
+    $('#search-merchant').keypress(function() {
+
+        if (x) 
+        { 
+            x.abort();
+        }
+
         clearTimeout(timer);
 
         var ms = 300,
             keyword = $(this).val(),
             hq_id = $('.com_id').val();
 
-        if(keyword.length >= 3) {
+        if(keyword.length >= 2) {
             timer = setTimeout(function() {
-                $.ajax({
+                x = $.ajax({
                     type: 'POST',
                     dataType: 'json',
                     url: '/system/merchant-hq/search',
@@ -205,8 +213,8 @@ $(document).ready(function() {
                     success: function(data) {
                         if(!data.error) {
                             $("#search_merchant").html(data.data);
-                            $("#search_merchant").multiselect('destroy');
-                            $("#search_merchant").multiselect();
+                            //$("#search_merchant").multiselect('destroy');
+                            //$("#search_merchant").multiselect();
                         } else {
                             swal({
                                 title: 'System Error',   
