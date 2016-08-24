@@ -355,7 +355,7 @@ class CorrectionController extends BaseController
                     return $this->redirect(['correction/to-correction?id=' . $nextUrl->sna_id]);
             }
             
-            if (!empty(Url::remember())) {
+            if (!empty(Url::previous())) {
                 return $this->redirect(Url::previous());
             } else {
                 return $this->redirect(['/snapearn']);
