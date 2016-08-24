@@ -1,4 +1,5 @@
 <?php
+
 namespace app\modules\merchant_signup\controllers;
 
 use Yii;
@@ -29,8 +30,6 @@ use app\models\FeatureSubscription;
  */
 class DefaultController extends BaseController
 {
-	private $_pageSize = 20;
-
     /**
      * Renders the index view for the module
      * @return string
@@ -38,10 +37,8 @@ class DefaultController extends BaseController
     public function actionIndex()
     {
         $this->setRememberUrl();
-        if(Yii::$app->request->get('search')) 
-        {
+        if(Yii::$app->request->get('search')) {
             $search = Yii::$app->request->get('search');
-        
             $model = MerchantSignup::find()
                 ->where('
                     mer_bussines_name LIKE :search OR 
@@ -50,19 +47,19 @@ class DefaultController extends BaseController
                     mer_login_email LIKE :search OR 
                     mer_address LIKE :search OR 
                     mer_pic_name LIKE :search 
-                ', [':search' => '%' . $search . '%']
-                )->orderBy(['id' => SORT_DESC]);
-        } 
-        else
-    	{
+                ', [
+                    ':search' => '%' . $search . '%'
+                ])
+                ->orderBy(['id' => SORT_DESC]);
+        } else {
             $model = MerchantSignup::find()->orderBy(['id' => SORT_DESC]);
         }
-        
+
         $dataProvider = new ActiveDataProvider([
             'query' => $model,
             'sort' => false,
             'pagination' => [
-                'pageSize' => $this->_pageSize,
+                'pageSize' => 20,
             ],
         ]);
 
@@ -121,12 +118,20 @@ class DefaultController extends BaseController
                         $model->mer_reviewed = Yii::$app->user->id;
                         if ($model->save()) {
                             if ($model_company->com_in_mall = 1) {
-                                    $mam_model = new MallMerchant();
-                                    $mam_model->mam_com_id = $model_company->com_id;
-                                    $mam_model->mam_mal_id = Yii::$app->request->post('mall_id');
-                                    $mam_model->save(false);
-                                }
-                            $audit = AuditReport::setAuditReport('Copy Merchant from tbl_signup_merchant : ' . $model->mer_company_name, Yii::$app->user->id, MerchantSignup::className(), $model->id, $changed_attributes);
+                                $mam_model = new MallMerchant();
+                                $mam_model->mam_com_id = $model_company->com_id;
+                                $mam_model->mam_mal_id = Yii::$app->request->post('mall_id');
+                                $mam_model->save(false);
+                            }
+                            // $audit = AuditReport::setAuditReport('Copy Merchant from tbl_signup_merchant : ' . $model->mer_company_name, Yii::$app->user->id, MerchantSignup::className(), $model->id, $changed_attributes);
+                            $activities = [
+                                'Merchant Sign Up',
+                                'Merchant Sign Up - Review, ' . $model_company->com_email . ' on ' . $model_company->com_name,
+                                Company::className(),
+                                $model_company->com_id
+                            ];
+                            $this->saveLog($activities);
+
                             $transaction->commit();
                             $this->setMessage('save','success', 'Business updated successfully!');
                             return $this->redirect([$this->getRememberUrl()]);
@@ -149,10 +154,9 @@ class DefaultController extends BaseController
         }
 
         return $this->render('review',[
-                'model' => $model,
-                'model_company' => $model_company
-            ]);
-
+            'model' => $model,
+            'model_company' => $model_company
+        ]);
     }
 
     public function actionXreview($id)
@@ -172,6 +176,14 @@ class DefaultController extends BaseController
             if($model->save()) {
                 if(!empty($model->mer_multichain_file))
                     S3::Upload($filename, $originalFile);
+
+                $activities = [
+                    'Merchant Sign Up',
+                    'Merchant Sign Up - XReview, (' . $model->mer_login_email . ') ' . $model->mer_bussines_name . ' on ' . $model->created_date,
+                    MerchantSignup::className(),
+                    $model->com_id
+                ];
+                $this->saveLog($activities);
 
                 $this->setMessage('save', 'success', 'This merchant has been successfully edited!');
                 return $this->redirect(['index']);
