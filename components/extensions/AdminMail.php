@@ -113,15 +113,15 @@ class TBackend extends TMail
                 break;
             case 8:
                 $this->template = '//mail/template/snapearn/invalid';
-                $this->subject = 'Invalid Receipt Uploaded';
+                $this->subject = 'Invalid Merchant Location';
                 break;
             case 9:
                 $this->template = '//mail/template/snapearn/invalid';
-                $this->subject = 'Invalid Receipt Uploaded';
+                $this->subject = 'Receipt uploaded more than 24 hours after transaction time';
                 break;
             case 10:
                 $this->template = '//mail/template/snapearn/violates';
-                $this->subject = 'Receipt violates Manis T&Cs';
+                $this->subject = 'More than 2 receipts uploaded from this outlet today';
                 break;
         }
         $this->body = Mail::BODY_SNAPEARN_REJECTED;
