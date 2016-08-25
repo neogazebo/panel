@@ -37,6 +37,14 @@ class PointController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
         	$model->spo_created_by = Yii::$app->user->id;
             if ($model->save()) {
+                $activities = [
+                    'SnapearnPoint',
+                    'SnapearnPoint - Add New Point, "' . $model->spo_name . '" with point is ' . $model->spo_point . ' has been added!',
+                    SnapearnPoint::className(),
+                    $model->spo_created_by
+                ];
+                $this->saveLog($activities);
+
                 $this->setMessage('save', 'success', 'Point has been successfully created!');
                 return $this->redirect(['index']);
             }
@@ -53,6 +61,14 @@ class PointController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
         	$model->spo_updated_by = Yii::$app->user->id;
             if ($model->save()) {
+                $activities = [
+                    'SnapearnPoint',
+                    'SnapearnPoint - Add New Point, "' . $model->spo_name . '" with point is ' . $model->spo_point . ' has been edited!',
+                    SnapearnPoint::className(),
+                    $model->spo_updated_by
+                ];
+                $this->saveLog($activities);
+
                 $this->setMessage('save', 'success', 'Point has been successfully updated!');
                 return $this->redirect(['index']);
             }
