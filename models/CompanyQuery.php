@@ -56,13 +56,15 @@ class CompanyQuery extends \yii\db\ActiveQuery
             $parent_is_first = true;
         }
 
-        //$keyword = implode(' ', $keyword);
+        $keyword = implode(' ', $keyword);
 
-        //$this->andWhere('com_name LIKE "%' . $keyword . '%" ');
+        $this->andWhere('com_name LIKE "%' . $keyword . '%" ');
 
+        /*
         foreach($keyword as $key) {
             $this->andWhere('com_name LIKE "%' . $key . '%" ');
         }
+        */
 
         $this->andWhere('tbl_company_category.com_category_type = :type', [
             'type' => 1
@@ -70,16 +72,14 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
         $this->andWhere('com_status != 2');
 
-        $order = 'com_name';
+        $order = 'com_name ASC';
 
         if($parent_is_first)
         {
-            $order = new Expression('FIELD (com_is_parent,1) DESC');
+            $order = new Expression('FIELD (com_is_parent,1) DESC, com_name ASC');
         }
         
         $this->orderBy($order);
-        //echo $this->createCommand()->getRawSql();
-        //exit;
         return $this->all();
     }
 
