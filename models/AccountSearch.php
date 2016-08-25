@@ -61,7 +61,7 @@ class AccountSearch extends Account
         // grid filtering conditions
         $query->andFilterWhere([
             'acc_id' => $this->acc_id,
-            'acc_facebook_id' => $this->acc_facebook_id,
+            // 'acc_facebook_id' => $this->acc_facebook_id,
             'acc_created_datetime' => $this->acc_created_datetime,
             'acc_updated_datetime' => $this->acc_updated_datetime,
             'acc_status' => $this->acc_status,
@@ -71,6 +71,7 @@ class AccountSearch extends Account
         ]);
 
         $query->andFilterWhere(['like', 'acc_facebook_email', $this->acc_facebook_email])
+            ->andFilterWhere(['like', 'acc_facebook_id', $this->acc_facebook_id])
             ->andFilterWhere(['like', 'acc_facebook_graph', $this->acc_facebook_graph])
             ->andFilterWhere(['like', 'acc_google_id', $this->acc_google_id])
             ->andFilterWhere(['like', 'acc_google_email', $this->acc_google_email])
