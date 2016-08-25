@@ -27,7 +27,7 @@ $this->registerJsFile(Yii::$app->homeUrl . 'pages/MerchantHqManager.js', ['depen
                             <h2><?= $this->title ?></h2>
                             <select name="children[]" id="search_merchant_to" class="form-control" size="8" multiple="multiple">
                                 <?php foreach($merchant_children as $children): ?>
-                                    <option value="<?= $children->com_id ?>"><?= $children->com_name ?></option>
+                                    <option value="<?= $children['com_id'] ?>"><?= $children['com_name'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
