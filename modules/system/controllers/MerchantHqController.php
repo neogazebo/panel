@@ -42,13 +42,13 @@ class MerchantHqController extends BaseController
     public function actionList($id)
     {
         $model = Company::findOne($id);
-        $merchant_children = Company::find()->getChildMerchants($id)->all();
-        $all_merchant_children = Company::find()->getAllChildMerchants();
+        $merchant_children = Company::find()->getChildMerchants($id)->asArray()->all();
+        //$all_merchant_children = Company::find()->getAllChildMerchants();
 
         return $this->render('list', [
             'model' => $model,
             'merchant_children' => $merchant_children,
-            'all_merchant_children' => $all_merchant_children
+            //'all_merchant_children' => $all_merchant_children
         ]);
     }
 

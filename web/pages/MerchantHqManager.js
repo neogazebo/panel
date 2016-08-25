@@ -181,7 +181,7 @@ $(document).ready(function() {
     var timer;
     var x;
 
-    $('#search-merchant').keypress(function() {
+    $('#search-merchant').keyup(function() {
 
         if (x) 
         { 

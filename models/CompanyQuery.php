@@ -69,14 +69,14 @@ class CompanyQuery extends \yii\db\ActiveQuery
         $this->andWhere('tbl_company_category.com_category_type = :type', [
             'type' => 1
         ]);
-        
+
         $this->andWhere('com_status != 2');
 
-        $order = 'com_name';
+        $order = 'com_name ASC';
 
         if($parent_is_first)
         {
-            $order = new Expression('FIELD (com_is_parent,1) DESC');
+            $order = new Expression('FIELD (com_is_parent,1) DESC, com_name ASC');
         }
         
         $this->orderBy($order);
@@ -100,7 +100,6 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
     public function searchMerchant($keyword, $hq_id)
     {
-        $keyword = str_replace(' ', '%', $keyword);
         $this->select('com_id, com_name');
         $this->leftJoin('tbl_company_category', 'tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
         $this->andWhere('
@@ -115,9 +114,7 @@ class CompanyQuery extends \yii\db\ActiveQuery
         ]);
 
         $this->orderBy('lower(com_name)');
-        //var_dump($this->createCommand()->getRawSql());
-        //die;
-        return $this->all();
+        return $this;
     }
 
     public function saveMerchantChildren($parent_id, $children, $removed = false)

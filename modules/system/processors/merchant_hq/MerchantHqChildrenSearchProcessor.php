@@ -14,7 +14,7 @@ class MerchantHqChildrenSearchProcessor extends BaseProcessor
             $keyword = Yii::$app->request->post('keyword');
             $hq_id = Yii::$app->request->post('hq_id');
 
-            $data = Company::find()->searchMerchant($keyword, $hq_id);
+            $data = Company::find()->searchMerchant($keyword, $hq_id)->asArray()->all();
             $output = Yii::$app->controller->renderPartial('partials/search_result', ['data' => $data]);
             return $this->json_helper->jsonOutput(0, 'success', null, $output);
         } catch(\Exception $e) {
