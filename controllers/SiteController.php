@@ -84,6 +84,11 @@ class SiteController extends Controller
         }
     }
 
+    public function actionInfo()
+    {
+        echo phpinfo();
+    }
+
     public function actionLogout()
     {
         Yii::$app->user->logout();
