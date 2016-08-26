@@ -68,7 +68,24 @@ class DefaultController extends BaseController
         $view_filename = 'index';
         $save_path = 'sne';
 
+        // additional views output goes here
+        $this->getMerchantName();
+
         return $this->processOutput($view_filename, $columns, $column_styles, $save_path, $filename);
+    }
+
+    private function getMerchantName()
+    {
+        $output = [];
+
+        $merchant_id = Yii::$app->request->get('com_name');
+
+        if($merchant_id)
+        {
+            $company = Company::findOne($merchant_id);
+            $output['company'] = $company;
+            $this->processOutputHooks($output);
+        }
     }
 
     public function actionNewMerchant($id, $to = null)

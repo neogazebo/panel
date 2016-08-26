@@ -14,6 +14,18 @@ $this->title = 'Snap & Earn List';
 $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
 $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 
+$company_name = null;
+
+if($data_hooks)
+{
+    if($data_hooks['company'])
+    {
+        $company_name = $data_hooks['company']->com_name;
+    }
+}
+
+$this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.min.css');
+$this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.theme.min.css');
 $this->registerJs("var search_mechant_url = '" . Url::to(['list']) . "';", \yii\web\View::POS_BEGIN);
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/SnapEarnManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 
@@ -138,12 +150,10 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                     */
                                 ?>
 
-                                <select class="form-control select2 search-merchant" style="width: 250px;" name="com_name">
-                                  
-                                </select>
+                                <input type="text" id="com_name_search" class="form-control" value="<?= $company_name ?>" width="200px" />
                             </div>
                             <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
-                            <!--<input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">-->
+                            <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
                             <?php endif; ?>  
                             <div class="form-group">
                                 <label>&nbsp;</label><br>

@@ -113,7 +113,10 @@ $(document).ready(function() {
         search: {
             right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
         },
-        'keepRenderingSort': true
+        //'keepRenderingSort': true,
+        'sort': function(Multiselect, $options, event, silent, skipStack) {
+            //console.log(Multiselect);
+        }
     });
 
     $(".table").tablesorter({ 

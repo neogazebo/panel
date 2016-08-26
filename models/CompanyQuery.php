@@ -103,7 +103,7 @@ class CompanyQuery extends \yii\db\ActiveQuery
         $this->select('com_id, com_name');
         $this->leftJoin('tbl_company_category', 'tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
         $this->andWhere('
-            lower(com_name) LIKE "%' . $keyword . '%" 
+            com_name LIKE "%' . $keyword . '%" 
             AND com_hq_id = 0 
             AND com_status != 2 
             AND com_is_parent = 0
@@ -113,13 +113,21 @@ class CompanyQuery extends \yii\db\ActiveQuery
             'type' => 1
         ]);
 
-        $this->orderBy('lower(com_name)');
+        $this->orderBy('com_name');
         return $this;
     }
 
     public function saveMerchantChildren($parent_id, $children, $removed = false)
     {
+        $new_parent = $parent_id;
+
         $parent = Company::findOne($parent_id);
+
+        if($removed)
+        {
+            $new_parent = 0;
+        }
+
         if ($removed == true)
             $is_removed = 'removed';
         else
@@ -127,7 +135,7 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
         foreach($children as $child) {
             $company = Company::findOne($child);
-            $company->com_hq_id = $parent_id;
+            $company->com_hq_id = $new_parent;
             $company->save(false);
 
             $activities = [

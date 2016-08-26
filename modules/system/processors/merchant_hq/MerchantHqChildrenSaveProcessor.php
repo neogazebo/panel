@@ -46,7 +46,7 @@ class MerchantHqChildrenSaveProcessor extends BaseProcessor
                         return $this->json_helper->jsonOutput(self::CHILDREN_OP_CONFIRMATION_CODE, 'error', 'You are about to empty the data');
                     }
 
-                    Company::find()->saveMerchantChildren(0, $merchant_children_id);
+                    Company::find()->saveMerchantChildren($parent_id, $merchant_children_id);
                     $transaction->commit();
                     return $this->json_helper->jsonOutput(0, 'success', null);
                 }
