@@ -229,11 +229,11 @@ class IndexController extends BaseController
         ]);
     }
 
-    protected function activities($name, $role, $assign = 'Assign')
+    protected function activities($name, $role, $assign = 'Assign', $desc = '')
     {
         $activities = [
             'RBAC',
-            'RBAC - ' . $assign . ' User, ' . $name . ' with role is "' . $role . '"',
+            'RBAC - ' . $assign . ' User, ' . $name . ' with role is "' . $role . '"' . $desc,
             AuthItem::className(),
             Yii::$app->user->id
         ];
@@ -275,6 +275,8 @@ class IndexController extends BaseController
             $role = Yii::$app->request->post('role');
             $auth = $this->_role();
             $r = AuthItem::find()->where('name = :role', [':role' => $role])->one();
+
+            $assigned = '';
             if(!empty($childs)) {
                 foreach ($childs as $val) {
                     $getAssignment = AuthAssignment::find()->where([
@@ -283,15 +285,21 @@ class IndexController extends BaseController
                     ])->one();
                     if (empty($getAssignment)) {
                         $auth->assign($r, $val);
+                        $assigned .= $val . ', ';
                     }
                 }
             }
 
+            $revoked = '';
             if(!empty($revokes)) {
                 foreach ($revokes as $val) {
                    $auth->revoke($r, $val);
+                   $revoked .= $val . ', ';
                 }
             }
+
+            $this->activities($r->name, $role, 'Multi Assign', ' assigned to [' . rtrim($assigned, ', ') . '] and revoked [' . rtrim($revoked, ', ') . ']');
+
             $this->setMessage('save', 'success', 'Update assigned user successfully');
             return $this->redirect(['user?name=' . $role]);
         }
