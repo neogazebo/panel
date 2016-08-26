@@ -31,22 +31,24 @@ class DefaultController extends BaseController
         if (!empty($country)) {
             $params = User::find()->with('worktime')->where('country = :cty', [':cty' => $country]);
         }
+
         $model = WorkingTime::find()->with('user')->getWorker($params)->asArray()->all();
         for ($i=0; $i < count($model); $i++) { 
             $model[$i]['user']['username'] = ucfirst($model[$i]['user']['username']);
         }
+
         $dataProvider = new ArrayDataProvider([
-                'key' => 'wrk_id',
-                'allModels' => $model,
-                'sort' => [
-                    'attributes' => [
-                        'user.username' => [
-                            'asc' => ['user.username' => SORT_ASC],
-                            'desc' => ['user.username' => SORT_DESC]
-                        ]
-                    ],
+            'key' => 'wrk_id',
+            'allModels' => $model,
+            'sort' => [
+                'attributes' => [
+                    'user.username' => [
+                        'asc' => ['user.username' => SORT_ASC],
+                        'desc' => ['user.username' => SORT_DESC]
+                    ]
                 ],
-            ]);
+            ],
+        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider
@@ -65,6 +67,7 @@ class DefaultController extends BaseController
                 'pageSize' => 20
             ]
         ]);
+
         return $this->render('view',[
             'dataProvider' => $dataProvider,
             'id' => $id,

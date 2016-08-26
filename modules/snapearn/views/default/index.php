@@ -177,16 +177,11 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                             'layout' => '{summary} {items} {pager}',
                             'columns' => [
                                 [
-                                    'label' => 'Merchant',
+                                    'label' => 'M erchant',
                                     'attribute' => 'sna_com_id',
                                     'format' => 'html',
                                     'value' => function($data) {
-                                        if (!empty($data->newSuggestion))
-                                            return $data->newSuggestion->cos_name . ' <span class="badge bg-yellow">suggestion</span>';
-
-                                        if (!empty($data->merchant)) {
-                                            return $data->merchant->com_name . ($data->merchant->com_joined == 1 ? ' <span class="badge bg-info">joined</span>' : '') . ($data->merchant->com_premium == 1 ? ' <span class="badge bg-green">premium</span>' : '');
-                                        }
+                                        return (!empty($data->merchant)) ? $data->merchant->com_name : '<a class=""><span class="not-set">(not set)</span></a>';
                                     }
                                 ],
                                 [
