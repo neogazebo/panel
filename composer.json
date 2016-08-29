@@ -40,6 +40,7 @@
         "github-oauth": {
                 "github.com": "991937f2a93f7a2a76c9910efa6e1a18a266d217"
             }
+        }
     },
     "scripts": {
         "post-create-project-cmd": [

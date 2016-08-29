@@ -26,8 +26,8 @@ use app\models\VoucherBoughtDetail;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class EpayController extends EpaybridgeController {
-
+class EpayController extends EpaybridgeController
+{
     /**
      * Run SomeModel::some_method for a period of time
      * @param string $from
@@ -51,15 +51,15 @@ class EpayController extends EpaybridgeController {
     //     }
     // }
 
-    public function actionBuy($id) {
-	   // echo trim($id);exit;
-        $success = 0;
+    public function actionBuy($id)
+    {
+	    $success = 0;
         $fail = 0;
 
         $model = Epay::findOne($id);
         $voucherBought = VoucherBought::find()
-                ->where('vob_vou_id = :vou_id', [':vou_id' => $model->epa_vou_id])
-                ->one();
+            ->where('vob_vou_id = :vou_id', [':vou_id' => $model->epa_vou_id])
+            ->one();
         $product = $model->productInfo();
         for ($i = 1; $i <= $model->epa_qty; $i++) {
             try {
@@ -156,7 +156,8 @@ class EpayController extends EpaybridgeController {
      * Run SomeModel::some_method for today only as the default action
      * @return int exit code
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         echo var_dump(Yii::$app->params);
         exit;
         // return $this->actionInit(date("Y-m-d"), date("Y-m-d"));
@@ -166,7 +167,8 @@ class EpayController extends EpaybridgeController {
      * Run SomeModel::some_method for yesterday
      * @return int exit code
      */
-    public function actionYesterday() {
+    public function actionYesterday()
+    {
         return $this->actionInit(date("Y-m-d", strtotime("-1 days")), date("Y-m-d", strtotime("-1 days")));
     }
 

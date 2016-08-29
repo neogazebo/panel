@@ -43,7 +43,13 @@ $config = [
         ],
         'gridview' =>  [
             'class' => '\kartik\grid\Module',
-        ]
+        ],
+        'system/merchant-hq' => [
+            'class' => 'app\modules\system\merchant_hq\MerchantHq',
+        ],
+        'system' => [
+            'class' => 'app\modules\system\System',
+        ],
     ],
     'components' => [
         'request' => [

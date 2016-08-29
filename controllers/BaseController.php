@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\WorkingTime;
+use app\models\Logging;
 use app\components\helpers\General;
 use PHPExcel;
 use PHPExcel_Writer_Excel2007;
@@ -19,6 +20,7 @@ class BaseController extends Controller
     protected $output_type;
     protected $output;
     protected $data_provider;
+    protected $data_hooks = [];
 
     public function beforeAction($action)
     {
@@ -86,6 +88,13 @@ class BaseController extends Controller
 				Yii::$app->session->setFlash($type, $customText !== null ? Yii::t('app', $customText) : Yii::$app->params['flashmsg']['delete'][$type]);
 				break;
 		}
+    }
+
+    public function saveLog($activities)
+    {
+        // ['activity', 'desc', 'item', 'item_id']
+        $loging = new Logging;
+        $loging->saveLog($activities);
     }
 
     protected function centralTimeZone()
@@ -187,8 +196,18 @@ class BaseController extends Controller
         $this->output_type = Yii::$app->request->get('output_type');
     }
 
+    protected function processOutputHooks($data)
+    {
+        foreach($data as $key => $value)
+        {
+            $this->data_hooks[$key] = $value;
+        }
+    }
+
     protected function processOutputSize($size =  0)
     {
+        $this->page_size = 20;
+
         if (!empty($size)) {
             $this->page_size = $size;
         }
@@ -196,27 +215,31 @@ class BaseController extends Controller
         {
             if($this->output_type == 'excel')
             {
-                $this->page_size = 20;
+                $this->page_size = 0;
             }
         }
     }
 
     protected function processOutput($view_name, $excel_columns, $excel_column_styles, $save_path, $filename)
     {
+        // comes from search or export event
         if($this->output_type)
         {
             if($this->output_type == 'view')
             {
                 return $this->render($view_name, [
-                    'dataProvider' => $this->data_provider
+                    'dataProvider' => $this->data_provider,
+                    'data_hooks' => $this->data_hooks
                 ]);
             }
 
             return $this->exportToExcel($excel_columns, $excel_column_styles, $save_path, $filename);
         }
 
+        // this is executed the first time user open the sne page
         return $this->render($view_name, [
             'dataProvider' => $this->data_provider,
+            'data_hooks' => $this->data_hooks
         ]);
     }
 
@@ -283,5 +306,15 @@ class BaseController extends Controller
         $writer->save($excel_report_path);
 
         Yii::$app->response->sendFile($excel_report_path);
+    }
+
+    protected function jsonOutput($code, $status, $message, $data = null)
+    {
+        return [
+            'error' => $code,
+            'status' => $status,
+            'message' => $message,
+            'data' => $data
+        ];
     }
 }

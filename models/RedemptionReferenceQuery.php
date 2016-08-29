@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-
 use app\components\helpers\Utc;
 
 /**
@@ -38,42 +37,43 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
 
     public function findCostume()
     {
-        $username = Yii::$app->request->get('username');
-        $msisdn = Yii::$app->request->get('rwd_msisdn');
+        $username = str_replace(' ', '%', Yii::$app->request->get('username'));
+        $r_name = str_replace(' ', '%', Yii::$app->request->get('r_name'));
+        $msisdn = str_replace(' ', '%', Yii::$app->request->get('rwd_msisdn'));
         $status = Yii::$app->request->get('rwd_status');
-        $code = Yii::$app->request->get('rwd_code');
+        $code = str_replace(' ', '%', Yii::$app->request->get('rwd_code'));
         $daterange = Yii::$app->request->get('rwd_daterange');
         $country = Yii::$app->request->get('acc_cty_id');
 
-        if (!empty($username)){
-            $this->andFilterWhere(['like', 'acc_screen_name', $username]);
-        }
+        if (!empty($username))
+            $this->andWhere('acc_screen_name LIKE :username', [':username' => '%' . $username . '%']);
+        
+        if (!empty($r_name))
+            $this->andWhere('rdr_name LIKE :r_name', [':r_name' => '%' . $r_name . '%']);
+        
         if (!empty($msisdn))
-            $this->andFilterWhere(['like', 'rdr_msisdn', $msisdn]);
+            $this->andWhere('rdr_msisdn LIKE :msisdn', [':msisdn' => '%' . $msisdn . '%']);
         
         if ($status == 'open' || $status == 'close') {
             $stats = ($status == 'open') ? 0 : 1;
             $this->andWhere('rdr_status = :status', [
                 ':status' => $stats
-                ]);
+            ]);
         }
-            
+
         if (!empty($daterange)) {
             $daterange = explode(' to ', $daterange);
             $this->andWhere("FROM_UNIXTIME(rdr_datetime) BETWEEN '$daterange[0] 00:00:00' AND '$daterange[1] 23:59:59'");
         }
         if ($code)
-            $this->andFilterWhere(['like','rdr_vod_code',$code]);
+            $this->andWhere('rdr_vod_code LIKE :code', [':code' => '%' . $code . '%']);
 
-        if($country)
-        {
+        if($country) {
             if($country == 'ID' || $country == 'MY')
-            {
                 $this->andWhere(['acc_cty_id'=> $country]);
-            }
         }
 
-        $this->join('LEFT JOIN','tbl_account','tbl_account.acc_id = rdr_acc_id');
+        $this->join('LEFT JOIN', 'tbl_account', 'tbl_account.acc_id = rdr_acc_id');
         $this->orderBy('rdr_datetime DESC');
         return $this;
     }   
@@ -150,5 +150,14 @@ class RedemptionReferenceQuery extends \yii\db\ActiveQuery
                  'bold'  => true,
             ]
         ];
+    }
+
+    public function getReward($q = null)
+    {
+        $this->select('rdr_name as id,rdr_name as text');
+        $this->where("rdr_name <> ''");
+        $this->andWhere('rdr_name LIKE :r_name', [':r_name' => '%' . $q. '%']);
+        $this->groupBy('rdr_name');
+        return $this;
     }
 }

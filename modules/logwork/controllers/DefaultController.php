@@ -3,16 +3,17 @@
 namespace app\modules\logwork\controllers;
 
 use Yii;
-use yii\web\Controller;
-use yii\helpers\Url;
-use app\models\WorkingTime;
+use app\controllers\BaseController;
+use app\models\PdfForm;
 use app\models\SearchWorkingTime;
 use app\models\User;
-use app\models\PdfForm;
-use app\controllers\BaseController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use app\models\WorkingTime;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+use yii\filters\VerbFilter;
+use yii\helpers\Url;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /**
  * Default controller for the `logwork` module
@@ -25,13 +26,28 @@ class DefaultController extends BaseController
      */
     public function actionIndex()
     {
-        $model = WorkingTime::find()->getWorker();
-        $dataProvider = new ActiveDataProvider([
-            'query' => $model,
-            'sort' => false,
-            'pagination' => [
-                'pageSize' => 20
-            ]
+        $params = NULL;
+        $country = Yii::$app->request->get('country');
+        if (!empty($country)) {
+            $params = User::find()->with('worktime')->where('country = :cty', [':cty' => $country]);
+        }
+
+        $model = WorkingTime::find()->with('user')->getWorker($params)->asArray()->all();
+        for ($i=0; $i < count($model); $i++) { 
+            $model[$i]['user']['username'] = ucfirst($model[$i]['user']['username']);
+        }
+
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'wrk_id',
+            'allModels' => $model,
+            'sort' => [
+                'attributes' => [
+                    'user.username' => [
+                        'asc' => ['user.username' => SORT_ASC],
+                        'desc' => ['user.username' => SORT_DESC]
+                    ]
+                ],
+            ],
         ]);
 
         return $this->render('index', [
@@ -51,6 +67,7 @@ class DefaultController extends BaseController
                 'pageSize' => 20
             ]
         ]);
+
         return $this->render('view',[
             'dataProvider' => $dataProvider,
             'id' => $id,

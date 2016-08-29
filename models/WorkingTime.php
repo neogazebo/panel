@@ -106,12 +106,12 @@ class WorkingTime extends \yii\db\ActiveRecord
 
     public function getUser()
     {
-        return $this->hasOne(User::ClassName(),['id' => 'wrk_by']);
+        return $this->hasOne(User::ClassName(), ['id' => 'wrk_by']);
     }
 
     public function getReason()
     {
-        return $this->hasOne(SnapearnPoint::ClassName(),['spo_id' => 'wrk_rjct_number']);
+        return $this->hasOne(SnapearnPoint::ClassName(), ['spo_id' => 'wrk_rjct_number']);
     }
 
     public function getTime($userId)

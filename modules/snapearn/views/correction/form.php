@@ -38,7 +38,9 @@ $model->sna_push = true;
             <div class="user-block">
               <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'] . $model->member->acc_photo : $this->theme->baseUrl . '/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
               <span class="username">
-                  <?= $model->member->acc_screen_name ?>
+                  <a href="<?= Yii::$app->homeUrl ?>account/default/view?id=<?= $model->member->acc_id ?>" target="_blank">
+                      <?= (!empty($model->member)) ? $model->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>' ?>
+                  </a>
               </span>
               <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
             </div>
@@ -79,9 +81,15 @@ $model->sna_push = true;
                 <div class="box-body">
                   <ul class="nav nav-stacked update">
                     <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                    <li class="">
-                      <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
-                    </li>
+                      <li>
+                        <a href="#"><b>Operator </b>
+                          <span class="pull-right text-light-blue"><?= (!empty($model->sna_review_by)) ? $model->review->username : '<a class=""><span class="not-set">(not set)</span></a>' ?>
+                          </span>
+                        </a>
+                      </li>
+                      <li class="">
+                        <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
+                      </li>
                     <?php endif; ?>
                     <li class="">
                       <a href="#"><b><?= (empty($model->merchant)) ? 'Suggestion Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
@@ -93,7 +101,7 @@ $model->sna_push = true;
                         <?php if ($model->merchant->com_point < 1000) :?>
                           <!--this validation if add point to merchant is only specific user-->
                           <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
-                            <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
+                            <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id.'&type=2', 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
                           <?php // else: ?>
                             <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
                           <?php // endif; ?>
@@ -143,7 +151,7 @@ $model->sna_push = true;
                       </div>-->
                       
                       <?php //$form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
-                      <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
+                      <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status'])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.') ?>
                       <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                       <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                   </div>

@@ -1,12 +1,14 @@
 <?php
 
-use yii\helpers\Html;
+use kartik\export\ExportMenu;
 use kartik\grid\GridView;
-use yii\helpers\Url;
+use kartik\select2\Select2;
 use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
-use kartik\export\ExportMenu;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 $this->title = 'Reward Reference';
 $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
@@ -25,12 +27,35 @@ $this->registerCss("
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <form class="form-inline" action="reward" method="get">
-
-                        <div>
+                        <div class="col-sm-12">
+                            <div class="row">
                             <div class="form-group">
                                 <label>Member</label>
                                 <div>
                                     <input type="text" class="form-control" name="username" value="<?= (!empty($_GET['username'])) ? $_GET['username'] : '' ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Reward Name</label>
+                                <div>
+                                    <?=
+                                        Select2::widget([
+                                            'name' => 'r_name',
+                                            // 'data' => $data,
+                                            'options' => [
+                                                'placeholder' => 'Reward name ...',
+                                            ],
+                                            'pluginOptions' => [
+                                                'allowClear' => true,
+                                                'minimumInputLength' => 3,
+                                                'ajax' => [
+                                                    'url' => Url::to(['get-reward']),
+                                                    'dataType' => 'json',
+                                                    'data' => new JsExpression('function(params) {return {q:params.term};}')
+                                                ],
+                                            ],
+                                        ]);
+                                    ?>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -54,7 +79,10 @@ $this->registerCss("
 
                                 </select>
                             </div>
-                            
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
                             <div class="form-group">
                                 <label>Transaction Time</label>
                                 <div>
@@ -87,11 +115,12 @@ $this->registerCss("
                                 <label>&nbsp;</label><br>
                                 <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                             </div>
-                        </div>
                        
-                        <div class="form-group">
-                            <label>Export</label><br>
-                            <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                            <div class="form-group">
+                                <label>Export</label><br>
+                                <button name="output_type" value="excel" type="submit" class="btn btn-info btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                            </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -112,6 +141,10 @@ $this->registerCss("
                                 [
                                     'label' => 'Username',
                                     'attribute' => 'account.acc_screen_name'
+                                ],
+                                [
+                                    'label' => 'User Email',
+                                    'attribute' => 'account.acc_facebook_email'
                                 ],
                                 
                                 [

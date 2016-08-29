@@ -163,6 +163,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->getPrimaryKey();
     }
 
+    public function getWorktime()
+    {
+        return $this->hasOne(WorkingTime::className(), ['wrk_by' => 'id']);
+    }
+
     public function getAuthKey()
     {
         return $this->auth_key;

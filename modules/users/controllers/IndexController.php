@@ -79,10 +79,19 @@ class IndexController extends BaseController
                     $model = new AuthAssignment;
                     $model->item_name = $child;
                     $model->user_id = $user_id;
-                    if($model->save())
+                    if($model->save()) {
+                        $activities = [
+                            'User',
+                            'User - Add Child, ' . $model->user->username . ' assigned to ' . $model->item_name,
+                            AuthAssignment::className(),
+                            $model->user_id
+                        ];
+                        $this->saveLog($activities);
+
                         $this->setMessage('save', 'success', 'Add "' . $username . '" assignment successfully!');
-                    else
+                    } else {
                         $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
+                    }
                 }
             } else {
                 $model = AuthAssignment::deleteAll(['user_id' => $user_id]);

@@ -92,6 +92,10 @@ $this->registerCss("
                             'columns' => [
                                 'account.acc_screen_name',
                                 [
+                                    'label' => 'User Email',
+                                    'value' => 'account.acc_facebook_email',
+                                ],
+                                [
                                     'attribute' => 'cvr_pvd_update_datetime',
                                     'format' => 'html',
                                     'value' => function($data) {

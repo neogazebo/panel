@@ -9,13 +9,28 @@ use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
 use yii\helpers\ArrayHelper;
 
-
 $this->title = 'Snap & Earn List';
 
 $search = !empty(Yii::$app->request->get('search')) ? Yii::$app->request->get('search') : '';
 $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
+
+$company_name = null;
+
+if($data_hooks)
+{
+    if($data_hooks['company'])
+    {
+        $company_name = $data_hooks['company']->com_name;
+    }
+}
+
+$this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.min.css');
+$this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.theme.min.css');
+$this->registerJs("var search_mechant_url = '" . Url::to(['list']) . "';", \yii\web\View::POS_BEGIN);
+$this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/SnapEarnManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+
 ?>
-<section class="content-header ">
+<section class="content-header">
     <h1><?= $this->title?></h1>
 </section>
 
@@ -102,12 +117,14 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 ?>
                             </div>
                             <div class="form-group">
-                                <label>Merchant</label>
-                                <?=
-                                    Typeahead::widget([
+                                <label>Merchant</label><br>
+                                <?php 
+
+                                    /*
+                                    echo Typeahead::widget([
                                         'id' => 'merchant',
                                         'name' => 'merchant',
-                                        'options' => ['placeholder' => $mer],
+                                        //'options' => ['placeholder' => $mer],
                                         'pluginOptions' => [
                                             'highlight' => true,
                                             'minLength' => 3
@@ -130,7 +147,10 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                             ]
                                         ]
                                     ]);
+                                    */
                                 ?>
+
+                                <input type="text" id="com_name_search" class="form-control" value="<?= $company_name ?>" width="200px" />
                             </div>
                             <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
                             <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
@@ -142,7 +162,7 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                             <?php if ($visible) : ?>
                             <div class="form-group">
                                 <label>Export</label><br>
-                                <button name="output_type" value="excel" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                                <button name="output_type" value="excel" type="submit" class="btn btn-info btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
                             </div>
                             <?php endif; ?>  
                         </div>
@@ -157,13 +177,11 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                             'layout' => '{summary} {items} {pager}',
                             'columns' => [
                                 [
-                                    'label' => 'Merchant',
+                                    'label' => 'M erchant',
                                     'attribute' => 'sna_com_id',
                                     'format' => 'html',
                                     'value' => function($data) {
-                                        if (!empty($data->merchant)) {
-                                            return $data->merchant->com_name . ($data->merchant->com_joined == 1 ? ' <i class="fa fa-check"></i>' : '');
-                                        }
+                                        return (!empty($data->merchant)) ? $data->merchant->com_name : '<a class=""><span class="not-set">(not set)</span></a>';
                                     }
                                 ],
                                 [
@@ -179,14 +197,14 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 //                                'sna_receipt_date',
                                 [
                                     'attribute' => 'sna_receipt_amount',
-                                    'format' => ['decimal',2],
+                                    'format' => ['decimal', 2],
                                     'value' => function($data) {
                                         return $data->sna_receipt_amount;
                                     }
                                 ],
                                 [
                                     'attribute' => 'sna_point',
-                                    'format' => ['decimal',0],
+                                    'format' => ['decimal', 0],
                                     'value' => function($data) {
                                         return $data->sna_point;
                                     }
@@ -242,14 +260,14 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
                                 ],
                                 [
                                     'class' => 'yii\grid\ActionColumn',
-                                    'template' => '<span class="pull-right actionColumn">{update} {corection}</span>',
+                                    'template' => '<span class="pull-right actionColumn">{update}</span>',
                                     'buttons' => [
                                         'update' => function($url,$model) {
                                             $superuser = Yii::$app->user->identity->superuser;
                                             if ($model->sna_status == 0) {
                                                 return Html::a('<i class="fa fa-pencil-square-o"></i>', ['to-update', 'id' => $model->sna_id]);
                                             } elseif($model->sna_status != 0 && $superuser == 1) {
-                                                return Html::a('<i class="fa fa-pencil-square-o btn-correction"></i>',['correction/to-correction','id' => $model->sna_id]);
+                                                return Html::a('<i class="fa fa-pencil-square-o btn-correction"></i>', ['correction/to-correction','id' => $model->sna_id]);
                                             }
                                         },
                                     ],
@@ -266,7 +284,6 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 </section>
 
 <?php
-
 $this->registerJs("
     // get parameter from url params name
     function getParameterByName(name, url) {

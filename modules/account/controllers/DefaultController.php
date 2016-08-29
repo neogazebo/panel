@@ -189,7 +189,16 @@ class DefaultController extends BaseController
                     $history->lph_current_point = $history->lph_amount;
 
                     if($history->save()) {
-                        $acc_screen_name = !empty($model->member) ? $model->member->acc_screen_name . ' (' . $model->member->acc_google_email . ')' : $model->lph_acc_id;
+                        $acc_screen_name = !empty($model->member) ? $model->member->acc_screen_name . ' (' . $model->member->acc_facebook_email . ')' : $model->lph_acc_id;
+
+                        $activities = [
+                            'Account',
+                            'Account - Correction Point, ' . $history->member->acc_screen_name . ' [' . $history->member->acc_facebook_email . '] by ' . $history->user->username . ' about ' . $history->lph_current_point . ' (' . $history->lph_type . ') description is "' . $history->lph_description . '" on ' . Yii::$app->formatter->asDatetime($history->lph_datetime) . ', total point is ' . $history->lph_total_point,
+                            LoyaltyPointHistory::className(),
+                            $id
+                        ];
+                        $this->saveLog($activities);
+
                         $transaction->commit();
                         
                         // CLEAR CACHE WEBHOOK
@@ -217,8 +226,7 @@ class DefaultController extends BaseController
             'model' => $model
         ]);
     }
-    
-    
+
     public function actionBlockUser()
     {
         if (Yii::$app->request->isAjax){
@@ -226,6 +234,15 @@ class DefaultController extends BaseController
             $model = $this->findModel($id);
             $model->acc_status = ($model->acc_status == 0) ? 1 : 0;
             if ($model->save(false)) {
+                $status = $model->acc_status == 1 ? 'activated' : 'blocked';
+                $activities = [
+                    'Account',
+                    'Account - Block User, ' . $model->acc_facebook_email . ' on ' . $model->acc_screen_name . ' has been ' . $status . '!',
+                    Account::className(),
+                    $model->acc_id
+                ];
+                $this->saveLog($activities);
+
                 // CLEAR CACHE WEBHOOK USER
                 $curl = new curl\Curl();
                 $curl->get(Yii::$app->params['WEBHOOK_BLOCK_USER'].'?data={"id":' . intval($id) . '}');
@@ -240,7 +257,7 @@ class DefaultController extends BaseController
     */
     public function actionTopChart()
     {
-        if (Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             $filters = Yii::$app->request->post('data');
             $model = SnapEarn::find()->setChartTopFour($filters);
             $out = [];
@@ -256,14 +273,13 @@ class DefaultController extends BaseController
                         $d->categoryName = 'Others';
                     }
 
-                    $cr = Country::find()->where('cty_short_code = :cty',[':cty' => strtoupper($d->country)])->one();
+                    $cr = Country::find()->where('cty_short_code = :cty', [':cty' => strtoupper($d->country)])->one();
                     $config = SnapEarnRule::find()->where(['ser_country' => $cr->cty_currency_name_iso3])->one();
                     $amount = $d->amount;
                     $k = '';
                     if ($config->ser_point_provision > 0 ) {
                         $amount = (int)($amount / $config->ser_point_provision);
                         $k = ' K';
-
                     }
 
                     $currency = ($cr->cty_currency_name_iso3 == 'IDR') ? 'Rp' : 'RM';
@@ -280,7 +296,7 @@ class DefaultController extends BaseController
                     ];
                     $i++;
                 }
-            }else{
+            } else {
                 $out[] = ['value' => 0,'label' => 'No Receipt','total' => 0];
             }
             echo \yii\helpers\Json::encode($out);
@@ -292,10 +308,18 @@ class DefaultController extends BaseController
         $model = $this->findModel($param);
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save(false)) {
+                $activities = [
+                    'Account',
+                    'Account - Change Country, (' . $model->acc_facebook_email . ') ' . $model->acc_screen_name . ' change country to ' . $model->acc_cty_id,
+                    Account::className(),
+                    $model->acc_id
+                ];
+                $this->saveLog($activities);
+
                 return $this->redirect(['view', 'id' => $param]);
             }
         }
-        return $this->renderAjax('country',['model' => $model]);
+        return $this->renderAjax('country', ['model' => $model]);
     }
 
     /**
