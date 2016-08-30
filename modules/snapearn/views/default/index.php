@@ -177,7 +177,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                             'layout' => '{summary} {items} {pager}',
                             'columns' => [
                                 [
-                                    'label' => 'M erchant',
+                                    'label' => 'Merchant',
                                     'attribute' => 'sna_com_id',
                                     'format' => 'html',
                                     'value' => function($data) {

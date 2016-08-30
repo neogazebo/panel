@@ -177,11 +177,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
 
         $this->select("
-            cat_name as categoryName,
+            coc_name as categoryName,
             sum(sna_receipt_amount) as amount,
             acc_cty_id as country
         ");
-        $this->innerJoin('tbl_category','tbl_category.cat_id = tbl_snapearn.sna_cat_id');
+        $this->innerJoin('tbl_company_category','tbl_company_category.coc_id = tbl_snapearn.sna_cat_id');
         $this->leftJoin("tbl_account","tbl_account.acc_id = tbl_snapearn.sna_acc_id");
         $this->where('
             sna_acc_id = :id
