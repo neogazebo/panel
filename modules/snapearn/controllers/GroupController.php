@@ -48,6 +48,8 @@ class GroupController extends BaseController
     public function actionCreate()
     {
         $model = new SnapearnGroup;
+        $model->setScenario('create');
+
         if ($model->load(Yii::$app->request->post())) {
         	$model->spg_created_by = Yii::$app->user->id;
             if ($model->save()) {
@@ -64,6 +66,8 @@ class GroupController extends BaseController
     public function actionUpdate($id)
     {
         $model = SnapearnGroup::findOne($id);
+        $model->setScenario('update');
+
         if ($model->load(Yii::$app->request->post())) {
         	$model->spg_updated_by = Yii::$app->user->id;
             if ($model->save()) {

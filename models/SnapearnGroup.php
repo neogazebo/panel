@@ -62,6 +62,8 @@ class SnapearnGroup extends \yii\db\ActiveRecord
         return [
             [['spg_created_by', 'spg_created_date', 'spg_updated_by', 'spg_updated_date'], 'integer'],
             [['spg_name'], 'string', 'max' => 255],
+            [['spg_name'], 'required', 'on' => 'create'],
+            [['spg_name'], 'required', 'on' => 'update'],
         ];
     }
 
