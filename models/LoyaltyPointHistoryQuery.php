@@ -108,30 +108,13 @@ class LoyaltyPointHistoryQuery extends \yii\db\ActiveQuery
 
         $results = new Query();
         
-        $results->select([
-                'com_name AS merchant',
-                'lpe_name AS type',
-                'lph_amount AS point',
-                'IF(lph_type = "C", "Credit", "Debit") AS method',
-                'FROM_UNIXTIME(lph_datetime) AS created_date',
-                'lph_total_point AS total_point',
-                'lph_current_point as current_point',
-                'lph_approve AS status'
-            ])
-            ->from('tbl_loyalty_point_history')
-            ->innerJoin('tbl_member', 'mem_id = lph_mem_id')
-            ->leftJoin('tbl_company', 'com_id = lph_com_id')
-            ->leftJoin('tbl_loyalty_point_type', 'lpe_id = lph_lpe_id');
+        $this->innerJoin('tbl_account', 'acc_id = lph_acc_id')
+             ->with('merchant','type')
+             ->where('lph_acc_id = :id', [':id' => $member_id]);
 
         if($op_type == 'filter')
         {
-            $results->where('
-                lph_mem_id = :id 
-                AND
-                lph_datetime >= :start_date
-                AND
-                lph_datetime <= :end_date
-            ', [
+            $this->andWhere('lph_acc_id = :id AND lph_datetime >= :start_date AND lph_datetime <= :end_date', [
                 ':id' => $member_id,
                 ':start_date' => $start_date,
                 ':end_date' => $end_date
@@ -139,18 +122,18 @@ class LoyaltyPointHistoryQuery extends \yii\db\ActiveQuery
         }
         else
         {
-            $results->where('lph_mem_id = :id', [
+            $this->andWhere('lph_acc_id = :id', [
                 ':id' => $member_id
             ]);
         }
         
         if($offset && $limit)
         {
-            $results->limit($limit)->offset($offset);
+            $this->limit($limit)->offset($offset);
         }
         
-        $results->orderBy('lph_datetime DESC');
+        $this->orderBy('lph_datetime DESC');
 
-        return $results;
+        return $this;
     }
 }
