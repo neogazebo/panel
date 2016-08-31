@@ -37,26 +37,30 @@ $this->registerCss("
                             </div>
                             <div class="form-group">
                                 <label>Reward Name</label>
-                                <div>
-                                    <?=
-                                        Select2::widget([
-                                            'name' => 'r_name',
-                                            // 'data' => $data,
-                                            'options' => [
-                                                'placeholder' => 'Reward name ...',
-                                            ],
-                                            'pluginOptions' => [
-                                                'allowClear' => true,
-                                                'minimumInputLength' => 3,
-                                                'ajax' => [
-                                                    'url' => Url::to(['get-reward']),
-                                                    'dataType' => 'json',
-                                                    'data' => new JsExpression('function(params) {return {q:params.term};}')
+                                <?= 
+                                    Typeahead::widget([
+                                        'name' => 'r_name',
+                                        'options' => [
+                                            'placeholder' => 'Reward Name',
+                                            'value' => (!empty($_GET['r_name'])) ? $_GET['r_name'] : ''
+                                        ],
+                                        'pluginOptions' => [
+                                            'highlight' => true,
+                                            'minLength' => 2
+                                        ],
+                                        'dataset' => [
+                                            [
+                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                                'display' => 'value',
+                                                'remote' => [
+                                                    'url' => Url::to('get-reward') . '?q=%QUERY',
+                                                    'wildcard' => '%QUERY'
                                                 ],
-                                            ],
-                                        ]);
-                                    ?>
-                                </div>
+                                                'limit' => 20
+                                            ]
+                                        ]
+                                    ]);
+                                ?>
                             </div>
                             <div class="form-group">
                                 <label>MSISDN</label>

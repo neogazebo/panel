@@ -89,16 +89,14 @@ class DefaultController extends BaseController
 
     public function actionGetReward($q = null)
     {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $out = ['results' => ['id' => '', 'text' => '']];
         if (!is_null($q)) {
             $model = RedemptionReference::find()->getReward($q);
             $data = $model->asArray()->all();
-            $out['results'] = array_values($data);
-            if (count($out['results']) > 0) {
-                $out['results'] = array_values($data);
-            } 
-            return $out;
+            $out = [];
+            foreach ($data as $d) {
+                $out[] = ['id' => $d['id'],'value' => $d['text']];
+            }
+            echo \yii\helpers\Json::encode($out);
         }
         
     }
