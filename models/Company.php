@@ -3,9 +3,10 @@
 namespace app\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 use app\models\CompanyTag;
+use app\models\Currency;
 use app\models\EbizuActiveRecord;
+use yii\db\ActiveRecord;
 
 class Company extends EbizuActiveRecord
 {
@@ -62,7 +63,7 @@ class Company extends EbizuActiveRecord
             [['com_email'], 'email'],
             [['com_email'], 'required', 'except' => ['new-hq','update-hq']],
             [['com_business_name'], 'required', 'on' => 'signup'],
-            [['com_point'], 'required', 'on' => 'point'],
+            [['com_point','com_currency'], 'required', 'on' => 'point'],
             ['com_status', 'required', 'on' => 'change_status'],
             [['com_photo', 'com_banner_photo'], 'validateGif'],
             [['com_joined', 'com_joined_datetime', 'com_joined_by'], 'required', 'on' => 'joined'],
@@ -937,6 +938,16 @@ class Company extends EbizuActiveRecord
             '500+' => '500+',
         ];
     }
+
+    public function getCurrency()
+    {
+        $model = Currency::find()->all();
+        return \app\components\helpers\Html::listData($model,'cur_id','cur_name');
+        // return [
+        //     'IDR' => 'Indonesia Rupiah',
+        //     'MYR' => 'Malaysia Ringgit'
+        // ];
+    }       
 
     public function getCategoryList()
     {

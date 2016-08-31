@@ -41,8 +41,8 @@ $this->registerCss("
                                     Typeahead::widget([
                                         'name' => 'r_name',
                                         'options' => [
-                                            'placeholder' => 'Reward Name',
-                                            'value' => (!empty($_GET['r_name'])) ? $_GET['r_name'] : ''
+                                            'placeholder' => (!empty($_GET['r_name'])) ? $_GET['r_name'] : 'Reward Name',
+                                            'class' => 'form-control tt-input my-input'
                                         ],
                                         'pluginOptions' => [
                                             'highlight' => true,
