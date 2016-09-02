@@ -10,6 +10,7 @@ use app\models\User;
 use app\models\WorkingTime;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
+use yii\db\Query;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -29,9 +30,18 @@ class DefaultController extends BaseController
         $params = NULL;
         $country = Yii::$app->request->get('country');
         if (!empty($country)) {
-            $params = User::find()->with('worktime')->where('country = :cty', [':cty' => $country]);
+            $query = new Query;
+            $query->select('id')
+                ->from('tbl_admin_user')
+                ->where('country = :cty',[
+                        ':cty' => $country
+                    ]);
+            $params = $query->all();
+            $command = $query->createCommand();
+            $params = $command->queryAll();
         }
-
+        
+        
         $model = WorkingTime::find()->with('user')->getWorker($params)->asArray()->all();
         for ($i=0; $i < count($model); $i++) { 
             $model[$i]['user']['username'] = ucfirst($model[$i]['user']['username']);
