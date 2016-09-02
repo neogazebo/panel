@@ -141,7 +141,7 @@ class PdfExport
                 'SetHeader' => [
                     $brand.'|| '.$username.'/Report/{DATE Y/m/j/H:m:s}'
                 ],
-                'SetFooter' => ['{PAGENO}'],
+                'SetFooter' => ['{PAGENO} / {nbpg}'],
             ]
         ]);
 
