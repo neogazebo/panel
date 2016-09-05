@@ -36,7 +36,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     public function findCustome()
     {
         $dt = new DateRangeCarbon();
-        $this->leftJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+        $this->innerJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
         if (!empty($_GET['sna_cty'])) {
             $sna_cty = $_GET['sna_cty'];
             $this->andWhere('tbl_account.acc_cty_id = :country', [':country' => $sna_cty]);
@@ -108,8 +108,6 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         }
         
         $this->orderBy('sna_id DESC');
-        //echo $this->createCommand()->getRawSql();
-        //exit;
         return $this;
     }
 
