@@ -113,6 +113,11 @@ class Account extends \yii\db\ActiveRecord
         return $model;
     }
 
+    public function getOperator()
+    {
+        return $this->hasOne(User::className(),['id' => 'acc_blocked_by']);
+    }
+
     /**
      * @inheritdoc
      */
