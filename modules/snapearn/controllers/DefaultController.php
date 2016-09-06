@@ -870,6 +870,29 @@ class DefaultController extends BaseController
         }
     }
 
+    public function actionSearchMemberEmail()
+    {
+        if (Yii::$app->request->isAjax) {
+            $model = Account::find()->searchMemberEmail();
+            $out = [];
+            if (!empty($model)) {
+                foreach ($model as $d) {
+                    $out[] = [
+                        'id' => $d->acc_facebook_email,
+                        'value' => $d->acc_facebook_email
+                    ];
+                }
+            } else {
+                $out[] = [
+                    'id' => 0,
+                    'value' => 'Email Not Found!',
+                ];
+            }
+
+            echo \yii\helpers\Json::encode($out);
+        }
+    }
+
     public function actionCityList()
     {
         if (Yii::$app->request->isAjax){
