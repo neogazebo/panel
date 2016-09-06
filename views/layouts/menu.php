@@ -37,6 +37,11 @@ use app\components\filters\AccessFilters;
                     <i class="fa fa-circle-o"></i> List
                 </a>
             </li>
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
+                    <i class="fa fa-circle-o"></i> Merchant HQ
+                </a>
+            </li>
         </ul>
     </li>
     <?php endif; ?>
@@ -117,6 +122,7 @@ use app\components\filters\AccessFilters;
     <?php endif; ?>
     
     <?php if (AccessFilters::getMenu('system')) : ?>
+    <!--
     <li class="treeview">
         <a href="#">
             <i class="fa fa-university"></i>
@@ -132,5 +138,6 @@ use app\components\filters\AccessFilters;
             
         </ul>
     </li>
+    -->
     <?php endif; ?>
 </ul>
