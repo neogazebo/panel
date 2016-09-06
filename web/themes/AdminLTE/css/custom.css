@@ -1,7 +1,12 @@
 .ajax-loading {
     /*background: #fff url("../img/loading-circle.gif") no-repeat scroll center center !important;*/
+    background: #ffffff url('../img/loading-circle.gif') center center no-repeat !important;
     opacity: 0.5;
-    z-index: 9999;
+    z-index: 99999;
+}
+
+.ajax-loading tr, .ajax-loading td {
+    background: transparent !important;
 }
 
 .margin-top-10 {

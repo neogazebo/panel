@@ -10,6 +10,7 @@ use app\models\User;
 use app\models\WorkingTime;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
+use yii\db\Query;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -29,9 +30,18 @@ class DefaultController extends BaseController
         $params = NULL;
         $country = Yii::$app->request->get('country');
         if (!empty($country)) {
-            $params = User::find()->with('worktime')->where('country = :cty', [':cty' => $country]);
+            $query = new Query;
+            $query->select('id')
+                ->from('tbl_admin_user')
+                ->where('country = :cty',[
+                        ':cty' => $country
+                    ]);
+            $params = $query->all();
+            $command = $query->createCommand();
+            $params = $command->queryAll();
         }
-
+        
+        
         $model = WorkingTime::find()->with('user')->getWorker($params)->asArray()->all();
         for ($i=0; $i < count($model); $i++) { 
             $model[$i]['user']['username'] = ucfirst($model[$i]['user']['username']);
@@ -148,7 +158,8 @@ class DefaultController extends BaseController
             $first_date = $date[0] . ' 00:00:00';
             $last_date = $date[1] . ' 23:59:59';
 
-            $query = WorkingTime::find()->with('reason')->getReportDetail($id, $model->date_range);
+//            $query = WorkingTime::find()->with('reason')->getReportDetail($id, $model->date_range);
+            $query = \app\models\SnapearnPoint::find()->getReportDetail($id, $model->date_range);
             $preview = '_detail';
             $title = [
                 'username' => $user->username,

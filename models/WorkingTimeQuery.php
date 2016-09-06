@@ -42,7 +42,7 @@ class WorkingTimeQuery extends \yii\db\ActiveQuery
         
         if (!empty($params)) {
             $id = [];
-            foreach ($params->asArray()->all() as $key) {
+            foreach ($params as $key) {
                 $id[] = (int)$key['id'];
             }
             $this->andWhere(['wrk_by' => $id]);

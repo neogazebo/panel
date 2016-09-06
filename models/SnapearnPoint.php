@@ -70,6 +70,11 @@ class SnapearnPoint extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'spo_created_by']);
     }
+    
+    public function getWorker()
+    {
+        return $this->hasOne(WorkingTime::className(), ['wrk_rjct_number' => 'spo_id']);
+    }
 
     /**
      * @inheritdoc

@@ -9,9 +9,9 @@ class ComposerStaticInitf3604ac49e84047474ea94ed2a17f03a
     public static $files = array (
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         'ef49e2d680177bff6b87f195ea2420b2' => __DIR__ . '/..' . '/hguenot/yii2-gftp/autoload.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         'ee08107f5f123445647495385b3fd6cd' => __DIR__ . '/..' . '/hguenot/yii2-gsftp/autoload.php',
     );
 
@@ -19,6 +19,7 @@ class ComposerStaticInitf3604ac49e84047474ea94ed2a17f03a
         'y' => 
         array (
             'yii\\swiftmailer\\' => 16,
+            'yii\\jui\\' => 8,
             'yii\\gii\\' => 8,
             'yii\\faker\\' => 10,
             'yii\\debug\\' => 10,
@@ -56,6 +57,7 @@ class ComposerStaticInitf3604ac49e84047474ea94ed2a17f03a
             'kartik\\form\\' => 12,
             'kartik\\file\\' => 12,
             'kartik\\export\\' => 14,
+            'kartik\\dialog\\' => 14,
             'kartik\\depdrop\\' => 15,
             'kartik\\datetime\\' => 16,
             'kartik\\date\\' => 12,
@@ -96,6 +98,10 @@ class ComposerStaticInitf3604ac49e84047474ea94ed2a17f03a
         'yii\\swiftmailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-swiftmailer',
+        ),
+        'yii\\jui\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-jui',
         ),
         'yii\\gii\\' => 
         array (
@@ -208,6 +214,10 @@ class ComposerStaticInitf3604ac49e84047474ea94ed2a17f03a
         'kartik\\export\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-export',
+        ),
+        'kartik\\dialog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-dialog',
         ),
         'kartik\\depdrop\\' => 
         array (

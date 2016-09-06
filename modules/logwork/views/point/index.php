@@ -50,16 +50,16 @@ $this->title = 'Snap & Earn Point';
                                         }
                                     ],
                                     'userCreated.username',
-                                    [
-                                        'class' => 'yii\grid\ActionColumn',
-                                        'template' => '<span class="pull-right actionColumn">{update}</span>',
-                                        'buttons' => [
-                                            'update' => function($url, $model) {
-                                                // return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?id='.$model->spo_id]), 'class' => 'modalButton']);
-                                                // return Html::a('<i class="fa fa-pencil"></i>', ['update', 'id' => $model->spo_id]);
-                                            },
-                                        ]
-                                    ]
+//                                    [
+//                                        'class' => 'yii\grid\ActionColumn',
+//                                        'template' => '<span class="pull-right actionColumn">{update}</span>',
+//                                        'buttons' => [
+//                                            'update' => function($url, $model) {
+//                                                // return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?id='.$model->spo_id]), 'class' => 'modalButton']);
+//                                                // return Html::a('<i class="fa fa-pencil"></i>', ['update', 'id' => $model->spo_id]);
+//                                            },
+//                                        ]
+//                                    ]
                                 ],
                                 'tableOptions' => ['class' => 'table table-striped table-hover']
                             ]);

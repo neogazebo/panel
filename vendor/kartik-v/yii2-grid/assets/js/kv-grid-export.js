@@ -2,7 +2,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
- * @version   3.1.1
+ * @version   3.1.2
  *
  * Grid Export Validation Module for Yii's Gridview. Supports export of
  * grid data as CSV, HTML, or Excel.
@@ -89,6 +89,7 @@
         self.$element = $(element);
         //noinspection JSUnresolvedVariable
         self.$grid = $("#" + gridOpts.gridId);
+        self.dialogLib = options.dialogLib;
         self.messages = gridOpts.messages;
         self.target = gridOpts.target;
         self.exportConversions = gridOpts.exportConversions;
@@ -131,41 +132,6 @@
             });
             return data;
         },
-        notify: function (e) {
-            var self = this;
-            if (!self.showConfirmAlert) {
-                e.preventDefault();
-                return true;
-            }
-            var msgs = self.messages, msg1 = isEmpty(self.alertMsg) ? '' : self.alertMsg,
-                msg2 = isEmpty(msgs.allowPopups) ? '' : msgs.allowPopups,
-                msg3 = isEmpty(msgs.confirmDownload) ? '' : msgs.confirmDownload, msg = '';
-            if (msg1.length && msg2.length) {
-                msg = msg1 + '\n\n' + msg2;
-            } else {
-                if (!msg1.length && msg2.length) {
-                    msg = msg2;
-                } else {
-                    msg = (msg1.length && !msg2.length) ? msg1 : '';
-                }
-            }
-            if (msg3.length) {
-                msg = msg + '\n\n' + msg3;
-            }
-            e.preventDefault();
-            if (isEmpty(msg)) {
-                return true;
-            }
-            return self.kvConfirm(msg);
-        },
-        kvConfirm: function (msg) {
-            try {
-                return window.confirm(msg);
-            }
-            catch (err) {
-                return true;
-            }
-        },
         setPopupAlert: function (msg) {
             var self = this;
             if (self.popup.document === undefined) {
@@ -181,24 +147,56 @@
                 self.popup.document.write(newmsg);
             }
         },
-        listenClick: function (callback) {
-            var self = this, arg = arguments.length > 1 ? arguments[1] : '';
-            self.$element.on("click", function (e) {
-                if (!self.notify(e)) {
-                    return;
-                }
+        processExport: function(callback, arg) {
+            var self = this;
+            setTimeout(function() {
                 if (!isEmpty(arg)) {
                     self[callback](arg);
                 } else {
                     self[callback]();
                 }
+            }, 100);
+        },
+        listenClick: function (callback) {
+            var self = this, arg = arguments.length > 1 ? arguments[1] : '', lib = window[self.dialogLib];
+            self.$element.off("click.gridexport").on("click.gridexport", function (e) {
+                e.stopPropagation();
                 e.preventDefault();
+                if (!self.showConfirmAlert) {
+                    self.processExport(callback, arg);
+                    return;
+                }
+                var msgs = self.messages, msg1 = isEmpty(self.alertMsg) ? '' : self.alertMsg,
+                    msg2 = isEmpty(msgs.allowPopups) ? '' : msgs.allowPopups,
+                    msg3 = isEmpty(msgs.confirmDownload) ? '' : msgs.confirmDownload, msg = '';
+                if (msg1.length && msg2.length) {
+                    msg = msg1 + '\n\n' + msg2;
+                } else {
+                    if (!msg1.length && msg2.length) {
+                        msg = msg2;
+                    } else {
+                        msg = (msg1.length && !msg2.length) ? msg1 : '';
+                    }
+                }
+                if (msg3.length) {
+                    msg = msg + '\n\n' + msg3;
+                }
+                if (isEmpty(msg)) {
+                    return;
+                }
+                lib.confirm(msg, function(result) {
+                    if (result) {
+                        self.processExport(callback, arg);
+                    }
+                    e.preventDefault();
+                });
+                return false;
             });
         },
         listen: function () {
             var self = this;
             if (self.target === '_popup') {
-                self.$form.on('submit', function () {
+                self.$form.on('submit.gridexport', function () {
                     setTimeout(function () {
                         self.setPopupAlert(self.messages.downloadComplete, true);
                     }, 1000);
@@ -376,8 +374,6 @@
         });
     };
 
-    $.fn.gridexport.defaults = {};
-
+    $.fn.gridexport.defaults = {dialogLib: 'krajeeDialog'};
     $.fn.gridexport.Constructor = GridExport;
-
 })(window.jQuery);

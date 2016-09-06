@@ -11,7 +11,7 @@ function setUpload(data) {
             id[i] = data[i].id;
             my[i] = data[i].my;
             appId[i] = data[i].appId;
-            appMy[i] = data[i].appId;
+            appMy[i] = data[i].appMy;
             rjtId[i] = data[i].rjtId;
             rjtMy[i] = data[i].rjtMy;
         }
