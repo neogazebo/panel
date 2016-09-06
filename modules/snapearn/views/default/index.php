@@ -17,18 +17,13 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 $company_name = null;
 
 if($data_hooks)
-{
     if($data_hooks['company'])
-    {
         $company_name = $data_hooks['company']->com_name;
-    }
-}
 
 $this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.min.css');
 $this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.theme.min.css');
 $this->registerJs("var search_mechant_url = '" . Url::to(['list']) . "';", \yii\web\View::POS_BEGIN);
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/SnapEarnManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
-
 ?>
 <section class="content-header">
     <h1><?= $this->title?></h1>
