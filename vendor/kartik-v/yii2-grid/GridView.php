@@ -4,7 +4,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
- * @version   3.1.1
+ * @version   3.1.2
  */
 
 namespace kartik\grid;
@@ -16,10 +16,12 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\helpers\Url;
+use yii\grid\Column;
 use yii\web\JsExpression;
 use yii\web\View;
 use yii\widgets\Pjax;
 use kartik\base\Config;
+use kartik\dialog\Dialog;
 
 /**
  * Enhances the Yii GridView widget with various options to include Bootstrap specific styling enhancements. Also
@@ -125,6 +127,13 @@ class GridView extends \yii\grid\GridView
     const TARGET_POPUP = '_popup';
     const TARGET_SELF = '_self';
     const TARGET_BLANK = '_blank';
+
+    /**
+     * @var array configuration settings for the Krajee dialog widget that will be used to render alerts and
+     *     confirmation dialog prompts
+     * @see http://demos.krajee.com/dialog
+     */
+    public $krajeeDialogSettings = [];
 
     /**
      * @var string the panel prefix
@@ -355,6 +364,11 @@ HTML;
     public $resizableColumns = true;
 
     /**
+     * @var boolean whether to hide resizable columns for smaller screen sizes (< 768px). Defaults to `true`.
+     */
+    public $hideResizeMobile = true;
+
+    /**
      * @var array the resizableColumns plugin options
      */
     public $resizableColumnsOptions = ['resizeFromBody' => false];
@@ -496,7 +510,7 @@ HTML;
      *     associative array of $key => $value pairs, where $key can be:
      * - 'maxCount': int|bool, the maximum number of records uptil which the toggle button will be rendered. If the
      *     dataProvider records exceed this setting, the toggleButton will not be displayed. Defaults to `10000` if
-     *     not set. If you set this to `true`, the toggle button will always be displayed. If you set this to `false the 
+     *     not set. If you set this to `true`, the toggle button will always be displayed. If you set this to `false the
      *     toggle button will not be displayed (similar to `toggleData` setting).
      * - 'minCount': int|bool, the minimum number of records beyond which a confirmation message will be displayed when
      *     toggling all records. If the dataProvider record count exceeds this setting, a confirmation message will be
@@ -588,6 +602,7 @@ HTML;
      * - options: array, HTML attributes for the export menu button. Defaults to `['class' => 'btn btn-default',
      *     'title'=>'Export']`.
      * - encoding: string, the export output file encoding. If not set, defaults to `utf-8`.
+     * - bom: boolean, whether a BOM is to be embedded for text or CSV files with utf-8 encoding. Defaults to `true`.
      * - menuOptions: array, HTML attributes for the export dropdown menu. Defaults to `['class' => 'dropdown-menu
      *     dropdown-menu-right']`. This property is to be setup exactly as the `options` property required by the
      *     `\yii\bootstrap\Dropdown` widget.
@@ -616,7 +631,7 @@ HTML;
      *     configuration options are read specific to each file type:
      *     - HTML:
      *          - cssFile: string, the css file that will be used in the exported HTML file. Defaults to:
-     *            `http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css`.
+     *            `https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css`.
      *     - CSV and TEXT:
      *          - colDelimiter: string, the column delimiter string for TEXT and CSV downloads.
      *          - rowDelimiter: string, the row delimiter string for TEXT and CSV downloads.
@@ -693,6 +708,16 @@ HTML;
     protected $_toggleButtonId;
 
     /**
+     * @var string the JS variable to store the toggle options
+     */
+    protected $_toggleOptionsVar;
+
+    /**
+     * @var string generated plugin script for the toggle button
+     */
+    protected $_toggleScript;
+
+    /**
      * @var bool whether the current mode is showing all data
      */
     protected $_isShowAll = false;
@@ -723,7 +748,7 @@ HTML;
      */
     public function init()
     {
-        $this->_module = Config::initModule(Module::classname());
+        $this->_module = Config::initModule(Module::className());
         if (empty($this->options['id'])) {
             $this->options['id'] = $this->getId();
         }
@@ -814,14 +839,15 @@ HTML;
             return '';
         }
         $maxCount = ArrayHelper::getValue($this->toggleDataOptions, 'maxCount', false);
-        if ($maxCount !== true && (!$maxCount || (int) $maxCount <= $this->dataProvider->getTotalCount())) {
+        if ($maxCount !== true && (!$maxCount || (int)$maxCount <= $this->dataProvider->getTotalCount())) {
             return '';
         }
         $tag = $this->_isShowAll ? 'page' : 'all';
-        $label = ArrayHelper::remove($this->toggleDataOptions[$tag], 'label', '');
+        $options = $this->toggleDataOptions[$tag];
+        $label = ArrayHelper::remove($options, 'label', '');
         $url = Url::current([$this->_toggleDataKey => $tag]);
         static::initCss($this->toggleDataContainer, 'btn-group');
-        return Html::tag('div', Html::a($label, $url, $this->toggleDataOptions[$tag]), $this->toggleDataContainer);
+        return Html::tag('div', Html::a($label, $url, $options), $this->toggleDataContainer);
     }
 
     /**
@@ -847,6 +873,7 @@ HTML;
             $action = [$action];
         }
         $encoding = ArrayHelper::getValue($this->export, 'encoding', 'utf-8');
+        $bom = ArrayHelper::getValue($this->export, 'bom', true);
         $target = ArrayHelper::getValue($this->export, 'target', self::TARGET_POPUP);
         $form = Html::beginForm($action, 'post', [
                 'class' => 'kv-export-form',
@@ -858,7 +885,8 @@ HTML;
             Html::hiddenInput('export_mime') . "\n" .
             Html::hiddenInput('export_config') . "\n" .
             Html::hiddenInput('export_encoding', $encoding) . "\n" .
-            Html::textArea('export_content') . "\n</form>";
+            Html::hiddenInput('export_bom', $bom) . "\n" .
+            Html::textarea('export_content') . "\n</form>";
         $items = empty($this->export['header']) ? [] : [$this->export['header']];
         foreach ($this->exportConfig as $format => $setting) {
             $iconOptions = ArrayHelper::getValue($setting, 'iconOptions', []);
@@ -1030,7 +1058,7 @@ HTML;
                 'options' => ['title' => Yii::t('kvgrid', 'Hyper Text Markup Language')],
                 'mime' => 'text/html',
                 'config' => [
-                    'cssFile' => 'http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css'
+                    'cssFile' => 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'
                 ]
             ],
             self::CSV => [
@@ -1259,6 +1287,9 @@ HTML;
             $gridId = empty($this->options['id']) ? $this->getId() : $this->options['id'];
             $this->containerOptions['data-resizable-columns-id'] = (empty($key) ? "kv-{$gridId}" : "kv-{$key}-{$gridId}");
         }
+        if ($this->hideResizeMobile) {
+            Html::addCssClass($this->options, 'hide-resize');
+        }
         $export = $this->renderExport();
         $toggleData = $this->renderToggleData();
         $toolbar = strtr(
@@ -1301,10 +1332,10 @@ HTML;
         }
         $container = 'jQuery("#' . $this->pjaxSettings['options']['id'] . '")';
         $js = $container;
-        if (ArrayHelper::getvalue($this->pjaxSettings, 'neverTimeout', true)) {
+        if (ArrayHelper::getValue($this->pjaxSettings, 'neverTimeout', true)) {
             $js .= ".on('pjax:timeout', function(e){e.preventDefault()})";
         }
-        $loadingCss = ArrayHelper::getvalue($this->pjaxSettings, 'loadingCssClass', 'kv-grid-loading');
+        $loadingCss = ArrayHelper::getValue($this->pjaxSettings, 'loadingCssClass', 'kv-grid-loading');
         $postPjaxJs = "setTimeout({$this->_gridClientFunc}, 2500);";
         if ($loadingCss !== false) {
             $grid = 'jQuery("#' . $this->containerOptions['id'] . '")';
@@ -1314,6 +1345,7 @@ HTML;
             $js .= ".on('pjax:send', function(){{$grid}.addClass('{$loadingCss}')})";
             $postPjaxJs .= "{$grid}.removeClass('{$loadingCss}');";
         }
+        $postPjaxJs .= "\n" . $this->_toggleScript;
         if (!empty($postPjaxJs)) {
             $event = 'pjax:complete.' . hash('crc32', $postPjaxJs);
             $js .= ".off('{$event}').on('{$event}', function(){{$postPjaxJs}})";
@@ -1340,7 +1372,7 @@ HTML;
     /**
      * Sets a default css value if not set
      *
-     * @param array  $options
+     * @param array $options
      * @param string $css
      */
     protected static function initCss(&$options, $css)
@@ -1469,24 +1501,29 @@ HTML;
 
     /**
      * Generate toggle data validation client script
-     *
-     * @return string
      */
-    protected function getToggleDataScript()
+    protected function genToggleDataScript()
     {
-        $tag = $this->_isShowAll ? 'page' : 'all';
-        if (!$this->toggleData || $tag !== 'all') {
-            return '';
+        $this->_toggleScript = '';
+        if (!$this->toggleData) {
+            return;
         }
         $minCount = ArrayHelper::getValue($this->toggleDataOptions, 'minCount', 0);
-        if ($minCount !== true && (!$minCount || $minCount <= $this->dataProvider->getTotalCount())) {
-            return '';
+        if (!$minCount || $minCount >= $this->dataProvider->getTotalCount()) {
+            return;
         }
-        $event = $this->pjax ? 'pjax:click' : 'click';
-        $msg = $this->toggleDataOptions['confirmMsg'];
-        return "\$('#{$this->_toggleButtonId}').on('{$event}',function(e){
-            if(!window.confirm('{$msg}')){e.preventDefault();}
-        });";
+        $view = $this->getView();
+        $opts = Json::encode([
+            'id' => $this->_toggleButtonId,
+            'pjax' => $this->pjax ? 1 : 0,
+            'mode' => $this->_isShowAll ? 'all' : 'page',
+            'msg' => ArrayHelper::getValue($this->toggleDataOptions, 'confirmMsg', ''),
+            'lib' => new JsExpression(ArrayHelper::getValue($this->krajeeDialogSettings, 'libName', 'krajeeDialog'))
+        ]);
+        $this->_toggleOptionsVar = 'kvTogOpts_' . hash('crc32', $opts);
+        $view->registerJs("{$this->_toggleOptionsVar}={$opts};", View::POS_HEAD);
+        GridToggleDataAsset::register($view);
+        $this->_toggleScript = "kvToggleData({$this->_toggleOptionsVar});";
     }
 
     /**
@@ -1499,6 +1536,7 @@ HTML;
         if ($this->bootstrap) {
             GridViewAsset::register($view);
         }
+        Dialog::widget($this->krajeeDialogSettings);
         $gridId = $this->options['id'];
         if ($this->export !== false && is_array($this->export) && !empty($this->export)) {
             GridExportAsset::register($view);
@@ -1523,6 +1561,7 @@ HTML;
                 $genOptsVar = 'kvGridExp_' . hash('crc32', $genOpts);
                 $view->registerJs("var {$genOptsVar}={$genOpts};", View::POS_HEAD);
                 $expOpts = Json::encode([
+                    'dialogLib' => ArrayHelper::getValue($this->krajeeDialogSettings, 'libName', 'krajeeDialog'),
                     'gridOpts' => new JsExpression($gridOptsVar),
                     'genOpts' => new JsExpression($genOptsVar),
                     'alertMsg' => ArrayHelper::getValue($setting, 'alertMsg', false),
@@ -1567,9 +1606,41 @@ HTML;
             GridPerfectScrollbarAsset::register($view);
             $script .= "{$container}.perfectScrollbar(" . Json::encode($this->perfectScrollbarOptions) . ");";
         }
-        $script .= $this->getToggleDataScript();
+        $this->genToggleDataScript();
+        $script .= $this->_toggleScript;
         $this->_gridClientFunc = 'kvGridInit_' . hash('crc32', $script);
         $this->options['data-krajee-grid'] = $this->_gridClientFunc;
         $view->registerJs("var {$this->_gridClientFunc}=function(){\n{$script}\n};\n{$this->_gridClientFunc}();");
+    }
+
+    /**
+     * Renders the column group HTML.
+     * @return boolean|string the column group HTML or `false` if no column group should be rendered.
+     */
+    public function renderColumnGroup()
+    {
+        $requireColumnGroup = false;
+        foreach ($this->columns as $column) {
+            /* @var $column Column */
+            if (!empty($column->options)) {
+                $requireColumnGroup = true;
+                break;
+            }
+        }
+        if ($requireColumnGroup) {
+            $cols = [];
+            foreach ($this->columns as $column) {
+                //Skip column with groupedRow
+                /** @noinspection PhpUndefinedFieldInspection */
+                if (property_exists($column, 'groupedRow') && $column->groupedRow) {
+                    continue;
+                }
+                $cols[] = Html::tag('col', '', $column->options);
+            }
+
+            return Html::tag('colgroup', implode("\n", $cols));
+        } else {
+            return false;
+        }
     }
 }

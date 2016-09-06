@@ -54,7 +54,20 @@ class DefaultController extends BaseController
         
         $this->data_provider = new ActiveDataProvider([
             'query' => $model,
-            'sort' => false,
+            'sort' => [
+                'attributes' => [
+                    'sna_receipt_amount' => [
+                        'asc' => ['sna_receipt_amount' => SORT_ASC],
+                        'desc' => ['sna_receipt_amount' => SORT_DESC],
+                        'default' => SORT_DESC
+                    ],
+                    'sna_point' => [
+                        'asc' => ['sna_point' => SORT_ASC],
+                        'desc' => ['sna_point' => SORT_DESC],
+                        'default' => SORT_DESC
+                    ],
+                ]
+            ],
             'pagination' => [
                 'pageSize' => $this->page_size
             ]
@@ -80,8 +93,7 @@ class DefaultController extends BaseController
 
         $merchant_id = Yii::$app->request->get('com_name');
 
-        if($merchant_id)
-        {
+        if($merchant_id) {
             $company = Company::findOne($merchant_id);
             $output['company'] = $company;
             $this->processOutputHooks($output);

@@ -56,16 +56,13 @@ class CompanyQuery extends \yii\db\ActiveQuery
             $parent_is_first = true;
         }
 
-        $keyword = implode(' ', $keyword);
+        //$keyword = implode(' ', $keyword);
+        //$this->andWhere('com_name LIKE "%' . $keyword . '%" ');
 
-        $this->andWhere('com_name LIKE "%' . $keyword . '%" ');
-
-        /*
         foreach($keyword as $key) {
             $this->andWhere('com_name LIKE "%' . $key . '%" ');
         }
-        */
-
+        
         $this->andWhere('tbl_company_category.com_category_type = :type', [
             'type' => 1
         ]);

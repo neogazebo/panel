@@ -93,16 +93,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         // merchant filter
         if (!empty($_GET['com_name'])) {
             $merchantId = $_GET['com_name'];
-
             $company_is_hq = Company::find()->checkCompanyIsParent($merchantId);
-
-            if($company_is_hq)
-            {
+            if($company_is_hq) {
                 $children = array_map('intval', Company::find()->getChildMerchantsId($merchantId));
                 $this->andWhere(['sna_com_id' => $children]);
-            }
-            else
-            {
+            } else {
                 $this->andWhere("sna_com_id = :com",[':com' => $merchantId]);
             }
         }
