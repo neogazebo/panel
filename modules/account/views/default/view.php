@@ -5,7 +5,7 @@ use yii\widgets\DetailView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use kartik\grid\GridView;
-
+$blocked_status = $model->acc_status == 0;
 $this->title = $model->acc_screen_name;
 $model->acc_gender = ($model->acc_gender == 1) ? 'Male' : 'Female';
 $this->registerCss("
@@ -63,6 +63,16 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                             <button class="btn btn-danger btn-xs confirmBlocked" value="block-user?id=<?= $_GET['id'] ?>">Change <i class="fa fa-exchange"></i></button>
                             <a class="pull-right"><?= ($model->acc_status == 1) ? 'Active' : 'Blocked' ?></a>
                         </li>
+                        <?php if ($blocked_status) : ?>
+                        <li class="list-group-item">
+                            <b>Blocked By</b>
+                            <a href="#" class="pull-right"><?= $model->operator->username ?></a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Block Date</b>
+                            <a href="#" class="pull-right"><?= Yii::$app->formatter->asDate($model->acc_blocked_date) ?></a>
+                        </li>
+                        <?php endif; ?>
                         <li class="list-group-item">
                             <b>Currency </b> <a class="pull-right"><?= !empty($model->country) ? $model->country->cty_currency_name_iso3 : '' ?></a>
                         </li>

@@ -4,7 +4,7 @@
 # sublime project files
 *.sublime-project
 *.sublime-workspace
-*.phpintel
+.phpintel
 
 # phpstorm project files
 .idea
@@ -38,7 +38,7 @@ phpunit.phar
 /runtime/*
 
 # composer vendor dir
-/vendor/*
+vendor/*
 
 *.psd
 # ebextension files

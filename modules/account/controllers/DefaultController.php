@@ -231,8 +231,11 @@ class DefaultController extends BaseController
     {
         if (Yii::$app->request->isAjax){
             $id = Yii::$app->request->get('id');
+            $blocked_date = Yii::$app->formatter->asTimestamp(date('Y-m-d h:i:s'));
             $model = $this->findModel($id);
             $model->acc_status = ($model->acc_status == 0) ? 1 : 0;
+            $model->acc_blocked_by = Yii::$app->user->id;
+            $model->acc_blocked_date = $blocked_date;
             if ($model->save(false)) {
                 $status = $model->acc_status == 1 ? 'activated' : 'blocked';
                 $activities = [

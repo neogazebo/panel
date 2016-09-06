@@ -99,4 +99,21 @@ class AccountQuery extends \yii\db\ActiveQuery
             ]
         ];
     }
+
+    public function searchMemberEmail()
+    {
+        $parent_is_first = false;
+        $search = $_GET['q'];
+        $this->select('acc_facebook_email');
+        $keyword = preg_split("/[\s,]+/", $search);
+
+        $keyword = implode(' ', $keyword);
+        $this->andWhere('acc_facebook_email LIKE "%' . $keyword . '%" ');
+        
+        $this->andWhere('acc_status = :status', [
+            'status' => 1
+        ]);
+
+        return $this->all();
+    }
 }
