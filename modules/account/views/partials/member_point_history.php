@@ -18,44 +18,50 @@ GridView::widget([
             'label' => 'Merchant',
             'format' => 'html',
             'value' => function($data) {
-                return $data['merchant'];
+                if (!empty($data->merchant))
+                    return $data->merchant->com_name;
             }
         ],
         [
             'label' => 'Type',
             'format' => 'html',
             'value' => function($data) {
-                return $data['type'] ? ucwords($data['type']) : null;
-            }
-        ],
-        [
-            'label' => 'Point',
-            'format' => 'html',
-            'value' => function($data) {
-                return $data['point'];
+                if (!empty($data->type)) {
+                    return ucwords($data->type->lpe_name);
+                } else {
+                    return 'Snap & Earn';
+                }
             }
         ],
         [
             'label' => 'Method',
             'format' => 'html',
             'value' => function($data) {
-                return ucwords($data['method']);
+                return ($data->lph_type == 'C') ? 'Credit' : 'Debit';
+            }
+        ],
+        [
+            'label' => 'Amount',
+            'format' => 'html',
+            'value' => function($data) {
+                return $data->lph_amount;
             }
         ],
         [
             'label' => 'Current Point',
             'format' => 'html',
             'value' => function($data) {
-                return $data['current_point'];
+                return $data->lph_current_point;
             }
         ],
         [
             'label' => 'Total Point',
             'format' => 'html',
             'value' => function($data) {
-                return $data['total_point'];
+                return $data->lph_total_point;
             }
         ],
+        /*
         [
             'label' => 'Status',
             'format' => 'html',
@@ -63,11 +69,12 @@ GridView::widget([
                 return $data['status'] == 1 ? 'Approved' : null;
             }
         ],
+        */
         [
             'label' => 'Date',
             'format' => 'html',
             'value' => function($data) {
-                return $data['created_date'];
+                return Yii::$app->formatter->asDate($data->lph_datetime);
             },
         ],
     ],
