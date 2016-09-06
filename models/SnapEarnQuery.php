@@ -47,6 +47,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $this->andWhere(['=', 'sna_acc_id', $sna_member]);
         }
 
+        if (!empty($_GET['member_email'])) {
+            $member_email = $_GET['member_email'];
+            $this->andWhere('tbl_account.acc_facebook_email = :member_email', [':member_email' => $member_email]);
+        }
+
         if (!empty($_GET['sna_receipt'])) {
             $sna_receipt = $_GET['sna_receipt'];
             $this->andWhere(['LIKE', 'sna_ops_receipt_number', $sna_receipt]);
@@ -377,30 +382,38 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                 'relation_name' => 'acc_screen_name'
             ], 
             'C' => [
+                'name' => 'Member Email',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'member',
+                'have_relations' => true,
+                'relation_name' => 'acc_facebook_email'
+            ], 
+            'D' => [
                 'name' => 'Ops Receipt Number',
                 'width' => 30,
                 'height' => 5,
                 'db_column' => 'sna_ops_receipt_number',
             ], 
-            'D' => [
+            'E' => [
                 'name' => 'Receipt Date',
                 'width' => 30,
                 'height' => 5,
                 'db_column' => 'sna_receipt_date',
             ],
-            'E' => [
+            'F' => [
                 'name' => 'Receipt Amount',
                 'width' => 30,
                 'height' => 5,
                 'db_column' => 'sna_receipt_amount',
             ],
-            'F' => [
+            'G' => [
                 'name' => 'Point',
                 'width' => 30,
                 'height' => 5,
                 'db_column' => 'sna_point',
             ],
-            'G' => [
+            'H' => [
                 'name' => 'Upload Date',
                 'width' => 30,
                 'height' => 5,
@@ -409,7 +422,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                     return Yii::$app->formatter->asDateTime(Utc::convert($data));
                 }
             ],
-            'H' => [
+            'I' => [
                 'name' => 'Review Date',
                 'width' => 30,
                 'height' => 5,
@@ -418,7 +431,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                     return Yii::$app->formatter->asDateTime(Utc::convert($data));
                 }
             ],
-            'I' => [
+            'J' => [
                 'name' => 'Operator',
                 'width' => 30,
                 'height' => 5,
@@ -426,7 +439,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                 'have_relations' => true,
                 'relation_name' => 'username'
             ],
-            'J' => [
+            'K' => [
                 'name' => 'Status',
                 'width' => 30,
                 'height' => 5,
@@ -446,7 +459,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                     }
                 }
             ],
-            'K' => [
+            'L' => [
                 'name' => 'Description',
                 'width' => 30,
                 'height' => 5,

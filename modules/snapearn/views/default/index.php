@@ -21,7 +21,7 @@ $company_name = null;
 
 if($data_hooks)
 {
-    if($data_hooks['company'])
+    if(isset($data_hooks['company']))
     {
         $company_name = $data_hooks['company']->com_name;
     }
@@ -30,6 +30,7 @@ if($data_hooks)
 $this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.min.css');
 $this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.theme.min.css');
 $this->registerJs("var search_mechant_url = '" . Url::to(['list']) . "';", \yii\web\View::POS_BEGIN);
+$this->registerJs("var search_member_email_url = '" . Url::to(['search-member-email']) . "';", \yii\web\View::POS_BEGIN);
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/SnapEarnManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 
 ?>
@@ -106,6 +107,10 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                         <input name="sna_member" class="form-control" id="sna_member" placeholder="Enter name" type="hidden" value="<?= (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '' ?>">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label>Member Email</label><br>
+                                    <input name="member_email"  type="text" id="member_email_search" class="form-control" value="<?= (!empty($_GET['member_email'])) ? $_GET['member_email'] : '' ?>" width="300px" placeholder="Enter Email" />
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -179,7 +184,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                     */
                                 ?>
 
-                                <input type="text" id="com_name_search" class="form-control" value="<?= $company_name ?>" width="200px" />
+                                <input type="text" id="com_name_search" class="form-control" value="<?= $company_name ?>" width="200px" placeholder="Enter merchant name" />
                             </div>
                             <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
                             <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
@@ -211,7 +216,8 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                     'format' => 'html',
                                     'value' => function($data) {
                                         return (!empty($data->merchant)) ? $data->merchant->com_name : '<a class=""><span class="not-set">(not set)</span></a>';
-                                    }
+                                    },
+                                    'contentOptions'=>['style'=>'max-width: 90px; word-wrap: break-word;']
                                 ],
                                 [
                                     'label' => 'Member',
@@ -222,8 +228,23 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                         return (!empty($data->member)) ? $data->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>';
                                     }
                                 ],
-                                'sna_ops_receipt_number',
-//                                'sna_receipt_date',
+                                [
+                                    'label' => 'Member Email',
+                                    'visible' => $visible,
+                                    'format' => 'html',
+                                    'value' => function($data) {
+                                        return (!empty($data->member)) ? $data->member->acc_facebook_email : '<a class=""><span class="not-set">(not set)</span></a>';
+                                    }
+                                ],
+                                [
+                                    'label' => 'Receipt Number',
+                                    'visible' => $visible,
+                                    'format' => 'html',
+                                    'value' => function($data) {
+                                        return (!empty($data->sna_ops_receipt_number)) ? $data->sna_ops_receipt_number : '<a class=""><span class="not-set">(not set)</span></a>';
+                                    },
+                                    'contentOptions'=>['style'=>'max-width: 80px; word-wrap: break-word;']
+                                ],
                                 [
                                     'attribute' => 'sna_receipt_amount',
                                     'format' => ['decimal', 2],
