@@ -2,7 +2,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
- * @version   3.1.1
+ * @version   3.1.2
  *
  * jQuery methods library for yii2-grid expand row column
  * 
@@ -38,7 +38,7 @@ var kvRowNum = 0, kvExpandRow;
             $hdrIcon = $hdrCell.find('.kv-expand-header-icon'),
             collapseAll = options.collapseAll === undefined ? false : options.collapseAll,
             expandAll = options.expandAll === undefined ? false : options.expandAll,
-            $rows = $grid.find("td .kv-expand-row:not(.kv-state-disabled)"),
+            $rows = $grid.find("td .kv-expand-row." + gridId + ":not(.kv-state-disabled)"),
             numRows = $rows.length, progress = 'kv-expand-detail-loading',
             getCols = function () {
                 var $row = $grid.find('.kv-expand-icon:first').closest('tr'), cols = 0;
