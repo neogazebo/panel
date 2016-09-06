@@ -101,8 +101,6 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                 $this->andWhere("sna_com_id = :com",[':com' => $merchantId]);
             }
         }
-        
-        $this->orderBy('sna_id DESC');
         return $this;
     }
 

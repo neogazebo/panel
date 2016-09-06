@@ -55,18 +55,7 @@ class DefaultController extends BaseController
         $this->data_provider = new ActiveDataProvider([
             'query' => $model,
             'sort' => [
-                'attributes' => [
-                    'sna_receipt_amount' => [
-                        'asc' => ['sna_receipt_amount' => SORT_ASC],
-                        'desc' => ['sna_receipt_amount' => SORT_DESC],
-                        'default' => SORT_DESC
-                    ],
-                    'sna_point' => [
-                        'asc' => ['sna_point' => SORT_ASC],
-                        'desc' => ['sna_point' => SORT_DESC],
-                        'default' => SORT_DESC
-                    ],
-                ]
+                'attributes' => ['sna_receipt_amount', 'sna_point'],
             ],
             'pagination' => [
                 'pageSize' => $this->page_size
