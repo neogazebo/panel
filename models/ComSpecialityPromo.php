@@ -18,7 +18,7 @@ use yii\db\ActiveRecord;
  * @property integer $spt_promo_end_date
  * @property integer $spt_promo_created_date
  */
-class ComSpecialityPromo extends \yii\db\ActiveRecord
+class ComSpecialityPromo extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -75,11 +75,11 @@ class ComSpecialityPromo extends \yii\db\ActiveRecord
 
     public function checkDate($data)
     {
-        $today = date('Y-m-d');
-        $start_date = $this->spt_promo_start_date;
-        if ($start_date < $today) {
-            $this->addError($data, Yii::t('app', "Start date must greater than by today"));
-        }
+        // $today = date('Y-m-d');
+        // $start_date = $this->spt_promo_start_date;
+        // if ($start_date < $today) {
+        return $this->addError($data, Yii::t('app', "Start date must greater than by today"));
+        // }
     }
 
     public function getSpeciality()

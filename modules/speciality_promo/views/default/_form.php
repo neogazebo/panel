@@ -1,7 +1,7 @@
 <?php
 
 use app\models\CompanySpeciality;
-// use kartik\widgets\DatePicker;
+use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\jui\DatePicker;
@@ -18,32 +18,32 @@ use yii\widgets\ActiveForm;
         'id' => 'promo',
         'enableClientValidation' => true,
         'enableAjaxValidation' => true,
+        'fieldConfig' => [
+        'template' => "{label}\n<div class=\"\">{input}\n<div>{error}</div></div>",
+            'labelOptions' => ['class' => 'control-label'],
+        ],
     ]); ?>
     <?=
     $form->field($model, 'spt_promo_com_spt_id')->dropDownList(ArrayHelper::map(CompanySpeciality::find()->all(), 'com_spt_id', 'com_spt_merchant_speciality_name'), ['prompt'=>'Choose...'])->label('Company Speciality'); ?>
     <?= $form->field($model, 'spt_promo_description')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'spt_promo_point')->textInput() ?>
-    <!-- <div class="col-sm-6"> -->
+    <div class="col-sm-6" style="padding: 0px 12px 0px 0px;">
         <?=
-            DatePicker::widget([
-                'model' => $model,
-                'attribute' => 'spt_promo_start_date',
-                //'language' => 'ru',
-                'dateFormat' => 'yyyy-MM-dd',
-            ]);
+        $form->field($model, 'spt_promo_start_date')->widget(\yii\jui\DatePicker::classname(), [
+            'language' => 'ru',
+            'dateFormat' => 'yyyy-MM-dd',
+        ]);
         ?>
-   <!--  </div>
-    <div class="col-sm-6"> -->
+    </div>
+    <div class="col-sm-6" style="padding: 0px 0px 0px 12px;">
         <?=
-            DatePicker::widget([
-                'model' => $model,
-                'attribute' => 'spt_promo_end_date',
-                //'language' => 'ru',
-                'dateFormat' => 'yyyy-MM-dd',
-            ]);
+        $form->field($model, 'spt_promo_end_date')->widget(\yii\jui\DatePicker::classname(), [
+            'language' => 'ru',
+            'dateFormat' => 'yyyy-MM-dd',
+        ]);
         ?>
-    <!-- </div> -->
+    </div>
   
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
