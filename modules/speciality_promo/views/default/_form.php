@@ -16,12 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin([
         'id' => 'promo',
-        'enableClientValidation' => true,
-        'enableAjaxValidation' => true,
-        'fieldConfig' => [
-        'template' => "{label}\n<div class=\"\">{input}\n<div>{error}</div></div>",
-            'labelOptions' => ['class' => 'control-label'],
-        ],
+        // 'enableAjaxValidation' => true,
     ]); ?>
     <?=
     $form->field($model, 'spt_promo_com_spt_id')->dropDownList(ArrayHelper::map(CompanySpeciality::find()->all(), 'com_spt_id', 'com_spt_merchant_speciality_name'), ['prompt'=>'Choose...'])->label('Company Speciality'); ?>
@@ -32,7 +27,12 @@ use yii\widgets\ActiveForm;
         <?=
         $form->field($model, 'spt_promo_start_date')->widget(\yii\jui\DatePicker::classname(), [
             'language' => 'ru',
-            'dateFormat' => 'yyyy-MM-dd',
+            'options' => [
+                'class' => 'form-control'
+            ],
+            'attribute' => [
+                'dateFormat' => 'yyyy-MM-dd'
+            ]
         ]);
         ?>
     </div>
@@ -40,6 +40,9 @@ use yii\widgets\ActiveForm;
         <?=
         $form->field($model, 'spt_promo_end_date')->widget(\yii\jui\DatePicker::classname(), [
             'language' => 'ru',
+            'options' => [
+                'class' => 'form-control'
+            ],
             'dateFormat' => 'yyyy-MM-dd',
         ]);
         ?>
@@ -52,3 +55,10 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+$this->registerJs("
+    $( '#comspecialitypromo-spt_promo_start_date' ).datepicker({
+      dateFormat: 'yy-mm-dd'
+    });
+");
+?>

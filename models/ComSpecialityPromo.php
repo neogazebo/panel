@@ -75,11 +75,11 @@ class ComSpecialityPromo extends ActiveRecord
 
     public function checkDate($data)
     {
-        // $today = date('Y-m-d');
-        // $start_date = $this->spt_promo_start_date;
-        // if ($start_date < $today) {
-        return $this->addError($data, Yii::t('app', "Start date must greater than by today"));
-        // }
+        $today = date('Y-m-d');
+        $start_date = $this->spt_promo_start_date;
+        if ($start_date < $today) {
+            $this->addError($data, Yii::t('app', "Start date must greater than by today"));
+        }
     }
 
     public function getSpeciality()
