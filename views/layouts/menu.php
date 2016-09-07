@@ -37,6 +37,11 @@ use app\components\filters\AccessFilters;
                     <i class="fa fa-circle-o"></i> List
                 </a>
             </li>
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('speciality') ?>">
+                    <i class="fa fa-circle-o"></i> Merchant Speciality Promo
+                </a>
+            </li>
         </ul>
     </li>
     <?php endif; ?>

@@ -151,38 +151,6 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                             </div>
                             <div class="form-group">
                                 <label>Merchant</label><br>
-                                <?php 
-
-                                    /*
-                                    echo Typeahead::widget([
-                                        'id' => 'merchant',
-                                        'name' => 'merchant',
-                                        //'options' => ['placeholder' => $mer],
-                                        'pluginOptions' => [
-                                            'highlight' => true,
-                                            'minLength' => 3
-                                        ],
-                                        'pluginEvents' => [
-                                            "typeahead:select" => "function(ev, suggestion) { "
-                                                . "$('#com_name').val(suggestion.id); "
-                                                . "$(this).css('color','000');"
-                                            . "}",
-                                        ],
-                                        'dataset' => [
-                                            [
-                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                                                'display' => 'value',
-                                                'remote' => [
-                                                    'url' => Url::to(['list']) . '?q=%QUERY',
-                                                    'wildcard' => '%QUERY'
-                                                ],
-                                                'limit' => 20
-                                            ]
-                                        ]
-                                    ]);
-                                    */
-                                ?>
-
                                 <input type="text" id="com_name_search" class="form-control" value="<?= $company_name ?>" width="200px" placeholder="Enter merchant name" />
                             </div>
                             <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
