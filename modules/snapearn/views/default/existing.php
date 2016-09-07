@@ -35,7 +35,7 @@ $form = ActiveForm::begin([
             'useHandleBars' => false,
             'scrollable' => true,
             'pluginOptions' => [
-                'highlight'=>true,
+                'highlight' => true,
                 'minLength' => 3
             ],
             'pluginEvents' => [

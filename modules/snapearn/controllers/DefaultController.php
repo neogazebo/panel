@@ -375,6 +375,7 @@ class DefaultController extends BaseController
 
         // get post request form
         if ($model->load(Yii::$app->request->post())) {
+            $model->sna_transaction_time = $_POST['d1'] . ' ' . $_POST['t1'];
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);

@@ -85,7 +85,7 @@ class CorrectionController extends BaseController
         if ($model->sna_status == 0 && $superuser != 1) {
             $this->checkSession($id);
             return $this->redirect(['default/to-update','id'=> $id]);
-        }elseif ($model->sna_status != 0 && $superuser != 1) {
+        } elseif ($model->sna_status != 0 && $superuser != 1) {
             $this->checkSession($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         }
@@ -101,6 +101,7 @@ class CorrectionController extends BaseController
 
         // get post request form
         if ($model->load(Yii::$app->request->post())) {
+            $model->sna_transaction_time = $_POST['d1'] . ' ' . $_POST['t1'];
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
@@ -113,7 +114,7 @@ class CorrectionController extends BaseController
                 // configuration to get real point user before reviews
                 $mp = Company::find()->getCurrentPoint($model->sna_com_id);
                 $up = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                if($up !== 0) {
+                if ($up !== 0) {
                     $cp = $up['lph_total_point'];
                 } else {
                     $cp = 0;
@@ -147,7 +148,6 @@ class CorrectionController extends BaseController
 
                 // if approved action
                 if ($model->sna_status == 1) {
-                    
                     // get current point merchant
                     $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                     $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
@@ -307,14 +307,11 @@ class CorrectionController extends BaseController
                 // execution save to snapearn
                 $snap_type = '';
                 if ($model->save()) {
-                    
                     // webhook for manis v3
                     // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
                     $curl = new curl\Curl();
                     $curl->get(Yii::$app->params['WEBHOOK_MANIS_API'].'?data={"acc_id":' . intval($model->sna_acc_id) . ',"sna_id":' . intval($model->sna_id) . ',"sna_status":' . intval($model->sna_status) . '}');
                     
-                    // $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
-
                     $activities = [
                         'Snap Earn',
                         'Snapearn ' . ($model->sna_status == 1 ? 'APPROVED' : 'REJECTED') . ' in ' . $model->member->acc_facebook_email . ' on ' . $model->business->com_name . ' at ' . date('d M Y H:i:s', $model->sna_transaction_time),
@@ -360,12 +357,11 @@ class CorrectionController extends BaseController
             } else {
                 return $this->redirect(['/snapearn']);
             }
-            
         } else {
             $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
         }
 
-        $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
+        $model->sna_transaction_time = Utc::convert($model->sna_transaction_time);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
         if (!empty($ses_com)) {
             $model->sna_com_id = $ses_com['sna_com_id'];
