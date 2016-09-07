@@ -108,6 +108,51 @@ function op_confirm(com_id, children)
     });
 }
 
+function delete_confirm(com_id)
+{
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: '/system/merchant-hq/delete',
+        beforeSend: function() {
+            $('.box').waitMe({
+                effect : 'stretch',
+                text : 'Deleting...',
+                bg : 'rgba(255,255,255,0.7)',
+                color : '#000',
+                sizeW : '',
+                sizeH : ''
+            });
+        },
+        complete: function(){
+            $('.box').waitMe('hide');
+        },
+        data: {
+            'com_id': com_id,
+        },
+        success: function(data) {
+            if(!data.error) {
+                swal({
+                    title: 'Operation Status',   
+                    html: true,
+                    text: 'Data is successfully deleted',
+                    type: "success",
+                },
+                function() {   
+                    window.location.reload();
+                });
+            } else {
+                swal({
+                    title: 'System Error',   
+                    html: true,
+                    text: data.message,
+                    type: "error",
+                });
+            }
+        }
+    });
+}
+
 $(document).ready(function() {
     $('#search_merchant').multiselect({
         search: {
@@ -305,5 +350,31 @@ $(document).ready(function() {
                 }
             }
         });
+    });
+
+    $('.delete').click(function(e) {
+
+        e.preventDefault();
+
+        var com_id = $(this).data('id');
+
+        swal({
+            title: "Are you sure?",   
+            text: 'You are about to do an irreversable operation',
+            html: true,   
+            type: "warning",   
+            showCancelButton: true,   
+            confirmButtonColor: "#DD6B55",   
+            confirmButtonText: "Yes",   
+            cancelButtonText: "Cancel",   
+            closeOnConfirm: true,   
+            closeOnCancel: true 
+        }, 
+        function(isConfirm) {   
+            if(isConfirm) {
+                delete_confirm(com_id);
+            }
+        });
+
     });
 });
