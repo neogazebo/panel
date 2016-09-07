@@ -21,7 +21,8 @@
         "nesbot/carbon": "^1.21",
         "kartik-v/yii2-grid": "^3.1",
         "kartik-v/yii2-money": "^1.2",
-        "kartik-v/yii2-export": "^1.2"
+        "kartik-v/yii2-export": "^1.2",
+        "yiisoft/yii2-jui": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

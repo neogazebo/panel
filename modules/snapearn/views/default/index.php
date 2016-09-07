@@ -96,7 +96,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                             'clientOptions' => [
                                                 'source' => $data,
                                                 'autoFill'=>true,
-                                                'minLength'=>'3',
+                                                'minLength'=>'1',
                                                 'select' => new JsExpression("function( event, ui ) {
                                                     $('#sna_member').val(ui.item.id);
                                                  }")

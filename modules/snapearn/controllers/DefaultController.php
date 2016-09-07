@@ -99,7 +99,7 @@ class DefaultController extends BaseController
         $model->scenario = 'signup';
         $model->usr_password = md5('123456');
         $model->usr_type_id = 2;
-        $model->usr_approved = 0;
+        $model->usr_approved = 1;
 
         $company = new Company();
         $company->scenario  = 'point';
