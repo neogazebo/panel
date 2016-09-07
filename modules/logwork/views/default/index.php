@@ -134,6 +134,7 @@ $this->registerCss($customCss);
                                 ['class' => 'yii\grid\SerialColumn'],
                                 [
                                     'label' => 'Username',
+                                    'format' => 'html',
                                     'attribute' => 'user.username',
                                     'headerOptions' => ['style' => 'text-align: left'],
                                     'contentOptions' => ['style' => 'text-align: left'],
@@ -144,30 +145,35 @@ $this->registerCss($customCss);
                                 ],
                                 [
                                     'label' => 'Total Approved',
+                                    'format' => 'html',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asDecimal($data['total_approved'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Rejected',
+                                    'format' => 'html',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asDecimal($data['total_rejected'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Rejection Rate',
+                                    'format' => 'html',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asPercent($data['rejected_rate']);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Point',
+                                    'format' => 'html',
                                     'value' => function($data) {
                                         return Yii::$app->formatter->asDecimal($data['total_point'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Work Time',
+                                    'format' => 'html',
                                     'value' => function($data) {
                                         date_default_timezone_set('UTC');
                                         return date('H:i:s', $data['total_record']);
