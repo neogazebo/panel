@@ -1,9 +1,10 @@
 <?php
 
 use app\models\CompanySpeciality;
-use kartik\widgets\DatePicker;
+// use kartik\widgets\DatePicker;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\jui\DatePicker;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -23,19 +24,27 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'spt_promo_description')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'spt_promo_point')->textInput() ?>
-    <?=
-        DatePicker::widget([
-            'name' => 'spt_promo_start_date',
-            'value' => date('Y-m-d'),
-            'type' => DatePicker::TYPE_RANGE,
-            'name2' => 'spt_promo_end_date',
-            'value2' => date('Y-m-d'),
-            'pluginOptions' => [
-                'format' => 'yyyy-mm-dd',
-                'autoclose' => true,
-            ]
-        ]);
-    ?>
+    <!-- <div class="col-sm-6"> -->
+        <?=
+            DatePicker::widget([
+                'model' => $model,
+                'attribute' => 'spt_promo_start_date',
+                //'language' => 'ru',
+                'dateFormat' => 'yyyy-MM-dd',
+            ]);
+        ?>
+   <!--  </div>
+    <div class="col-sm-6"> -->
+        <?=
+            DatePicker::widget([
+                'model' => $model,
+                'attribute' => 'spt_promo_end_date',
+                //'language' => 'ru',
+                'dateFormat' => 'yyyy-MM-dd',
+            ]);
+        ?>
+    <!-- </div> -->
+  
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
