@@ -11,6 +11,7 @@ use app\controllers\BaseController;
 use app\modules\system\processors\merchant_hq\MerchantHqSaveProcessor;
 use app\modules\system\processors\merchant_hq\MerchantHqChildrenSaveProcessor;
 use app\modules\system\processors\merchant_hq\MerchantHqChildrenSearchProcessor;
+use app\modules\system\processors\merchant_hq\MerchantHqDeleteProcessor;
 use app\models\Company;
 
 class MerchantHqController extends BaseController
@@ -61,6 +62,12 @@ class MerchantHqController extends BaseController
     public function actionSaveChild()
     {
         $processor = new MerchantHqChildrenSaveProcessor();
+        return $processor->process();
+    }
+
+    public function actionDelete()
+    {
+        $processor = new MerchantHqDeleteProcessor();
         return $processor->process();
     }
 }

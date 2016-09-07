@@ -28,7 +28,7 @@ use app\components\filters\AccessFilters;
     <li class="treeview">
         <a href="#">
             <i class="fa fa-th-list"></i>
-            <span>Merchant Signup</span>
+            <span>Merchant</span>
             <i class="fa fa-angle-left pull-right"></i>
         </a>
         <ul class="treeview-menu">
@@ -40,6 +40,8 @@ use app\components\filters\AccessFilters;
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('speciality') ?>">
                     <i class="fa fa-circle-o"></i> Merchant Speciality Promo
+                <a href="<?= Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
+                    <i class="fa fa-circle-o"></i> Merchant HQ
                 </a>
             </li>
         </ul>
@@ -122,6 +124,7 @@ use app\components\filters\AccessFilters;
     <?php endif; ?>
     
     <?php if (AccessFilters::getMenu('system')) : ?>
+    <!--
     <li class="treeview">
         <a href="#">
             <i class="fa fa-university"></i>
@@ -130,12 +133,13 @@ use app\components\filters\AccessFilters;
         </a>
         <ul class="treeview-menu">
             <li>
-                <a href="<?= Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
+                <a href="<?php // Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
                     <i class="fa fa-circle-o"></i> Merchant HQ
                 </a>
             </li>
             
         </ul>
     </li>
+    -->
     <?php endif; ?>
 </ul>
