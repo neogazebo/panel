@@ -39,6 +39,11 @@ class CorrectionController extends BaseController
 {
     public function actionToCorrection($id)
     {
+        $model = $this->findModel($id);
+        $params = $model->sna_status;
+        if ($params == 0 ) {
+            return $this->redirect(['default/to-update','id'=> $id]);
+        }
         // destroy session com && create session company id
         $this->checkSession($id);
         
@@ -52,7 +57,6 @@ class CorrectionController extends BaseController
         $this->setSession('wrk_ses_'.$id, $wrk_ses);
         
         if (empty($this->getSession('oldCompany_'.$id))) {
-            $model = $this->findModel($id);
             $mp = Company::find()->getCurrentPoint($model->sna_com_id);
             $params = [
                 'sna_id' => $id,
@@ -68,6 +72,15 @@ class CorrectionController extends BaseController
 
 	public function actionCorrection($id)
 	{
+        $model = $this->findModel($id);
+        $superuser = Yii::$app->user->identity->superuser;
+        if ($model->sna_status == 0 ) {
+            return $this->redirect(['default/to-update','id'=> $id]);
+        }elseif ($model->sna_status != 0 && $superuser != 1) {
+            $this->checkSession($id);
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
+        }
+
     	$model = $this->findModel($id);
     	$model->scenario = 'correction';
        
@@ -79,17 +92,7 @@ class CorrectionController extends BaseController
         if ($old == '' || $get_sesssion == '') {
             return $this->redirect(['to-correction','id'=> $id]);
         }
-
-        // validation superuser
-        $superuser = Yii::$app->user->identity->superuser;
-        if ($model->sna_status == 0 && $superuser != 1) {
-            $this->checkSession($id);
-            return $this->redirect(['default/to-update','id'=> $id]);
-        }elseif ($model->sna_status != 0 && $superuser != 1) {
-            $this->checkSession($id);
-            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
-        }
-                                
+                       
         // get old point
         $ctr = $model->member->acc_cty_id;
 
