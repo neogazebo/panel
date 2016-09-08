@@ -126,21 +126,32 @@ $model->sna_push = true;
                     <?= $form->field($model, 'sna_status')->dropDownList($model->status, ['class' => 'form-control status']) ?>
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                     <div class="point-form">
+                        <label>Transaction Time</label>
                         <?=
-                        $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
-                            'options' => [
-                                'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s')
-                            ],
-                            'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
+                        kartik\widgets\DatePicker::widget([
+                            'name' => 'd1',
+                            'type' => kartik\widgets\DatePicker::TYPE_COMPONENT_PREPEND,
+                            'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: Y-m-d'),
                             'pluginOptions' => [
-                                'autoclose'=>true,
-                                'format' => 'yyyy-mm-dd hh:i:ss',
-                                'endDate' => date('Y-m-d 23:59:59')
+                                'format' => 'yyyy-MMM-dd'
                             ]
                         ]);
                         ?>
-
-                        <?php //$form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status','value' => '','placeholder' => $model->sna_receipt_number]) ?>
+                        <?=
+                        kartik\widgets\TimePicker::widget([
+                            'name' => 't1',
+                            'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: H:i:s'),
+                            'pluginOptions' => [
+                                'showSeconds' => true,
+                                'showMeridian' => false,
+                            ],
+                            'addonOptions' => [
+                                'buttonOptions' => [
+                                    'class' => 'btn btn-info'
+                                ]
+                            ]
+                        ]);
+                        ?>
                         <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status'])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.') ?>
                         <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                         <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>

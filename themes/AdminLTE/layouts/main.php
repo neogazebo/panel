@@ -139,7 +139,7 @@ $this->registerCss("
 
             <footer class="main-footer">
                 <div class="pull-right hidden-xs">
-                    <b>Version</b> 1.0.0
+                    <b>Version</b> 3.3.0
                 </div>
                 <strong>Copyright &copy; <?= date('Y') ?> Ebizu Backend Service.</strong> All rights reserved.
             </footer>

@@ -41,7 +41,21 @@ $this->title = 'Snap & Earn Group';
                                             return Yii::$app->formatter->asDatetime($data->spg_created_date, "php:d M Y");
                                         }
                                     ],
-                                    'user.username',
+                                    [
+                                        'attribute' => 'user.username',
+                                        'header' => 'User Created'
+                                    ],
+                                    [
+                                        'attribute' => 'spg_updated_date',
+                                        'format' => 'html',
+                                        'value' => function($data) {
+                                            return Yii::$app->formatter->asDatetime($data->spg_updated_date, "php:d M Y");
+                                        }
+                                    ],
+                                    [
+                                        'attribute' => 'userUpdate.username',
+                                        'header' => 'User Updated'
+                                    ],
                                     [
                                         'class' => 'yii\grid\ActionColumn',
                                         'template' => '<span class="pull-right actionColumn">{list} {update}</span>',

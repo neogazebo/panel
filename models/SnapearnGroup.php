@@ -4,7 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
+// use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "tbl_snapearn_group".
@@ -39,20 +39,20 @@ class SnapearnGroup extends \yii\db\ActiveRecord
         return new SnapearnGroupQuery(get_called_class());
     }
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['spg_created_date', 'spg_updated_date'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['spg_updated_date'],
-                ],
-                // if you're using datetime instead of UNIX timestamp:
-                'value' => new \yii\db\Expression('NOW()'),
-            ],
-        ];
-    }
+    // public function behaviors()
+    // {
+    //     return [
+    //         [
+    //             'class' => TimestampBehavior::className(),
+    //             'attributes' => [
+    //                 ActiveRecord::EVENT_BEFORE_INSERT => ['spg_created_date', 'spg_updated_date'],
+    //                 ActiveRecord::EVENT_BEFORE_UPDATE => ['spg_updated_date'],
+    //             ],
+    //             // if you're using datetime instead of UNIX timestamp:
+    //             'value' => new \yii\db\Expression('NOW()'),
+    //         ],
+    //     ];
+    // }
 
     /**
      * @inheritdoc
@@ -70,6 +70,11 @@ class SnapearnGroup extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'spg_created_by']);
+    }
+
+    public function getUserUpdate()
+    {
+        return $this->hasOne(User::className(), ['id' => 'spg_updated_by']);
     }
 
     /**
