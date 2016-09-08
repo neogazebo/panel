@@ -36,7 +36,7 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => CompanySpeciality::find(),
+            'query' => CompanySpeciality::find()->with('promo'),
         ]);
 
         return $this->render('index', [

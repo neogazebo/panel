@@ -88,7 +88,7 @@ class CompanySpeciality extends \yii\db\ActiveRecord
     {
         $dt = new DateRangeCarbon;
         $today = $dt->getTimezone();
-        return $this->hasMany(ComSpecialityPromo::className(),['spt_promo_com_spt_id' => 'com_spt_id'])->where('spt_promo_start_date <= :today')->andWhere('spt_promo_end_date >= :today',[
+        return $this->hasOne(ComSpecialityPromo::className(),['spt_promo_com_spt_id' => 'com_spt_id'])->where('spt_promo_start_date <= :today')->andWhere('spt_promo_end_date >= :today',[
                 ':today' => $today
             ]);
     }

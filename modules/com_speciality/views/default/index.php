@@ -32,11 +32,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'com_spt_merchant_speciality_name',
                             'format' => 'html',
                             'value' => function($data){
+                                // echo "<pre>";
+                                // var_dump($data->promo);exit;
                                 $promo = ($data->promo) ? ' <span class="label label-warning">promo</span>' : '';
                                 return $data->com_spt_merchant_speciality_name.$promo;
                             }
                         ],
-                        'com_spt_multiple_point',
+                        [
+                            'attribute' => 'com_spt_multiple_point',
+                            'format' => 'html',
+                            'value' => function($data){
+                                return ($data->promo) ? $data->promo->spt_promo_point : $data->com_spt_multiple_point;
+                            }
+                        ],
                         [
                             'label' => 'PIC',
                             'attribute' => 'com_spt_created_by',
@@ -45,17 +53,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
+                            'label' => 'Start Date',
                             'attribute' => 'com_spt_created_date',
                             'format' => 'html',
                             'value' => function($data){
-                                return Yii::$app->formatter->asDate($data->com_spt_created_date);
+                                if ($data->promo){
+                                    return date('Y-m-d',$data->promo->spt_promo_start_date);
+                                }
+                                
                             }
                         ],
                         [
+                            'label' => 'End Date',
                             'attribute' => 'com_spt_updated_date',
                             'format' => 'html',
                             'value' => function($data){
-                                return Yii::$app->formatter->asDate($data->com_spt_updated_date);
+                                if ($data->promo){
+                                    return date('Y-m-d',$data->promo->spt_promo_end_date);
+                                }
                             }
                         ]
                         //['class' => 'yii\grid\ActionColumn'],

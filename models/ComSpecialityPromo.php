@@ -20,6 +20,7 @@ use yii\db\ActiveRecord;
  */
 class ComSpecialityPromo extends ActiveRecord
 {
+    public $end_date;
     /**
      * @inheritdoc
      */
@@ -34,9 +35,10 @@ class ComSpecialityPromo extends ActiveRecord
     public function rules()
     {
         return [
-            [['spt_promo_com_spt_id', 'spt_promo_description', 'spt_promo_point', 'spt_promo_created_by', 'spt_promo_start_date', 'spt_promo_end_date', 'spt_promo_created_date'], 'required'],
+            [['spt_promo_com_spt_id', 'spt_promo_description', 'spt_promo_point', 'spt_promo_start_date', 'spt_promo_end_date'], 'required'],
             [['spt_promo_start_date'],'checkDate'],
             [['spt_promo_com_spt_id', 'spt_promo_point', 'spt_promo_created_by', 'spt_promo_created_date'], 'integer'],
+            [['end_date'],'safe'],
             [['spt_promo_description'], 'string', 'max' => 255],
         ];
     }
@@ -61,22 +63,38 @@ class ComSpecialityPromo extends ActiveRecord
     public function behaviors()
     {
         return [
-                'createdBy' => [
-                    'class' => AttributeBehavior::className(),
-                    'attributes' => [
-                        ActiveRecord::EVENT_BEFORE_INSERT => ['spt_promo_created_by'],
-                    ],
-                    'value' => function($event){
-                        return Yii::$app->user->id;
-                    }
-                ]
-            ];
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['spt_promo_created_date']
+                ],
+            ],
+            'createdBy' => [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['spt_promo_created_by'],
+                ],
+                'value' => function($event){
+                    return Yii::$app->user->id;
+                }
+            ]
+        ];
     }
 
     public function checkDate($data)
     {
         $today = date('Y-m-d');
-        $start_date = $this->spt_promo_start_date;
+        $start_date = date('Y-m-d',$this->spt_promo_start_date);
+        $spt_id = $this->spt_promo_com_spt_id;
+        $last_promo = self::find()
+            ->select('date(from_unixtime(spt_promo_end_date)) as end_date')
+            ->where('spt_promo_com_spt_id = :spt_id',[':spt_id' => $spt_id])
+            ->orderBy('spt_promo_id DESC')->limit(1)->asArray()->one();
+
+        if ($start_date <= $last_promo['end_date']) {
+            $this->addError($data, Yii::t('app', "Start date must greater than by last promo date"));
+        }
+
         if ($start_date < $today) {
             $this->addError($data, Yii::t('app', "Start date must greater than by today"));
         }
@@ -85,6 +103,11 @@ class ComSpecialityPromo extends ActiveRecord
     public function getSpeciality()
     {
         return $this->hasOne(CompanySpeciality::className(),['com_spt_id' => 'spt_promo_com_spt_id']);
+    }
+
+    public function getPic()
+    {
+        return $this->hasOne(User::className(),['id' => 'spt_promo_created_by']);
     }
 
     /**

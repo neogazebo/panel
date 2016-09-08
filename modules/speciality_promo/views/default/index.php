@@ -25,20 +25,51 @@ $this->params['breadcrumbs'][] = $this->title;
                     </p>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
-                        'filterModel' => $searchModel,
+                        // 'filterModel' => $searchModel,
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
-
-                            'spt_promo_id',
-                            'spt_promo_com_spt_id',
-                            'spt_promo_description',
+                            [
+                                'attribute' => 'spt_promo_com_spt_id',
+                                'format' => 'html',
+                                'value' => function($data){
+                                    return $data->speciality->com_spt_merchant_speciality_name;
+                                }
+                            ],
+                            [
+                                'label' => 'Event Promo',
+                                'attribute' => 'spt_promo_description',
+                                'format' => 'html',
+                                'value' => function($data){
+                                    return $data->spt_promo_description;
+                                }
+                            ],
                             'spt_promo_point',
-                            'spt_promo_created_by',
+                            [
+                                'label' => 'PIC',
+                                'attribute' => 'spt_promo_created_by',
+                                'value' => function($data){
+                                    return $data->pic->username;
+                                }
+                            ],
+                            [
+                                'label' => 'Start',
+                                'attribute' => 'spt_promo_start_date',
+                                'value' => function($data){
+                                    return Yii::$app->formatter->asDate($data->spt_promo_start_date);
+                                }
+                            ],
+                            [
+                                'label' => 'End',
+                                'attribute' => 'spt_promo_end_date',
+                                'value' => function($data){
+                                    return Yii::$app->formatter->asDate($data->spt_promo_end_date);
+                                }
+                            ]
                             // 'spt_promo_start_date',
                             // 'spt_promo_end_date',
                             // 'spt_promo_created_date',
 
-                            ['class' => 'yii\grid\ActionColumn'],
+                            // ['class' => 'yii\grid\ActionColumn'],
                         ],
                     ]); ?>
                 </div>

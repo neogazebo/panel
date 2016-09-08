@@ -65,8 +65,18 @@ class DefaultController extends Controller
     {
         $model = new ComSpecialityPromo();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->spt_promo_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
+            $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->spt_promo_id]);
+            }else{
+                $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
+                $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,

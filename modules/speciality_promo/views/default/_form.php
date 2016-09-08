@@ -15,8 +15,9 @@ use yii\widgets\ActiveForm;
 <div class="com-speciality-promo-form">
 
     <?php $form = ActiveForm::begin([
-        'id' => 'promo',
-        // 'enableAjaxValidation' => true,
+        'id' => 'promo-speciality',
+        'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
     ]); ?>
     <?=
     $form->field($model, 'spt_promo_com_spt_id')->dropDownList(ArrayHelper::map(CompanySpeciality::find()->all(), 'com_spt_id', 'com_spt_merchant_speciality_name'), ['prompt'=>'Choose...'])->label('Company Speciality'); ?>
@@ -30,7 +31,7 @@ use yii\widgets\ActiveForm;
             'pluginOptions' => [
                 'autoclose'=>true,
                 'format' => 'yyyy-mm-dd'
-            ]
+            ],
         ]);
         ?>
     </div>
