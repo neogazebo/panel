@@ -1,10 +1,10 @@
 <?php
 
 use app\models\CompanySpeciality;
-use yii\helpers\Url;
+use kartik\widgets\DatePicker;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\jui\DatePicker;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -25,25 +25,23 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'spt_promo_point')->textInput() ?>
     <div class="col-sm-6" style="padding: 0px 12px 0px 0px;">
         <?=
-        $form->field($model, 'spt_promo_start_date')->widget(\yii\jui\DatePicker::classname(), [
-            'language' => 'ru',
-            'options' => [
-                'class' => 'form-control'
-            ],
-            'attribute' => [
-                'dateFormat' => 'yyyy-MM-dd'
+        $form->field($model, 'spt_promo_start_date')->widget(DatePicker::classname(),[
+            'removeButton' => false,
+            'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => 'yyyy-mm-dd'
             ]
         ]);
         ?>
     </div>
     <div class="col-sm-6" style="padding: 0px 0px 0px 12px;">
         <?=
-        $form->field($model, 'spt_promo_end_date')->widget(\yii\jui\DatePicker::classname(), [
-            'language' => 'ru',
-            'options' => [
-                'class' => 'form-control'
-            ],
-            'dateFormat' => 'yyyy-MM-dd',
+        $form->field($model, 'spt_promo_end_date')->widget(DatePicker::classname(),[
+            'removeButton' => false,
+            'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => 'yyyy-mm-dd'
+            ]
         ]);
         ?>
     </div>
@@ -56,9 +54,5 @@ use yii\widgets\ActiveForm;
 
 </div>
 <?php
-$this->registerJs("
-    $( '#comspecialitypromo-spt_promo_start_date' ).datepicker({
-      dateFormat: 'yy-mm-dd'
-    });
-");
+
 ?>
