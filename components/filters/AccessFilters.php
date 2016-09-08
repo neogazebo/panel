@@ -9,17 +9,12 @@ use yii\web\User;
 use yii\helpers\Url;
 use yii\base\Module;
 use yii\web\ForbiddenHttpException;
-// use app\models\User as UserAdmin;
-// use app\components\helpers\GetRoutes;
-// use app\models\AuthItem;
-// use app\models\AuthItemChild;
 
 /**
 *
 */
 class AccessFilters extends ActionFilter
 {
-	// public $allowActions = ['site/*'];
 
  	public function init()
  	{

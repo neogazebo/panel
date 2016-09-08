@@ -2,9 +2,7 @@
 
 namespace app\models;
 
-use Carbon\Carbon;
 use Yii;
-use app\components\helpers\DateRangeCarbon;
 use app\models\User;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
@@ -86,8 +84,7 @@ class CompanySpeciality extends \yii\db\ActiveRecord
 
     public function getPromo()
     {
-        $dt = new DateRangeCarbon;
-        $today = $dt->getTimezone();
+        $today = time();
         return $this->hasOne(ComSpecialityPromo::className(),['spt_promo_com_spt_id' => 'com_spt_id'])->where('spt_promo_start_date <= :today')->andWhere('spt_promo_end_date >= :today',[
                 ':today' => $today
             ]);

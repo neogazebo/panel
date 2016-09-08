@@ -44,6 +44,17 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionDetail()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => CompanySpeciality::find(),
+        ]);
+
+        return $this->render('detail', [
+            'dataProvider' => $dataProvider,
+        ]);   
+    }
+
     /**
      * Displays a single CompanySpeciality model.
      * @param integer $id

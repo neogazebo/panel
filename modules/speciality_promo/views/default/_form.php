@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin([
         'id' => 'promo-speciality',
-        'enableAjaxValidation' => false,
+        'enableAjaxValidation' => true,
         'enableClientValidation' => true,
     ]); ?>
     <?=

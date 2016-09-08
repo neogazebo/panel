@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Active Speciality';
+$this->title = 'Default Specialities';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="content-header ">
@@ -20,8 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border"></div><!-- /.box-header -->
                 <div class="box-body">
                 <p>
-                    <?= Html::a('Company Speciality', ['detail'], ['class' => 'btn btn-success']) ?>
-                    <?= Html::a('Promo', ['/promo'], ['class' => 'btn btn-danger']) ?>
+                    <?= Html::a('Company Speciality', ['create'], ['class' => 'btn btn-success']) ?>
                 </p>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
@@ -32,35 +31,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'com_spt_merchant_speciality_name',
                             'format' => 'html',
                             'value' => function($data){
-                                // echo "<pre>";
-                                // var_dump($data->promo);exit;
-                                $promo = ($data->promo) ? ' <span class="label label-warning">promo</span>' : '';
-                                return $data->com_spt_merchant_speciality_name.$promo;
+                                return $data->com_spt_merchant_speciality_name;
                             }
                         ],
                         [
-                            'label' => 'Event Promo',
-                            'attribute' => 'com_spt_id',
-                            'format' => 'html',
-                            'value' => function($data){
-                                if ($data->promo) {
-                                    return $data->promo->spt_promo_description;
-                                }
-                            }
-                        ], 
-                        [
-                            'label' => 'Point',
                             'attribute' => 'com_spt_multiple_point',
                             'format' => 'html',
                             'value' => function($data){
-                                return ($data->promo) ? $data->promo->spt_promo_point : $data->com_spt_multiple_point;
+                                return $data->com_spt_multiple_point;
                             }
                         ],
                         [
                             'label' => 'PIC',
                             'attribute' => 'com_spt_created_by',
                             'value' => function($data){
-                                return ($data->promo) ? $data->promo->pic->username : $data->pic->username;
+                                return $data->pic->username;
                             }
                         ],
                         [
@@ -68,10 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'com_spt_created_date',
                             'format' => 'html',
                             'value' => function($data){
-                                if ($data->promo){
-                                    return date('Y-m-d',$data->promo->spt_promo_start_date);
-                                }
-                                
+                                return date('Y-m-d',$data->com_spt_created_date);
                             }
                         ],
                         [
@@ -79,12 +61,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'com_spt_updated_date',
                             'format' => 'html',
                             'value' => function($data){
-                                if ($data->promo){
-                                    return date('Y-m-d',$data->promo->spt_promo_end_date);
-                                }
+                                return date('Y-m-d',$data->com_spt_updated_date);
                             }
-                        ]
-                        //['class' => 'yii\grid\ActionColumn'],
+                        ],
+                        ['class' => 'yii\grid\ActionColumn'],
                     ],
                 ]); ?>
                 </div>

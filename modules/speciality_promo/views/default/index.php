@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\ComSpecialityPromoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Com Speciality Promos';
+$this->title = 'Speciality Promo';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="content-header ">
@@ -21,7 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border"></div><!-- /.box-header -->
                 <div class="box-body">
                     <p>
-                        <?= Html::a('Create Com Speciality Promo', ['create'], ['class' => 'btn btn-success']) ?>
+                        <?= Html::a('Back', ['/speciality'], ['class' => 'btn btn-primary']) ?>
+                        <?= Html::a('Create Promo', ['create'], ['class' => 'btn btn-success']) ?>
                     </p>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,

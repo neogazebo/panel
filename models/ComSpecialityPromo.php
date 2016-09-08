@@ -85,13 +85,14 @@ class ComSpecialityPromo extends ActiveRecord
     {
         $today = date('Y-m-d');
         $start_date = date('Y-m-d',$this->spt_promo_start_date);
+        var_dump($start_date);exit;
         $spt_id = $this->spt_promo_com_spt_id;
         $last_promo = self::find()
             ->select('date(from_unixtime(spt_promo_end_date)) as end_date')
             ->where('spt_promo_com_spt_id = :spt_id',[':spt_id' => $spt_id])
             ->orderBy('spt_promo_id DESC')->limit(1)->asArray()->one();
 
-        if ($start_date <= $last_promo['end_date']) {
+        if ($start_date < $last_promo['end_date']) {
             $this->addError($data, Yii::t('app', "Start date must greater than by last promo date"));
         }
 
