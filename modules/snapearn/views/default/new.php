@@ -52,6 +52,7 @@ $form = ActiveForm::begin([
     <?= $form->field($company, 'com_business_name')->textInput(['value' => (!empty($suggest)) ? $suggest->cos_name : '']) ?>
     <?= $form->field($company, 'com_email')->textInput() ?>
     <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList,['prompt' => '']); ?>
+    <?= $form->field($company, 'com_currency')->dropDownList($company->currency,['prompt' => 'Select Currency']); ?>
     <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
 
     <?= $form->field($company, 'com_address')->textInput(); ?>

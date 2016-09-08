@@ -109,8 +109,8 @@ class LoyaltyPointHistory extends \yii\db\ActiveRecord
 
     public function getUser()
     {
-        return Account::find()
-            ->where('acc_id = :id', [':id' => $this->lph_param])
+        return User::find()
+            ->where('id = :id', [':id' => $this->lph_param])
             ->one();
     }
 

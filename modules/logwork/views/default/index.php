@@ -12,6 +12,18 @@ use yii\helpers\ArrayHelper;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Working Hours';
+$customCss = <<< SCRIPT
+    .table > thead > tr > th, 
+    .table > tbody > tr > th, 
+    .table > tfoot > tr > th, 
+    .table > thead > tr > td, 
+    .table > tbody > tr > td, 
+    .table > tfoot > tr > td  {
+        border-top: 1px solid #f4f4f4;
+        text-align: right;
+    }
+SCRIPT;
+$this->registerCss($customCss);
 ?>
 <section class="content-header ">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -94,6 +106,16 @@ $this->title = 'Working Hours';
                                 </div>
                             </div>
                             <div class="form-group">
+                                <div class="input-group">
+                                    <label>Country</label>
+                                     <select class="form-control" name="country">
+                                         <option value="" <?= (empty($_GET['country'])) ? 'selected' : '' ?>>All</option>
+                                         <option value="ID" <?= (!empty($_GET['country']) && $_GET['country'] == 'ID') ? 'selected' : '' ?>>Indonesia</option>
+                                         <option value="MYR" <?= (!empty($_GET['country']) && $_GET['country'] == 'MYR') ? 'selected' : '' ?>>Malaysia</option>
+                                     </select>
+                                 </div>
+                            </div>
+                            <div class="form-group">
                                 <input type="hidden" name="group" id="group">
                                 <input type="hidden" name="wrk_by" id="wrk_by">
                                 <input type="hidden" name="wrk_param_id" id="wrk_param_id">
@@ -112,45 +134,49 @@ $this->title = 'Working Hours';
                                 ['class' => 'yii\grid\SerialColumn'],
                                 [
                                     'label' => 'Username',
-                                    'attribute' => 'wrk_by',
+                                    'format' => 'html',
+                                    'attribute' => 'user.username',
+                                    'headerOptions' => ['style' => 'text-align: left'],
+                                    'contentOptions' => ['style' => 'text-align: left'],
                                     'value' => function($data) {
-                                        return $data->user->username;
-                                    }
-                                ],
-                                [
-                                    'label' => 'Total Point',
-                                    'attribute' => 'wrk_point',
-                                    'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_point, 0);
+                                        if (!empty($data['user']))
+                                            return $data['user']['username'];
                                     }
                                 ],
                                 [
                                     'label' => 'Total Approved',
-                                    'attribute' => 'wrk_type',
+                                    'format' => 'html',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_approved, 0);
+                                        return Yii::$app->formatter->asDecimal($data['total_approved'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Rejected',
-                                    'attribute' => 'wrk_type',
+                                    'format' => 'html',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data->total_rejected, 0);
+                                        return Yii::$app->formatter->asDecimal($data['total_rejected'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Rejection Rate',
-                                    'attribute' => 'wrk_type',
+                                    'format' => 'html',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asPercent($data->rejected_rate);
+                                        return Yii::$app->formatter->asPercent($data['rejected_rate']);
+                                    }
+                                ],
+                                [
+                                    'label' => 'Total Point',
+                                    'format' => 'html',
+                                    'value' => function($data) {
+                                        return Yii::$app->formatter->asDecimal($data['total_point'], 0);
                                     }
                                 ],
                                 [
                                     'label' => 'Total Work Time',
-                                    'attribute' => 'wrk_time',
+                                    'format' => 'html',
                                     'value' => function($data) {
                                         date_default_timezone_set('UTC');
-                                        return date('H:i:s', $data->total_record);
+                                        return date('H:i:s', $data['total_record']);
                                     }
                                 ],
                                 [
@@ -158,7 +184,7 @@ $this->title = 'Working Hours';
                                     'template' => '<span class="pull-right actionColumn">{detail} </span>',
                                     'buttons' => [
                                         'detail' => function($url,$model) {
-                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model->wrk_by,'wrk_daterange' => (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ]);
+                                            return Html::a('<i class="fa fa-search"></i>', ['view', 'id' => $model['wrk_by'],'wrk_daterange' => (!empty($_GET['wrk_daterange'])) ? $_GET['wrk_daterange'] : '' ]);
                                         },
                                     ]
                                 ]

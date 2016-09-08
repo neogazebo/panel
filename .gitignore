@@ -38,7 +38,7 @@ phpunit.phar
 /runtime/*
 
 # composer vendor dir
-# /vendor
+vendor
 
 *.psd
 # ebextension files

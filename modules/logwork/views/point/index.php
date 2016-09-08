@@ -19,9 +19,8 @@ $this->title = 'Snap & Earn Point';
                     <div class="pull-left">
                         <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['/logwork'], ['class' => 'btn btn-warning']) ?>  
                     </div>
-<!--                    <div class="pull-right">
-                        <?php//= Html::button('<i class="fa fa-plus-square"></i> New Point', ['value' => Url::to(['create']), 'class' => 'btn btn-primary modalButton']); ?>  
-                    </div>-->
+                    <div class="pull-right">
+                    </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="table-responsive">

@@ -3,9 +3,10 @@
 namespace app\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 use app\models\CompanyTag;
+use app\models\Currency;
 use app\models\EbizuActiveRecord;
+use yii\db\ActiveRecord;
 
 class Company extends EbizuActiveRecord
 {
@@ -57,10 +58,12 @@ class Company extends EbizuActiveRecord
             [['com_name', 'com_business_name', 'com_category_id', 'com_agent_code', 'com_par_id'], 'required', 'on' => 'partner'],
             [['com_par_id', 'com_email'], 'safe', 'on' => 'snapEarnUpdate'],
             [['com_email'], 'unique'],
-            [['com_name', 'com_email','com_subcategory_id'], 'required'],
+            [['com_name'], 'required', 'on' => ['new-hq','update-hq'], 'message' => 'HQ Name is required'],
+            [['com_name','com_subcategory_id'], 'required'],
             [['com_email'], 'email'],
+            [['com_email'], 'required', 'except' => ['new-hq','update-hq']],
             [['com_business_name'], 'required', 'on' => 'signup'],
-            [['com_point'], 'required', 'on' => 'point'],
+            [['com_point','com_currency'], 'required', 'on' => 'point'],
             ['com_status', 'required', 'on' => 'change_status'],
             [['com_photo', 'com_banner_photo'], 'validateGif'],
             [['com_joined', 'com_joined_datetime', 'com_joined_by'], 'required', 'on' => 'joined'],
@@ -115,7 +118,8 @@ class Company extends EbizuActiveRecord
                 'com_twitter',
                 'com_size',
                 'com_nbrs_employees',
-                'com_agent_code', 'com_registered_to',
+                'com_agent_code', 
+                'com_registered_to',
                 'free_trial',
                 'fes_id',
                 'com_gst_id',
@@ -152,7 +156,12 @@ class Company extends EbizuActiveRecord
                 'com_par_id',
                 'com_par_createdby',
                 'tag',
+                'com_is_parent',
             ], 'safe'],
+            [['com_name'], 'unique', 'on' => 'new-hq', 'message' => 'HQ Name is already taken'],
+            [['com_name'], 'unique', 'on' => 'update-hq', 'when' => function ($model, $attribute) {
+                return $model->{$attribute} !== $model->getOldAttribute($attribute);
+            }, 'message' => 'HQ Name is already taken'],
             [['mall_id'], 'required', 'when' => function($model) {
                 return $this ->com_in_mall == 1;
             }, 'whenClient' => "function (attribute, value) {
@@ -930,6 +939,16 @@ class Company extends EbizuActiveRecord
         ];
     }
 
+    public function getCurrency()
+    {
+        $model = Currency::find()->all();
+        return \app\components\helpers\Html::listData($model,'cur_id','cur_name');
+        // return [
+        //     'IDR' => 'Indonesia Rupiah',
+        //     'MYR' => 'Malaysia Ringgit'
+        // ];
+    }       
+
     public function getCategoryList()
     {
         $model = (new yii\db\Query())
@@ -987,6 +1006,11 @@ class Company extends EbizuActiveRecord
         ->leftJoin('tbl_company c', 'c.com_id = b.cot_com_id')
         ->where(['c.com_id' => $id])
         ->all();
+    }
+
+    public function getCategory()
+    {
+        return $this->hasOne(CompanyCategory::className(), ['com_category_id' => 'com_subcategory_id']);
     }
 
     public static function find()

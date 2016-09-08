@@ -137,7 +137,6 @@ class SnapEarn extends \yii\db\ActiveRecord
                 }
             }
         }
-        
     }
 
     public function checkMerchant($data)
@@ -280,6 +279,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_receipt_image' => 'Receipt Image',
             'sna_com_name' => 'Merchant Name',
             'sna_transaction_time' => 'Transaction Time',
+            'sna_push' => 'Yes'
         ];
     }
 

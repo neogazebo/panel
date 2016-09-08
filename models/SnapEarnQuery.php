@@ -36,7 +36,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     public function findCustome()
     {
         $dt = new DateRangeCarbon();
-        $this->leftJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+        $this->innerJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
         if (!empty($_GET['sna_cty'])) {
             $sna_cty = $_GET['sna_cty'];
             $this->andWhere('tbl_account.acc_cty_id = :country', [':country' => $sna_cty]);
@@ -44,12 +44,12 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
 
         if (!empty($_GET['sna_member'])) {
             $sna_member = $_GET['sna_member'];
-            $this->andWhere(['LIKE', 'tbl_account.acc_screen_name', $sna_member]);
+            $this->andWhere(['=', 'sna_acc_id', $sna_member]);
         }
 
         if (!empty($_GET['sna_receipt'])) {
             $sna_receipt = $_GET['sna_receipt'];
-            $this->andWhere(['LIKE', 'sna_receipt_number', $sna_receipt]);
+            $this->andWhere(['LIKE', 'sna_ops_receipt_number', $sna_receipt]);
         }
         if (!empty($_GET['sna_status'])) {
             $sna_status = $_GET['sna_status'];
@@ -93,7 +93,18 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         // merchant filter
         if (!empty($_GET['com_name'])) {
             $merchantId = $_GET['com_name'];
-            $this->andWhere("sna_com_id = :com",[':com' => $merchantId]);
+
+            $company_is_hq = Company::find()->checkCompanyIsParent($merchantId);
+
+            if($company_is_hq)
+            {
+                $children = array_map('intval', Company::find()->getChildMerchantsId($merchantId));
+                $this->andWhere(['sna_com_id' => $children]);
+            }
+            else
+            {
+                $this->andWhere("sna_com_id = :com",[':com' => $merchantId]);
+            }
         }
         
         $this->orderBy('sna_id DESC');
@@ -164,11 +175,11 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_daterange = explode(' to ', ($dt->getThisMonth()));
 
         $this->select("
-            cat_name as categoryName,
+            coc_name as categoryName,
             sum(sna_receipt_amount) as amount,
             acc_cty_id as country
         ");
-        $this->innerJoin('tbl_category','tbl_category.cat_id = tbl_snapearn.sna_cat_id');
+        $this->innerJoin('tbl_company_category','tbl_company_category.coc_id = tbl_snapearn.sna_cat_id');
         $this->leftJoin("tbl_account","tbl_account.acc_id = tbl_snapearn.sna_acc_id");
         $this->where('
             sna_acc_id = :id

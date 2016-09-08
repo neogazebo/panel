@@ -58,6 +58,14 @@ class IndexController extends BaseController
             if($auth->add($role)) {
                 $model = AuthItem::findOne($model->name);
                 if($model->save()) {
+                    $activities = [
+                        'RBAC',
+                        'RBAC - Create Role, ' . $model->user->username . ' with name is "' . $model->name . '"',
+                        AuthItem::className(),
+                        $model->created_by
+                    ];
+                    $this->saveLog($activities);
+
                     $this->setMessage('save', 'success', 'Role "'.$model->name.'" successfully created!');
                 } else {
                     $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
@@ -138,6 +146,14 @@ class IndexController extends BaseController
             $admin = $auth->createRole($model->name);
             $auth->update($model->name, $admin);
             if ($model->save()) {
+                $activities = [
+                    'RBAC',
+                    'RBAC - Edit Role, ' . $model->user->username . ' with name is "' . $model->name . '"',
+                    AuthItem::className(),
+                    Yii::$app->user->id
+                ];
+                $this->saveLog($activities);
+
                 $this->setMessage('save', 'success', 'Role "' . $oldName . '" successfully updated to ' . $model->name);
             } else {
                 $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
@@ -156,7 +172,15 @@ class IndexController extends BaseController
             $model = $this->findModel($name);
             $auth = $this->_role();
             $admin = $auth->createRole($model->name);
-            if ($auth->remove($admin) ) {
+            if ($auth->remove($admin)) {
+                $activities = [
+                    'RBAC',
+                    'RBAC - Delete Role, ' . $model->user->username . ' with name is "' . $model->name . '"',
+                    AuthItem::className(),
+                    Yii::$app->user->id
+                ];
+                $this->saveLog($activities);
+
                 $this->setMessage('save', 'success', 'Role "' . $name . '" successfully deleted');
             } else {
                 $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
@@ -205,6 +229,17 @@ class IndexController extends BaseController
         ]);
     }
 
+    protected function activities($name, $role, $assign = 'Assign', $desc = '')
+    {
+        $activities = [
+            'RBAC',
+            'RBAC - ' . $assign . ' User, ' . $name . ' with role is "' . $role . '"' . $desc,
+            AuthItem::className(),
+            Yii::$app->user->id
+        ];
+        $this->saveLog($activities);
+    }
+
     public function actionAssign($role)
     {
         $model = new AuthAssignment();
@@ -213,12 +248,13 @@ class IndexController extends BaseController
             $name = User::findOne($userId)->username;
             $r = AuthItem::find()->where('name = :role',[':role' => $role])->one();
             $auth = $this->_role();
-            if ($auth->assign($r,$userId)) {
-                $this->setMessage('save', 'success', 'Success assign user '.$name.' to '.$role);
-                return $this->redirect(['user?name='.$role]);
-            }else{
-                $this->setMessage('save', 'error', 'Failed assign user '.$name.' to '.$role);
-                return $this->redirect(['user?name='.$role]);
+            if ($auth->assign($r, $userId)) {
+                $this->activities($name, $role);
+                $this->setMessage('save', 'success', 'Success assigned user ' . $name . ' to ' . $role);
+                return $this->redirect(['user?name=' . $role]);
+            } else {
+                $this->setMessage('save', 'error', 'Failed assigned user ' . $name . ' to ' . $role);
+                return $this->redirect(['user?name=' . $role]);
             }
         } else {
             return $this->renderAjax('assign', [
@@ -230,7 +266,7 @@ class IndexController extends BaseController
 
     public function actionMultiAssign($role)
     {
-        $models = AuthAssignment::find($role)->with('user')->where('item_name = :role',[':role' => $role])->all();
+        $models = AuthAssignment::find($role)->with('user')->where('item_name = :role', [':role' => $role])->all();
         $lists = User::find()->where('type = 1')->all();
         $title = $role;
         if (Yii::$app->request->isAjax) {
@@ -238,43 +274,50 @@ class IndexController extends BaseController
             $revokes = Yii::$app->request->post('from');
             $role = Yii::$app->request->post('role');
             $auth = $this->_role();
-            $r = AuthItem::find()->where('name = :role',[':role' => $role])->one();
+            $r = AuthItem::find()->where('name = :role', [':role' => $role])->one();
+
+            $assigned = '';
             if(!empty($childs)) {
                 foreach ($childs as $val) {
                     $getAssignment = AuthAssignment::find()->where([
-                            'item_name' => $role,
-                            'user_id' => $val
-                        ])->one();
-                   if (empty($getAssignment)) {
-                        $auth->assign($r,$val);
-                   }
+                        'item_name' => $role,
+                        'user_id' => $val
+                    ])->one();
+                    if (empty($getAssignment)) {
+                        $auth->assign($r, $val);
+                        $assigned .= $val . ', ';
+                    }
                 }
             }
 
+            $revoked = '';
             if(!empty($revokes)) {
                 foreach ($revokes as $val) {
-                   $auth->revoke($r,$val);
+                   $auth->revoke($r, $val);
+                   $revoked .= $val . ', ';
                 }
             }
 
-            $this->setMessage('save', 'success', 'Update assign user successfully');
-            return $this->redirect(['user?name='.$role]);
-        }
-        return $this->render('multi-assign',[
-                'lists' => $lists,
-                'models' => $models,
-                'title' => $role
-            ]);
+            $this->activities($r->name, $role, 'Multi Assign', ' assigned to [' . rtrim($assigned, ', ') . '] and revoked [' . rtrim($revoked, ', ') . ']');
 
-        
+            $this->setMessage('save', 'success', 'Update assigned user successfully');
+            return $this->redirect(['user?name=' . $role]);
+        }
+
+        return $this->render('multi-assign',[
+            'lists' => $lists,
+            'models' => $models,
+            'title' => $role
+        ]);
     }   
 
-    public function actionRevoke($role,$userId,$name)
+    public function actionRevoke($role, $userId, $name)
     {
         $auth = $this->_role();
         $name = User::findOne($userId)->username;
         $r = AuthItem::find()->where('name = :role',[':role' => $role])->one();
-        if ($auth->revoke($r,$userId)) {
+        if ($auth->revoke($r, $userId)) {
+            $this->activities($name, $role, 'Revoke');
             $this->setMessage('save', 'success', 'User '.$name.' success revoked from this role');
             return $this->redirect(['user?name='.$role]);
         }

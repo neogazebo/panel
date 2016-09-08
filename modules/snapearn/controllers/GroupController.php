@@ -45,12 +45,24 @@ class GroupController extends BaseController
     	}
 	}
 
+    protected function activities($id, $title, $name)
+    {
+        $activities = [
+            'Snap & Earn Group',
+            'Snap & Earn Group - ' . $title . ', ' . $name,
+            SnapearnGroup::className(),
+            $id
+        ];
+        $this->saveLog($activities);
+    }
+
     public function actionCreate()
     {
         $model = new SnapearnGroup;
         if ($model->load(Yii::$app->request->post())) {
         	$model->spg_created_by = Yii::$app->user->id;
             if ($model->save()) {
+                $this->activities($model->spg_id, 'Create', $model->spg_name);
                 $this->setMessage('save', 'success', 'Group has been successfully created!');
                 return $this->redirect(['index']);
             }
@@ -67,6 +79,7 @@ class GroupController extends BaseController
         if ($model->load(Yii::$app->request->post())) {
         	$model->spg_updated_by = Yii::$app->user->id;
             if ($model->save()) {
+                $this->activities($model->spg_id, 'Edit', $model->spg_name);
                 $this->setMessage('save', 'success', 'Group has been successfully updated!');
                 return $this->redirect(['index']);
             }
@@ -100,16 +113,20 @@ class GroupController extends BaseController
 
             if (!empty($childs)) {
                 $model = SnapearnGroupDetail::deleteAll(['spgd_spg_id' => $spg_id]);
+                $spgid = '';
+                $users = '';
                 foreach($childs as $child) {
                     $model = new SnapearnGroupDetail;
                     $model->spgd_usr_id = $child;
                     $model->spgd_spg_id = $spg_id;
-                    if ($model->save()) {
-                        $this->setMessage('save', 'success', 'Some operators in "' . $group . '" list has been successfully added!');
-                    } else {
-                        $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
-                    }
+                    $model->save();
+                    $spgid .= $spg_id . ', ';
+                    $users .= $child . ', ';
                 }
+                $users = rtrim($users, ', ');
+
+                $this->activities($spg_id, 'Add List', 'List ' . $group . ' are ' . $spgid . ' and users are ' . $users);
+                $this->setMessage('save', 'success', 'Some operators in "' . $group . '" list has been successfully added!');
             } else {
                 $model = SnapearnGroupDetail::deleteAll(['spgd_spg_id' => $spg_id]);
                 $this->setMessage('save', 'warning', 'No operators saved!');

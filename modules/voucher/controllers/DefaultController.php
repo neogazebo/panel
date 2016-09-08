@@ -86,4 +86,18 @@ class DefaultController extends BaseController
             echo \yii\helpers\Json::encode($out);
     	}
     }
+
+    public function actionGetReward($q = null)
+    {
+        if (!is_null($q)) {
+            $model = RedemptionReference::find()->getReward($q);
+            $data = $model->asArray()->all();
+            $out = [];
+            foreach ($data as $d) {
+                $out[] = ['id' => $d['id'],'value' => $d['text']];
+            }
+            echo \yii\helpers\Json::encode($out);
+        }
+        
+    }
 }
