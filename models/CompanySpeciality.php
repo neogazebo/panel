@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
  * This is the model class for table "tbl_company_speciality".
  *
  * @property integer $com_spt_id
- * @property string $com_spt_merchant_speciality_name
+ * @property string $com_spt_type
  * @property integer $com_spt_multiple_point
  * @property integer $com_spt_created_by
  * @property integer $com_spt_created_date
@@ -33,9 +33,9 @@ class CompanySpeciality extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['com_spt_merchant_speciality_name', 'com_spt_multiple_point'], 'required'],
+            [['com_spt_type', 'com_spt_cty_id', 'com_spt_max_point' ,'com_spt_multiple_point'], 'required'],
             [['com_spt_multiple_point', 'com_spt_created_by', 'com_spt_created_date', 'com_spt_updated_date'], 'integer'],
-            [['com_spt_merchant_speciality_name'], 'string', 'max' => 255],
+            [['com_spt_type'], 'string', 'max' => 255],
         ];
     }
 
@@ -46,7 +46,9 @@ class CompanySpeciality extends \yii\db\ActiveRecord
     {
         return [
             'com_spt_id' => 'ID',
-            'com_spt_merchant_speciality_name' => 'Merchant Speciality Name',
+            'com_spt_cty_id' => 'Country',
+            'com_spt_type' => 'Speciality Name',
+            'com_spt_max_point' => 'Maximum point',
             'com_spt_multiple_point' => 'Multiple Point',
             'com_spt_created_by' => 'Created By',
             'com_spt_created_date' => 'Created Date',
@@ -85,9 +87,13 @@ class CompanySpeciality extends \yii\db\ActiveRecord
     public function getPromo()
     {
         $today = time();
-        return $this->hasOne(ComSpecialityPromo::className(),['spt_promo_com_spt_id' => 'com_spt_id'])->where('spt_promo_start_date <= :today')->andWhere('spt_promo_end_date >= :today',[
-                ':today' => $today
-            ]);
+        return $this->hasOne(ComSpecialityPromo::className(),[
+                'spt_promo_com_spt_id' => 'com_spt_id'
+                ])->where('spt_promo_cty_id = com_spt_cty_id')
+                ->where('spt_promo_start_date <= :today')
+                ->andWhere('spt_promo_end_date >= :today',[
+                    ':today' => $today
+                ]);
     }
 
     /**

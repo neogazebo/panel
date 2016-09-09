@@ -31,6 +31,33 @@ class GlobalHelper extends Component
         $file = new GFile();
         return $file->generateCSV($data, $filename);
     }
+
+/**
+* Author : ilham Fauzi
+* Mail   : ilham@ebizu.com
+*/
+
+    public static function Weekdays()
+    {
+        $weekdays = [
+            'Friday' => 'Friday',
+            'Saturday' => 'Saturday',
+            'Sunday' => 'Sunday',
+            'Monday' => 'Monday',
+            'Tuesday' => 'Tuesday',
+            'Wednesday' => 'Wednesday'
+        ];
+        return $weekdays;
+    }
+
+    public static function TempCountry()
+    {
+        $country = [
+            'IDR' => 'Indonesia',
+            'MYR' => 'Malaysia'
+        ];
+        return $country;
+    }  
 }
 
 
@@ -101,5 +128,6 @@ class GFile {
         }
 
         return false;
-    }    
+    } 
 }
+   

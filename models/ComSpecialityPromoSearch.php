@@ -18,8 +18,8 @@ class ComSpecialityPromoSearch extends ComSpecialityPromo
     public function rules()
     {
         return [
-            [['spt_promo_id', 'spt_promo_com_spt_id', 'spt_promo_point', 'spt_promo_created_by', 'spt_promo_start_date', 'spt_promo_end_date', 'spt_promo_created_date'], 'integer'],
-            [['spt_promo_description'], 'safe'],
+            [['spt_promo_id', 'spt_promo_cty_id', 'spt_promo_com_spt_id', 'spt_promo_multiple_point', 'spt_promo_max_point', 'spt_promo_created_by', 'spt_promo_start_date', 'spt_promo_end_date', 'spt_promo_created_date'], 'integer'],
+            [['spt_promo_description', 'spt_promo_day_promo'], 'safe'],
         ];
     }
 
@@ -60,15 +60,18 @@ class ComSpecialityPromoSearch extends ComSpecialityPromo
         // grid filtering conditions
         $query->andFilterWhere([
             'spt_promo_id' => $this->spt_promo_id,
+            'spt_promo_cty_id' => $this->spt_promo_cty_id,
             'spt_promo_com_spt_id' => $this->spt_promo_com_spt_id,
-            'spt_promo_point' => $this->spt_promo_point,
+            'spt_promo_multiple_point' => $this->spt_promo_multiple_point,
+            'spt_promo_max_point' => $this->spt_promo_max_point,
             'spt_promo_created_by' => $this->spt_promo_created_by,
             'spt_promo_start_date' => $this->spt_promo_start_date,
             'spt_promo_end_date' => $this->spt_promo_end_date,
             'spt_promo_created_date' => $this->spt_promo_created_date,
         ]);
 
-        $query->andFilterWhere(['like', 'spt_promo_description', $this->spt_promo_description]);
+        $query->andFilterWhere(['like', 'spt_promo_description', $this->spt_promo_description])
+            ->andFilterWhere(['like', 'spt_promo_day_promo', $this->spt_promo_day_promo]);
 
         return $dataProvider;
     }

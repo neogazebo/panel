@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'spt_promo_description') ?>
 
-    <?= $form->field($model, 'spt_promo_point') ?>
+    <?= $form->field($model, 'spt_promo_multiple_point') ?>
 
     <?= $form->field($model, 'spt_promo_created_by') ?>
 

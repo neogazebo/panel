@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'spt_promo_id',
             'spt_promo_com_spt_id',
             'spt_promo_description',
-            'spt_promo_point',
+            'spt_promo_multiple_point',
             'spt_promo_created_by',
             'spt_promo_start_date',
             'spt_promo_end_date',

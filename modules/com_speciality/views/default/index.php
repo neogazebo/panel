@@ -29,13 +29,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['class' => 'yii\grid\SerialColumn'],
 
                         [
-                            'attribute' => 'com_spt_merchant_speciality_name',
+                            'label' => 'Country',
+                            'attribute' => 'com_spt_cty_id',
                             'format' => 'html',
                             'value' => function($data){
-                                // echo "<pre>";
-                                // var_dump($data->promo);exit;
-                                $promo = ($data->promo) ? ' <span class="label label-warning">promo</span>' : '';
-                                return $data->com_spt_merchant_speciality_name.$promo;
+                                return ($data->promo) ? $data->promo->com_promo_cty_id : $data->com_spt_cty_id;
+                            }
+                        ],
+                        [
+                            'label' => 'Speciality Name',
+                            'attribute' => 'com_spt_type',
+                            'format' => 'html',
+                            'value' => function($data){
+                                $promo = '';
+                                if ($data->promo){
+                                    $promo ='<span class="label label-warning">promo</span>';
+                                }
+                                return $data->com_spt_type.$promo;
                             }
                         ],
                         [
@@ -53,7 +63,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'com_spt_multiple_point',
                             'format' => 'html',
                             'value' => function($data){
-                                return ($data->promo) ? $data->promo->spt_promo_point : $data->com_spt_multiple_point;
+                                return ($data->promo) ? $data->promo->spt_promo_multiple_point : $data->com_spt_multiple_point;
+                            }
+                        ],
+                        [
+                            'label' => 'Max Point',
+                            'attribute' => 'com_spt_max_point',
+                            'format' => 'html',
+                            'value' => function($data){
+                                return ($data->promo) ? $data->promo->spt_promo_max_point : $data->com_spt_max_point;
                             }
                         ],
                         [

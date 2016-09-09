@@ -92,6 +92,39 @@ $(function() {
 		});
 	});
 
+	$('.gotohell').on('click',function() {
+		var Url = $(this).attr('value');
+			element = $(this).closest('tr');
+			confirm = $(this).data('text');
+			title = $(this).data('title');
+		swal({
+			title: title,
+			text: confirm,
+			type: "info",
+			showCancelButton: true,
+			closeOnCancel: true,
+			closeOnConfirm: false,
+			showLoaderOnConfirm: true,
+		}, function() {
+			$.post(Url, function(results) {
+				// data = JSON.parse(results);
+				// if (data.status = 'success') {
+					// element.remove();
+					// location.reload();
+					// swal.close();
+					// message = "Delete " + name + " role successed!";
+					// customAlert(data.status,message);
+					// element.remove();
+				// } else {
+					// swal.close();
+					// element.remove();
+					// message = "Delete " + name + " role failed!";
+					// customAlert('error', message);
+				// }
+			})
+		});
+	});
+
 
     $('#search').multiselect({
         search: {

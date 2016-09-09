@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
  * @property integer $spt_promo_id
  * @property integer $spt_promo_com_spt_id
  * @property string $spt_promo_description
- * @property integer $spt_promo_point
+ * @property integer $spt_promo_multiple_point
  * @property integer $spt_promo_created_by
  * @property integer $spt_promo_start_date
  * @property integer $spt_promo_end_date
@@ -35,11 +35,11 @@ class ComSpecialityPromo extends ActiveRecord
     public function rules()
     {
         return [
-            [['spt_promo_com_spt_id', 'spt_promo_description', 'spt_promo_point', 'spt_promo_start_date', 'spt_promo_end_date'], 'required'],
+            [['spt_promo_com_spt_id', 'spt_promo_cty_id', 'spt_promo_description', 'spt_promo_multiple_point', 'spt_promo_start_date', 'spt_promo_end_date'], 'required'],
             [['spt_promo_start_date'],'checkDate'],
-            [['spt_promo_com_spt_id', 'spt_promo_point', 'spt_promo_created_by', 'spt_promo_created_date'], 'integer'],
+            [['spt_promo_com_spt_id', 'spt_promo_multiple_point', 'spt_promo_created_by', 'spt_promo_created_date','spt_promo_max_point'], 'integer'],
             [['end_date'],'safe'],
-            [['spt_promo_description'], 'string', 'max' => 255],
+            [['spt_promo_description','spt_promo_day_promo'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,7 +52,7 @@ class ComSpecialityPromo extends ActiveRecord
             'spt_promo_id' => 'Promo',
             'spt_promo_com_spt_id' => 'Company Speciality',
             'spt_promo_description' => 'Promo Description',
-            'spt_promo_point' => 'Point',
+            'spt_promo_multiple_point' => 'Point',
             'spt_promo_created_by' => 'Promo Created By',
             'spt_promo_start_date' => 'Promo Start Date',
             'spt_promo_end_date' => 'Promo End Date',
@@ -84,8 +84,7 @@ class ComSpecialityPromo extends ActiveRecord
     public function checkDate($data)
     {
         $today = date('Y-m-d');
-        $start_date = date('Y-m-d',$this->spt_promo_start_date);
-        var_dump($start_date);exit;
+        $start_date = $this->spt_promo_start_date;
         $spt_id = $this->spt_promo_com_spt_id;
         $last_promo = self::find()
             ->select('date(from_unixtime(spt_promo_end_date)) as end_date')

@@ -65,12 +65,18 @@ class DefaultController extends Controller
     {
         $model = new ComSpecialityPromo();
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
+        
         if ($model->load(Yii::$app->request->post())) {
             $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
             $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
             if ($model->save()) {
                 return $this->redirect(['index']);
             }else{
+                var_dump($model->getErrors());exit;
                 $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
                 $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
                 return $this->render('create', [
@@ -94,9 +100,20 @@ class DefaultController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->spt_promo_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->redirect(['index']);
+            }else {
+                $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
+                $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+            
         } else {
+            $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
+            $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -112,7 +129,6 @@ class DefaultController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 

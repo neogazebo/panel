@@ -10,12 +10,17 @@ $this->title = 'Create Company Speciality';
 $this->params['breadcrumbs'][] = ['label' => 'Company Specialities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="company-speciality-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
+<div id="create-speciality" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span></button>
+        <h4 class="modal-title"><?= Html::encode($this->title) ?></h4>
+      </div>
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-
+    </div>
+  </div>
 </div>

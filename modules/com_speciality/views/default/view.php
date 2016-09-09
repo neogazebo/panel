@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'com_spt_id',
-            'com_spt_merchant_speciality_name',
+            'com_spt_type',
             'com_spt_multiple_point',
             'com_spt_created_by',
             'com_spt_created_date',

@@ -1,7 +1,8 @@
 <?php
 
-use yii\helpers\Html;
+use app\models\CompanySpeciality;
 use yii\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -20,7 +21,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border"></div><!-- /.box-header -->
                 <div class="box-body">
                 <p>
-                    <?= Html::a('Company Speciality', ['create'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Create Speciality', ['#'], [
+                    'class' => 'btn btn-success',
+                    'data-toggle' => 'modal', 
+                    'data-target' => '#create-speciality',
+                    'data-backdrop' => 'static',
+                    ]);
+                ?>
+                <?=
+                    $this->render('create',[
+                        'model' => new CompanySpeciality()
+                    ]);
+                ?>
                 </p>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
@@ -28,10 +40,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['class' => 'yii\grid\SerialColumn'],
 
                         [
-                            'attribute' => 'com_spt_merchant_speciality_name',
+                            'attribute' => 'com_spt_type',
                             'format' => 'html',
                             'value' => function($data){
-                                return $data->com_spt_merchant_speciality_name;
+                                return $data->com_spt_type;
                             }
                         ],
                         [
@@ -49,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
-                            'label' => 'Start Date',
+                            'label' => 'Create Date',
                             'attribute' => 'com_spt_created_date',
                             'format' => 'html',
                             'value' => function($data){
@@ -57,14 +69,36 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         ],
                         [
-                            'label' => 'End Date',
+                            'label' => 'Updated Date',
                             'attribute' => 'com_spt_updated_date',
                             'format' => 'html',
                             'value' => function($data){
                                 return date('Y-m-d',$data->com_spt_updated_date);
                             }
                         ],
-                        ['class' => 'yii\grid\ActionColumn'],
+                        [
+                            'header' => 'Action',
+                            'class' => 'yii\grid\ActionColumn',
+                            'template' => '{update}{delete}',
+                            'buttons' => [
+                                'update' => function($url,$model){
+                                    $html = Html::a('<i class="fa fa-pencil-square-o"></i>',['#'],['class' => 'modalButton', 'data-toggle' => 'modal', 'data-target' => '#edit-speciality-' . $model->com_spt_id, 'data-backdrop' => 'static', 'data-keyboard' => 'false']);
+                                    $html .= $this->render('update',[
+                                            'model' => $model
+                                        ]);
+                                    return $html;
+                                },
+                                'delete' => function($url,$model){
+                                    return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
+                                        [
+                                            'value' => 'delete?id='.$model->com_spt_id,
+                                            'class' => 'gotohell',
+                                            'data-title' => 'Delete',
+                                            'data-text' => 'Are you sure ?'
+                                        ]);
+                                },
+                            ]
+                        ],
                     ],
                 ]); ?>
                 </div>

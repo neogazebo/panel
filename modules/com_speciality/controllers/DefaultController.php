@@ -75,9 +75,22 @@ class DefaultController extends Controller
     public function actionCreate()
     {
         $model = new CompanySpeciality();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return \yii\widgets\ActiveForm::validate($model);
+        }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->com_spt_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->redirect(['detail']);
+            }else{
+                var_dump($model->getErrors());exit;
+                $model->com_spt_created_date = date('Y-m-d',$model->com_spt_created_date);
+                $model->com_spt_updated_date = date('Y-m-d',$model->com_spt_updated_date);
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -95,9 +108,21 @@ class DefaultController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->com_spt_id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->redirect(['detail']);
+            }else{
+                var_dump($model->getErrors());exit;
+                $model->com_spt_created_date = date('Y-m-d',$model->com_spt_created_date);
+                $model->com_spt_updated_date = date('Y-m-d',$model->com_spt_updated_date);
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+            
         } else {
+            $model->com_spt_created_date = date('Y-m-d',$model->com_spt_created_date);
+            $model->com_spt_updated_date = date('Y-m-d',$model->com_spt_updated_date);
             return $this->render('update', [
                 'model' => $model,
             ]);

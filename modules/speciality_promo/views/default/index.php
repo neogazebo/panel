@@ -1,7 +1,10 @@
 <?php
 
-use yii\helpers\Html;
+use app\models\ComSpecialityPromo;
+use yii\bootstrap\Modal;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ComSpecialityPromoSearch */
@@ -22,7 +25,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
                     <p>
                         <?= Html::a('Back', ['/speciality'], ['class' => 'btn btn-primary']) ?>
-                        <?= Html::a('Create Promo', ['create'], ['class' => 'btn btn-success']) ?>
+                        <?= Html::a('Create Promo', ['#'], [
+                            'class' => 'btn btn-success',
+                            'data-toggle' => 'modal', 
+                            'data-target' => '#create-promo',
+                            'data-backdrop' => 'static',
+                            ]);
+                        ?>
+                        <?=
+                            $this->render('create',[
+                                'model' => new ComSpecialityPromo()
+                            ]);
+                        ?>
                     </p>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -33,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'spt_promo_com_spt_id',
                                 'format' => 'html',
                                 'value' => function($data){
-                                    return $data->speciality->com_spt_merchant_speciality_name;
+                                    return $data->speciality->com_spt_type;
                                 }
                             ],
                             [
@@ -43,8 +57,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function($data){
                                     return $data->spt_promo_description;
                                 }
+                            ],                            
+                            [
+                                'label' => 'Day Promo',
+                                'attribute' => 'spt_promo_day_promo',
+                                'format' => 'html',
+                                'value' => function($data){
+                                    return $data->spt_promo_day_promo;
+                                }
                             ],
-                            'spt_promo_point',
+                            [
+                                'label' => 'Point',
+                                'attribute' => 'spt_promo_multiple_point',
+                            ],
                             [
                                 'label' => 'PIC',
                                 'attribute' => 'spt_promo_created_by',
@@ -56,21 +81,41 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'Start',
                                 'attribute' => 'spt_promo_start_date',
                                 'value' => function($data){
-                                    return Yii::$app->formatter->asDate($data->spt_promo_start_date);
+                                    return date('Y-m-d',$data->spt_promo_start_date);
                                 }
                             ],
                             [
                                 'label' => 'End',
                                 'attribute' => 'spt_promo_end_date',
                                 'value' => function($data){
-                                    return Yii::$app->formatter->asDate($data->spt_promo_end_date);
+                                    return date('Y-m-d',$data->spt_promo_end_date);
                                 }
-                            ]
-                            // 'spt_promo_start_date',
-                            // 'spt_promo_end_date',
-                            // 'spt_promo_created_date',
-
-                            // ['class' => 'yii\grid\ActionColumn'],
+                            ],
+                            [
+                                'header' => 'Action',
+                                'class' => 'yii\grid\ActionColumn',
+                                'template' => '{update}{delete}',
+                                'buttons' => [
+                                    'update' => function($url,$model){
+                                        $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
+                                        $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
+                                        $html = Html::a('<i class="fa fa-pencil-square-o"></i>',['#'],['class' => 'modalButton', 'data-toggle' => 'modal', 'data-target' => '#edit-promo-' . $model->spt_promo_id, 'data-backdrop' => 'static', 'data-keyboard' => 'false']);
+                                        $html .= $this->render('update',[
+                                                'model' => $model
+                                            ]);
+                                        return $html;
+                                    },
+                                    'delete' => function($url,$model){
+                                        return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
+                                            [
+                                                'value' => 'delete?id='.$model->spt_promo_id,
+                                                'class' => 'gotohell',
+                                                'data-title' => 'Delete',
+                                                'data-text' => 'Are you sure ?'
+                                            ]);
+                                    },
+                                ]
+                            ],
                         ],
                     ]); ?>
                 </div>
