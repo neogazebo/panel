@@ -42,6 +42,11 @@ use app\components\filters\AccessFilters;
                     <i class="fa fa-circle-o"></i> Merchant HQ
                 </a>
             </li>
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('merchant-signup/inquiry') ?>">
+                    <i class="fa fa-circle-o"></i> Inquiry
+                </a>
+            </li>
         </ul>
     </li>
     <?php endif; ?>

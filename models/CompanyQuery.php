@@ -2,7 +2,11 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\Expression;
+use app\components\helpers\DateRangeCarbon;
+use app\components\helpers\Utc;
+
 /**
  * This is the ActiveQuery class for [[AccountDevice]].
  *
@@ -183,5 +187,115 @@ class CompanyQuery extends \yii\db\ActiveQuery
         }
 
         return false;
+    }
+
+    /* Inquiry */
+    public static function getListInquiry()
+    {
+        $dt = new DateRangeCarbon();
+        $model = Company::find();
+        if (!empty($_GET['com_daterange'])) {
+            $com_daterange = explode(' to ', ($_GET['com_daterange']));
+            $first = "(
+                SELECT com_id 
+                FROM tbl_company 
+                WHERE com_created_date >= UNIX_TIMESTAMP('$com_daterange[0] 00:00:00') 
+                LIMIT 1
+            )";
+            $second = "(
+                SELECT com_id 
+                FROM tbl_company 
+                WHERE com_created_date <= UNIX_TIMESTAMP('$com_daterange[1] 23:59:59') 
+                ORDER BY com_id DESC 
+                LIMIT 1
+            )";
+            $model->andWhere("com_id BETWEEN $first AND $second");
+        } else {
+            $com_daterange = explode(' to ', ($dt->getDay()));
+            $first = "(
+                SELECT com_id 
+                FROM tbl_company 
+                WHERE com_created_date >= UNIX_TIMESTAMP('$com_daterange[0]') 
+                LIMIT 1
+            )";
+            $second = "(
+                SELECT com_id 
+                FROM tbl_company 
+                WHERE com_created_date <= UNIX_TIMESTAMP('$com_daterange[1]') 
+                ORDER BY com_id DESC 
+                LIMIT 1
+            )";
+            $model->andWhere("com_id BETWEEN $first AND $second");
+        }
+        if (!empty($_GET['com_name']))
+            $model->andWhere('com_id = :com_id', [':com_id' => $_GET['com_name']]);
+        if (!empty($_GET['ops_name']))
+            $model->andWhere('com_created_by = :id', [':id' => $_GET['ops_name']]);
+        $model->andWhere('com_created_date > 1473008400');
+        return $model;
+    }
+
+    public function getExcelColumns()
+    {
+        return  [
+            'A' => [
+                'name' => 'Outlet Name',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'com_name',
+                // 'have_relations' => true,
+                // 'relation_name' => 'com_name'
+            ], 
+            'B' => [
+                'name' => 'Email',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'com_email',
+                // 'have_relations' => true,
+                // 'relation_name' => 'acc_screen_name'
+            ], 
+            'C' => [
+                'name' => 'City',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'com_city',
+                // 'have_relations' => true,
+                // 'relation_name' => 'acc_facebook_email'
+            ], 
+            'D' => [
+                'name' => 'Category',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'category',
+                'have_relations' => true,
+                'relation_name' => 'com_category_id'
+            ],
+            'E' => [
+                'name' => 'Created On',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'com_created_date',
+                'format' => function($data) {
+                    return Yii::$app->formatter->asDateTime(Utc::convert($data));
+                }
+            ],
+            'F' => [
+                'name' => 'Operator',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'userCreated',
+                'have_relations' => true,
+                'relation_name' => 'username'
+            ],
+        ];
+    }
+
+    public function getExcelColumnsStyles()
+    {
+        return [
+            'font' => [
+                 'bold'  => true,
+            ]
+        ];
     }
 }

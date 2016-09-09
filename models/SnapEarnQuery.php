@@ -92,7 +92,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         // operator filter
         if (!empty($_GET['ops_name'])) {
             $operatorId = $_GET['ops_name'];
-            $this->andWhere("sna_review_by = :ops",[':ops' => $operatorId]);
+            $this->andWhere("sna_review_by = :ops", [':ops' => $operatorId]);
         }
         
         // merchant filter
