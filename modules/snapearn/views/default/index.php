@@ -115,44 +115,44 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                         <div class="col-sm-12">
                             <div class="row">
                                 <div class="form-group">
-                                <label>Operator</label>
-                                <?php
-                                $ops = (!empty($_GET['operator'])) ? $_GET['operator'] : 'Operator';
-                                $mer = (!empty($_GET['merchant'])) ? $_GET['merchant'] : 'Merchant';
-                                ?>
-                                <?=
-                                    Typeahead::widget([
-                                        'id' => 'operator',
-                                        'name' => 'operator',
-                                        'options' => ['placeholder' => $ops],
-                                        'pluginOptions' => [
-                                            'highlight' => true,
-                                            'minLength' => 3
-                                        ],
-                                        'pluginEvents' => [
-                                            "typeahead:select" => "function(ev, suggestion) { "
-                                                . "$('#ops_name').val(suggestion.id); "
-                                                . "$(this).css('color','000');"
-                                            . "}",
-                                        ],
-                                        'dataset' => [
-                                            [
-                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                                                'display' => 'value',
-                                                'remote' => [
-                                                    'url' => Url::to(['user-list']) . '?q=%QUERY',
-                                                    'wildcard' => '%QUERY'
-                                                ],
-                                                'limit' => 20
+                                    <label>Operator</label>
+                                    <?php
+                                    $ops = (!empty($_GET['operator'])) ? $_GET['operator'] : 'Operator';
+                                    $mer = (!empty($_GET['merchant'])) ? $_GET['merchant'] : 'Merchant';
+                                    ?>
+                                    <?=
+                                        Typeahead::widget([
+                                            'id' => 'operator',
+                                            'name' => 'operator',
+                                            'options' => ['placeholder' => $ops],
+                                            'pluginOptions' => [
+                                                'highlight' => true,
+                                                'minLength' => 3
+                                            ],
+                                            'pluginEvents' => [
+                                                "typeahead:select" => "function(ev, suggestion) { "
+                                                    . "$('#ops_name').val(suggestion.id); "
+                                                    . "$(this).css('color','000');"
+                                                . "}",
+                                            ],
+                                            'dataset' => [
+                                                [
+                                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
+                                                    'display' => 'value',
+                                                    'remote' => [
+                                                        'url' => Url::to(['user-list']) . '?q=%QUERY',
+                                                        'wildcard' => '%QUERY'
+                                                    ],
+                                                    'limit' => 20
+                                                ]
                                             ]
-                                        ]
-                                    ]);
-                                ?>
+                                        ]);
+                                    ?>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Merchant</label><br>
                                 <?php 
-
                                     /*
                                     echo Typeahead::widget([
                                         'id' => 'merchant',
@@ -182,7 +182,6 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                     ]);
                                     */
                                 ?>
-
                                 <input type="text" id="com_name_search" class="form-control" value="<?= $company_name ?>" width="200px" placeholder="Enter merchant name" />
                             </div>
                             <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
@@ -346,7 +345,7 @@ $this->registerJs("
     }
     
     // set var 
-    var operator = getParameterByName('operator');
+    var operator = getParameterByName('operator'),
         merchant = getParameterByName('merchant');
     
     // set value operator name
@@ -354,7 +353,7 @@ $this->registerJs("
         $('#operator').val(operator);
     }
     
-    $('#operator').on('blur',function(){
+    $('#operator').on('blur', function() {
         if ($(this).val() === '') {
             $('#ops_name').val('');
         }
@@ -365,13 +364,13 @@ $this->registerJs("
         $('#merchant').val(merchant);
     }
     
-    $('#merchant').on('blur',function(){
+    $('#merchant').on('blur', function() {
         if ($(this).val() === '') {
             $('#com_name').val('');
         }
     });
 
-    $('#sna_member_name').on('blur',function(){
+    $('#sna_member_name').on('blur', function() {
         if ($(this).val() === '') {
             $('#sna_member').val('');
         }
