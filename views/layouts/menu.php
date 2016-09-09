@@ -38,6 +38,8 @@ use app\components\filters\AccessFilters;
                 </a>
             </li>
             <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('speciality') ?>">
+                    <i class="fa fa-circle-o"></i> Merchant Speciality Promo
                 <a href="<?= Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
                     <i class="fa fa-circle-o"></i> Merchant HQ
                 </a>
@@ -136,7 +138,7 @@ use app\components\filters\AccessFilters;
         </a>
         <ul class="treeview-menu">
             <li>
-                <a href="<?= Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
+                <a href="<?php // Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
                     <i class="fa fa-circle-o"></i> Merchant HQ
                 </a>
             </li>

@@ -50,6 +50,12 @@ $config = [
         'system' => [
             'class' => 'app\modules\system\System',
         ],
+        'speciality' => [
+            'class' => 'app\modules\com_speciality\Module',
+        ],
+        'promo' => [
+            'class' => 'app\modules\speciality_promo\Module',
+        ],
     ],
     'components' => [
         'request' => [
