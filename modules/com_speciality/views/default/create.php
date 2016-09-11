@@ -6,9 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\CompanySpeciality */
 
-$this->title = 'Create Company Speciality';
-$this->params['breadcrumbs'][] = ['label' => 'Company Specialities', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$create_title = 'Create Company Speciality';
 ?>
 <div id="create-speciality" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog">
@@ -16,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span></button>
-        <h4 class="modal-title"><?= Html::encode($this->title) ?></h4>
+        <h4 class="modal-title"><?= Html::encode($create_title) ?></h4>
       </div>
     <?= $this->render('_form', [
         'model' => $model,

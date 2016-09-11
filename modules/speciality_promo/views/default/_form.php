@@ -8,6 +8,12 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 $country = new GlobalHelper;
+$speciality = CompanySpeciality::find()->with('type','country')->asArray()->all();
+$get_type = [];
+foreach ($speciality as $val) {
+    $get_type[$val['com_spt_id']] = $val['type']['com_type_name'].' ('.$val['country']['cty_name'].')';
+}
+
 ?>
     <?php $form = ActiveForm::begin([
         'id' => 'promo-speciality',
@@ -17,8 +23,7 @@ $country = new GlobalHelper;
     ]); ?>
     <div class="modal-body">
         <?=
-        $form->field($model, 'spt_promo_com_spt_id')->dropDownList(ArrayHelper::map(CompanySpeciality::find()->all(), 'com_spt_id', 'com_spt_type'), ['prompt'=>'Choose...'])->label('Company Speciality'); ?>
-        <?= $form->field($model, 'spt_promo_cty_id')->dropDownList($country->TempCountry(),['prompt' => 'Select Country...']) ?>
+        $form->field($model, 'spt_promo_com_spt_id')->dropDownList($get_type, ['prompt'=>'Choose...'])->label('Company Speciality'); ?>
         <?= $form->field($model, 'spt_promo_description')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'spt_promo_day_promo')->dropDownList(GlobalHelper::Weekdays(),['prompt' => 'Special Day...']) ?>
         <?= $form->field($model, 'spt_promo_multiple_point')->textInput() ?>

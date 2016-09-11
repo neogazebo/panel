@@ -1,6 +1,9 @@
 <?php
 
 use app\components\helpers\GlobalHelper;
+use app\models\CompanyType;
+use app\models\Country;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -17,9 +20,9 @@ $country = new GlobalHelper();
     ]); ?>
     <div class="modal-body">
 
-    <?= $form->field($model, 'com_spt_type')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'com_spt_type_id')->dropDownList(ArrayHelper::map(CompanyType::find()->all(), 'com_type_id', 'com_type_name'), ['prompt'=>'Choose...'])->label('Company Speciality'); ?>
 
-	<?= $form->field($model, 'com_spt_cty_id')->dropDownList($country->TempCountry(),['prompt' => 'Select Country...']) ?>
+	<?= $form->field($model, 'com_spt_cty_id')->dropDownList(ArrayHelper::map(Country::find()->all(), 'cty_id', 'cty_name'), ['prompt'=>'Choose...'])->label('Select Country...'); ?>
 
     <?= $form->field($model, 'com_spt_multiple_point')->textInput() ?>
 

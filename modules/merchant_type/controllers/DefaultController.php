@@ -1,16 +1,16 @@
 <?php
 
-namespace app\modules\com_speciality\controllers;
+namespace app\modules\merchant_type\controllers;
 
 use Yii;
-use app\models\CompanySpeciality;
-use yii\data\ActiveDataProvider;
+use app\models\CompanyType;
+use app\models\CompanyTypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * DeafultController implements the CRUD actions for CompanySpeciality model.
+ * DefaultController implements the CRUD actions for CompanyType model.
  */
 class DefaultController extends Controller
 {
@@ -30,33 +30,22 @@ class DefaultController extends Controller
     }
 
     /**
-     * Lists all CompanySpeciality models.
+     * Lists all CompanyType models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => CompanySpeciality::find()->with('promo','type'),
-        ]);
+        $searchModel = new CompanyTypeSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-    }
-
-    public function actionDetail()
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => CompanySpeciality::find(),
-        ]);
-
-        return $this->render('detail', [
-            'dataProvider' => $dataProvider,
-        ]);   
     }
 
     /**
-     * Displays a single CompanySpeciality model.
+     * Displays a single CompanyType model.
      * @param integer $id
      * @return mixed
      */
@@ -68,29 +57,22 @@ class DefaultController extends Controller
     }
 
     /**
-     * Creates a new CompanySpeciality model.
+     * Creates a new CompanyType model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new CompanySpeciality();
+        $model = new CompanyType();
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = 'json';
             return \yii\widgets\ActiveForm::validate($model);
         }
-
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                return $this->redirect(['detail']);
-            }else{
-                var_dump($model->getErrors());exit;
-                $model->com_spt_created_date = date('Y-m-d',$model->com_spt_created_date);
-                $model->com_spt_updated_date = date('Y-m-d',$model->com_spt_updated_date);
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
+                return $this->redirect(['index']);
             }
+            var_dump($model->getErrors());exit;
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -99,7 +81,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Updates an existing CompanySpeciality model.
+     * Updates an existing CompanyType model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -108,21 +90,9 @@ class DefaultController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                return $this->redirect(['detail']);
-            }else{
-                var_dump($model->getErrors());exit;
-                $model->com_spt_created_date = date('Y-m-d',$model->com_spt_created_date);
-                $model->com_spt_updated_date = date('Y-m-d',$model->com_spt_updated_date);
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
-            
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->com_type_id]);
         } else {
-            $model->com_spt_created_date = date('Y-m-d',$model->com_spt_created_date);
-            $model->com_spt_updated_date = date('Y-m-d',$model->com_spt_updated_date);
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -130,7 +100,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Deletes an existing CompanySpeciality model.
+     * Deletes an existing CompanyType model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -143,15 +113,15 @@ class DefaultController extends Controller
     }
 
     /**
-     * Finds the CompanySpeciality model based on its primary key value.
+     * Finds the CompanyType model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return CompanySpeciality the loaded model
+     * @return CompanyType the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = CompanySpeciality::findOne($id)) !== null) {
+        if (($model = CompanyType::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

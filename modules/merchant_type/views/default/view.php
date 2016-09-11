@@ -1,0 +1,42 @@
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\DetailView;
+
+/* @var $this yii\web\View */
+/* @var $model app\models\CompanyType */
+
+$this->title = $model->com_type_id;
+$this->params['breadcrumbs'][] = ['label' => 'Company Types', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="company-type-view">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a('Update', ['update', 'id' => $model->com_type_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->com_type_id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post',
+            ],
+        ]) ?>
+    </p>
+
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'com_type_id',
+            'com_type_name',
+            'com_type_multiple_point',
+            'com_type_max_point',
+            'com_type_created_by',
+            'com_type_created_date',
+            'com_type_updated_date',
+            'com_type_deleted_date',
+        ],
+    ]) ?>
+
+</div>
