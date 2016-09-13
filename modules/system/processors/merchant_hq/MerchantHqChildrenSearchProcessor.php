@@ -3,7 +3,7 @@
 namespace app\modules\system\processors\merchant_hq;
 
 use Yii;
-use app\modules\system\processors\bases\BaseProcessor;
+use app\modules\bases\BaseProcessor;
 use app\models\Company;
 
 class MerchantHqChildrenSearchProcessor extends BaseProcessor
