@@ -1,14 +1,15 @@
 <?php
-use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\ActiveForm;
-use yii\helpers\Url;
+use app\components\helpers\GlobalHelper;
+use kartik\select2\Select2;
 use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
-use yii\helpers\ArrayHelper;
 use yii\bootstrap\Modal;
-use kartik\widgets\Select2; // or kartik\select2\Select2
+use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\JsExpression;
+use yii\widgets\ActiveForm;
 
 $this->title = "New Merchant";
 
@@ -18,6 +19,7 @@ $this->registerCssFile($this->theme->baseUrl . '/dist/plugins/jQueryui/jquery-ui
 $latitude = ($company->com_latitude ? $company->com_latitude : 3.139003);
 $longitude = ($company->com_longitude ? $company->com_longitude : 101.686855);
 $company->com_in_mall = true;
+$currency = new GlobalHelper;
 ?>
 
 <section class="content-header">
@@ -46,39 +48,39 @@ $form = ActiveForm::begin([
         'labelOptions' => ['class' => 'col-lg-3 control-label'],
     ]
 ]);
+
 ?>
 <div class="panel-body">
     <?= $form->field($company, 'com_name')->textInput(['value' => (!empty($suggest)) ? $suggest->cos_name : '']) ?>
     <?= $form->field($company, 'com_business_name')->textInput(['value' => (!empty($suggest)) ? $suggest->cos_name : '']) ?>
     <?= $form->field($company, 'com_email')->textInput() ?>
     <?= $form->field($company, 'com_subcategory_id')->dropDownList($company->categoryList,['prompt' => '']); ?>
-    <?= $form->field($company, 'com_currency')->dropDownList($company->currency,['prompt' => 'Select Currency']); ?>
+    <?= $form->field($company, 'com_currency')->dropDownList(ArrayHelper::map($currency->getCurrency(),'code','country'),['prompt' => 'Select Currency']); ?>
     <?= $form->field($company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
 
     <?= $form->field($company, 'com_address')->textInput(); ?>
-    <?=
-        $form->field($company, 'com_city')->widget(Typeahead::classname(),[
-            'name' => 'merchant',
-            'options' => ['placeholder' => 'City, Region, Country'],
-            'pluginOptions' => [
-                'highlight'=>true,
-                'minLength' => 3
+
+    <?= 
+    $form->field($company, 'com_city')->widget(Select2::classname(), [
+        'options' => [
+                'placeholder' => 'City, Region, Country'
+        ], 
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' => 1,
+            'language' => [
+                'errorLoading' => new JsExpression("function () { return 'searching...'; }"),
             ],
-            'pluginEvents' => [
-                "typeahead:select" => "function(ev, suggestion) { $(this).val(suggestion.id); }",
+            'ajax' => [
+                'url' => Url::to(['city-list']),
+                'dataType' => 'json',
+                'data' => new JsExpression('function(params) { return {q:params.term}; }')
             ],
-            'dataset' => [
-                [
-                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-                    'display' => 'value',
-                    'remote' => [
-                        'url' => Url::to(['city-list']) . '?q=%QUERY',
-                        'wildcard' => '%QUERY'
-                    ],
-                    'limit' => 20
-                ]
-            ]
-        ]);
+            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+            'templateResult' => new JsExpression('function(city) { return city.value; }'),
+            'templateSelection' => new JsExpression('function (city) { return city.value; }'),
+        ],
+    ])->label('Location <small><cite title="Source Title">(City, Region, Country)</cite></small>');
     ?>
     <input id="com_city" type="hidden" name="com_city" value="">
     <input id="mall_id" type="hidden" name="mall_id" value="">
@@ -108,7 +110,7 @@ $form = ActiveForm::begin([
                     'limit' => 20
                 ]
             ]
-        ])->label('Select Mall');
+        ]);
     ?>
 
 

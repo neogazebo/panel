@@ -48,7 +48,7 @@ class CityQuery extends \yii\db\ActiveQuery
         $query = $connection->createCommand($query)->queryAll();
         $return = [];
         foreach ($query as $row) {
-            $return[]['value'] = $row['cit_name'] . ', ' . $row['reg_name'] . ', ' . $row['cny_name'];
+            $return[] = ['id' => $row['cit_name'] . ', ' . $row['reg_name'] . ', ' . $row['cny_name'],'value' => $row['cit_name'] . ', ' . $row['reg_name'] . ', ' . $row['cny_name']];
         }
         return $return;
     }

@@ -185,17 +185,9 @@ class DefaultController extends BaseController
                                 $mam_model->save(false);
                             }
 
-                            // SnapEarnPointDetail::savePoint($id, 8);
-
-                            // $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
-
                             $this->assignModule($com_id, $company);
                             $this->assignEmail($com_id, $company);
-
-                            // Additional point to working time
-                            // $param = $id;
-                            // $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
-                            // $this->addWorkPoint($param, $point);
+                            
                             $wrk_ses = $this->getSession('wrk_ses_'.$id);
                             if (!empty($wrk_ses)) {
                                 $ses = [];
@@ -861,8 +853,10 @@ class DefaultController extends BaseController
     public function actionCityList()
     {
         if (Yii::$app->request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             $model = City::find()->SearchCityList();
-            echo \yii\helpers\Json::encode($model);
+            $out['results'] = array_values($model);
+            return $out;
         }
     }
 

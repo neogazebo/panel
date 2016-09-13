@@ -167,7 +167,17 @@ class Company extends EbizuActiveRecord
             }, 'whenClient' => "function (attribute, value) {
                 return $('#company-com_in_mall').val() == 1;
             }"],
+            [['com_city'], 'required', 'when' => function($model) {
+                return $this ->com_in_mall == 0;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#company-com_in_mall').val() == 0;
+            }"],
         ];
+    }
+
+    public function checkCity($data)
+    {
+        ;
     }
 
     public function validateGif($data)
