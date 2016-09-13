@@ -3,11 +3,13 @@
 namespace app\modules\com_speciality\controllers;
 
 use Yii;
+use app\models\Company;
 use app\models\CompanySpeciality;
+use app\models\Country;
 use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * DeafultController implements the CRUD actions for CompanySpeciality model.
@@ -65,6 +67,44 @@ class DefaultController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionGroup($id)
+    {
+        $type = CompanySpeciality::find($id)->with('type')->one();
+        $cty = Country::find($type->com_spt_cty_id)->one();
+        $title = $type->type->com_type_name.' ('.$cty->cty_currency_name_iso3.')';
+        $active_group = Company::find()
+            ->select('com_id,com_name,com_country_id,com_currency,com_speciality')
+            ->where('com_speciality = :type_id AND com_currency = :type_cty',[
+                ':type_id' => $type->com_spt_id,
+                ':type_cty' => $cty->cty_currency_name_iso3
+            ])
+            ->andWhere('com_status = :status',[
+                ':status' => 1
+            ])
+            ->asArray()->all();
+        // $inactive_group = Company::find()
+        //     ->select('com_id,com_name,com_country_id,com_currency,com_speciality')
+        //     ->where('com_currency = :type_cty',[
+        //         ':type_cty' => $cty->cty_currency_name_iso3
+        //     ])
+        //     ->andWhere('com_status = :status',[
+        //         ':status' => 1
+        //     ])
+        //     ->asArray()->all();
+        return $this->render('group',[
+                'active_group' => $active_group,
+                'spt_id' => $id,
+                // 'inactive_group' => $inactive_group,
+                'title' => $title
+            ]);
+    }
+
+    public function actionSearch()
+    {
+        $processor = new MerchantHqChildrenSearchProcessor();
+        return $processor->process();
     }
 
     /**

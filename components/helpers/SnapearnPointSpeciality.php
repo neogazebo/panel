@@ -27,28 +27,24 @@ class SnapearnPointSpeciality
 			])->asArray()->one();
 		
 		$company = $this->getCompanyConfig($snap['sna_com_id']);
-		$from_company = $from_company['com_country']['cty_id'];
+		// $from_company = $from_company['com_country']['cty_id'];
 
 		$account = Account::find()
 		->where('acc_id = :acc',[
 			':acc' => $snap['sna_acc_id']
 			])->asArray()->one();
-		$from_account['acc_country'] = $this->getCompany($account['acc_cty_id']);
-		var_dump($from_company['com_country']);exit;
-		echo "<hr>";
-		var_dump($from_account);
-		echo "<hr>";
-		if ($from_company['com_country'] != $from_account['acc_country']) {
-			$not_same['reason'] = "Country of the user and the merchant does not match !!";
-			$not_same['user_country'] = $this->getCompany($from_account['acc_country']);
-			exit;
-		}
-		$speciality = $this->getSpeciality($from_company['com_type'],$from_company['com_country']);
-		var_dump($speciality);exit;
-		if ($com_speciality['promo']) {
-			return $com_speciality['promo']['spt_promo_point'];
-		}
-		return $com_speciality['com_spt_multiple_point'];
+		// $from_account['acc_country'] = $this->getCompany($account['acc_cty_id']);
+
+		// if ($from_company['com_country'] != $from_account['acc_country']) {
+		// 	$not_same['reason'] = "Country of the user and the merchant does not match !!";
+		// 	$not_same['user_country'] = $this->getCompany($from_account['acc_country']);
+		// }
+		// $speciality = $this->getSpeciality($from_company['com_type'],$from_company['com_country']);
+		
+		// if ($com_speciality['promo']) {
+		// 	return $com_speciality['promo']['spt_promo_point'];
+		// }
+		// return $com_speciality['com_spt_multiple_point'];
 	}
 
 

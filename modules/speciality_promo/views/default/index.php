@@ -13,8 +13,6 @@ use yii\helpers\Url;
 
 $this->title = 'Speciality Promo';
 $this->params['breadcrumbs'][] = $this->title;
-$x = new SnapearnPointSpeciality;
-var_dump($x->getActivePoint(1067));
 ?>
 <section class="content-header ">
     <h1><?= Html::encode($this->title) ?></h1>
