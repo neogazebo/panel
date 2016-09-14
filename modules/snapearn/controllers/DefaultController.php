@@ -966,7 +966,6 @@ class DefaultController extends BaseController
                           ->andWhere(['com_id' => 1642497]);
             }])
             ->one();
-        var_dump($model);exit;
     }
 
 }
