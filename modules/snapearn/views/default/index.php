@@ -106,14 +106,15 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                         <input name="sna_member" class="form-control" id="sna_member" placeholder="Enter name" type="hidden" value="<?= (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '' ?>">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Member Email</label><br>
-                                    <input name="member_email"  type="text" id="member_email_search" class="form-control" value="<?= (!empty($_GET['member_email'])) ? $_GET['member_email'] : '' ?>" width="300px" placeholder="Enter Email" />
-                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="row">
+                                <div class="form-group">
+                                    <label>Member Email</label><br>
+                                    <input name="member_email"  type="text" id="member_email_search" class="form-control" value="<?= (!empty($_GET['member_email'])) ? $_GET['member_email'] : '' ?>" width="300px" placeholder="Enter Email" />
+                                </div>
+
                                 <div class="form-group">
                                     <label>Operator</label>
                                     <?php
@@ -149,26 +150,26 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                         ]);
                                     ?>
                                 </div>
+                            
+                                <div class="form-group">
+                                    <label>Merchant</label><br>
+                                    <input type="text" id="com_name_search" class="form-control" value="<?= $company_name ?>" width="200px" placeholder="Enter merchant name" />
+                                </div>
+                                <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
+                                <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
+                                <?php endif; ?>  
+                                <div class="form-group">
+                                    <label>&nbsp;</label><br>
+                                    <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                                </div>
+                                <?php if ($visible) : ?>
+                                <div class="form-group">
+                                    <label>Export</label><br>
+                                    <button name="output_type" value="excel" type="submit" class="btn btn-info btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                                </div>
+                                <?php endif; ?>  
                             </div>
-                            <div class="form-group">
-                                <label>Merchant</label><br>
-                                <input type="text" id="com_name_search" class="form-control" value="<?= $company_name ?>" width="200px" placeholder="Enter merchant name" />
-                            </div>
-                            <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
-                            <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
-                            <?php endif; ?>  
-                            <div class="form-group">
-                                <label>&nbsp;</label><br>
-                                <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
-                            </div>
-                            <?php if ($visible) : ?>
-                            <div class="form-group">
-                                <label>Export</label><br>
-                                <button name="output_type" value="excel" type="submit" class="btn btn-info btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
-                            </div>
-                            <?php endif; ?>  
                         </div>
-                    </div>
                     </form>
                 </div>
                 <div class="box-body">
