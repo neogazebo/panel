@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use app\components\helpers\SnapearnPointSpeciality;
 use app\models\ComSpecialityPromo;

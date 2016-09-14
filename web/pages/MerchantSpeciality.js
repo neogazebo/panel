@@ -68,12 +68,12 @@ function save(op_url, form_data, modal_instance)
     });
 }
 
-function op_confirm(com_id, children)
+function op_confirm(com_speciality, children)
 {
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        url: '/system/merchant-hq/save-child',
+        url: '/speciality/default/set-speciality',
         beforeSend: function() {
             $('.box').waitMe({
                 effect : 'stretch',
@@ -88,7 +88,7 @@ function op_confirm(com_id, children)
             $('.box').waitMe('hide');
         },
         data: {
-            'com_id': com_id,
+            'com_speciality': com_speciality,
             'op_confirmation': true,
             'children': children
         },
@@ -108,12 +108,12 @@ function op_confirm(com_id, children)
     });
 }
 
-function delete_confirm(com_id)
+function delete_confirm(com_speciality)
 {
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        url: '/system/merchant-hq/delete',
+        url: '/speciality/default/delete',
         beforeSend: function() {
             $('.box').waitMe({
                 effect : 'stretch',
@@ -128,7 +128,7 @@ function delete_confirm(com_id)
             $('.box').waitMe('hide');
         },
         data: {
-            'com_id': com_id,
+            'com_speciality': com_speciality,
         },
         success: function(data) {
             if(!data.error) {
@@ -240,17 +240,17 @@ $(document).ready(function() {
 
         var ms = 300,
             keyword = $(this).val(),
-            hq_id = $('.com_id').val();
+            com_speciality = $('.com_speciality').val();
 
         if(keyword.length >= 2) {
             timer = setTimeout(function() {
                 x = $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    url: '/system/merchant-hq/search',
+                    url: '/speciality/default/search',
                     data: {
                         'keyword': keyword,
-                        'hq_id': hq_id
+                        'com_speciality': com_speciality
                     },
                     beforeSend: function() {
                         $('#search-merchant').addClass('search-process');
@@ -279,15 +279,18 @@ $(document).ready(function() {
 
     $('#add-merchant-child').submit(function(e) {
         e.preventDefault();
-
-        var op_url = '/system/merchant-hq/save-child',
+        var a = $('#search_merchant_to').val();
+        // console.log(a);
+        console.log(JSON.stringify(a));
+        // console.log(a.length);
+        var op_url = '/speciality/default/set-speciality',
             form_data = new FormData(this);
 
         $.ajax({
             type: 'POST',
             dataType: 'json',
             url: op_url,
-            data: form_data,
+            data: { 'children': JSON.stringify(a)},
             processData: false,
             contentType: false,
             beforeSend: function() {
@@ -339,9 +342,9 @@ $(document).ready(function() {
                         }, 
                         function(isConfirm) {   
                             if(isConfirm) {
-                                var com_id = $('.com_id').val();
+                                var com_speciality = $('.com_speciality').val();
                                 var children = $('#search_merchant_to').val();
-                                op_confirm(com_id, children);
+                                op_confirm(com_speciality, children);
                             } else {
                                 window.location.reload();
                             }
@@ -356,7 +359,7 @@ $(document).ready(function() {
 
         e.preventDefault();
 
-        var com_id = $(this).data('id');
+        var com_speciality = $(this).data('id');
 
         swal({
             title: "Are you sure?",   
@@ -372,7 +375,7 @@ $(document).ready(function() {
         }, 
         function(isConfirm) {   
             if(isConfirm) {
-                delete_confirm(com_id);
+                delete_confirm(com_speciality);
             }
         });
 

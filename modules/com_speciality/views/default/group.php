@@ -25,6 +25,8 @@ $this->registerJsFile(Yii::$app->homeUrl . 'pages/MerchantSpeciality.js', ['depe
                     <div class="box-body">
                         <div id="searchList" class="col-sm-6">
                             <h2><?= $this->title ?></h2>
+
+                            <input type="hidden" class="com_speciality" name="com_speciality" value="<?= $spt_id ?>">
                             <select name="children[]" id="search_merchant_to" class="form-control" size="8" multiple="multiple">
                                 <?php foreach($active_group as $active): ?>
                                     <option value="<?= $active['com_id'] ?>"><?= $active['com_name'] ?></option>
@@ -46,7 +48,6 @@ $this->registerJsFile(Yii::$app->homeUrl . 'pages/MerchantSpeciality.js', ['depe
                         <div class="clearfix"></div>    
                     </div>
                     <div class="box-footer">
-                        <input type="hidden" class="com_id" name="com_id" value="<?= $spt_id ?>">
                         <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['index'], ['class' => 'btn btn-warning']) ?>
                         <?= Html::submitButton('<i class="fa fa-check"></i> Save', ['class' => 'btn btn-primary pull-right']) ?>
                     </div>

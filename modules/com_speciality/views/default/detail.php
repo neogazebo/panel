@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'template' => '{group} {update} {delete}',
                             'buttons' => [
                                 'group' => function($url,$model){
-                                    return Html::a('<i class="fa fa-group"></i>',['group','id' => $model->com_spt_id]);
+                                    return Html::a('<i class="fa fa-group"></i>',['group','id' => $model->com_spt_id],['data-method' => 'post']);
                                 },
                                 'update' => function($url,$model){
                                     $html = Html::a('<i class="fa fa-pencil-square-o"></i>',['#'],['class' => 'modalButton', 'data-toggle' => 'modal', 'data-target' => '#edit-speciality-' . $model->com_spt_id, 'data-backdrop' => 'static', 'data-keyboard' => 'false']);
