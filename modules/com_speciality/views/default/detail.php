@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Default Specialities';
+$this->title = 'Company Specialities';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="content-header ">
@@ -40,17 +40,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['class' => 'yii\grid\SerialColumn'],
 
                         [
-                            'attribute' => 'com_spt_type',
+                            'attribute' => 'com_spt_type_id',
                             'format' => 'html',
                             'value' => function($data){
-                                return $data->com_spt_type;
+                                return $data->type->com_type_name. ' <span class="text-green">('.$data->country->cty_name.')</span>';
                             }
                         ],
                         [
                             'attribute' => 'com_spt_multiple_point',
                             'format' => 'html',
                             'value' => function($data){
-                                return $data->com_spt_multiple_point;
+                                if (!isset($data->com_spt_multiple_point)) {
+                                    return $data->type->com_type_multiple_point;
+                                } else {
+                                    return $data->com_spt_multiple_point;
+                                }
+                            }
+                        ],
+                        [
+                            'attribute' => 'com_spt_max_point',
+                            'format' => 'html',
+                            'value' => function($data){
+                                if (!isset($data->com_spt_multiple_point)) {
+                                    return $data->type->com_type_max_point;
+                                } else {
+                                    return $data->com_spt_max_point;
+                                }
                             }
                         ],
                         [
@@ -68,19 +83,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return date('Y-m-d',$data->com_spt_created_date);
                             }
                         ],
-                        [
-                            'label' => 'Updated Date',
-                            'attribute' => 'com_spt_updated_date',
-                            'format' => 'html',
-                            'value' => function($data){
-                                return date('Y-m-d',$data->com_spt_updated_date);
-                            }
-                        ],
+                        // [
+                        //     'label' => 'Updated Date',
+                        //     'attribute' => 'com_spt_updated_date',
+                        //     'format' => 'html',
+                        //     'value' => function($data){
+                        //         return date('Y-m-d',$data->com_spt_updated_date);
+                        //     }
+                        // ],
                         [
                             'header' => 'Action',
                             'class' => 'yii\grid\ActionColumn',
-                            'template' => '{update}{delete}',
+                            'template' => '{group} {update} {delete}',
                             'buttons' => [
+                                'group' => function($url,$model){
+                                    return Html::a('<i class="fa fa-group"></i>',['group','id' => $model->com_spt_id]);
+                                },
                                 'update' => function($url,$model){
                                     $html = Html::a('<i class="fa fa-pencil-square-o"></i>',['#'],['class' => 'modalButton', 'data-toggle' => 'modal', 'data-target' => '#edit-speciality-' . $model->com_spt_id, 'data-backdrop' => 'static', 'data-keyboard' => 'false']);
                                     $html .= $this->render('update',[

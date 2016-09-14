@@ -56,6 +56,9 @@ $config = [
         'promo' => [
             'class' => 'app\modules\speciality_promo\Module',
         ],
+        'type' => [
+            'class' => 'app\modules\merchant_type\Module',
+        ],
     ],
     'components' => [
         'request' => [

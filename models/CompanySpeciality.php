@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\Country;
 use app\models\User;
 use yii\behaviors\AttributeBehavior;
 use yii\db\ActiveRecord;
@@ -33,9 +34,8 @@ class CompanySpeciality extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['com_spt_type', 'com_spt_cty_id', 'com_spt_max_point' ,'com_spt_multiple_point'], 'required'],
-            [['com_spt_multiple_point', 'com_spt_created_by', 'com_spt_created_date', 'com_spt_updated_date'], 'integer'],
-            [['com_spt_type'], 'string', 'max' => 255],
+            [['com_spt_type_id', 'com_spt_cty_id', 'com_spt_max_point' ,'com_spt_multiple_point'], 'required'],
+            [['com_spt_multiple_point', 'com_spt_created_by', 'com_spt_created_date', 'com_spt_updated_date'], 'integer']
         ];
     }
 
@@ -47,7 +47,7 @@ class CompanySpeciality extends \yii\db\ActiveRecord
         return [
             'com_spt_id' => 'ID',
             'com_spt_cty_id' => 'Country',
-            'com_spt_type' => 'Speciality Name',
+            'com_spt_type_id' => 'Speciality Name',
             'com_spt_max_point' => 'Maximum point',
             'com_spt_multiple_point' => 'Multiple Point',
             'com_spt_created_by' => 'Created By',
@@ -89,11 +89,21 @@ class CompanySpeciality extends \yii\db\ActiveRecord
         $today = time();
         return $this->hasOne(ComSpecialityPromo::className(),[
                 'spt_promo_com_spt_id' => 'com_spt_id'
-                ])->where('spt_promo_cty_id = com_spt_cty_id')
+                ])
                 ->where('spt_promo_start_date <= :today')
                 ->andWhere('spt_promo_end_date >= :today',[
                     ':today' => $today
                 ]);
+    }
+
+    public function getType()
+    {
+        return $this->hasOne(CompanyType::className(),['com_type_id' => 'com_spt_type_id']);
+    }
+
+    public function getCountry()
+    {
+        return $this->hasOne(Country::className(),['cty_id' => 'com_spt_cty_id']);
     }
 
     /**

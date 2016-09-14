@@ -118,6 +118,26 @@ class CompanyQuery extends \yii\db\ActiveQuery
         return $this;
     }
 
+    public function searchMerchantSpeciality($keyword,$spt)
+    {
+        $this->select('com_id, com_name');
+        $this->leftJoin('tbl_company_category');
+        $this->andWhere('
+            com_name LIKE "%' . $keyword . '%" 
+            AND com_hq_id = 0 
+            AND com_status != 2 
+            AND com_is_parent = 0
+            AND com_speciality <> :spt
+        ',[':spt' => $spt ]);
+        
+        $this->andWhere('tbl_company_category.com_category_type = :type', [
+            'type' => 1
+        ]);
+
+        $this->orderBy('com_name');
+        return $this;
+    }
+
     public function saveMerchantChildren($parent_id, $children, $removed = false)
     {
         $new_parent = $parent_id;
