@@ -83,6 +83,31 @@ class CompanyQuery extends \yii\db\ActiveQuery
         return $this->all();
     }
 
+    public function searchExistingMerchantTemporary()
+    {
+        $search = $_GET['q'];
+        $this->select('com_id, com_name');
+        $keyword = preg_split("/[\s,]+/", $search);
+
+        $this->select('com_id, com_name');
+        $this->leftJoin('tbl_company_category', 'tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
+        
+        foreach($keyword as $key) {
+            $this->andWhere('com_name LIKE "%' . $key . '%" ');
+        }
+        
+        $this->andWhere('tbl_company_category.com_category_type = :type', [
+            'type' => 1
+        ]);
+
+        $this->andWhere('com_status != 2');
+
+        $order = 'com_name ASC';
+        
+        $this->orderBy($order);
+        return $this->all();
+    }
+
     public function getParentMerchants()
     {
         return $this->select('com_id, com_name, com_created_date, com_subcategory_id')->joinWith('category')->where('com_is_parent = :is_parent', [':is_parent' => 1])->orderBy(['com_id' => SORT_DESC]);

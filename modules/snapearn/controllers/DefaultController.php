@@ -858,6 +858,29 @@ class DefaultController extends BaseController
         }
     }
 
+    public function actionListTemp()
+    {
+        if (Yii::$app->request->isAjax) {
+            $model = Company::find()->searchExistingMerchantTemporary();
+            $out = [];
+            if (!empty($model)) {
+                foreach ($model as $d) {
+                    $out[] = [
+                        'id' => $d->com_id,
+                        'value' => $d->com_name
+                    ];
+                }
+            } else {
+                $out[] = [
+                    'id' => 0,
+                    'value' => 'Merchant Not Found!',
+                ];
+            }
+
+            echo \yii\helpers\Json::encode($out);
+        }
+    }
+
     public function actionCityList()
     {
         if (Yii::$app->request->isAjax){
