@@ -116,6 +116,11 @@ class DefaultController extends BaseController
                     $model_company->com_create_from = 4;
                     $model_company->com_snapearn_checkin = 1;
                     $model_company->com_registered_to = 'EBC';
+                    $mall_id = Yii::$app->request->post('mall_id');
+                    if (!empty($mall_id)) {
+                        $mall = Mall::findOne($mall_id)->mal_name;
+                        $model_company->com_name = $model_company->com_name .' @ ' . $mall;
+                    }
                     if ($model_company->save()) {
                         $model_company->setTag();
                         $model->mer_login_email = $model_company->com_email;

@@ -59,7 +59,7 @@ class Company extends EbizuActiveRecord
             [['com_par_id', 'com_email'], 'safe', 'on' => 'snapEarnUpdate'],
             [['com_email'], 'unique'],
             [['com_name'], 'required', 'on' => ['new-hq','update-hq'], 'message' => 'HQ Name is required'],
-            [['com_name','com_subcategory_id'], 'required'],
+            [['com_name','com_subcategory_id','com_currency'], 'required'],
             [['com_email'], 'email'],
             [['com_email'], 'required', 'except' => ['new-hq','update-hq']],
             [['com_business_name'], 'required', 'on' => 'signup'],
