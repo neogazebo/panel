@@ -49,35 +49,31 @@ class CompanyQuery extends \yii\db\ActiveQuery
     {
         $parent_is_first = false;
         $search = $_GET['q'];
-        $this->select('com_id, com_name');
         $keyword = preg_split("/[\s,]+/", $search);
 
         $this->select('com_id, com_name');
         $this->leftJoin('tbl_company_category', 'tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
 
-        if(!in_array('@', $keyword))
-        {
+        if (!in_array('@', $keyword)) {
             $parent_is_first = true;
         }
 
-        //$keyword = implode(' ', $keyword);
-        //$this->andWhere('com_name LIKE "%' . $keyword . '%" ');
-
-        foreach($keyword as $key) {
+        foreach ($keyword as $key) {
             $this->andWhere('com_name LIKE "%' . $key . '%" ');
         }
         
-        $this->andWhere('tbl_company_category.com_category_type = :type', [
-            'type' => 1
+        $this->andWhere('
+            tbl_company_category.com_category_type = :type 
+            AND com_status != :status
+        ', [
+            ':type' => 1,
+            ':status' => 2
         ]);
-
-        $this->andWhere('com_status != 2');
 
         $order = 'com_name ASC';
 
-        if($parent_is_first)
-        {
-            $order = new Expression('FIELD (com_is_parent,1) DESC, com_name ASC');
+        if ($parent_is_first) {
+            $order = new Expression('FIELD (com_is_parent, 1) DESC, com_name ASC');
         }
         
         $this->orderBy($order);
@@ -86,35 +82,78 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
     public function getParentMerchants()
     {
-        return $this->select('com_id, com_name, com_created_date, com_subcategory_id')->joinWith('category')->where('com_is_parent = :is_parent', [':is_parent' => 1])->orderBy(['com_id' => SORT_DESC]);
+        return $this->select('
+                com_id, com_name, com_created_date, com_subcategory_id
+            ')
+            ->joinWith('category')
+            ->where('
+                com_is_parent = :is_parent
+            ', [
+                ':is_parent' => 1
+            ])
+            ->orderBy([
+                'com_id' => SORT_DESC
+            ]);
     }
 
     public function getChildMerchants($parent_id)
     {
-        return $this->select('com_id, com_name')->where('com_hq_id = :hq_id', [':hq_id' => $parent_id])->orderBy(['com_id' => SORT_DESC]);
+        return $this
+            ->select('com_id, com_name')
+            ->where('
+                com_hq_id = :hq_id
+            ', [
+                ':hq_id' => $parent_id
+            ])
+            ->orderBy(['com_id' => SORT_DESC]);
     }
 
     public function getAllChildMerchants()
     {
-        return \Yii::$app->getDb()->createCommand('SELECT com_id, com_name FROM tbl_company WHERE com_hq_id = :hq_id', [':hq_id' => 0]);
+        return \Yii::$app
+            ->getDb()
+            ->createCommand('
+                SELECT com_id, com_name 
+                FROM tbl_company 
+                WHERE com_hq_id = :hq_id
+            ', [
+                ':hq_id' => 0
+            ]);
     }
 
-    public function searchMerchant($keyword, $hq_id)
+    public function searchMerchant($keyword, $hq_id = null)
     {
+        $parent_is_first = false;
+        $keyword = preg_split("/[\s,]+/", $keyword);
+
         $this->select('com_id, com_name');
         $this->leftJoin('tbl_company_category', 'tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
-        $this->andWhere('
-            com_name LIKE "%' . $keyword . '%" 
-            AND com_hq_id = 0 
-            AND com_status != 2 
-            AND com_is_parent = 0
-        ');
+
+        if (!in_array('@', $keyword)) {
+            $parent_is_first = true;
+        }
+
+        foreach ($keyword as $key) {
+            $this->andWhere('com_name LIKE "%' . $key . '%"');
+        }
         
-        $this->andWhere('tbl_company_category.com_category_type = :type', [
-            'type' => 1
+        $this->andWhere('
+            tbl_company_category.com_category_type = :type 
+            AND com_status != :status 
+            AND com_hq_id = :hq
+        ', [
+            ':type' => 1,
+            ':status' => 2,
+            ':hq' => 0
         ]);
 
-        $this->orderBy('com_name');
+        $order = 'com_name ASC';
+
+        if ($parent_is_first) {
+            $order = new Expression('FIELD (com_is_parent, 1) DESC, com_name ASC');
+        }
+        
+        $this->orderBy($order);
         return $this;
     }
 

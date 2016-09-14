@@ -19,10 +19,8 @@ $visible = Yii::$app->user->identity->superuser == 1 ? true : false;
 
 $company_name = null;
 
-if($data_hooks)
-{
-    if(isset($data_hooks['company']))
-    {
+if($data_hooks) {
+    if(isset($data_hooks['company'])) {
         $company_name = $data_hooks['company']->com_name;
     }
 }
