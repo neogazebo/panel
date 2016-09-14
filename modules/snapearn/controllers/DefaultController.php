@@ -142,6 +142,7 @@ class DefaultController extends BaseController
                         1= ADM panel; 
                         2 = Snapearn add new merchant; 
                         3 = Mall cms 
+                        4 = merchant - signup
                         ]
                     */
                     $company->com_create_from = int(2); 

@@ -106,6 +106,14 @@ class DefaultController extends BaseController
                     $model_company->com_usr_id = $user->usr_id;
                     $model_company->com_status = 1;
                     $model_company->com_snapearn = 1;
+                    /* create from [ 
+                        1= ADM panel; 
+                        2 = Snapearn add new merchant; 
+                        3 = Mall cms 
+                        4 = merchant - signup
+                        ]
+                    */
+                    $model_company->com_create_from = 4;
                     $model_company->com_snapearn_checkin = 1;
                     $model_company->com_registered_to = 'EBC';
                     if ($model_company->save()) {
@@ -241,8 +249,10 @@ class DefaultController extends BaseController
     public function actionCityList()
     {
         if (Yii::$app->request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             $model = City::find()->SearchCityList();
-            echo \yii\helpers\Json::encode($model);
+            $out['results'] = array_values($model);
+            return $out;
         }
     }
 
