@@ -138,6 +138,13 @@ class DefaultController extends BaseController
                     $company->com_email = $model->usr_email;
                     $company->com_status = 1;
                     $company->com_snapearn = 1;
+                    /* create from [ 
+                        1= ADM panel; 
+                        2 = Snapearn add new merchant; 
+                        3 = Mall cms 
+                        ]
+                    */
+                    $company->com_create_from = int(2); 
                     $company->com_snapearn_checkin = 1;
                     $company->com_registered_to = 'EBC';
                     $company->com_created_by = Yii::$app->user->id;

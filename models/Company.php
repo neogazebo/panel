@@ -67,7 +67,7 @@ class Company extends EbizuActiveRecord
             ['com_status', 'required', 'on' => 'change_status'],
             [['com_photo', 'com_banner_photo'], 'validateGif'],
             [['com_joined', 'com_joined_datetime', 'com_joined_by'], 'required', 'on' => 'joined'],
-            [['com_timezone', 'com_mac_id','com_in_mall'], 'integer'],
+            [['com_timezone', 'com_mac_id','com_in_mall','com_create_from'], 'integer'],
             [[
                 'com_name',
                 'com_business_name',
