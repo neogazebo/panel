@@ -87,7 +87,7 @@ class DefaultController extends BaseController
         $user->scenario = 'signup';
         $user->usr_password = md5('123456');
         $user->usr_type_id = 2;
-        $user->usr_approved = 0;
+        $user->usr_approved = 1;
 
         $model_company = new Company();
 
