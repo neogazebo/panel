@@ -9,8 +9,9 @@ namespace app\components\helpers;
  * @since V2.1.9
  */
 
-use yii\base\Component;
 use Yii;
+use app\models\Country;
+use yii\base\Component;
 use yii\base\InvalidConfigException;
 
 class GlobalHelper extends Component
@@ -30,6 +31,17 @@ class GlobalHelper extends Component
     public function downloadAsCSV($data, $filename = null) {
         $file = new GFile();
         return $file->generateCSV($data, $filename);
+    }
+
+    public function getCurrency()
+    {
+        $model = Country::find()->asArray()->all();
+        $currency = [];
+        foreach ($model as $key) {
+            $currency[] = ['code' => $key['cty_currency_name_iso3'],'country' => $key['cty_name'].' ('.$key['cty_currency_name_iso3'].')'];
+        }
+        return $currency;
+      
     }
 }
 

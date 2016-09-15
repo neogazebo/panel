@@ -138,6 +138,14 @@ class DefaultController extends BaseController
                     $company->com_email = $model->usr_email;
                     $company->com_status = 1;
                     $company->com_snapearn = 1;
+                    /* create from [ 
+                        1= ADM panel; 
+                        2 = Snapearn add new merchant; 
+                        3 = Mall cms 
+                        4 = merchant - signup
+                        ]
+                    */
+                    $company->com_create_from = intval(2); 
                     $company->com_snapearn_checkin = 1;
                     $company->com_registered_to = 'EBC';
                     $company->com_created_by = Yii::$app->user->id;
@@ -185,17 +193,9 @@ class DefaultController extends BaseController
                                 $mam_model->save(false);
                             }
 
-                            // SnapEarnPointDetail::savePoint($id, 8);
-
-                            // $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
-
                             $this->assignModule($com_id, $company);
                             $this->assignEmail($com_id, $company);
-
-                            // Additional point to working time
-                            // $param = $id;
-                            // $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
-                            // $this->addWorkPoint($param, $point);
+                            
                             $wrk_ses = $this->getSession('wrk_ses_'.$id);
                             if (!empty($wrk_ses)) {
                                 $ses = [];
@@ -858,11 +858,36 @@ class DefaultController extends BaseController
         }
     }
 
+    public function actionListTemp()
+    {
+        if (Yii::$app->request->isAjax) {
+            $model = Company::find()->searchExistingMerchantTemporary();
+            $out = [];
+            if (!empty($model)) {
+                foreach ($model as $d) {
+                    $out[] = [
+                        'id' => $d->com_id,
+                        'value' => $d->com_name
+                    ];
+                }
+            } else {
+                $out[] = [
+                    'id' => 0,
+                    'value' => 'Merchant Not Found!',
+                ];
+            }
+
+            echo \yii\helpers\Json::encode($out);
+        }
+    }
+
     public function actionCityList()
     {
         if (Yii::$app->request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             $model = City::find()->SearchCityList();
-            echo \yii\helpers\Json::encode($model);
+            $out['results'] = array_values($model);
+            return $out;
         }
     }
 
@@ -941,7 +966,6 @@ class DefaultController extends BaseController
                           ->andWhere(['com_id' => 1642497]);
             }])
             ->one();
-        var_dump($model);exit;
     }
 
 }

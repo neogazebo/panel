@@ -59,7 +59,7 @@ class Company extends EbizuActiveRecord
             [['com_par_id', 'com_email'], 'safe', 'on' => 'snapEarnUpdate'],
             [['com_email'], 'unique'],
             [['com_name'], 'required', 'on' => ['new-hq','update-hq'], 'message' => 'HQ Name is required'],
-            [['com_name','com_subcategory_id'], 'required'],
+            [['com_name','com_subcategory_id','com_currency'], 'required'],
             [['com_email'], 'email'],
             [['com_email'], 'required', 'except' => ['new-hq','update-hq']],
             [['com_business_name'], 'required', 'on' => 'signup'],
@@ -67,7 +67,7 @@ class Company extends EbizuActiveRecord
             ['com_status', 'required', 'on' => 'change_status'],
             [['com_photo', 'com_banner_photo'], 'validateGif'],
             [['com_joined', 'com_joined_datetime', 'com_joined_by'], 'required', 'on' => 'joined'],
-            [['com_timezone', 'com_mac_id','com_in_mall'], 'integer'],
+            [['com_timezone', 'com_mac_id','com_in_mall','com_create_from'], 'integer'],
             [[
                 'com_name',
                 'com_business_name',
@@ -167,7 +167,17 @@ class Company extends EbizuActiveRecord
             }, 'whenClient' => "function (attribute, value) {
                 return $('#company-com_in_mall').val() == 1;
             }"],
+            [['com_city'], 'required', 'when' => function($model) {
+                return $this ->com_in_mall == 0;
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#company-com_in_mall').val() == 0;
+            }"],
         ];
+    }
+
+    public function checkCity($data)
+    {
+        ;
     }
 
     public function validateGif($data)
