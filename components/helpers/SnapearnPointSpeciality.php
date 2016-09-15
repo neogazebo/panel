@@ -19,104 +19,126 @@ class SnapearnPointSpeciality
 
 	public function getActivePoint($conditions = null)
 	{
+		// get snapearn config detail
 		$config = [];
-		// get snapearn detail
 		$snap = SnapEarn::find()
 		->where('sna_id = :sna',[
 			':sna' => $conditions
 			])->asArray()->one();
-		
 		$company = $this->getCompanyConfig($snap['sna_com_id']);
-
-		$account = Account::find()
-		->where('acc_id = :acc',[
-			':acc' => $snap['sna_acc_id']
-			])->asArray()->one();
-		// $from_account['acc_country'] = $this->getCompany($account['acc_cty_id']);
-
-		// if ($from_company['com_country'] != $from_account['acc_country']) {
-		// 	$not_same['reason'] = "Country of the user and the merchant does not match !!";
-		// 	$not_same['user_country'] = $this->getCompany($from_account['acc_country']);
-		// }
-		// $speciality = $this->getSpeciality($from_company['com_type'],$from_company['com_country']);
-		
-		// if ($com_speciality['promo']) {
-		// 	return $com_speciality['promo']['spt_promo_point'];
-		// }
-		// return $com_speciality['com_spt_multiple_point'];
 	}
 
 
 	protected function getCompanyConfig($id)
 	{
 		// get company detail
-		$company_conf = [];
-		$company_conf['com_type'] = NULL;
-		$company_conf['com_country'] = NULL;
-
+		$config = [];
 		$company = Company::find()
 		->where('com_id = :com',[
 				':com' => $id
 			])->asArray()->one();
+		$type = $company['com_speciality'];
+		$country = $this->getCompanyByCode('cty_currency_name_iso3',$company['com_currency']);
+		$country_id = $country['cty_id'];
+		if(!empty($country_id)){
+			$data = $this->getSpecialityConfig($type,$country_id);
+		}else{
+			$data = $this->getSpecialityByType($type);
+		}
+		return $data;
+	}
 
-		// get company speciality type
-		$company_conf['com_type'] = $this->getCompanyType($company['com_speciality']);
-		// get com_country using com_currecny
-		$company_conf['com_country']  = $this->getCompanyCode($company['com_currency']);
+	public function getType($type)
+	{
+		$model = CompanyType::find()
+		->where('com_type_id = :type',[
+				':type' => $type
+			])->asArray()->one();
+		return $model;
+	}
 
-		// if company country empty using com_currency do this
-		if (empty($company_conf['com_country'])) {
-			if (!empty($company['com_country_id'])) {
-				$master_country = MasterCountry::find()
-					->where('cny_id = :cny_id',[
-						':cny_id' => $company['com_country_id']
-					])->asArray()->one();
-				// get com country using country short code 2 on table copuntry
-				$company_conf['com_country'] = $this->getCompany($master_country['cny_shortcode2']);
-			}
+	public function getSpecialityByType($type)
+	{	
+		$config = [];
+		$model = CompanyType::find()
+		->select('com_type_multiple_point,com_type_max_point')
+		->where('com_type_id = :id',[':id' => $type])->asArray()->one();
+
+		$config['point'] = $model['com_type_multiple_point'];
+		$config['max_point'] = $model['com_type_max_point'];
+		return $config;
+	}
+
+	public function getSpecialityConfig($type = NULL, $cty = NULL)
+	
+		$data = CompanySpeciality::find()
+		->with('type','country','promo')
+		->where('com_spt_type_id = :type',[
+				':type' => $type
+			])
+		->andWhere('com_spt_cty_id = :cty',[
+				':cty' => $cty
+			])->asArray()->all();
+		$model = $this->getFinalConfig($data);
+		return $model;
+	}
+
+	public function getFinalConfig($params)
+	{
+		$model = $params;
+		$config = [];
+
+		$config['point'] = NULL;
+		$config['max_point'] = NULL;
+		$config['day_promo'] = NULL;
+		$config['start'] = NULL;
+		$config['end'] = NULL;
+
+		if ($model[0]['promo']) {
+
+			if($model[0]['promo']['spt_promo_multiple_point'])
+				$config['point'] = $model[0]['promo']['spt_promo_multiple_point'];
+			if($model[0]['promo']['spt_promo_max_point'])
+				$config['max_point'] = $model[0]['promo']['spt_promo_max_point'];
+			if($model[0]['promo']['spt_promo_day_promo'])
+				$config['day_promo'] = $model[0]['promo']['spt_promo_day_promo'];
+
+			$config['start'] = $model[0]['promo']['spt_promo_start_date'];
+			$config['end'] = $model[0]['promo']['spt_promo_end_date'];
 		}
 
-		return $company_conf;
+		if (!$config['point'] && ($model[0]['com_spt_multiple_point']))
+			$config['point'] = $model[0]['com_spt_multiple_point'];
+
+		if(!$config['max_point'] && ($model[0]['com_spt_max_point']))
+			$config['max_point'] = $model[0]['com_spt_max_point'];
+
+		if (!$config['point'] && ($model[0]['type']['com_type_multiple_point']))
+			$config['point'] = $model[0]['type']['com_type_multiple_point'];
+
+		if(!$config['max_point'] && ($model[0]['type']['com_type_max_point']))
+			$config['max_point'] = $model[0]['type']['com_type_max_point'];
+
+		return $config;
 	}
 
-	public function getSpeciality($type, $cty)
+	public function getCompanyByCode($findIt = null, $params)
 	{
-		$com_speciality = CompanySpeciality::find()
-			->with('promo','type','country')
-			->where('com_spt_type_id = :com_type AND com_spt_cty_id = :cty_id',[ 
-				':com_type' => $type,
-				':cty_id' => $cty
-			])->asArray()->all();
-		return $com_speciality;
-	}
-
-	public function getCompanyType($params)
-	{
-		// get company type id
-		$type = CompanyType::find()
-		->where('com_type_id = :com_type',[
-				':com_type' => $params
-			])->asArray()->one();
-		return $type;
-	}
-
-	public function getCompanyCode($params)
-	{
-		// get country id using country short code 3
-		$country = Country::find()
-		->where('cty_currency_name_iso3 = :code',[
+		$model = Country::find()
+		->select('cty_id')
+		->where($findIt.' = :code',[
 				':code' => $params
 			])->asArray()->one();
-		return $country;
+		return $model;
 	}
 
-	public function getCompany($params)
+	public function getCompanyById($findIt = null, $params)
 	{
-		// get country id using country short code 2
-		$country = Country::find()
-		->where('cty_short_code = :acc_cty_id',[
-				':acc_cty_id' => $params
+		$model = MasterCountry::find()
+		->select('cny_shortcode2')
+		->where($findIt.' = :code',[
+				':code' => $params
 			])->asArray()->one();
-		return $country;
+		return $model;
 	}
 }

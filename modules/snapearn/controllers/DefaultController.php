@@ -3,37 +3,38 @@
 namespace app\modules\snapearn\controllers;
 
 use Yii;
-use yii\data\ActiveDataProvider;
-use yii\web\NotFoundHttpException;
-use yii\helpers\Url;
-use linslin\yii2\curl;
-use app\controllers\BaseController;
-use app\components\helpers\Utc;
 use app\components\helpers\General;
+use app\components\helpers\SnapearnPointSpeciality;
+use app\components\helpers\Utc;
+use app\controllers\BaseController;
 use app\models\Account;
-use app\models\City;
-use app\models\Mall;
-use app\models\MallMerchant;
-use app\models\SnapEarn;
-use app\models\SnapEarnRule;
-use app\models\SnapEarnRemark;
-use app\models\Company;
 use app\models\Activity;
-use app\models\LoyaltyPointHistory;
-use app\models\MerchantUser;
+use app\models\AuditReport;
+use app\models\City;
+use app\models\Company;
 use app\models\CompanySuggestion;
-use app\models\SnapEarnPointDetail;
 use app\models\FeatureSubscription;
 use app\models\FeatureSubscriptionCompany;
-use app\models\AuditReport;
+use app\models\LoyaltyPointHistory;
+use app\models\Mall;
+use app\models\MallMerchant;
+use app\models\MerchantUser;
 use app\models\Module;
 use app\models\ModuleInstalled;
-use app\models\SystemMessage;
-use app\models\WorkingTime;
-use app\models\User;
+use app\models\SnapEarn;
+use app\models\SnapEarnPointDetail;
+use app\models\SnapEarnRemark;
+use app\models\SnapEarnRule;
 use app\models\SnapearnPoint;
-use yii\web\HttpException;
+use app\models\SystemMessage;
+use app\models\User;
+use app\models\WorkingTime;
+use linslin\yii2\curl;
+use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\ForbiddenHttpException;
+use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
 
 /**
  * Default controller for the `snapearn` module
@@ -317,7 +318,8 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
-
+        // $point_config = new SnapearnPointSpeciality;
+        // $point_config->getActivePoint($id);
         
         $this->checkSession($id);
         $model = $this->findModel($id);
