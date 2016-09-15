@@ -317,6 +317,8 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
+
+        
         $this->checkSession($id);
         $model = $this->findModel($id);
         if (empty($model->member)) {

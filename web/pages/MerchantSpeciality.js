@@ -70,6 +70,7 @@ function save(op_url, form_data, modal_instance)
 
 function op_confirm(com_speciality, children)
 {
+    console.log(children);
     $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -279,15 +280,10 @@ $(document).ready(function() {
 
     $('#add-merchant-child').submit(function(e) {
         e.preventDefault();
-        // var a = $('#search_merchant_to').val();
-        // // console.log(a);
-        // console.log(JSON.stringify(a));
-        // // console.log(a.length);
         var op_url = '/speciality/default/set-speciality',
             form_data = new FormData(this);
-
             children = JSON.stringify($('#search_merchant_to').val());
-            spt_id = $('.com_speciality').val();
+            com_speciality = $('.com_speciality').val();
 
         $.ajax({
             type: 'POST',
@@ -295,10 +291,8 @@ $(document).ready(function() {
             url: op_url,
             data: {
                 children : children,
-                spt_id : spt_id
+                com_speciality : com_speciality
             },
-            // processData: false,
-            // contentType: 'json',
             beforeSend: function() {
                 $('.box').waitMe({
                     effect : 'stretch',
@@ -348,8 +342,6 @@ $(document).ready(function() {
                         }, 
                         function(isConfirm) {   
                             if(isConfirm) {
-                                var com_speciality = $('.com_speciality').val();
-                                var children = $('#search_merchant_to').val();
                                 op_confirm(com_speciality, children);
                             } else {
                                 window.location.reload();

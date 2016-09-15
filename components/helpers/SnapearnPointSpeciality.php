@@ -27,7 +27,6 @@ class SnapearnPointSpeciality
 			])->asArray()->one();
 		
 		$company = $this->getCompanyConfig($snap['sna_com_id']);
-		// $from_company = $from_company['com_country']['cty_id'];
 
 		$account = Account::find()
 		->where('acc_id = :acc',[

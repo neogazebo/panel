@@ -172,9 +172,8 @@ class CompanyQuery extends \yii\db\ActiveQuery
             AND com_hq_id = 0 
             AND com_status != 2 
             AND com_is_parent = 0
-            AND com_speciality <> :spt
-            AND com_currency = :cty
-        ',[':spt' => $spt, ':cty' => $cty]);
+            AND com_speciality <> "'.$spt.'"
+            AND com_currency = "'.$cty.'"');
         
         $this->andWhere('tbl_company_category.com_category_type = :cat_id',[':cat_id' => 1]);
 
@@ -213,16 +212,17 @@ class CompanyQuery extends \yii\db\ActiveQuery
         }
     }
 
-    public function saveMerchantSpeciality($speciality_id, $company)
+    public function changeSpecialityMerchant($new_speciality_id,$changes)
     {
-        foreach($company as $child) {
-            $company = Company::findOne($child);
-            $company->com_speciality = $speciality_id;
-            $company->save(false);
+        var_dump($new_speciality_id);exit;
+        foreach($changes as $com_id) {
+            $company = Company::findOne($com_id);
+            $company->com_speciality = $new_speciality_id;
+            var_dump($company->save(false));
 
             $activities = [
                 'Company',
-                'Company '.$company->com_name.' has been set to '.$speciality_id,
+                'Company '.$company->com_name.' has been set to '.$new_speciality_id,
                 Company::className(),
                 $company->com_id
             ];
@@ -249,7 +249,7 @@ class CompanyQuery extends \yii\db\ActiveQuery
         $result = [];
         $special = CompanySpeciality::find()->with('type','country')->where('com_spt_id = :id',[
             ':id' => $speciality_id])->one();
-        // $children = $this->getMerchantSpecialityGroup($speciality_id,$cty_id)->all();
+
         $children = Company::find()
             ->select('com_id')
             ->where('com_speciality = :type_id AND com_currency = :type_cty',[
