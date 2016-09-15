@@ -80,14 +80,13 @@ class DefaultController extends Controller
         $active_group = Company::find()
             ->select('com_id,com_name,com_country_id,com_currency,com_speciality')
             ->where('com_speciality = :type_id AND com_currency = :type_cty',[
-                ':type_id' => $type->com_spt_id,
+                ':type_id' => $type->type->com_type_id,
                 ':type_cty' => $type->country->cty_currency_name_iso3
             ])
             ->andWhere('com_status = :status',[
                 ':status' => 1
             ])
             ->asArray()->all();
-
         return $this->render('group',[
                 'active_group' => $active_group,
                 'spt_id' => $id,
@@ -104,8 +103,8 @@ class DefaultController extends Controller
 
     public function actionSetSpeciality()
     {               
-        var_dump(json_decode(Yii::$app->request->post('children')));exit;
-        var_dump(count(Yii::$app->request->post('children')));exit;
+        // $test = Yii::$app->request->post('children');
+        // var_dump(json_decode($test));exit;
         $processor = new MerchantSetSpeciality();
         return $processor->process();
     }

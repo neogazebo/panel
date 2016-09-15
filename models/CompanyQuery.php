@@ -244,17 +244,17 @@ class CompanyQuery extends \yii\db\ActiveQuery
         return $result;
     }
 
-    public function getGroupMerchantSpeciality($speciality_id,$cty_id)
+    public function getGroupMerchantSpeciality($speciality_id)
     {
         $result = [];
-        $type = CompanySpeciality::find()->with('type','country')->where('com_spt_id = :id',[
+        $special = CompanySpeciality::find()->with('type','country')->where('com_spt_id = :id',[
             ':id' => $speciality_id])->one();
         // $children = $this->getMerchantSpecialityGroup($speciality_id,$cty_id)->all();
         $children = Company::find()
-            ->select('com_id,com_name,com_country_id,com_currency,com_speciality')
+            ->select('com_id')
             ->where('com_speciality = :type_id AND com_currency = :type_cty',[
-                ':type_id' => $type->com_spt_id,
-                ':type_cty' => $type->country->cty_currency_name_iso3
+                ':type_id' => $special->type->com_type_id,
+                ':type_cty' => $special->country->cty_currency_name_iso3
             ])
             ->andWhere('com_status = :status',[
                 ':status' => 1

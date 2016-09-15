@@ -27,7 +27,7 @@ $this->registerJsFile(Yii::$app->homeUrl . 'pages/MerchantSpeciality.js', ['depe
                             <h2><?= $this->title ?></h2>
 
                             <input type="hidden" class="com_speciality" name="com_speciality" value="<?= $spt_id ?>">
-                            <select name="children[]" id="search_merchant_to" class="form-control" size="8" multiple="multiple">
+                            <select name="children[]" disabled="" id="search_merchant_to" class="form-control" size="8" multiple="multiple">
                                 <?php foreach($active_group as $active): ?>
                                     <option value="<?= $active['com_id'] ?>"><?= $active['com_name'] ?></option>
                                 <?php endforeach; ?>

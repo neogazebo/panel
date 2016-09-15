@@ -279,20 +279,26 @@ $(document).ready(function() {
 
     $('#add-merchant-child').submit(function(e) {
         e.preventDefault();
-        var a = $('#search_merchant_to').val();
-        // console.log(a);
-        console.log(JSON.stringify(a));
-        // console.log(a.length);
+        // var a = $('#search_merchant_to').val();
+        // // console.log(a);
+        // console.log(JSON.stringify(a));
+        // // console.log(a.length);
         var op_url = '/speciality/default/set-speciality',
             form_data = new FormData(this);
+
+            children = JSON.stringify($('#search_merchant_to').val());
+            spt_id = $('.com_speciality').val();
 
         $.ajax({
             type: 'POST',
             dataType: 'json',
             url: op_url,
-            data: { 'children': JSON.stringify(a)},
-            processData: false,
-            contentType: false,
+            data: {
+                children : children,
+                spt_id : spt_id
+            },
+            // processData: false,
+            // contentType: 'json',
             beforeSend: function() {
                 $('.box').waitMe({
                     effect : 'stretch',
