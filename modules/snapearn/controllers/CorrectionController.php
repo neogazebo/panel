@@ -109,6 +109,7 @@ class CorrectionController extends BaseController
 
                 $model->sna_review_date = Utc::getNow();
                 $model->sna_review_by = Yii::$app->user->id;
+                $model->sna_company_tagging = 1;
 
 				// start process rollback
                 // configuration to get real point user before reviews

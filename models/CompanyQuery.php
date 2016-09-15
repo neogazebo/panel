@@ -135,9 +135,11 @@ class CompanyQuery extends \yii\db\ActiveQuery
         $this->select('com_id, com_name');
         $this->leftJoin('tbl_company_category', 'tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
 
+        /*
         if (!in_array('@', $keyword)) {
             $parent_is_first = true;
         }
+        */
 
         foreach ($keyword as $key) {
             $this->andWhere('com_name LIKE "%' . $key . '%"');
@@ -147,17 +149,21 @@ class CompanyQuery extends \yii\db\ActiveQuery
             tbl_company_category.com_category_type = :type 
             AND com_status != :status 
             AND com_hq_id = :hq
+            AND com_is_parent = :is_parent
         ', [
             ':type' => 1,
             ':status' => 2,
-            ':hq' => 0
+            ':hq' => 0,
+            ':is_parent' => 0
         ]);
 
         $order = 'com_name ASC';
 
+        /*
         if ($parent_is_first) {
             $order = new Expression('FIELD (com_is_parent, 1) DESC, com_name ASC');
         }
+        */
         
         $this->orderBy($order);
         return $this;

@@ -169,6 +169,16 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                 <?php endif; ?>  
 
                                 <div class="form-group">
+                                    <label>Tagging</label>
+                                    <select name="sna_company_tagging" id="" class="form-control select2" style="width: 100%">
+                                        <option value="" <?= (!empty($_GET['sna_company_tagging']) == '' || empty($_GET['sna_company_tagging'])) ? 'selected' : '' ?>>All</option>
+                                        <option value="Ebizu" <?= (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] > 0) ? 'selected' : '' ?>>Ebizu</option>
+                                        <option value="Manis" <?= (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] > 0) ? 'selected' : '' ?>>User</option>
+                                        <option value="Untagged" <?= (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] == 0) ? 'selected' : '' ?>>Untagged</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
                                     <label>&nbsp;</label><br>
                                     <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
                                 </div>
@@ -265,6 +275,18 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                         if (!empty($data->review)) {
                                             return $data->review->username;
                                         } 
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'sna_company_tagging',
+                                    'format' => 'raw',
+                                    'value' => function($data) {
+                                        if ($data->sna_company_tagging > 0 && $data->sna_com_id > 0)
+                                            return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/ebz_logo.png', ['height' => '16']) . '</center>';
+                                        elseif ($data->sna_company_tagging == 0 && $data->sna_com_id == 0)
+                                            return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/manis.png', ['height' => '16']) . '</center>';
+                                        else
+                                            return '<center><i class="fa fa-tags"></i></center>';
                                     }
                                 ],
                                 [

@@ -385,6 +385,7 @@ class DefaultController extends BaseController
 
                 $model->sna_review_date = Utc::getNow();
                 $model->sna_review_by = Yii::$app->user->id;
+                $model->sna_company_tagging = 1;
 
                 // limited transaction point per-user per-merchant per-day
                 if ($model->sna_transaction_time != 0) {
