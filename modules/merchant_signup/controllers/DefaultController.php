@@ -113,7 +113,7 @@ class DefaultController extends BaseController
                         4 = merchant - signup
                         ]
                     */
-                    $model_company->com_create_from = 4;
+                    $model_company->com_create_from = intval(4);
                     $model_company->com_snapearn_checkin = 1;
                     $model_company->com_registered_to = 'EBC';
                     $mall_id = Yii::$app->request->post('mall_id');
