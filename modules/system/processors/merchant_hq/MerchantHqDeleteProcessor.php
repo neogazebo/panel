@@ -11,9 +11,7 @@ class MerchantHqDeleteProcessor extends BaseProcessor
     public function process()
     {
         $transaction = Yii::$app->db->beginTransaction();
-
         try {
-
             $id = Yii::$app->request->post('com_id');
             $model = Company::find()->where(['com_id' => $id])->one();
             $merchant_children = Company::find()->getChildMerchants($id)->asArray()->all();
@@ -23,18 +21,18 @@ class MerchantHqDeleteProcessor extends BaseProcessor
 
             $activities = [
                 $title,
-                $title . ' ' . $model->com_email . ' on ' . $model->com_name,
+                $title . ', ' . $model->com_email . ' on ' . $model->com_name,
                 Company::className(),
                 $model->com_id
             ];
             
-            if($merchant_children) {
+            if ($merchant_children) {
                 throw new \Exception("You could not delete HQ that have children. Please empty the children first", self::SYSTEM_ERROR_CODE);
             }
 
             $model->setScenario($scenario);
 
-            if($model->delete()) {
+            if ($model->delete()) {
                 $this->saveLog($activities);
                 $transaction->commit();
                 return $this->json_helper->jsonOutput(0, 'success', null);

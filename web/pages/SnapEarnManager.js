@@ -3,11 +3,9 @@ $(document).ready(function() {
 	var merchant_timer;
     var merchant_timer_request;
 
-	$("#com_name_search").autocomplete( {
+	$("#com_name_search").autocomplete({
 		source: function(request,response) {
-
-			if (merchant_timer_request) 
-	        { 
+			if (merchant_timer_request) { 
 	            merchant_timer_request.abort();
 	        }
 
@@ -17,7 +15,7 @@ $(document).ready(function() {
 	        var $this = $(this);
 			var $element = $(this.element);
 			var $element_val = $element.val();
-			var previous_request = $element.data( "jqXHR" );
+			var previous_request = $element.data("jqXHR");
 
 	        if($element_val.length >= 2) {
 	            merchant_timer = setTimeout(function() {
@@ -51,14 +49,12 @@ $(document).ready(function() {
 			$(this).val(ui.item.label);
 			$('#com_name').val(ui.item.value);
 
-			if(ui.item.value == 'Merchant Not Found!')
-			{
+			if(ui.item.value == 'Merchant Not Found!') {
 				$('#com_name').val('');
 			}
 		},
 		change: function(event, ui) {
-			if($(this).val() == '')
-			{
+			if($(this).val() == '') {
 				$('#com_name').val('');
 			}
 		}
@@ -67,13 +63,10 @@ $(document).ready(function() {
 	var email_timer;
     var email_search_request;
 
-	$("#member_email_search").autocomplete( {
+	$("#member_email_search").autocomplete({
 		source: function(request,response) {
-
-			if (email_search_request) 
-	        { 
+			if (email_search_request)
 	            email_search_request.abort();
-	        }
 
 	        clearTimeout(email_timer);
 
@@ -81,7 +74,7 @@ $(document).ready(function() {
 	        var $this = $(this);
 			var $element = $(this.element);
 			var $element_val = $element.val();
-			var previous_request = $element.data( "jqXHR" );
+			var previous_request = $element.data("jqXHR");
 
 	        if($element_val.length >= 2) {
 	            email_timer = setTimeout(function() {
@@ -95,7 +88,7 @@ $(document).ready(function() {
 						beforeSend: function() {
 		                    $('#member_email_search').addClass('search-process');
 		                },
-		                complete: function(){
+		                complete: function() {
 		                    $('#member_email_search').removeClass('search-process');
 		                },
 	                    success: function(data) {
