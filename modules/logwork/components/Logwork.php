@@ -32,7 +32,7 @@
                         'Name' => 'point_working_hours',
                         'Type' => 'page_components',
                         'Sub_Type' => 'form_button',
-                        'Description' => 'Working Hours Point Button (Index Page Page)',
+                        'Description' => 'Working Hours Point Button (Index Page)',
                         'Origin' => 'Index Page',
                         'Permission' => AuthItem::find()->getPermissions($this->name, "Logwork[Page_Components][point_working_hours]")
                     ],

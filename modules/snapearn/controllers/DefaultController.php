@@ -94,6 +94,14 @@ class DefaultController extends BaseController
 
     public function actionNewMerchant($id, $to = null)
     {
+        if(Yii::$app->permission_helper->checkRbac())
+        {
+            if (!Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Pages][new_merchant]'))
+            {
+                throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
+            }
+        }
+
         // remove session
         $this->removeSession('ses_com_'.$id);
         

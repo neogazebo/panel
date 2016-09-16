@@ -31,7 +31,7 @@
                         'Name' => 'block_user',
                         'Type' => 'page_components',
                         'Sub_Type' => 'form_button',
-                        'Description' => 'Block User Button',
+                        'Description' => 'Block User Button (Detail Page)',
                         'Origin' => 'Detail Page',
                         'Permission' => AuthItem::find()->getPermissions($this->name, "Account[Page_Components][block_user]")
                     ],
@@ -39,7 +39,7 @@
                         'Name' => 'change_country',
                         'Type' => 'page_components',
                         'Sub_Type' => 'form_button',
-                        'Description' => 'Change Country Button',
+                        'Description' => 'Change Country Button (Detail Page)',
                         'Origin' => 'Detail Page',
                         'Permission' => AuthItem::find()->getPermissions($this->name, "Account[Page_Components][change_country]")
                     ],
@@ -47,7 +47,7 @@
                         'Name' => 'point_correction',
                         'Type' => 'page_components',
                         'Sub_Type' => 'form_button',
-                        'Description' => 'Point Correction Button',
+                        'Description' => 'Point Correction Button (Detail Page)',
                         'Origin' => 'Detail Page',
                         'Permission' => AuthItem::find()->getPermissions($this->name, "Account[Page_Components][point_correction]")
                     ],

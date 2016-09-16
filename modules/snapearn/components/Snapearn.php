@@ -57,6 +57,12 @@
                         'Type' => 'page',
                         'Description' => 'Correction page',
                         'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Pages][correction]")
+                    ],
+                    [
+                        'Name' => 'new_merchant',
+                        'Type' => 'page',
+                        'Description' => 'New Merchant page',
+                        'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Pages][new_merchant]")
                     ]
                 ],
 
@@ -127,6 +133,14 @@
                         'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Page_Components][merchant_field]")
                     ],
                     [
+                        'Name' => 'tagging',
+                        'Type' => 'page_components',
+                        'Sub_Type' => 'form_field',
+                        'Description' => 'Search Form (List Page)',
+                        'Origin' => 'List Page',
+                        'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Page_Components][tagging]")
+                    ],
+                    [
                         'Name' => 'submit_button',
                         'Type' => 'page_components',
                         'Sub_Type' => 'form_button',
@@ -149,7 +163,7 @@
                         'Name' => 'merchant',
                         'Type' => 'page_components',
                         'Sub_Type' => 'table_column',
-                        'Description' => 'Test',
+                        'Description' => 'Snapearn Table (List Page)',
                         'Origin' => 'List Page',
                         'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Page_Components][merchant]")
                     ],
@@ -157,7 +171,7 @@
                         'Name' => 'member',
                         'Type' => 'page_components',
                         'Sub_Type' => 'table_column',
-                        'Description' => 'Test',
+                        'Description' => 'Snapearn Table (List Page)',
                         'Origin' => 'List Page',
                         'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Page_Components][member]")
                     ],
@@ -165,7 +179,7 @@
                         'Name' => 'actions',
                         'Type' => 'page_components',
                         'Sub_Type' => 'table_column',
-                        'Description' => 'Test',
+                        'Description' => 'Snapearn Table (List Page)',
                         'Origin' => 'List Page',
                         'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Page_Components][actions]")
                     ],

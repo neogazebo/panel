@@ -101,16 +101,9 @@ $model->sna_push = true;
                                 <a href="#"><b>Merchant Point</b>
 
                                     <?php if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][add_point_button_correction]')) : ?>
-                                        <!--start-->
                                         <?php if ($model->merchant->com_point < 1000) :?>
-                                            <!--this validation if add point to merchant is only specific user-->
-                                            <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
                                             <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id.'&type=2', 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
-                                            <?php // else: ?>
-                                            <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
-                                            <?php // endif; ?>
                                         <?php endif; ?>
-                                        <!--end--> 
                                     <?php endif; ?>
 
                                     <span class="pull-right text-light-blue">
@@ -127,6 +120,12 @@ $model->sna_push = true;
                                 </a>
                             </li>
                         <?php endif; ?>
+
+                        <?php if ($model->sna_company_tagging > 0 && $model->sna_com_id > 0): ?>
+                            <li><a href="#"><b>Tagged by <?= Html::img('@web/themes/AdminLTE/dist/img/ebz_logo.png', ['height' => 16]) ?> </b><span class="pull-right text-light-blue"><?= !empty($model->sna_review_by) ? $model->review->username : '' ?></span></a></li>
+                        <?php elseif ($model->sna_company_tagging == 0 && $model->sna_com_id == 0): ?>
+                            <li><a href="#"><b>Tagged by <?= Html::img('@web/themes/AdminLTE/dist/img/manis.png', ['height' => 16]) ?> </b><span class="pull-right text-light-blue"></span></a></li>
+                        <?php endif ?>
 
                         <li></li>
                     </ul>

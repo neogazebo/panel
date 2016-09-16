@@ -51,4 +51,16 @@
 
             return $view_filename;
         }
+
+        public function checkRbac()
+        {
+            $rbac_config = Yii::$app->permission_helper->getConfig();
+
+            if ($rbac_config['enable'])
+            {
+                return true;
+            }
+
+            return false;
+        }
     }

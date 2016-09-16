@@ -33,21 +33,9 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-    public function checkRbac()
-    {
-        $rbac_config = Yii::$app->permission_helper->getConfig();
-
-        if ($rbac_config['enable'])
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     public function findCustome()
     {
-        if($this->checkRbac())
+        if(Yii::$app->permission_helper->checkRbac())
         {
             return $this->findCostumeWithRbac();
         }
@@ -236,6 +224,27 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             }
         }
         
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][tagging]'))
+        {
+            if (!empty($_GET['sna_company_tagging'])) 
+            {
+                $sna_company_tagging = $_GET['sna_company_tagging'];
+                $tagging = '';
+                switch ($sna_company_tagging) {
+                    case 'Ebizu':
+                        $tagging = 'sna_company_tagging > 0 AND sna_com_id > 0';
+                        break;
+                    case 'Manis':
+                        $tagging = 'sna_company_tagging = 0 AND sna_com_id = 0';
+                        break;
+                    case 'Untagged':
+                        $tagging = 'sna_company_tagging = 0';
+                        break;
+                }
+                $this->andWhere($tagging);
+            }
+        }
+
         if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][merchant_field]'))
         {
             if (!empty($_GET['com_name'])) 

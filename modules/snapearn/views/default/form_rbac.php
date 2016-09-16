@@ -99,18 +99,9 @@ $model->sna_push = true;
                                 <a href="#"><b>Merchant Point</b>
 
                                     <?php if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][add_point_button_update]')) : ?>
-                                        <!--start-->
                                         <?php if ($model->merchant->com_point < 1000) :?>
-
-                                            <!--this validation if add point to merchant is only specific user-->
-                                            <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
                                             <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id, 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
-                                            <?php // else: ?>
-                                            <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
-                                            <?php // endif; ?>
-
                                         <?php endif; ?>
-                                        <!--end--> 
                                     <?php endif; ?>
 
                                     <span class="pull-right text-light-blue">
@@ -121,20 +112,27 @@ $model->sna_push = true;
                         <?php endif; ?>
 
                         <?php if (empty($model->merchant)) : ?>
-                        <li>
-                            <a href="#"><b><?= (empty($model->sna_address)) ? 'Suggestion Location' : 'Location' ?></b>
-                                <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
-                            </a>
-                        </li>
+                            <li>
+                                <a href="#"><b><?= (empty($model->sna_address)) ? 'Suggestion Location' : 'Location' ?></b>
+                                    <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
+                                </a>
+                            </li>
                         <?php endif; ?>
+
+                        <?php if ($model->sna_company_tagging > 0 && $model->sna_com_id > 0): ?>
+                            <li><a href="#"><b>Tagged by <?= Html::img('@web/themes/AdminLTE/dist/img/ebz_logo.png', ['height' => 16]) ?> </b><span class="pull-right text-light-blue"><?= !empty($model->sna_review_by) ? $model->review->username : '' ?></span></a></li>
+                        <?php elseif ($model->sna_company_tagging == 0 && $model->sna_com_id == 0): ?>
+                            <li><a href="#"><b>Tagged by <?= Html::img('@web/themes/AdminLTE/dist/img/manis.png', ['height' => 16]) ?> </b><span class="pull-right text-light-blue"></span></a></li>
+                        <?php endif ?>
 
                         <li></li>
                     </ul>
 
-                    <?= $form->field($model, 'sna_status')->dropDownList($model->status, [
+                    <?= 
+                        $form->field($model, 'sna_status')->dropDownList($model->status, [
                             'class' => 'form-control status', 
                             'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][status_update]') ? false : true
-                        ]) 
+                        ]);
                     ?>
 
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
@@ -143,29 +141,29 @@ $model->sna_push = true;
                         <?php if(Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][transaction_time_update]')): ?>
                             <label>Transaction Time</label>
                             <?=
-                            kartik\widgets\DatePicker::widget([
-                                'name' => 'd1',
-                                'type' => kartik\widgets\DatePicker::TYPE_COMPONENT_PREPEND,
-                                'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: Y-m-d'),
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-MMM-dd'
-                                ]
-                            ]);
+                                kartik\widgets\DatePicker::widget([
+                                    'name' => 'd1',
+                                    'type' => kartik\widgets\DatePicker::TYPE_COMPONENT_PREPEND,
+                                    'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: Y-m-d'),
+                                    'pluginOptions' => [
+                                        'format' => 'yyyy-MMM-dd'
+                                    ]
+                                ]);
                             ?>
                             <?=
-                            kartik\widgets\TimePicker::widget([
-                                'name' => 't1',
-                                'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: H:i:s'),
-                                'pluginOptions' => [
-                                    'showSeconds' => true,
-                                    'showMeridian' => false,
-                                ],
-                                'addonOptions' => [
-                                    'buttonOptions' => [
-                                        'class' => 'btn btn-info'
+                                kartik\widgets\TimePicker::widget([
+                                    'name' => 't1',
+                                    'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: H:i:s'),
+                                    'pluginOptions' => [
+                                        'showSeconds' => true,
+                                        'showMeridian' => false,
+                                    ],
+                                    'addonOptions' => [
+                                        'buttonOptions' => [
+                                            'class' => 'btn btn-info'
+                                        ]
                                     ]
-                                ]
-                            ]);
+                                ]);
                             ?>
                         <?php endif; ?>
 

@@ -296,6 +296,50 @@
                                 <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
                                 <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
 
+                                 <!-- Tagging Dropdown -->
+                                <?php 
+                                    echo app\components\widgets\RbacSelectWidget::widget([
+                                        'label' => 'Tagging',
+                                        'name' => 'sna_company_tagging',
+                                        'class_names' => ['form-control', 'select2'],
+                                        'selects' => [
+                                            [
+                                                'text' => 'All',
+                                                'value' => '',
+                                                'selected' => function() {
+                                                    return (!empty($_GET['sna_company_tagging']) == '' || empty($_GET['sna_company_tagging'])) ? 'selected' : '';
+                                                }
+                                            ],
+                                            [
+                                                'text' => 'Ebizu',
+                                                'value' => 'Ebizu',
+                                                'selected' => function() {
+                                                    return (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] > 0) ? 'selected' : '';
+                                                }
+                                            ],
+                                            [
+                                                'text' => 'User',
+                                                'value' => 'Manis',
+                                                'selected' => function() {
+                                                    return (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] > 0) ? 'selected' : '';
+                                                }
+                                            ],
+                                            [
+                                                'text' => 'Untagged',
+                                                'value' => 'Untagged',
+                                                'selected' => function() {
+                                                    return (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] == 0) ? 'selected' : '';
+                                                }
+                                            ]
+                                        ],
+                                        'permission' => [
+                                            'module' => 'Snapearn',
+                                            'name' => 'Snapearn[Page_Components][tagging]'
+                                        ]
+                                    ]); 
+                                ?>
+                                <!-- /Tagging Dropdown -->
+
                                 <!-- Submit button -->
                                 <?php 
                                     echo app\components\widgets\RbacButtonWidget::widget([
@@ -427,6 +471,18 @@
                                         if (!empty($data->review)) {
                                             return $data->review->username;
                                         } 
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'sna_company_tagging',
+                                    'format' => 'raw',
+                                    'value' => function($data) {
+                                        if ($data->sna_company_tagging > 0 && $data->sna_com_id > 0)
+                                            return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/ebz_logo.png', ['height' => '16']) . '</center>';
+                                        elseif ($data->sna_company_tagging == 0 && $data->sna_com_id == 0)
+                                            return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/manis.png', ['height' => '16']) . '</center>';
+                                        else
+                                            return '<center><i class="fa fa-tags"></i></center>';
                                     }
                                 ],
                                 [
