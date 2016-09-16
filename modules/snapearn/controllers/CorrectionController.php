@@ -71,6 +71,8 @@ class CorrectionController extends BaseController
 
 	public function actionCorrection($id)
 	{
+        $speciality = new SnapearnPointSpeciality;
+
     	$model = $this->findModel($id);
     	$model->scenario = 'correction';
        
@@ -108,6 +110,9 @@ class CorrectionController extends BaseController
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
+                // get promo configuration
+                $point_config = $speciality->getActivePoint($id,$model->sna_transaction_time);
+
                 $model->sna_point = floor($model->sna_receipt_amount);
 
                 $model->sna_review_date = Utc::getNow();
@@ -169,13 +174,23 @@ class CorrectionController extends BaseController
                     }
 
                     // optional point for premium or default merchant
-                    if(!empty($config) && !empty($model->business)) {
-                        if($model->business->com_premium == 1) {
-                            $model->sna_point *= 2;
-                            $limitPoint = $config->ser_premium;
-                        } else {
-                            $limitPoint = $config->ser_point_cap;
-                        }
+                    // if(!empty($config) && !empty($model->business)) {
+                    //     if($model->business->com_premium == 1) {
+                    //         $model->sna_point *= 2;
+                    //         $limitPoint = $config->ser_premium;
+                    //     } else {
+                    //         $limitPoint = $config->ser_point_cap;
+                    //     }
+                    // }
+                   // config
+                    $day = $point_config['day_promo'];
+                    $trans_day = date('l',$model->sna_transaction_time);
+                    if($day == $trans_day){
+                        $model->sna_point *= $point_config['point'];
+                        $limitPoint = $point_config['max_point'];
+                    }else{
+                        $model->sna_point *= $point_config['point'];
+                        $limitPoint = $point_config['max_point'];
                     }
 
                     if ($model->sna_point > $limitPoint) {
@@ -380,32 +395,8 @@ class CorrectionController extends BaseController
     public function actionAjaxSnapearnPoint()
     {
         if (Yii::$app->request->isAjax) {
-            $id = Yii::$app->request->post('id');
-            $amount = Yii::$app->request->post('amount');
-            $com_id = Yii::$app->request->post('com_id');
-            $business = Company::findOne($com_id);
-            $se = $this->findModel($id);
-
-            $config = SnapEarnRule::find()->where(['ser_country' => $se->member->country->cty_currency_name_iso3])->one();
-
-            $point = $amount;
-
-            if ($config->ser_point_provision > 0 ) {
-                $point = (int) ($amount / $config->ser_point_provision);
-            }
-
-            if(!empty($config) && !empty($business)) {
-                if($business->com_premium == 1) {
-                    $point *= 2;
-                    $point_cap = $config->ser_premium;
-                } else {
-                    $point_cap = $config->ser_point_cap;
-                }
-
-                if($point > $point_cap)
-                    return $point_cap;
-            }
-            return $point;
+            $model = SnapEarnRule::find()->getPointSnapEarnRule();
+            return $model;
         }
     }
 

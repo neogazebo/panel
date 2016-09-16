@@ -131,31 +131,42 @@ $model->sna_push = true;
                         <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                         <div class="point-form">
                             <label>Transaction Time</label>
-                            <?=
-                            kartik\widgets\DatePicker::widget([
-                                'name' => 'd1',
-                                'type' => kartik\widgets\DatePicker::TYPE_COMPONENT_PREPEND,
-                                'value' => Yii::$app->formatter->asDatetime($model->sna_transaction_time, 'php: Y-m-d'),
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-MMM-dd'
-                                ]
-                            ]);
-                            ?>
-                            <?=
-                            kartik\widgets\TimePicker::widget([
-                                'name' => 't1',
-                                'value' => Yii::$app->formatter->asDatetime($model->sna_transaction_time, 'php: H:i:s'),
-                                'pluginOptions' => [
-                                    'showSeconds' => true,
-                                    'showMeridian' => false,
-                                ],
-                                'addonOptions' => [
-                                    'buttonOptions' => [
-                                        'class' => 'btn btn-info'
-                                    ]
-                                ]
-                            ]);
-                            ?>
+                            <div class="row form-group">
+                                <div class="col-sm-6" style="padding-right: 0px">
+                                    <?=
+                                    kartik\widgets\DatePicker::widget([
+                                        'name' => 'd1',
+                                        'options' => [
+                                            'class' => 'sna_transaction',
+                                        ],
+                                        'removeButton' => false,
+                                        'type' => kartik\widgets\DatePicker::TYPE_COMPONENT_APPEND,
+                                        'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: Y-m-d'),
+                                        'pluginOptions' => [
+                                            'format' => 'yyyy-mm-dd',
+                                            'endDate' => '+1d',
+                                        ]
+                                    ]);
+                                    ?>
+                                </div>
+                                <div class="col-sm-6" style="padding-left: 0px">
+                                    <?=
+                                    kartik\widgets\TimePicker::widget([
+                                        'name' => 't1',
+                                        'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: H:i:s'),
+                                        'pluginOptions' => [
+                                            'showSeconds' => true,
+                                            'showMeridian' => false,
+                                        ],
+                                        'addonOptions' => [
+                                            'buttonOptions' => [
+                                                'class' => 'btn btn-info'
+                                            ]
+                                        ]
+                                    ]);
+                                    ?>
+                                </div>
+                            </div>
                             <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status'])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.') ?>
                             <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                             <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
@@ -239,6 +250,10 @@ $this->registerCss("
 }
 .point-form { display: none; }
 .reject-form { display: none; }
+.bootstrap-timepicker input {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
 ");
 
 $this->registerCssFile($this->theme->baseUrl . '/plugins/perfect-zoom/jquery.iviewer.css', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
@@ -287,17 +302,23 @@ $this->registerJs("
         }
     }).trigger('change');
 
-    $('#snapearn-sna_receipt_amount').change(function() {
+    $('#snapearn-sna_receipt_amount, .sna_transaction').change(function() {
         pointConvert();
     });
 
     function pointConvert() {
         var amount = Math.floor($('#snapearn-sna_receipt_amount').val());
+            transaction_time = $('.sna_transaction').val();
 // $('#snapearn-sna_point').val(point);
         $.ajax({
             type: 'POST',
             url: baseUrl + 'snapearn/default/ajax-snapearn-point',
-            data: { id: id, com_id: com_id, amount: amount },
+            data: { 
+                id: id, 
+                com_id: com_id, 
+                amount: amount,
+                transaction_time: transaction_time
+             },
             dataType: 'json',
             success: function(result) {
                 $('#snapearn-sna_point').val(result);

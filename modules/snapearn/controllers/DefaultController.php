@@ -318,9 +318,6 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
-        $speciality = new SnapearnPointSpeciality;
-        $point_config = $speciality->getActivePoint($id);
-        var_dump($point_config);exit;
         $this->checkSession($id);
         $model = $this->findModel($id);
         if (empty($model->member)) {
@@ -345,9 +342,6 @@ class DefaultController extends BaseController
 
     public function actionUpdate($id)
     {
-        $speciality = new SnapearnPointSpeciality;
-        $point_config = $speciality->getActivePoint($id);
-
     	$model = $this->findModel($id);
         
         $get_sesssion = $this->getSession('wrk_ses_'.$id);
@@ -382,10 +376,15 @@ class DefaultController extends BaseController
 
         // get post request form
         if ($model->load(Yii::$app->request->post())) {
+            $speciality = new SnapearnPointSpeciality;
+
             $model->sna_transaction_time = $_POST['d1'] . ' ' . $_POST['t1'];
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
+                // get configuration promo
+                $point_config = $speciality->getActivePoint($id,$model->sna_transaction_time);
+
                 $model->sna_point = floor($model->sna_receipt_amount);
 
                 $model->sna_review_date = Utc::getNow();
@@ -415,13 +414,23 @@ class DefaultController extends BaseController
                     }
 
                     // optional point for premium or default merchant
-                    if(!empty($config) && !empty($model->business)) {
-                        if($model->business->com_premium == 1) {
-                            $model->sna_point *= 2;
-                            $limitPoint = $config->ser_premium;
-                        } else {
-                            $limitPoint = $config->ser_point_cap;
-                        }
+                    // if(!empty($config) && !empty($model->business)) {
+                    //     if($model->business->com_premium == 1) {
+                    //         $model->sna_point *= 2;
+                    //         $limitPoint = $config->ser_premium;
+                    //     } else {
+                    //         $limitPoint = $config->ser_point_cap;
+                    //     }
+                    // }
+                    // config
+                    $day = $point_config['day_promo'];
+                    $trans_day = date('l',$model->sna_transaction_time);
+                    if($day == $trans_day){
+                        $model->sna_point *= $point_config['point'];
+                        $limitPoint = $point_config['max_point'];
+                    }else{
+                        $model->sna_point *= $point_config['point'];
+                        $limitPoint = $point_config['max_point'];
                     }
 
                     // get current point merchant
@@ -665,36 +674,8 @@ class DefaultController extends BaseController
     public function actionAjaxSnapearnPoint()
     {
         if (Yii::$app->request->isAjax) {
-            $id = Yii::$app->request->post('id');
-            $amount = Yii::$app->request->post('amount');
-            $com_id = Yii::$app->request->post('com_id');
-            $business = Company::findOne($com_id);
-            $se = $this->findModel($id);
-
-            $config = SnapEarnRule::find()->where(['ser_country' => $se->member->country->cty_currency_name_iso3])->one();
-
-            $point = $amount;
-
-            if ($config->ser_point_provision > 0 ) {
-                $point = (int) ($amount / $config->ser_point_provision);
-            }
-
-            if (!empty($business)) {
-                if(!empty($config)) {
-                    if($business->com_premium == 1) {
-                        $point *= 2;
-                        $point_cap = $config->ser_premium;
-                    } else {
-                        $point_cap = $config->ser_point_cap;
-                    }
-
-                    if($point > $point_cap)
-                        return $point_cap;
-                }
-                return $point;
-            } else {
-                return "empty-b";
-            }
+            $model = SnapEarnRule::find()->getPointSnapEarnRule();
+            return $model;
         }
     }
 

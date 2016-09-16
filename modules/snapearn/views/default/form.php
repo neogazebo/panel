@@ -289,16 +289,22 @@ $this->registerJs("
         }
     }).trigger('change');
 
-    $('#snapearn-sna_receipt_amount').change(function(){
+    $('#snapearn-sna_receipt_amount,.sna_transaction').change(function(){
         pointConvert();
     });
 
     function pointConvert() {
         var amount = Math.floor($('#snapearn-sna_receipt_amount').val());
+            transaction_time = $('.sna_transaction').val();
         $.ajax({
             type: 'POST',
             url: baseUrl + 'snapearn/default/ajax-snapearn-point',
-            data: { id: id, com_id: com_id, amount: amount },
+            data: { 
+                id: id, 
+                com_id: com_id, 
+                amount: amount,
+                transaction_time: transaction_time
+             },
             dataType: 'json',
             success: function(result) {
                 $('#snapearn-sna_point').val(result);

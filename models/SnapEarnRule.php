@@ -62,4 +62,9 @@ class SnapEarnRule extends \yii\db\ActiveRecord
             'ser_by' => 'By',
         ];
     }
+
+    public static function find()
+    {
+        return new SnapEarnRuleQuery(get_called_class());
+    }
 }
