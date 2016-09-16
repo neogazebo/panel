@@ -427,6 +427,26 @@ class DefaultController extends BaseController
                         $model->sna_point = $limitPoint;
                     }
                     $model->sna_sem_id = '';
+
+                    // add user for customer company
+                    // check sna_cus_id
+                    if (empty($model->sna_cus_id)) {
+                        $cus_id = $model->sna_mem_id;
+                        $com_id = $model->sna_com_id;
+                        $customer = Customer::find()->getAreCustomer($cus_id, $com_id);
+                        if (!empty($customer)) {
+                            $model->sna_cus_id = $customer->cus_id;
+                        } else {
+                            $customer = new Customer();
+                            $customer->cus_mem_id = $model->sna_mem_id;
+                            $customer->cus_com_id = $model->sna_com_id;
+                            $customer->cus_datetime = strtotime(date('Y-m-d H:i:s'));
+                            if ($customer->save()) {
+                                $model->sna_cus_id = $customer->cus_id;
+                            }
+                        }
+                    }
+
                     // if rejected action
                 } elseif ($model->sna_status == 2) {
                     $username = $model->member->acc_screen_name;

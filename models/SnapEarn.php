@@ -87,7 +87,9 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_review_date',
                 'sna_review_by',
                 'sna_sem_id',
-                'sna_cat_id'],
+                'sna_cat_id',
+                // 'sna_cus_id'
+                ],
             'integer'],
             [['sna_status'],'globalValidation'],
             [['sna_receipt_amount'], 'number', 'min' => 1, 'when' => function($model) {
@@ -255,6 +257,12 @@ class SnapEarn extends \yii\db\ActiveRecord
     {
         return $this->hasOne(AdminUser::className(), ['id' => 'sna_review_by']);
     }
+
+
+    // public function getCustomer()
+    // {
+    //     return $this->hasOne(CustomerMaster::className(), ['cus_id' => 'sna_cus_id']);
+    // }
 
     /**
      * @inheritdoc
