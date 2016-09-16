@@ -141,4 +141,14 @@ class GroupController extends BaseController
             return $this->redirect(['user-list?id=' . $spg_id]);
         }
     }
+
+    public function actionDelete($id)
+    {
+        $model = SnapearnGroup::findOne($id);
+        if ($model->delete()) {
+            $this->setMessage('save', 'success', 'That group successfully delete!');
+            $this->activities($model->spg_id, 'Delete', $model->spg_name);
+            return $this->redirect(['index']);
+        }
+    }
 }

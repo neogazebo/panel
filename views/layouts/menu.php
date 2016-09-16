@@ -124,6 +124,11 @@ use app\components\filters\AccessFilters;
                     <i class="fa fa-circle-o"></i> Role
                 </a>
             </li>
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('rbac/permission') ?>">
+                    <i class="fa fa-circle-o"></i> Module Permissions
+                </a>
+            </li>
         </ul>
     </li>
     <?php endif; ?>

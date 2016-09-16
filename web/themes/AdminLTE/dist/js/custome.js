@@ -48,7 +48,7 @@ $(function() {
 			  closeOnConfirm: false,
 			  showLoaderOnConfirm: true,
 		}, function() {
-			$.get(Url,function(results) {
+			$.get(Url, function(results) {
 				// data = JSON.parse(results);
 				// if (data.status = 'success') {
 				// 	dom.load(reload);
@@ -60,10 +60,11 @@ $(function() {
 		});
 	});
 
-	$('.deleteBtn').on('click',function() {
-		var Url = $(this).attr('value');
-			name = Url.match(/\w+$/)[0];
+	$('.deleteBtn').on('click', function() {
+		var Url = $(this).attr('value'),
+			name = Url.match(/\w+$/)[0],
 			element = $(this).closest('tr');
+
 		swal({
 			title: "Delete " + name + " role",
 			text: "Are you sure want to delete this?",
@@ -73,22 +74,26 @@ $(function() {
 			closeOnConfirm: false,
 			showLoaderOnConfirm: true,
 		}, function() {
-			$.get(Url, function(results) {
-				// data = JSON.parse(results);
-				// if (data.status = 'success') {
-					// element.remove();
-					// location.reload();
-					// swal.close();
-					// message = "Delete " + name + " role successed!";
-					// customAlert(data.status,message);
-					// element.remove();
-				// } else {
-					// swal.close();
-					// element.remove();
-					// message = "Delete " + name + " role failed!";
-					// customAlert('error', message);
-				// }
-			})
+			$.get(Url, function(results) {})
+		});
+	});
+
+	$('.deleteThis').on('click', function() {
+		var Url = $(this).attr('value'),
+			name = Url.match(/\w+$/)[0],
+			element = $(this).closest('tr'),
+			title = $(this).attr('data-title');
+
+		swal({
+			title: title,
+			text: "Are you sure want to delete this?",
+			type: "info",
+			showCancelButton: true,
+			closeOnCancel: true,
+			closeOnConfirm: false,
+			showLoaderOnConfirm: true,
+		}, function() {
+			$.get(Url, function(results) {})
 		});
 	});
 

@@ -23,55 +23,60 @@ $this->title = 'Snap & Earn Group';
                 <div class="box-body">
                     <div class="table-responsive">
                         <?=
-                            GridView::widget([
-                                'id' => 'snapearn-point',
-                                'layout' => '{items} {summary} {pager}',
-                                'dataProvider' => $dataProvider,
-                                'columns' => [
-                                    [
-                                    	'attribute' => 'spg_name',
-                                    	'value' => function($data) {
-                                			return $data->spg_name;
-                                    	}
-                                    ],
-                                    [
-                                        'attribute' => 'spg_created_date',
-                                        'format' => 'html',
-                                        'value' => function($data) {
-                                            return Yii::$app->formatter->asDatetime($data->spg_created_date, "php:d M Y");
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'user.username',
-                                        'header' => 'User Created'
-                                    ],
-                                    [
-                                        'attribute' => 'spg_updated_date',
-                                        'format' => 'html',
-                                        'value' => function($data) {
-                                            return Yii::$app->formatter->asDatetime($data->spg_updated_date, "php:d M Y");
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'userUpdate.username',
-                                        'header' => 'User Updated'
-                                    ],
-                                    [
-                                        'class' => 'yii\grid\ActionColumn',
-                                        'template' => '<span class="pull-right actionColumn">{list} {update}</span>',
-                                        'buttons' => [
-                                            'list' => function($url, $model) {
-                                                return Html::a('<i class="fa fa-group"></i>', ['user-list', 'id' => $model->spg_id]);
-                                            },
-                                            'update' => function($url, $model) {
-                                                return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?id='.$model->spg_id]), 'class' => 'modalButton']);
-                                            },
-                                        ]
-                                    ]
+                        GridView::widget([
+                            'id' => 'snapearn-point',
+                            'layout' => '{items} {summary} {pager}',
+                            'dataProvider' => $dataProvider,
+                            'columns' => [
+                                [
+                                	'attribute' => 'spg_name',
+                                	'value' => function($data) {
+                            			return $data->spg_name;
+                                	}
                                 ],
-                                'tableOptions' => ['class' => 'table table-striped table-hover']
-                            ]);
-                            ?>  
+                                [
+                                    'attribute' => 'spg_created_date',
+                                    'format' => 'html',
+                                    'value' => function($data) {
+                                        return Yii::$app->formatter->asDatetime($data->spg_created_date, "php:d M Y");
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'user.username',
+                                    'header' => 'User Created'
+                                ],
+                                [
+                                    'attribute' => 'spg_updated_date',
+                                    'format' => 'html',
+                                    'value' => function($data) {
+                                        return Yii::$app->formatter->asDatetime($data->spg_updated_date, "php:d M Y");
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'userUpdate.username',
+                                    'header' => 'User Updated'
+                                ],
+                                [
+                                    'class' => 'yii\grid\ActionColumn',
+                                    'template' => '<span class="pull-right actionColumn">{list} {update} {delete}</span>',
+                                    'buttons' => [
+                                        'list' => function($url, $model) {
+                                            return Html::a('<i class="fa fa-group"></i>', ['user-list', 'id' => $model->spg_id]);
+                                        },
+                                        'update' => function($url, $model) {
+                                            return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?id='.$model->spg_id]), 'class' => 'modalButton']);
+                                        },
+                                        'delete' => function($url, $model) {
+                                            if (empty($model->detail))
+                                                if (empty($model->detail->group))
+                                                    return Html::button('<i class="fa fa-times"></i>', ['value' => Url::to(['delete?id=' . $model->spg_id]), 'class' => 'deleteThis', 'data-title' => 'Delete group id: ' . $model->spg_id . ' and named is "' . $model->spg_name . '"']);
+                                        }
+                                    ]
+                                ]
+                            ],
+                            'tableOptions' => ['class' => 'table table-striped table-hover']
+                        ]);
+                        ?>
                     </div>
                 </div>
             </div>
