@@ -107,7 +107,7 @@ class CorrectionController extends BaseController
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
-                $model->sna_point = floor($model->sna_receipt_amount);
+                $model->sna_point = floor($model->sna_ops_receipt_amount);
 
                 $model->sna_review_date = Utc::getNow();
                 $model->sna_review_by = Yii::$app->user->id;
@@ -164,7 +164,7 @@ class CorrectionController extends BaseController
 
                    // setup devision point per country
                     if ($config->ser_point_provision > 0 ) {
-                        $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
+                        $model->sna_point = (int) ((int)$model->sna_ops_receipt_amount / $config->ser_point_provision);
                     }
 
                     // optional point for premium or default merchant

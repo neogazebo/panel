@@ -142,7 +142,7 @@ $model->sna_push = true;
 
                         <?php //$form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status','value' => '','placeholder' => $model->sna_receipt_number]) ?>
                         <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status'])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.') ?>
-                        <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
+                        <?= $form->field($model, 'sna_ops_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                         <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                     </div>
                     <div class="reject-form">
@@ -241,23 +241,23 @@ $this->registerJs("
 
     $('#snapearn-sna_transaction_time').attr('autofocus');
     $('#snapearn-sna_status').change(function() {
-        $('.field-snapearn-sna_receipt_amount').removeClass('has-error');
+        $('.field-snapearn-sna_ops_receipt_amount').removeClass('has-error');
         $('.btn-merchant').css({
             'border':'0px',
             'padding':'0px'
         });
-        $('.field-snapearn-sna_receipt_amount').find('.help-block').text('');
+        $('.field-snapearn-sna_ops_receipt_amount').find('.help-block').text('');
 
         if($(this).val() == 1) {
             pointConvert();
 
             if (com_id == 0) {
-                $('.field-snapearn-sna_receipt_amount').addClass('has-error');
+                $('.field-snapearn-sna_ops_receipt_amount').addClass('has-error');
                 $('.btn-merchant').css({
                     'border':'1px solid #DD4F3E',
                     'padding':'2px'
                 });
-                $('.field-snapearn-sna_receipt_amount').find('.help-block').text('Please create merchant first! Thanks.');
+                $('.field-snapearn-sna_ops_receipt_amount').find('.help-block').text('Please create merchant first! Thanks.');
             }
 
             $('#snapearn-sna_transaction_time').attr('autofocus');
@@ -272,12 +272,12 @@ $this->registerJs("
         }
     }).trigger('change');
 
-    $('#snapearn-sna_receipt_amount').change(function(){
+    $('#snapearn-sna_ops_receipt_amount').change(function(){
         pointConvert();
     });
 
     function pointConvert() {
-        var amount = Math.floor($('#snapearn-sna_receipt_amount').val());
+        var amount = Math.floor($('#snapearn-sna_ops_receipt_amount').val());
         $.ajax({
             type: 'POST',
             url: baseUrl + 'snapearn/default/ajax-snapearn-point',
