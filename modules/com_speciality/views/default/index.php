@@ -20,32 +20,34 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border"></div><!-- /.box-header -->
                 <div class="box-body">
                 <p>
-                    <?= Html::a('Company Speciality', ['detail'], ['class' => 'btn btn-success']) ?>
-                    <?= Html::a('Promo', ['/promo'], ['class' => 'btn btn-danger']) ?>
+                    <?= Html::a('Speciality', ['/type'], ['class' => 'btn btn-success']) ?>
+                    <?= Html::a('Config Per-Country ', ['detail'], ['class' => 'btn btn-success']) ?>
+                    <?= Html::a('Config Promo', ['/promo'], ['class' => 'btn btn-danger']) ?>
                 </p>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
 
-                        [
-                            'label' => 'Country',
-                            'attribute' => 'com_spt_cty_id',
-                            'format' => 'html',
-                            'value' => function($data){
-                                return ($data->promo) ? $data->promo->com_promo_cty_id : $data->com_spt_cty_id;
-                            }
-                        ],
+                        // [
+                        //     'label' => 'Country',
+                        //     'attribute' => 'com_spt_cty_id',
+                        //     'format' => 'html',
+                        //     'value' => function($data){
+                        //         return ($data->promo) ? $data->promo->com_promo_cty_id : $data->country->cty_name;
+                        //     }
+                        // ],
                         [
                             'label' => 'Speciality Name',
-                            'attribute' => 'com_spt_type',
+                            'attribute' => 'com_spt_type_id',
                             'format' => 'html',
                             'value' => function($data){
                                 $promo = '';
+                                $country = $data->country->cty_name;
                                 if ($data->promo){
-                                    $promo ='<span class="label label-warning">promo</span>';
+                                    $promo =' * <span class="label label-warning">promo</span>';
                                 }
-                                return $data->com_spt_type.$promo;
+                                return $data->type->com_type_name.' - ('.$country.')'.$promo;
                             }
                         ],
                         [
@@ -63,7 +65,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'com_spt_multiple_point',
                             'format' => 'html',
                             'value' => function($data){
-                                return ($data->promo) ? $data->promo->spt_promo_multiple_point : $data->com_spt_multiple_point;
+                                if(!empty($data->promo->spt_promo_multiple_point)){
+                                    return $data->promo->spt_promo_multiple_point;
+                                }else{
+                                    return (!empty($data->com_spt_multiple_point)) ? $data->com_spt_multiple_point : $data->type->com_type_multiple_point;
+                                }
                             }
                         ],
                         [
@@ -71,7 +77,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'com_spt_max_point',
                             'format' => 'html',
                             'value' => function($data){
-                                return ($data->promo) ? $data->promo->spt_promo_max_point : $data->com_spt_max_point;
+                                if(!empty($data->promo->spt_promo_max_point)){
+                                    return $data->promo->spt_promo_max_point;
+                                }else{
+                                    return (!empty($data->com_spt_max_point)) ? $data->com_spt_max_point : $data->type->com_type_max_point;
+                                }
                             }
                         ],
                         [

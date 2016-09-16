@@ -1,5 +1,6 @@
-<?php
+ <?php
 
+use app\components\helpers\SnapearnPointSpeciality;
 use app\models\ComSpecialityPromo;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
@@ -47,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'spt_promo_com_spt_id',
                                 'format' => 'html',
                                 'value' => function($data){
-                                    return $data->speciality->com_spt_type;
+                                    return $data->speciality->type->com_type_name.' ('.$data->speciality->country->cty_name.')';
                                 }
                             ],
                             [

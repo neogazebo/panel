@@ -5,10 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\CompanySpeciality */
 
-$this->title = 'Update : ' . $model->com_spt_type;
-$this->params['breadcrumbs'][] = ['label' => 'Company Specialities', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->com_spt_id, 'url' => ['view', 'id' => $model->com_spt_id]];
-$this->params['breadcrumbs'][] = 'Update';
+$update_title = 'Update : ' . $model->type->com_type_name.' ('.$model->country->cty_name.')';
 ?>
 <div id="edit-speciality-<?= $model->com_spt_id; ?>" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog">
@@ -16,7 +13,7 @@ $this->params['breadcrumbs'][] = 'Update';
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span></button>
-        <h4 class="modal-title"><?= Html::encode($this->title) ?></h4>
+        <h4 class="modal-title"><?= Html::encode($update_title) ?></h4>
       </div>
 	    <?= $this->render('_form', [
 	        'model' => $model,

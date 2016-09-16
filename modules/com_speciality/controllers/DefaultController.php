@@ -3,11 +3,16 @@
 namespace app\modules\com_speciality\controllers;
 
 use Yii;
+use app\models\Company;
 use app\models\CompanySpeciality;
+use app\models\Country;
+use app\modules\com_speciality\models\MerchantSetSpeciality;
+use app\modules\com_speciality\models\MerchantSpecialitySearchChanel;
+use app\modules\system\processors\merchant_hq\MerchantHqChildrenSaveProcessor;
 use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * DeafultController implements the CRUD actions for CompanySpeciality model.
@@ -36,7 +41,7 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => CompanySpeciality::find()->with('promo'),
+            'query' => CompanySpeciality::find()->with('promo','type'),
         ]);
 
         return $this->render('index', [
@@ -65,6 +70,43 @@ class DefaultController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionGroup($id)
+    {
+        $type = CompanySpeciality::find()->with('type','country')->where('com_spt_id = :id',[
+            ':id' => $id])->one();
+        $title = $type->type->com_type_name.' ('.$type->country->cty_currency_name_iso3.')';
+        $active_group = Company::find()
+            ->select('com_id,com_name,com_country_id,com_currency,com_speciality')
+            ->where('com_speciality = :type_id AND com_currency = :type_cty',[
+                ':type_id' => $type->type->com_type_id,
+                ':type_cty' => $type->country->cty_currency_name_iso3
+            ])
+            ->andWhere('com_status = :status',[
+                ':status' => 1
+            ])
+            ->asArray()->all();
+        return $this->render('group',[
+                'active_group' => $active_group,
+                'spt_id' => $id,
+                // 'inactive_group' => $inactive_group,
+                'title' => $title
+            ]);
+    }
+
+    public function actionSearch()
+    {
+        $processor = new MerchantSpecialitySearchChanel();
+        return $processor->process();
+    }
+
+    public function actionSetSpeciality()
+    {               
+        // $test = Yii::$app->request->post('children');
+        // var_dump(json_decode($test));exit;
+        $processor = new MerchantSetSpeciality();
+        return $processor->process();
     }
 
     /**

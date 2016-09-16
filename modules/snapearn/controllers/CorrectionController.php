@@ -3,33 +3,34 @@
 namespace app\modules\snapearn\controllers;
 
 use Yii;
-use yii\web\NotFoundHttpException;
-use yii\helpers\Url;
-use linslin\yii2\curl;
-use app\controllers\BaseController;
-use app\components\helpers\Utc;
 use app\components\helpers\General;
+use app\components\helpers\SnapearnPointSpeciality;
+use app\components\helpers\Utc;
+use app\controllers\BaseController;
 use app\models\Account;
-use app\models\City;
-use app\models\Mall;
-use app\models\SnapEarn;
-use app\models\SnapEarnRule;
-use app\models\Company;
 use app\models\Activity;
-use app\models\LoyaltyPointHistory;
-use app\models\MerchantUser;
+use app\models\AuditReport;
+use app\models\City;
+use app\models\Company;
 use app\models\CompanySuggestion;
-use app\models\SnapEarnPointDetail;
 use app\models\FeatureSubscription;
 use app\models\FeatureSubscriptionCompany;
-use app\models\AuditReport;
+use app\models\LoyaltyPointHistory;
+use app\models\Mall;
+use app\models\MerchantUser;
 use app\models\Module;
 use app\models\ModuleInstalled;
+use app\models\SnapEarn;
+use app\models\SnapEarnPointDetail;
+use app\models\SnapEarnRule;
+use app\models\SnapearnPoint;
 use app\models\SystemMessage;
 use app\models\WorkingTime;
-use app\models\SnapearnPoint;
-use yii\web\HttpException;
+use linslin\yii2\curl;
+use yii\helpers\Url;
 use yii\web\ForbiddenHttpException;
+use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Session;
 
 /**
@@ -39,6 +40,8 @@ class CorrectionController extends BaseController
 {
     public function actionToCorrection($id)
     {
+        // $point_config = new SnapearnPointSpeciality;
+        // $point_config->getActivePoint($id);
         // destroy session com && create session company id
         $this->checkSession($id);
         
@@ -109,6 +112,7 @@ class CorrectionController extends BaseController
 
                 $model->sna_review_date = Utc::getNow();
                 $model->sna_review_by = Yii::$app->user->id;
+                $model->sna_company_tagging = 1;
 
 				// start process rollback
                 // configuration to get real point user before reviews

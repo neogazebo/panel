@@ -76,7 +76,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         }
         if (!empty($_GET['sna_status'])) {
             $sna_status = $_GET['sna_status'];
-            switch ($_GET['sna_status']) {
+            switch ($sna_status) {
                 case 'NEW':
                     $sna_status = 0;
                     break;
@@ -111,6 +111,23 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         if (!empty($_GET['ops_name'])) {
             $operatorId = $_GET['ops_name'];
             $this->andWhere("sna_review_by = :ops", [':ops' => $operatorId]);
+        }
+
+        if (!empty($_GET['sna_company_tagging'])) {
+            $sna_company_tagging = $_GET['sna_company_tagging'];
+            $tagging = '';
+            switch ($sna_company_tagging) {
+                case 'Ebizu':
+                    $tagging = 'sna_company_tagging > 0 AND sna_com_id > 0';
+                    break;
+                case 'Manis':
+                    $tagging = 'sna_company_tagging = 0 AND sna_com_id = 0';
+                    break;
+                case 'Untagged':
+                    $tagging = 'sna_company_tagging = 0';
+                    break;
+            }
+            $this->andWhere($tagging);
         }
         
         // merchant filter

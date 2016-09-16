@@ -3,9 +3,10 @@
 namespace app\models;
 
 use Yii;
-use yii\db\Expression;
 use app\components\helpers\DateRangeCarbon;
 use app\components\helpers\Utc;
+use app\models\CompanySpeciality;
+use yii\db\Expression;
 
 /**
  * This is the ActiveQuery class for [[AccountDevice]].
@@ -96,6 +97,11 @@ class CompanyQuery extends \yii\db\ActiveQuery
             ]);
     }
 
+    public function getMerchantSpecialityGroup($speciality_id,$cty_id)
+    {
+        return $this->select('com_id, com_name')->where('com_speciality = :speciality_id AND com_currency = :cty_id', [':speciality_id' => $speciality_id, ':cty_id' => $cty_id])->orderBy(['com_id' => SORT_DESC]);
+    }
+
     public function getChildMerchants($parent_id)
     {
         return $this
@@ -163,6 +169,24 @@ class CompanyQuery extends \yii\db\ActiveQuery
         return $this;
     }
 
+    public function searchMerchantSpeciality($keyword,$spt,$cty)
+    {
+        $this->select('com_id, com_name');
+        $this->leftJoin('tbl_company_category', 'tbl_company_category.com_category_id = tbl_company.com_subcategory_id');
+        $this->andWhere('
+            com_name LIKE "%' . $keyword . '%" 
+            AND com_hq_id = 0 
+            AND com_status != 2 
+            AND com_is_parent = 0
+            AND com_speciality <> "'.$spt.'"
+            AND com_currency = "'.$cty.'"');
+        
+        $this->andWhere('tbl_company_category.com_category_type = :cat_id',[':cat_id' => 1]);
+
+        $this->orderBy('com_name');
+        return $this;
+    }
+
     public function saveMerchantChildren($parent_id, $children, $removed = false)
     {
         $new_parent = $parent_id;
@@ -194,6 +218,24 @@ class CompanyQuery extends \yii\db\ActiveQuery
         }
     }
 
+    public function changeSpecialityMerchant($new_speciality_id,$changes)
+    {
+        var_dump($new_speciality_id);exit;
+        foreach($changes as $com_id) {
+            $company = Company::findOne($com_id);
+            $company->com_speciality = $new_speciality_id;
+            var_dump($company->save(false));
+
+            $activities = [
+                'Company',
+                'Company '.$company->com_name.' has been set to '.$new_speciality_id,
+                Company::className(),
+                $company->com_id
+            ];
+            Logging::saveLog($activities);
+        }
+    }
+
     public function getChildMerchantsId($parent_id)
     {
         $result = [];
@@ -202,6 +244,32 @@ class CompanyQuery extends \yii\db\ActiveQuery
         if($children) {
             foreach($children as $child) {
                 array_push($result, $child->com_id);
+            }
+        }
+
+        return $result;
+    }
+
+    public function getGroupMerchantSpeciality($speciality_id)
+    {
+        $result = [];
+        $special = CompanySpeciality::find()->with('type','country')->where('com_spt_id = :id',[
+            ':id' => $speciality_id])->one();
+
+        $children = Company::find()
+            ->select('com_id')
+            ->where('com_speciality = :type_id AND com_currency = :type_cty',[
+                ':type_id' => $special->type->com_type_id,
+                ':type_cty' => $special->country->cty_currency_name_iso3
+            ])
+            ->andWhere('com_status = :status',[
+                ':status' => 1
+            ])
+            ->asArray()->all();
+
+        if($children) {
+            foreach($children as $child) {
+                array_push($result, $child['com_id']);
             }
         }
 
