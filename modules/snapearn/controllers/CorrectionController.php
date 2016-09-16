@@ -367,7 +367,7 @@ class CorrectionController extends BaseController
             $model->sna_com_id = $ses_com['sna_com_id'];
         }
         
-        return $this->render('form', [
+        return $this->render(Yii::$app->permission_helper->setRbacView('form','form_rbac'), [
             'model' => $model,
             'id' => $id
         ]);

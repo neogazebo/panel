@@ -67,7 +67,9 @@ class DefaultController extends BaseController
 
         $filename = 'SNE-' . date('Y-m-d H:i:s', time()) . '.xlsx';
 
-        $view_filename = 'index';
+        // set view name, based on rbac configuration
+        $view_filename = Yii::$app->permission_helper->setRbacView('index','index_rbac');
+
         $save_path = 'sne';
 
         // additional views output goes here
@@ -625,7 +627,7 @@ class DefaultController extends BaseController
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
 
-        return $this->render('form', [
+        return $this->render(Yii::$app->permission_helper->setRbacView('form','form_rbac'), [
             'model' => $model,
             'id' => $id
         ]);

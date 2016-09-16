@@ -160,6 +160,12 @@ $config = [
         // ],
         'array_helper' => [
             'class' => 'app\components\helpers\ArrayHelper',
+        ],
+        'mod_component_helper' => [
+            'class' => 'app\components\helpers\ModuleComponentsHelper',
+        ],
+        'permission_helper' => [
+            'class' => 'app\components\helpers\PermissionHelper',
         ]
     ],
     'params' => $params,
