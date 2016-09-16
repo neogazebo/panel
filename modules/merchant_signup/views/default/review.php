@@ -65,7 +65,7 @@ $currency = new GlobalHelper;
                         </div>
                         <?= $form->field($model_company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
 						<?= 
-					        $form->field($model_company, 'mall_id')->widget(Typeahead::classname(),[
+					        $form->field($model_company, 'mall_name')->widget(Typeahead::classname(),[
 					            'options' => [
 					                'placeholder' => 'Mall Name'
 					            ],
