@@ -77,6 +77,11 @@ class SnapearnGroup extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'spg_updated_by']);
     }
 
+    public function getDetail()
+    {
+        return $this->hasOne(SnapearnGroupDetail::className(), ['spgd_spg_id' => 'spg_id']);
+    }
+
     /**
      * @inheritdoc
      */
