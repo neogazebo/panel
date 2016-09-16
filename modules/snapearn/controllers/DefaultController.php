@@ -318,9 +318,9 @@ class DefaultController extends BaseController
 
     public function actionToUpdate($id)
     {
-        // $point_config = new SnapearnPointSpeciality;
-        // $point_config->getActivePoint($id);
-        
+        $speciality = new SnapearnPointSpeciality;
+        $point_config = $speciality->getActivePoint($id);
+        var_dump($point_config);exit;
         $this->checkSession($id);
         $model = $this->findModel($id);
         if (empty($model->member)) {
@@ -345,6 +345,9 @@ class DefaultController extends BaseController
 
     public function actionUpdate($id)
     {
+        $speciality = new SnapearnPointSpeciality;
+        $point_config = $speciality->getActivePoint($id);
+
     	$model = $this->findModel($id);
         
         $get_sesssion = $this->getSession('wrk_ses_'.$id);

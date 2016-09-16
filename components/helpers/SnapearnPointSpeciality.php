@@ -25,7 +25,8 @@ class SnapearnPointSpeciality
 		->where('sna_id = :sna',[
 			':sna' => $conditions
 			])->asArray()->one();
-		$company = $this->getCompanyConfig($snap['sna_com_id']);
+		$model = $this->getCompanyConfig($snap['sna_com_id']);
+		return $model;
 	}
 
 
@@ -70,7 +71,7 @@ class SnapearnPointSpeciality
 	}
 
 	public function getSpecialityConfig($type = NULL, $cty = NULL)
-	
+	{
 		$data = CompanySpeciality::find()
 		->with('type','country','promo')
 		->where('com_spt_type_id = :type',[
