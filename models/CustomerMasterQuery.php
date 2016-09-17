@@ -31,4 +31,15 @@ class CustomerMasterQuery extends \yii\db\ActiveQuery
     {
         return parent::one($db);
     }
+
+    public function getAreCustomer($cus_id,$com_id)
+    {
+        $this->andWhere('cus_mem_id = :mem',[
+                ':mem' => $cus_id
+            ]);
+        $this->andWhere('cus_com_id = :com',[
+                ':com' => $com_id
+            ]);
+        return $this->one();
+    }
 }
