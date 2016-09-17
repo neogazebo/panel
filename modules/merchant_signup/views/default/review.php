@@ -65,7 +65,7 @@ $currency = new GlobalHelper;
                         </div>
                         <?= $form->field($model_company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
 						<?= 
-					        $form->field($model_company, 'mall_name')->widget(Typeahead::classname(),[
+					        $form->field($model_company, 'mall_id')->widget(Typeahead::classname(),[
 					            'options' => [
 					                'placeholder' => 'Mall Name'
 					            ],
@@ -114,7 +114,7 @@ $currency = new GlobalHelper;
                                 ],
                             ])->label('Location <small><cite title="Source Title">(City, Region, Country)</cite></small>');
                             ?>
-                        
+                        <input id="com_city" type="hidden" name="com_city" value="">
                         <div class="form-group" id="businessMap">
                             <label class="col-sm-3 control-label">Map</label>
                             <div class="col-sm-8">
@@ -246,7 +246,7 @@ $this->registerJs("
         $('.field-company-com_postcode').hide();
         $('.field-company-com_city').hide();
         $('.field-mallmerchant-mam_mal_id').show();
-        $('.field-company-mall_name').show();
+        $('.field-company-mall_id').show();
         $('#floor-unit').show();
     };
     var unloadMall = function() {
@@ -257,7 +257,7 @@ $this->registerJs("
         $('.field-company-com_postcode').show();
         $('.field-company-com_city').show();
         $('.field-mallmerchant-mam_mal_id').hide();
-        $('.field-company-mall_name').hide();
+        $('.field-company-mall_id').hide();
         $('#floor-unit').hide();
     };
     var checkOrNot = function(mall_checked) {

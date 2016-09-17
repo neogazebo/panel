@@ -162,7 +162,7 @@ class Company extends EbizuActiveRecord
             [['com_name'], 'unique', 'on' => 'update-hq', 'when' => function ($model, $attribute) {
                 return $model->{$attribute} !== $model->getOldAttribute($attribute);
             }, 'message' => 'HQ Name is already taken'],
-            [['mall_id','mall_name'], 'required', 'when' => function($model) {
+            [['mall_id'], 'required', 'when' => function($model) {
                 return $this ->com_in_mall == 1;
             }, 'whenClient' => "function (attribute, value) {
                 return $('#company-com_in_mall').val() == 1;
