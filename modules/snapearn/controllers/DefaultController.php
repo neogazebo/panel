@@ -12,6 +12,7 @@ use app\models\Activity;
 use app\models\AuditReport;
 use app\models\City;
 use app\models\Company;
+use app\models\CustomerMaster;
 use app\models\CompanySuggestion;
 use app\models\FeatureSubscription;
 use app\models\FeatureSubscriptionCompany;
@@ -111,7 +112,7 @@ class DefaultController extends BaseController
         $model->scenario = 'signup';
         $model->usr_password = md5('123456');
         $model->usr_type_id = 2;
-        $model->usr_approved = 0;
+        $model->usr_approved = 1;
 
         $company = new Company();
         $company->scenario  = 'point';
@@ -150,6 +151,14 @@ class DefaultController extends BaseController
                     $company->com_email = $model->usr_email;
                     $company->com_status = 1;
                     $company->com_snapearn = 1;
+                    /* create from [ 
+                        1= ADM panel; 
+                        2 = Snapearn add new merchant; 
+                        3 = Mall cms 
+                        4 = merchant - signup
+                        ]
+                    */
+                    $company->com_create_from = intval(2); 
                     $company->com_snapearn_checkin = 1;
                     $company->com_registered_to = 'EBC';
                     $company->com_created_by = Yii::$app->user->id;
@@ -197,17 +206,9 @@ class DefaultController extends BaseController
                                 $mam_model->save(false);
                             }
 
-                            // SnapEarnPointDetail::savePoint($id, 8);
-
-                            // $audit = AuditReport::setAuditReport('create business from snapearn : ' . $company->com_name, Yii::$app->user->id, Company::className(), $company->com_id);
-
                             $this->assignModule($com_id, $company);
                             $this->assignEmail($com_id, $company);
-
-                            // Additional point to working time
-                            // $param = $id;
-                            // $point = WorkingTime::POINT_ADD_NEW_MERCHANT;
-                            // $this->addWorkPoint($param, $point);
+                            
                             $wrk_ses = $this->getSession('wrk_ses_'.$id);
                             if (!empty($wrk_ses)) {
                                 $ses = [];
@@ -256,21 +257,18 @@ class DefaultController extends BaseController
         ]);
     }
 
-    public function actionAjaxExisting($id,$to = null)
+    public function actionAjaxExisting()
     {
-        // remove session
         $this->removeSession('ses_com_'.$id);
-        
         $model = $this->findModel($id);
-        $urlActive = (!empty($to)) ? 'correction/'.$to : 'default/update';
-        
         if ($model->load(Yii::$app->request->post())) {
-            $model->sna_com_id = (int)Yii::$app->request->post('com_id');
+            var_dump(Yii::$app->request->post('com_name_search'));exit;
+            $model->sna_com_id = (int)Yii::$app->request->post('com_name_search');
+            $url = Yii::$app->request->post('url');
             $company = Company::findOne($model->sna_com_id);
             $cat_id = $this->getCategoryId($company->com_subcategory_id);
             $model->sna_cat_id = $cat_id;
             $model->sna_com_name = $company->com_name;
-            
             $wrk_ses = $this->getSession('wrk_ses_'.$id);
             if (!empty($wrk_ses)) {
                 $type = WorkingTime::ADD_EXISTING_TYPE;
@@ -283,46 +281,18 @@ class DefaultController extends BaseController
                 $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
                 $this->saveWorking($id);
             }
-            
-            if ($to == 'correction') {
-                $params = [
-                    'sna_com_id' => $model->sna_com_id,
-                    'sna_cat_id' => $model->sna_cat_id,
-                    'sna_com_name' => $model->sna_com_name
+            if ($model->save(false)) {
+                $activities = [
+                    'Snap Earn - Add Existing Merchant',
+                    'Snapearn (' . $model->sna_id . ') - Add Existing Merchant, ' . $company->com_email . ' on ' . $company->com_name,
+                    SnapEarn::className(),
+                    $company->com_id
                 ];
-                $this->setSession('ses_com_'.$id, $params);
+                $this->saveLog($activities);
                 $this->setMessage('save', 'success', 'Merchant successfully saved!');
-                return $this->redirect([$urlActive.'?id='.$id]);
-            } else {
-                if ($model->sna_com_id > 0) {
-                    if ($model->save(false)) {
-                        $activities = [
-                            'Snap Earn - Add Existing Merchant',
-                            'Snapearn (' . $model->sna_id . ') - Add Existing Merchant, ' . $company->com_email . ' on ' . $company->com_name,
-                            SnapEarn::className(),
-                            $company->com_id
-                        ];
-                        $this->saveLog($activities);
-
-                        $this->setMessage('save', 'success', 'Merchant successfully saved!');
-                        return $this->redirect([$urlActive.'?id='.$id]);
-                    } else {
-                        $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
-                        return $this->redirect([$urlActive.'?id='.$id]);
-                    }
-                } else {
-                    $this->setMessage('save', 'error', 'Merchant not selected!');
-                    return $this->redirect([$urlActive.'?id='.$id]);
-                }
+                return $this->render($url);
             }
         }
-
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('existing', [
-                'model' => $model
-            ]);
-        }
-        return $this->redirect(['update?id='.$id]);
     }
 
 
@@ -394,8 +364,7 @@ class DefaultController extends BaseController
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
                 // get configuration promo
                 $point_config = $speciality->getActivePoint($id,$model->sna_transaction_time);
-
-                $model->sna_point = floor($model->sna_receipt_amount);
+                $model->sna_point = floor($model->sna_ops_receipt_amount);
 
                 $model->sna_review_date = Utc::getNow();
                 $model->sna_review_by = Yii::$app->user->id;
@@ -420,7 +389,7 @@ class DefaultController extends BaseController
 
                     // setup devision point per country
                     if ($config->ser_point_provision > 0 ) {
-                        $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
+                        $model->sna_point = (int) ((int)$model->sna_ops_receipt_amount / $config->ser_point_provision);
                     }
 
                     // optional point for premium or default merchant
@@ -456,6 +425,31 @@ class DefaultController extends BaseController
                         $model->sna_point = $limitPoint;
                     }
                     $model->sna_sem_id = '';
+
+                    // add user for customer company
+                    // check sna_cus_id
+
+                    if (!$model->sna_cus_id) {
+                        $mem_id = $model->member->acc_mem_id;
+                        $com_id = $model->sna_com_id;
+                         
+                        $customer = CustomerMaster::find()->getAreCustomer($mem_id, $com_id);
+
+                        if (!$customer) {
+                            $customer = new CustomerMaster();
+                            $customer->cus_mem_id = $mem_id;
+                            $customer->cus_com_id = $com_id;
+                            $customer->cus_datetime = strtotime(date('Y-m-d H:i:s'));
+                            
+                            if ($customer->save(false)) {
+                                $model->sna_cus_id = $customer->cus_id;
+                            }
+                        }
+                        else {
+                            $model->sna_cus_id = $customer->cus_id;
+                        }
+                    }
+
                     // if rejected action
                 } elseif ($model->sna_status == 2) {
                     $username = $model->member->acc_screen_name;
@@ -859,6 +853,29 @@ class DefaultController extends BaseController
         }
     }
 
+    public function actionListMerchantNonHq()
+    {
+        if (Yii::$app->request->isAjax) {
+            $model = Company::find()->searchExistingMerchantNonHq();
+            $out = [];
+            if (!empty($model)) {
+                foreach ($model as $d) {
+                    $out[] = [
+                        'id' => $d->com_id,
+                        'value' => $d->com_name
+                    ];
+                }
+            } else {
+                $out[] = [
+                    'id' => 0,
+                    'value' => 'Merchant Not Found!',
+                ];
+            }
+
+            echo \yii\helpers\Json::encode($out);
+        }
+    }
+
     public function actionSearchMemberEmail()
     {
         if (Yii::$app->request->isAjax) {
@@ -885,8 +902,10 @@ class DefaultController extends BaseController
     public function actionCityList()
     {
         if (Yii::$app->request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             $model = City::find()->SearchCityList();
-            echo \yii\helpers\Json::encode($model);
+            $out['results'] = array_values($model);
+            return $out;
         }
     }
 
@@ -965,7 +984,6 @@ class DefaultController extends BaseController
                           ->andWhere(['com_id' => 1642497]);
             }])
             ->one();
-        var_dump($model);exit;
     }
 
 }

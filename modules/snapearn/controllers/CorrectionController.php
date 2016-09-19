@@ -40,8 +40,11 @@ class CorrectionController extends BaseController
 {
     public function actionToCorrection($id)
     {
-        // $point_config = new SnapearnPointSpeciality;
-        // $point_config->getActivePoint($id);
+        $model = $this->findModel($id);
+        $params = $model->sna_status;
+        if ($params == 0 ) {
+            return $this->redirect(['default/to-update','id'=> $id]);
+        }
         // destroy session com && create session company id
         $this->checkSession($id);
         
@@ -55,7 +58,6 @@ class CorrectionController extends BaseController
         $this->setSession('wrk_ses_'.$id, $wrk_ses);
         
         if (empty($this->getSession('oldCompany_'.$id))) {
-            $model = $this->findModel($id);
             $mp = Company::find()->getCurrentPoint($model->sna_com_id);
             $params = [
                 'sna_id' => $id,
@@ -72,6 +74,14 @@ class CorrectionController extends BaseController
 	public function actionCorrection($id)
 	{
         $speciality = new SnapearnPointSpeciality;
+        $model = $this->findModel($id);
+        $superuser = Yii::$app->user->identity->superuser;
+        if ($model->sna_status == 0 ) {
+            return $this->redirect(['default/to-update','id'=> $id]);
+        }elseif ($model->sna_status != 0 && $superuser != 1) {
+            $this->checkSession($id);
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
+        }
 
     	$model = $this->findModel($id);
     	$model->scenario = 'correction';
@@ -94,7 +104,7 @@ class CorrectionController extends BaseController
             $this->checkSession($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         }
-                                
+                  
         // get old point
         $ctr = $model->member->acc_cty_id;
 
@@ -112,8 +122,7 @@ class CorrectionController extends BaseController
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
                 // get promo configuration
                 $point_config = $speciality->getActivePoint($id,$model->sna_transaction_time);
-
-                $model->sna_point = floor($model->sna_receipt_amount);
+                $model->sna_point = floor($model->sna_ops_receipt_amount);
 
                 $model->sna_review_date = Utc::getNow();
                 $model->sna_review_by = Yii::$app->user->id;
@@ -170,7 +179,7 @@ class CorrectionController extends BaseController
 
                    // setup devision point per country
                     if ($config->ser_point_provision > 0 ) {
-                        $model->sna_point = (int) ((int)$model->sna_receipt_amount / $config->ser_point_provision);
+                        $model->sna_point = (int) ((int)$model->sna_ops_receipt_amount / $config->ser_point_provision);
                     }
 
                     // optional point for premium or default merchant
@@ -386,7 +395,7 @@ class CorrectionController extends BaseController
             $model->sna_com_id = $ses_com['sna_com_id'];
         }
         
-        return $this->render(Yii::$app->permission_helper->setRbacView('form','form_rbac'), [
+        return $this->render('form', [
             'model' => $model,
             'id' => $id
         ]);

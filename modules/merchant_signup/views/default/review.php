@@ -1,14 +1,15 @@
 <?php
-
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use yii\helpers\Url;
+use app\components\helpers\GlobalHelper;
+use kartik\select2\Select2;
 use kartik\widgets\Typeahead;
 use kartik\widgets\TypeaheadBasic;
-use kartik\widgets\DatePicker;
 use yii\bootstrap\Modal;
+use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\JsExpression;
-use yii\helpers\Json;
+use yii\widgets\ActiveForm;
 
 $this->title = $model->mer_bussines_name;
 $this->registerJsFile('https://maps.google.com/maps/api/js?sensor=true', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
@@ -17,6 +18,7 @@ $this->registerCssFile($this->theme->baseUrl . '/dist/plugins/jQueryui/jquery-ui
 $latitude = ($model_company->com_latitude ? $model_company->com_latitude : 3.139003);
 $longitude = ($model_company->com_longitude ? $model_company->com_longitude : 101.686855);
 $model_company->com_in_mall = true;
+$currency = new GlobalHelper;
 ?>
 
 <section class="content-header">
@@ -50,6 +52,7 @@ $model_company->com_in_mall = true;
                         <?= $form->field($model_company, 'com_business_name')->textInput(['value' => $model->mer_bussines_name]); ?>
                         <?= $form->field($model_company, 'com_description')->textArea(['value' => $model->mer_bussiness_description]); ?>
                         <?= $form->field($model_company, 'com_subcategory_id')->dropDownList($model_company->categoryListData); ?>
+                        <?= $form->field($model_company, 'com_currency')->dropDownList(ArrayHelper::map($currency->getCurrency(),'code','country'),['prompt' => 'Select Currency']); ?>
                         <div id="tagging">
                             <div class="form-group" id="business-tag">
                                 <label class="col-sm-3 control-label">Tags</label>
@@ -62,8 +65,7 @@ $model_company->com_in_mall = true;
                         </div>
                         <?= $form->field($model_company, 'com_in_mall')->checkBox(['style' => 'margin-top:10px;'])->label('In Mall?') ?>
 						<?= 
-					        $form->field($model_company, 'mall_name')->widget(Typeahead::classname(),[
-					            'name' => 'merchant',
+					        $form->field($model_company, 'mall_id')->widget(Typeahead::classname(),[
 					            'options' => [
 					                'placeholder' => 'Mall Name'
 					            ],
@@ -91,30 +93,28 @@ $model_company->com_in_mall = true;
                         <?= $form->field($model_company, 'com_address')->textInput(['value' => $model->mer_address]); ?>
                         <?= $form->field($model_company, 'com_postcode')->textInput(['value' => $model->mer_post_code]); ?>
 						<?= 
-					        $form->field($model_company, 'com_city')->widget(Typeahead::classname(),[
-					            'name' => 'merchant',
-					            'options' => ['placeholder' => 'City, Region, Country'],
-					            'pluginOptions' => [
-					                'highlight'=>true,
-					                'minLength' => 3
-					            ],
-					            'pluginEvents' => [
-					                "typeahead:select" => "function(ev, suggestion) { $(this).val(suggestion.id); }",
-					            ],
-					            'dataset' => [
-					                [
-					                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('id')",
-					                    'display' => 'value',
-					                    'remote' => [
-					                        'url' => Url::to(['city-list']) . '?q=%QUERY',
-					                        'wildcard' => '%QUERY'
-					                    ],
-					                    'limit' => 20
-					                ]
-					            ]
-					        ]);
-						?>
-                        
+                            $form->field($model_company, 'com_city')->widget(Select2::classname(), [
+                                'options' => [
+                                        'placeholder' => 'City, Region, Country'
+                                ], 
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'minimumInputLength' => 1,
+                                    'language' => [
+                                        'errorLoading' => new JsExpression("function () { return 'searching...'; }"),
+                                    ],
+                                    'ajax' => [
+                                        'url' => Url::to(['city-list']),
+                                        'dataType' => 'json',
+                                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                                    ],
+                                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                                    'templateResult' => new JsExpression('function(city) { return city.value; }'),
+                                    'templateSelection' => new JsExpression('function (city) { return city.value; }'),
+                                ],
+                            ])->label('Location <small><cite title="Source Title">(City, Region, Country)</cite></small>');
+                            ?>
+                        <input id="com_city" type="hidden" name="com_city" value="">
                         <div class="form-group" id="businessMap">
                             <label class="col-sm-3 control-label">Map</label>
                             <div class="col-sm-8">
@@ -238,7 +238,6 @@ $this->registerJs("
         return false;
     });
 
-    $('.datepicker').datepicker();
     var loadMall = function() {
         $('#businessMap').css('display','none');
         $('.field-company-com_mac_id').show();
@@ -247,7 +246,7 @@ $this->registerJs("
         $('.field-company-com_postcode').hide();
         $('.field-company-com_city').hide();
         $('.field-mallmerchant-mam_mal_id').show();
-        $('.field-company-mall_name').show();
+        $('.field-company-mall_id').show();
         $('#floor-unit').show();
     };
     var unloadMall = function() {
@@ -258,7 +257,7 @@ $this->registerJs("
         $('.field-company-com_postcode').show();
         $('.field-company-com_city').show();
         $('.field-mallmerchant-mam_mal_id').hide();
-        $('.field-company-mall_name').hide();
+        $('.field-company-mall_id').hide();
         $('#floor-unit').hide();
     };
     var checkOrNot = function(mall_checked) {

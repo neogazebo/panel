@@ -72,7 +72,18 @@ $model->sna_push = true;
                     <?php if (empty($model->merchant)): ?>
                     <div class="pull-right btn-merchant">
                         <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['new-merchant?id=' . $model->sna_id]), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
-                        <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['ajax-existing?id=' . $model->sna_id]), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?>
+                        <?= Html::a('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['#'], [
+                            'class' => 'btn btn-flat btn-warning btn-xs',
+                            'data-toggle' => 'modal', 
+                            'data-target' => '#find_existing',
+                            'data-backdrop' => 'static',
+                            ]);
+                        ?>
+                        <?=
+                            $this->render('/default/existing',[
+                                'model' => SnapEarn::findOne($model->sna_id)
+                            ]);
+                        ?>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -159,7 +170,7 @@ $model->sna_push = true;
                         ]);
                         ?>
                         <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status'])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.') ?>
-                        <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
+                        <?= $form->field($model, 'sna_ops_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                         <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                     </div>
                     <div class="reject-form">
@@ -198,6 +209,9 @@ Modal::begin([
 
 <?php
 $this->registerCss("
+    ul.ui-autocomplete {
+        z-index: 1100;
+    }
     #sna_image {
         position: relative;
         top: 0;
@@ -258,23 +272,23 @@ $this->registerJs("
 
     $('#snapearn-sna_transaction_time').attr('autofocus');
     $('#snapearn-sna_status').change(function() {
-        $('.field-snapearn-sna_receipt_amount').removeClass('has-error');
+        $('.field-snapearn-sna_ops_receipt_amount').removeClass('has-error');
         $('.btn-merchant').css({
             'border':'0px',
             'padding':'0px'
         });
-        $('.field-snapearn-sna_receipt_amount').find('.help-block').text('');
+        $('.field-snapearn-sna_ops_receipt_amount').find('.help-block').text('');
 
         if($(this).val() == 1) {
             pointConvert();
 
             if (com_id == 0) {
-                $('.field-snapearn-sna_receipt_amount').addClass('has-error');
+                $('.field-snapearn-sna_ops_receipt_amount').addClass('has-error');
                 $('.btn-merchant').css({
                     'border':'1px solid #DD4F3E',
                     'padding':'2px'
                 });
-                $('.field-snapearn-sna_receipt_amount').find('.help-block').text('Please create merchant first! Thanks.');
+                $('.field-snapearn-sna_ops_receipt_amount').find('.help-block').text('Please create merchant first! Thanks.');
             }
 
             $('#snapearn-sna_transaction_time').attr('autofocus');
@@ -289,12 +303,12 @@ $this->registerJs("
         }
     }).trigger('change');
 
-    $('#snapearn-sna_receipt_amount,.sna_transaction').change(function(){
+    $('#snapearn-sna_ops_receipt_amount,.sna_transaction').change(function(){
         pointConvert();
     });
 
     function pointConvert() {
-        var amount = Math.floor($('#snapearn-sna_receipt_amount').val());
+        var amount = Math.floor($('#snapearn-sna_ops_receipt_amount').val());
             transaction_time = $('.sna_transaction').val();
         $.ajax({
             type: 'POST',

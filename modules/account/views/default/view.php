@@ -208,7 +208,11 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                                                     'style' => 'font-size: 13px',
                                                 ],
                                                 'rowOptions' => function($model,$key,$index,$grid){
-                                                    return ['style' => 'cursor: pointer;' ,'onclick' => 'LinkToSnap('.$model->sna_id.')'];
+                                                    if ($model->status == 0) {
+                                                        return ['style' => 'cursor: pointer;' ,'onclick' => 'LinkToSnapUpdate('.$model->sna_id.')'];
+                                                    } else {
+                                                        return ['style' => 'cursor: pointer;' ,'onclick' => 'LinkToSnapCorrection('.$model->sna_id.')'];
+                                                    }
                                                 },
                                                 'layout' => '{items} {summary} {pager}',
                                                 'dataProvider' => $receiptProvider,
@@ -769,7 +773,11 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
 <?php Modal::end(); ?>
 <?php
 $customScript = <<< SCRIPT
-    function LinkToSnap(params) {
+    function LinkToSnapUpdate(params) {
+        var id = params;
+        window.open('/snapearn/default/to-update?id=' + id, '_blank');
+    };
+    function LinkToSnapCorrection(params) {
         var id = params;
         window.open('/snapearn/correction/to-correction?id=' + id, '_blank');
     };

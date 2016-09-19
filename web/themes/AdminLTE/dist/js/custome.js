@@ -192,7 +192,7 @@ $(function() {
 		window.close();
 	});
 
-	$(".select2").select2();
+	// $(".select2").select2();
 
 	//Date range picker
     $('#the_daterange').daterangepicker(

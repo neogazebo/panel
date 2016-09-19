@@ -4,8 +4,13 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "hash": "d31688b7067f037e2a092ce1a4aeac98",
     "content-hash": "907e51a9a8dea86496141778c3471ee3",
+=======
+    "hash": "4bfe20bf0158e0ac50984c4ae4f3a1ba",
+    "content-hash": "067a2069b284d94aed978c17c56fa921",
+>>>>>>> master
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -379,6 +384,7 @@
         },
         {
             "name": "kartik-v/yii2-dialog",
+<<<<<<< HEAD
             "version": "v1.0.0",
             "source": {
                 "type": "git",
@@ -389,6 +395,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/kartik-v/yii2-dialog/zipball/c0f83291c050fb05a1dc66a90ad6151de2d1e982",
                 "reference": "c0f83291c050fb05a1dc66a90ad6151de2d1e982",
+=======
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-dialog.git",
+                "reference": "4aaf8918c6dbd90218b6ad9036b1aae211480716"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-dialog/zipball/4aaf8918c6dbd90218b6ad9036b1aae211480716",
+                "reference": "4aaf8918c6dbd90218b6ad9036b1aae211480716",
+>>>>>>> master
                 "shasum": ""
             },
             "require": {
@@ -427,7 +445,11 @@
                 "modal",
                 "yii2"
             ],
+<<<<<<< HEAD
             "time": "2016-02-22 10:58:46"
+=======
+            "time": "2016-09-13 18:15:26"
+>>>>>>> master
         },
         {
             "name": "kartik-v/yii2-export",
@@ -3268,9 +3290,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "kartik-v/yii2-export": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
