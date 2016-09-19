@@ -135,7 +135,7 @@ class DefaultController extends BaseController
             ]
         ]);
 
-        return $this->render(Yii::$app->permission_helper->setRbacView('view','view_rbac'), [
+        return $this->render('view', [
             'model' => $this->findModel($id),
             'receiptProvider' => $receiptProvider,
             'historyOfferProvider' => $historyOfferProvider,

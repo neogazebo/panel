@@ -71,7 +71,7 @@ class DefaultController extends BaseController
         $filename = 'SNE-' . date('Y-m-d H:i:s', time()) . '.xlsx';
 
         // set view name, based on rbac configuration
-        $view_filename = Yii::$app->permission_helper->setRbacView('index','index_rbac');
+        $view_filename = 'index';
 
         $save_path = 'sne';
 

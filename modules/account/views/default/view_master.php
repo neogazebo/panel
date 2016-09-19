@@ -60,24 +60,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item item-status">
                             <b>Status </b> 
-                            
-                            <?php 
-                                echo app\components\widgets\RbacButtonWidget::widget([
-                                    'text' => 'Change',
-                                    'type' => 'submit',
-                                    'class_names' => ['btn', 'btn-danger', 'btn-xs', 'confirmBlocked'],
-                                    'icon' => ['fa', 'fa-exchange'],
-                                    'value' => function() {
-                                        return 'block-user?id=' . $_GET['id'];
-                                    },
-                                    'permission' => [
-                                        'module' => 'Account',
-                                        'name' => 'Account[Page_Components][block_user]'
-                                    ],
-                                    'use_container' => false
-                                ]); 
-                            ?>
-
+                            <button class="btn btn-danger btn-xs confirmBlocked" value="block-user?id=<?= $_GET['id'] ?>">Change <i class="fa fa-exchange"></i></button>
                             <a class="pull-right"><?= ($model->acc_status == 1) ? 'Active' : 'Blocked' ?></a>
                         </li>
                         <?php if ($blocked_status) : ?>
@@ -94,26 +77,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                             <b>Currency </b> <a class="pull-right"><?= !empty($model->country) ? $model->country->cty_currency_name_iso3 : '' ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Country </b>
-
-                            <?php 
-                                echo app\components\widgets\RbacButtonWidget::widget([
-                                    'text' => 'Change',
-                                    'type' => 'submit',
-                                    'class_names' => ['btn', 'bg-yellow', 'btn-xs', 'modalButton'],
-                                    'icon' => ['fa', 'fa-exchange'],
-                                    'value' => function() {
-                                        return 'change-country?param=' . $_GET['id'];
-                                    },
-                                    'permission' => [
-                                        'module' => 'Account',
-                                        'name' => 'Account[Page_Components][change_country]'
-                                    ],
-                                    'use_container' => false
-                                ]); 
-                            ?>
-
-                            <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
+                            <b>Country </b> <button class="btn bg-yellow btn-xs modalButton" value="change-country?param=<?= $_GET['id'] ?>">Change <i class="fa fa-exchange"></i></button> <a class="pull-right"><?= ($model->acc_cty_id == 'MY') ? 'Malaysia' : 'Indonesia' ?></a>
                         </li>
                         <li class="list-group-item">
                             <b>Current Point </b> <a class="pull-right"><?= (!empty($model->lastPointMember())) ? Yii::$app->formatter->asDecimal($model->lastPointMember(),0) : 0 ?></a>
@@ -133,10 +97,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
                         <li class="list-group-item">
                             <b>OS Version  </b> <a class="pull-right"><?= (!empty($model->activeDevice())) ? $model->activeDevice()->dvc_os_version : '<a class="pull-right"><span class="not-set">(not set)</span></a>'?></a>
                         </li>
-
-                        <?php if (Yii::$app->permission_helper->processPermissions('Account', 'Account[Page_Components][point_correction]')) : ?>
-                            <?= Html::button('<i class="fa fa-dollar"></i> Point Correction', ['value' => Url::to(['correction?id=' . $model->acc_id]), 'class' => 'btn btn-flat btn-primary modalButton']) ?>
-                        <?php endif; ?>
+                    <?= Html::button('<i class="fa fa-dollar"></i> Point Correction', ['value' => Url::to(['correction?id=' . $model->acc_id]), 'class' => 'btn btn-flat btn-primary modalButton']) ?>
                 </div>
             </div>
         </div>
