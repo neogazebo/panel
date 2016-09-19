@@ -60,6 +60,7 @@ class AppAsset extends AssetBundle
         'themes/AdminLTE/dist/js/demo.js',
         'themes/AdminLTE/dist/plugins/multi-select/multi-select.js',
         'themes/AdminLTE/dist/js/custome.js',
+        'common/js/activeformvalidation/beforesubmit.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
