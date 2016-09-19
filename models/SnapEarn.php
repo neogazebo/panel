@@ -91,6 +91,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 // 'sna_cus_id'
                 ],
             'integer'],
+            [['sna_com_id'],'required','on' => 'add_existing'],
             [['sna_status'],'globalValidation'],
             [['sna_ops_receipt_amount'], 'number', 'min' => 1, 'when' => function($model) {
                 return $model->sna_status == 1;

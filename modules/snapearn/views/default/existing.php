@@ -10,37 +10,20 @@ $this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.theme.
 $this->registerJs("var search_mechant_url = '" . Url::to(['default/list-merchant-non-hq']) . "';", \yii\web\View::POS_BEGIN);
 
 ?>
-        <?php
-        $form = ActiveForm::begin([
-            'id' => 'create-form',
-            'action' => '/snapearn/default/ajax-existing?id='.$model->sna_id,
-            'method' => 'post',
-            'options' => [
-                'class' => 'form-group',
-                'data-pjax' => true
-                ],
-            'enableClientValidation'=>true,
-            'enableAjaxValidation' => true,
-            'fieldConfig' => [
-                'template' => "{label}\n<div class=\"col-lg-8\">{input}\n<div>{error}</div></div>",
-                'labelOptions' => ['class' => 'col-lg-3 control-label'],
-            ]
-        ]);
-
-        ?>
+        <form id="existing_merchant_form" action="/snapearn/default/ajax-existing?id=<?= $model->sna_id ?>" method="post">
         <div class="modal-body">
             <div class="form-group">
-                <input type="text" id="com_name_search" class="form-control" value="" width="200px" placeholder="Enter merchant name" />
+                <input type="text" id="com_name_search" name="com_name" class="form-control" value="" width="200px" placeholder="Enter merchant name" />
                 <input type="hidden" name="url" value="<?= Url::current() ?>">
-                <?= $form->field($model,'sna_id')->fieldHidden() ?>
+                <input type="hidden" id="com_id" name="sna_com_id" value="">
+                <input type="hidden" name="_csrf" value="<?php echo Yii::$app->request->getCsrfToken(); ?>">
             </div>
         </div>
         <div class="modal-footer">
             <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>
-            <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'pull-right btn btn-info pull-right']) ?>
+            <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => ' btn btn-info']) ?>
         </div>
-
-        <?php ActiveForm::end(); ?>
+       </form>
 <?php
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/SnapEarnManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJs("

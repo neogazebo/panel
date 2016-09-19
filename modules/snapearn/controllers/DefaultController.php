@@ -12,8 +12,8 @@ use app\models\Activity;
 use app\models\AuditReport;
 use app\models\City;
 use app\models\Company;
-use app\models\CustomerMaster;
 use app\models\CompanySuggestion;
+use app\models\CustomerMaster;
 use app\models\FeatureSubscription;
 use app\models\FeatureSubscriptionCompany;
 use app\models\LoyaltyPointHistory;
@@ -36,6 +36,7 @@ use yii\helpers\Url;
 use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Default controller for the `snapearn` module
@@ -257,41 +258,55 @@ class DefaultController extends BaseController
         ]);
     }
 
-    public function actionAjaxExisting()
+    public function actionAjaxExisting($id)
     {
-        $this->removeSession('ses_com_'.$id);
-        $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post())) {
-            var_dump(Yii::$app->request->post('com_name_search'));exit;
-            $model->sna_com_id = (int)Yii::$app->request->post('com_name_search');
-            $url = Yii::$app->request->post('url');
-            $company = Company::findOne($model->sna_com_id);
-            $cat_id = $this->getCategoryId($company->com_subcategory_id);
-            $model->sna_cat_id = $cat_id;
-            $model->sna_com_name = $company->com_name;
-            $wrk_ses = $this->getSession('wrk_ses_'.$id);
-            if (!empty($wrk_ses)) {
-                $type = WorkingTime::ADD_EXISTING_TYPE;
-                $ses['wrk_end'] = $this->workingTime($id);
-                $ses['wrk_description'] = $this->getPoint($type)->spo_name;
-                $ses['wrk_type'] = WorkingTime::ADD_MERCHANT_TYPE;
-                $ses['wrk_rjct_number'] = $type;
-                $ses['wrk_point'] = $this->getPoint($type)->spo_point;
-                $wrk_new_merchant = array_merge($wrk_ses,$ses);
-                $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
-                $this->saveWorking($id);
+        try {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if (!Yii::$app->request->post('sna_com_id')) {
+                throw new \Exception("Merchatn Name is Required!", 1000);
             }
-            if ($model->save(false)) {
-                $activities = [
-                    'Snap Earn - Add Existing Merchant',
-                    'Snapearn (' . $model->sna_id . ') - Add Existing Merchant, ' . $company->com_email . ' on ' . $company->com_name,
-                    SnapEarn::className(),
-                    $company->com_id
+            $this->removeSession('ses_com_'.$id);
+            $model = $this->findModel($id);
+            if ($model->load(Yii::$app->request->post(),'')) {
+                $model->sna_com_id = (int)Yii::$app->request->post('sna_com_id');
+                $url = Yii::$app->request->post('url');
+                $company = Company::findOne($model->sna_com_id);
+                $cat_id = $this->getCategoryId($company->com_subcategory_id);
+                $model->sna_cat_id = $cat_id;
+                $model->sna_com_name = $company->com_name;
+                $wrk_ses = $this->getSession('wrk_ses_'.$id);
+                if (!empty($wrk_ses)) {
+                    $type = WorkingTime::ADD_EXISTING_TYPE;
+                    $ses['wrk_end'] = $this->workingTime($id);
+                    $ses['wrk_description'] = $this->getPoint($type)->spo_name;
+                    $ses['wrk_type'] = WorkingTime::ADD_MERCHANT_TYPE;
+                    $ses['wrk_rjct_number'] = $type;
+                    $ses['wrk_point'] = $this->getPoint($type)->spo_point;
+                    $wrk_new_merchant = array_merge($wrk_ses,$ses);
+                    $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
+                    $this->saveWorking($id);
+                }
+                if ($model->save(false)) {
+                    $activities = [
+                        'Snap Earn - Add Existing Merchant',
+                        'Snapearn (' . $model->sna_id . ') - Add Existing Merchant, ' . $company->com_email . ' on ' . $company->com_name,
+                        SnapEarn::className(),
+                        $company->com_id
+                    ];
+                    $this->saveLog($activities);
+                    $this->setMessage('save', 'success', 'Merchant successfully saved!');
+                    return $this->redirect($url);
+                }
+                return [
+                    'error' => 1000,
+                    'message' => $model->getErrors()
                 ];
-                $this->saveLog($activities);
-                $this->setMessage('save', 'success', 'Merchant successfully saved!');
-                return $this->render($url);
-            }
+            }  
+        } catch (\Exception $e) {
+            return $results = [
+                'error' => 1000, 
+                'message' => $e->getMessage()
+                ];
         }
     }
 
