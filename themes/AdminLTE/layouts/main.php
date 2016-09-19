@@ -126,7 +126,7 @@ $this->registerCss("
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div> -->
                     <!-- </div> -->
-                    <?= $this->render('//layouts/' . Yii::$app->permission_helper->setRbacView('menu','menu_rbac')) ?>
+                    <?= $this->render('//layouts/menu') ?>
                 </section>
                 <!-- /.sidebar -->
             </aside>

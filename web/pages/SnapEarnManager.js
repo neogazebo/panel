@@ -48,7 +48,7 @@ $(document).ready(function() {
 			event.preventDefault();
 			$(this).val(ui.item.label);
 			$('#com_name').val(ui.item.value);
-
+			$('#com_id').val(ui.item.value);
 			if(ui.item.value == 'Merchant Not Found!') {
 				$('#com_name').val('');
 			}

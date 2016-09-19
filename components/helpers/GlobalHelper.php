@@ -9,8 +9,9 @@ namespace app\components\helpers;
  * @since V2.1.9
  */
 
-use yii\base\Component;
 use Yii;
+use app\models\Country;
+use yii\base\Component;
 use yii\base\InvalidConfigException;
 
 class GlobalHelper extends Component
@@ -49,15 +50,17 @@ class GlobalHelper extends Component
         ];
         return $weekdays;
     }
-
-    public static function TempCountry()
+    
+    public function getCurrency()
     {
-        $country = [
-            'IDR' => 'Indonesia',
-            'MYR' => 'Malaysia'
-        ];
-        return $country;
-    }  
+        $model = Country::find()->asArray()->all();
+        $currency = [];
+        foreach ($model as $key) {
+            $currency[] = ['code' => $key['cty_currency_name_iso3'],'country' => $key['cty_name'].' ('.$key['cty_currency_name_iso3'].')'];
+        }
+        return $currency;
+      
+    }
 }
 
 

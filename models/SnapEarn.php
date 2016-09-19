@@ -13,7 +13,7 @@ use app\components\helpers\Html;
  * @property integer $sna_com_id
  * @property string $sna_receipt_number
  * @property string $sna_receipt_date
- * @property string $sna_receipt_amount
+ * @property string $sna_ops_receipt_amount
  * @property integer $sna_point
  * @property integer $sna_status
  * @property integer $sna_upload_date
@@ -74,7 +74,7 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_com_name'],
             'required'],
             [['sna_push'],'safe'],
-            [['sna_receipt_amount',
+            [['sna_ops_receipt_amount',
                 'sna_ops_receipt_number',
                 'sna_receipt_image',
                 'sna_transaction_time'], 'required', 'when' => function($model) {
@@ -87,10 +87,13 @@ class SnapEarn extends \yii\db\ActiveRecord
                 'sna_review_date',
                 'sna_review_by',
                 'sna_sem_id',
-                'sna_cat_id'],
+                'sna_cat_id',
+                // 'sna_cus_id'
+                ],
             'integer'],
+            [['sna_com_id'],'required','on' => 'add_existing'],
             [['sna_status'],'globalValidation'],
-            [['sna_receipt_amount'], 'number', 'min' => 1, 'when' => function($model) {
+            [['sna_ops_receipt_amount'], 'number', 'min' => 1, 'when' => function($model) {
                 return $model->sna_status == 1;
             }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 1 }", 'on' => 'update'],
             [['sna_ops_receipt_number'],
@@ -104,7 +107,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             [['sna_receipt_date'],
                 'string',
                 'max' => 10],
-            [['sna_receipt_amount'],
+            [['sna_ops_receipt_amount'],
                 'checkPoint',
                 'when' => function($model) {
                     return $model->sna_status == 1;
@@ -121,7 +124,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             }, 'whenClient' => "function(attribute, value) { return $('.status').val() == 2 }",'on' => 'update'],
             [['sna_transaction_time',
                 'sna_receipt_number',
-                'sna_receipt_amount',
+                'sna_ops_receipt_amount',
                 'sna_com_id'], 'safe','on' => 'correction'],
         ];
     }
@@ -256,6 +259,12 @@ class SnapEarn extends \yii\db\ActiveRecord
         return $this->hasOne(AdminUser::className(), ['id' => 'sna_review_by']);
     }
 
+
+    // public function getCustomer()
+    // {
+    //     return $this->hasOne(CustomerMaster::className(), ['cus_id' => 'sna_cus_id']);
+    // }
+
     /**
      * @inheritdoc
      */
@@ -268,7 +277,7 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_receipt_number' => 'Receipt Number',
             'sna_ops_receipt_number' => 'Receipt Number',
             'sna_receipt_date' => 'Time',
-            'sna_receipt_amount' => 'Amount',
+            'sna_ops_receipt_amount' => 'Amount',
             'sna_point' => 'Points',
             'sna_status' => 'Status',
             'sna_upload_date' => 'Upload Date',
