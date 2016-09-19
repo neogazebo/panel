@@ -194,40 +194,38 @@ $model->sna_push = true;
                     
                     <div class="box-footer clearfix">
                         <div class="button-right pull-right">
-                            <?php 
-                                echo app\components\widgets\RbacButtonWidget::widget([
-                                    'text' => 'Save',
-                                    'type' => 'submit',
-                                    'class_names' => ['btn', 'btn-primary', 'submit-button'],
-                                    'icon' => ['fa', 'fa-check'],
-                                    'value' => function() {
-                                        return;
-                                    },
-                                    'permission' => [
-                                        'module' => 'Snapearn',
-                                        'name' => 'Snapearn[Page_Components][save_button_update]'
-                                    ],
-                                    'use_container' => false
-                                ]); 
-                            ?>
+                            <?=
+                            app\components\widgets\RbacButtonWidget::widget([
+                                'text' => 'Save',
+                                'type' => 'submit',
+                                'class_names' => ['btn', 'btn-primary', 'submit-button'],
+                                'icon' => ['fa', 'fa-check'],
+                                'value' => function() {
+                                    return;
+                                },
+                                'permission' => [
+                                    'module' => 'Snapearn',
+                                    'name' => 'Snapearn[Page_Components][save_button_update]'
+                                ],
+                                'use_container' => false
+                            ]); ?>
 
-                            <?php 
-                                echo app\components\widgets\RbacButtonWidget::widget([
-                                    'text' => 'Save &amp; Next',
-                                    'name' => 'save-next',
-                                    'type' => 'submit',
-                                    'class_names' => ['btn', 'btn-success', 'saveNext'],
-                                    'icon' => ['fa', 'fa-arrow-right'],
-                                    'value' => function() {
-                                        return;
-                                    },
-                                    'permission' => [
-                                        'module' => 'Snapearn',
-                                        'name' => 'Snapearn[Page_Components][save_next_button_update]'
-                                    ],
-                                    'use_container' => false
-                                ]); 
-                            ?>
+                            <?=
+                            app\components\widgets\RbacButtonWidget::widget([
+                                'text' => 'Save &amp; Next',
+                                'name' => 'save-next',
+                                'type' => 'submit',
+                                'class_names' => ['btn', 'btn-success', 'saveNext'],
+                                'icon' => ['fa', 'fa-arrow-right'],
+                                'value' => function() {
+                                    return;
+                                },
+                                'permission' => [
+                                    'module' => 'Snapearn',
+                                    'name' => 'Snapearn[Page_Components][save_next_button_update]'
+                                ],
+                                'use_container' => false
+                            ]); ?>
 
                             <!--<button type="submit" class="btn-primary btn submit-button"><i class="fa fa-check"></i> Save</button>-->
                             <!--<button class="btn btn-success saveNext" type="submit" name="save-next"><i class="fa fa-arrow-right"></i> Save &amp; Next</button>-->

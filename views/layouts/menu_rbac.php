@@ -1,6 +1,4 @@
-<?php
-use app\components\filters\AccessFilters;
-?>
+<?php use app\components\filters\AccessFilters; ?>
 <!-- sidebar menu: : style can be found in sidebar.less -->
 <ul class="sidebar-menu">
     <li class="header">MAIN NAVIGATION</li>
@@ -118,7 +116,7 @@ use app\components\filters\AccessFilters;
         <li class="treeview">
             <a href="#">
                 <i class="fa fa-gears"></i>
-                <span>User Management</span>
+                <span>User</span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
@@ -129,12 +127,12 @@ use app\components\filters\AccessFilters;
                 </li>
                 <li>
                     <a href="<?= Yii::$app->urlManager->createUrl('users/index') ?>">
-                        <i class="fa fa-circle-o"></i> User
+                        <i class="fa fa-circle-o"></i> User Management
                     </a>
                 </li>
                 <li>
                     <a href="<?= Yii::$app->urlManager->createUrl('rbac/index') ?>">
-                        <i class="fa fa-circle-o"></i> Role
+                        <i class="fa fa-circle-o"></i> Role Management
                     </a>
                 </li>
                 <li>
