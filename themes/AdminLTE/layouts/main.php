@@ -99,7 +99,7 @@ $this->registerCss("
                                             <a href="<?= Yii::$app->urlManager->createUrl('site/profile') ?>" class="btn btn-default btn-flat">Profile</a>
                                         </div> -->
                                         <div class="pull-right">
-                                            <a href="<?= Yii::$app->urlManager->createAbsoluteUrl('site/logout') ?>" data-method="post" class="btn btn-default btn-flat">Sign out</a>
+                                            <a href="<?= Yii::$app->urlManager->createAbsoluteUrl('site/logout') ?>" class="btn btn-default btn-flat">Sign out</a>
                                         </div>
                                     </li>
                                 </ul>
