@@ -35,8 +35,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
 
     public function findCustome()
     {
-        if(Yii::$app->permission_helper->checkRbac())
-        {
+        if(Yii::$app->permission_helper->checkRbac()) {
             return $this->findCostumeWithRbac();
         }
 
@@ -62,6 +61,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $sna_receipt = $_GET['sna_receipt'];
             $this->andWhere(['LIKE', 'sna_ops_receipt_number', $sna_receipt]);
         }
+
         if (!empty($_GET['sna_status'])) {
             $sna_status = $_GET['sna_status'];
             switch ($sna_status) {
@@ -109,10 +109,10 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                     $tagging = 'sna_company_tagging > 0 AND sna_com_id > 0';
                     break;
                 case 'Manis':
-                    $tagging = 'sna_company_tagging = 0 AND sna_com_id = 0';
+                    $tagging = 'sna_company_tagging = 0 AND sna_com_id > 0';
                     break;
                 case 'Untagged':
-                    $tagging = 'sna_company_tagging = 0';
+                    $tagging = 'sna_company_tagging = 0 AND sna_com_id = 0';
                     break;
             }
             $this->andWhere($tagging);
@@ -138,46 +138,36 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         
         $this->innerJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
 
-        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][country]'))
-        {
-            if (!empty($_GET['sna_cty'])) 
-            {
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][country]')) {
+            if (!empty($_GET['sna_cty'])) {
                 $sna_cty = $_GET['sna_cty'];
                 $this->andWhere('tbl_account.acc_cty_id = :country', [':country' => $sna_cty]);
             }
         }
         
-        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_field]'))
-        {
-            if (!empty($_GET['sna_member'])) 
-            {
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_field]')) {
+            if (!empty($_GET['sna_member'])) {
                 $sna_member = $_GET['sna_member'];
                 $this->andWhere(['=', 'sna_acc_id', $sna_member]);
             }
         }
         
-        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_email]'))
-        {
-            if (!empty($_GET['member_email'])) 
-            {
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_email]')) {
+            if (!empty($_GET['member_email'])) {
                 $member_email = $_GET['member_email'];
                 $this->andWhere('tbl_account.acc_facebook_email = :member_email', [':member_email' => $member_email]);
             }
         }
         
-        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][receipt_number]'))
-        {
-            if (!empty($_GET['sna_receipt'])) 
-            {
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][receipt_number]')) {
+            if (!empty($_GET['sna_receipt'])) {
                 $sna_receipt = $_GET['sna_receipt'];
                 $this->andWhere(['LIKE', 'sna_ops_receipt_number', $sna_receipt]);
             }
         }
         
-        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][receipt_status]'))
-        {
-            if (!empty($_GET['sna_status'])) 
-            {
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][receipt_status]')) {
+            if (!empty($_GET['sna_status'])) {
                 $sna_status = $_GET['sna_status'];
 
                 switch ($_GET['sna_status']) 
@@ -197,17 +187,13 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             }
         }
         
-        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][date_range]'))
-        {
-            if (!empty($_GET['sna_daterange'])) 
-            {
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][date_range]')) {
+            if (!empty($_GET['sna_daterange'])) {
                 $sna_daterange = explode(' to ', ($_GET['sna_daterange']));
                 $first = "(select sna_id from tbl_snapearn where sna_upload_date >= UNIX_TIMESTAMP('$sna_daterange[0] 00:00:00') limit 1)";
                 $second = "(select sna_id from tbl_snapearn where sna_upload_date <= UNIX_TIMESTAMP('$sna_daterange[1] 23:59:59') order by sna_id desc limit 1)";
                 $this->andWhere("sna_id BETWEEN $first AND $second");
-            } 
-            else 
-            {
+            } else {
                 $sna_daterange = explode(' to ', ($dt->getDay()));
                 $first = "(select sna_id from tbl_snapearn where sna_upload_date >= UNIX_TIMESTAMP('$sna_daterange[0]') limit 1)";
                 $second = "(select sna_id from tbl_snapearn where sna_upload_date <= UNIX_TIMESTAMP('$sna_daterange[1]') order by sna_id desc limit 1)";
@@ -215,19 +201,15 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             }
         }
         
-        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][operator]'))
-        {
-            if (!empty($_GET['ops_name'])) 
-            {
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][operator]')) {
+            if (!empty($_GET['ops_name'])) {
                 $operatorId = $_GET['ops_name'];
                 $this->andWhere("sna_review_by = :ops", [':ops' => $operatorId]);
             }
         }
         
-        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][tagging]'))
-        {
-            if (!empty($_GET['sna_company_tagging'])) 
-            {
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][tagging]')) {
+            if (!empty($_GET['sna_company_tagging'])) {
                 $sna_company_tagging = $_GET['sna_company_tagging'];
                 $tagging = '';
                 switch ($sna_company_tagging) {
@@ -235,20 +217,18 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                         $tagging = 'sna_company_tagging > 0 AND sna_com_id > 0';
                         break;
                     case 'Manis':
-                        $tagging = 'sna_company_tagging = 0 AND sna_com_id = 0';
+                        $tagging = 'sna_company_tagging = 0 AND sna_com_id > 0';
                         break;
                     case 'Untagged':
-                        $tagging = 'sna_company_tagging = 0';
+                        $tagging = 'sna_company_tagging = 0 AND sna_com_id = 0';
                         break;
                 }
                 $this->andWhere($tagging);
             }
         }
 
-        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][merchant_field]'))
-        {
-            if (!empty($_GET['com_name'])) 
-            {
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][merchant_field]')) {
+            if (!empty($_GET['com_name'])) {
                 $merchantId = $_GET['com_name'];
 
                 $company_is_hq = Company::find()->checkCompanyIsParent($merchantId);

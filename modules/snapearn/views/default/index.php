@@ -44,163 +44,155 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                         <div class="col-sm-12">
                             <div class="row">
                                 <!-- Country Dropdown -->
-                                <?php 
-                                    echo app\components\widgets\RbacSelectWidget::widget([
-                                        'label' => 'Country',
-                                        'name' => 'sna_cty',
-                                        'class_names' => ['form-control', 'select2'],
-                                        'selects' => [
-                                            [
-                                                'text' => 'All',
-                                                'value' => '',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_cty']) == '' || empty($_GET['sna_cty'])) ? 'selected' : '';
-                                                }
-                                            ],
-                                            [
-                                                'text' => 'Indonesia',
-                                                'value' => 'ID',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'ID') ? 'selected' : '';
-                                                }
-                                            ],
-                                            [
-                                                'text' => 'Malaysia',
-                                                'value' => 'MY',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'MY') ? 'selected' : '';
-                                                }
-                                            ]
+                                <?=
+                                app\components\widgets\RbacSelectWidget::widget([
+                                    'label' => 'Country',
+                                    'name' => 'sna_cty',
+                                    'class_names' => ['form-control', 'select2'],
+                                    'selects' => [
+                                        [
+                                            'text' => 'All',
+                                            'value' => '',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_cty']) == '' || empty($_GET['sna_cty'])) ? 'selected' : '';
+                                            }
                                         ],
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][country]'
+                                        [
+                                            'text' => 'Indonesia',
+                                            'value' => 'ID',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'ID') ? 'selected' : '';
+                                            }
+                                        ],
+                                        [
+                                            'text' => 'Malaysia',
+                                            'value' => 'MY',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'MY') ? 'selected' : '';
+                                            }
                                         ]
-                                    ]); 
-                                ?>
+                                    ],
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][country]'
+                                    ]
+                                ]); ?>
                                 <!-- /Country Dropdown -->
                                 <!-- Receipt Status Dropdown -->
-                                <?php 
-                                    echo app\components\widgets\RbacSelectWidget::widget([
-                                        'label' => 'Receipt Status',
-                                        'name' => 'sna_status',
-                                        'class_names' => ['form-control', 'select2'],
-                                        'selects' => [
-                                            [
-                                                'text' => 'All',
-                                                'value' => '',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_status']) && $_GET['sna_status'] == '' || empty($_GET['sna_status'])) ? 'selected' : '';
-                                                }
-                                            ],
-                                            [
-                                                'text' => 'New',
-                                                'value' => 'NEW',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'NEW') ? 'selected' : '';
-                                                }
-                                            ],
-                                            [
-                                                'text' => 'Approved',
-                                                'value' => 'APP',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'APP') ? 'selected' : '';
-                                                }
-                                            ],
-                                            [
-                                                'text' => 'Rejected',
-                                                'value' => 'REJ',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_status']) && $_GET['sna_status']== 'REJ') ? 'selected' : '';
-                                                }
-                                            ]
+                                <?=
+                                app\components\widgets\RbacSelectWidget::widget([
+                                    'label' => 'Receipt Status',
+                                    'name' => 'sna_status',
+                                    'class_names' => ['form-control', 'select2'],
+                                    'selects' => [
+                                        [
+                                            'text' => 'All',
+                                            'value' => '',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_status']) && $_GET['sna_status'] == '' || empty($_GET['sna_status'])) ? 'selected' : '';
+                                            }
                                         ],
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][receipt_status]'
+                                        [
+                                            'text' => 'New',
+                                            'value' => 'NEW',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'NEW') ? 'selected' : '';
+                                            }
+                                        ],
+                                        [
+                                            'text' => 'Approved',
+                                            'value' => 'APP',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_status']) && $_GET['sna_status'] == 'APP') ? 'selected' : '';
+                                            }
+                                        ],
+                                        [
+                                            'text' => 'Rejected',
+                                            'value' => 'REJ',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_status']) && $_GET['sna_status']== 'REJ') ? 'selected' : '';
+                                            }
                                         ]
-                                    ]); 
-                                ?>
+                                    ],
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][receipt_status]'
+                                    ]
+                                ]); ?>
                                 <!-- /Receipt Status Dropdown -->
 
                                 <!-- Date range field -->
-                                <?php 
-                                    echo app\components\widgets\RbacDateRangeWidget::widget([
-                                        'label' => 'Date range',
-                                        'name' => 'sna_daterange',
-                                        'id' => 'the_daterange',
-                                        'class_names' => ['form-control', 'pull-right'],
-                                        'value' => function() {
-                                            return (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '';
-                                        }, 
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][date_range]'
-                                        ]
-                                    ]); 
-                                ?>
+                                <?=
+                                app\components\widgets\RbacDateRangeWidget::widget([
+                                    'label' => 'Date range',
+                                    'name' => 'sna_daterange',
+                                    'id' => 'the_daterange',
+                                    'class_names' => ['form-control', 'pull-right'],
+                                    'value' => function() {
+                                        return (!empty($_GET['sna_daterange'])) ? $_GET['sna_daterange'] : '';
+                                    }, 
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][date_range]'
+                                    ]
+                                ]); ?>
                                 <!-- /Date range field -->
 
                                 <!-- Receipt Number field -->
-                                <?php 
-                                    echo app\components\widgets\RbacTextInputWidget::widget([
-                                        'label' => 'Receipt',
-                                        'name' => 'sna_receipt',
-                                        'id' => 'receipt',
-                                        'placeholder' => 'Receipt number',
-                                        'class_names' => ['form-control'],
-                                        'value' => function() {
-                                            return (!empty($_GET['sna_receipt'])) ? $_GET['sna_receipt'] : '';
-                                        }, 
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][receipt_number]'
-                                        ]
-                                    ]); 
-                                ?>
+                                <?=
+                                app\components\widgets\RbacTextInputWidget::widget([
+                                    'label' => 'Receipt',
+                                    'name' => 'sna_receipt',
+                                    'id' => 'receipt',
+                                    'placeholder' => 'Receipt number',
+                                    'class_names' => ['form-control'],
+                                    'value' => function() {
+                                        return (!empty($_GET['sna_receipt'])) ? $_GET['sna_receipt'] : '';
+                                    }, 
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][receipt_number]'
+                                    ]
+                                ]); ?>
                                 <!-- /Receipt Number field -->
 
                                 <!-- Member field -->
-                                <?php 
-                                    echo app\components\widgets\RbacTextInputWidget::widget([
-                                        'label' => 'Member',
-                                        'name' => 'sna_member',
-                                        'id' => 'sna_member',
-                                        'placeholder' => 'Enter name',
-                                        'class_names' => ['form-control'],
-                                        'value' => function() {
-                                            return (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '';
-                                        }, 
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][member_field]'
-                                        ]
-                                    ]); 
-                                ?>
+                                <?=
+                                app\components\widgets\RbacTextInputWidget::widget([
+                                    'label' => 'Member',
+                                    'name' => 'sna_member',
+                                    'id' => 'sna_member',
+                                    'placeholder' => 'Enter name',
+                                    'class_names' => ['form-control'],
+                                    'value' => function() {
+                                        return (!empty($_GET['sna_member'])) ? $_GET['sna_member'] : '';
+                                    }, 
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][member_field]'
+                                    ]
+                                ]); ?>
                                 <!-- /Member field -->
-
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="row">
-
                                 <!-- Member Email field -->
-                                <?php 
-                                    echo app\components\widgets\RbacTextInputWidget::widget([
-                                        'label' => 'Member Email',
-                                        'name' => 'member_email',
-                                        'id' => 'member_email_search',
-                                        'placeholder' => 'Enter Email',
-                                        'class_names' => ['form-control'],
-                                        'value' => function() {
-                                            return (!empty($_GET['member_email'])) ? $_GET['member_email'] : '';
-                                        }, 
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][member_email]'
-                                        ]
-                                    ]); 
-                                ?>
+                                <?=
+                                app\components\widgets\RbacTextInputWidget::widget([
+                                    'label' => 'Member Email',
+                                    'name' => 'member_email',
+                                    'id' => 'member_email_search',
+                                    'placeholder' => 'Enter Email',
+                                    'class_names' => ['form-control'],
+                                    'value' => function() {
+                                        return (!empty($_GET['member_email'])) ? $_GET['member_email'] : '';
+                                    }, 
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][member_email]'
+                                    ]
+                                ]); ?>
                                 <!-- /Member Email field -->
 
                                 <!-- Operator field -->
@@ -245,111 +237,106 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                 <!-- /Operator field -->
 
                                 <!-- Merchant field -->
-                                <?php 
-                                    echo app\components\widgets\RbacTextInputWidget::widget([
-                                        'label' => 'Merchant',
-                                        'id' => 'com_name_search',
-                                        'placeholder' => 'Enter merchant name',
-                                        'class_names' => ['form-control'],
-                                        'value' => function() use ($company_name) {
-                                            return $company_name;
-                                        }, 
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][merchant_field]'
-                                        ]
-                                    ]); 
-                                ?>
+                                <?=
+                                app\components\widgets\RbacTextInputWidget::widget([
+                                    'label' => 'Merchant',
+                                    'id' => 'com_name_search',
+                                    'placeholder' => 'Enter merchant name',
+                                    'class_names' => ['form-control'],
+                                    'value' => function() use ($company_name) {
+                                        return $company_name;
+                                    }, 
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][merchant_field]'
+                                    ]
+                                ]); ?>
                                 <!-- /Merchant field -->
 
                                 <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
                                 <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
 
                                 <!-- Tagging Dropdown -->
-                                <?php 
-                                    echo app\components\widgets\RbacSelectWidget::widget([
-                                        'label' => 'Tagging',
-                                        'name' => 'sna_company_tagging',
-                                        'class_names' => ['form-control', 'select2'],
-                                        'selects' => [
-                                            [
-                                                'text' => 'All',
-                                                'value' => '',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_company_tagging']) == '' || empty($_GET['sna_company_tagging'])) ? 'selected' : '';
-                                                }
-                                            ],
-                                            [
-                                                'text' => 'Ebizu',
-                                                'value' => 'Ebizu',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] > 0) ? 'selected' : '';
-                                                }
-                                            ],
-                                            [
-                                                'text' => 'User',
-                                                'value' => 'Manis',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] > 0) ? 'selected' : '';
-                                                }
-                                            ],
-                                            [
-                                                'text' => 'Untagged',
-                                                'value' => 'Untagged',
-                                                'selected' => function() {
-                                                    return (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] == 0) ? 'selected' : '';
-                                                }
-                                            ]
+                                <?=
+                                app\components\widgets\RbacSelectWidget::widget([
+                                    'label' => 'Tagging',
+                                    'name' => 'sna_company_tagging',
+                                    'class_names' => ['form-control', 'select2'],
+                                    'selects' => [
+                                        [
+                                            'text' => 'All',
+                                            'value' => '',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_company_tagging']) == '' || empty($_GET['sna_company_tagging'])) ? 'selected' : '';
+                                            }
                                         ],
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][tagging]'
+                                        [
+                                            'text' => 'Ebizu',
+                                            'value' => 'Ebizu',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] == 'Ebizu') ? 'selected' : '';
+                                            }
+                                        ],
+                                        [
+                                            'text' => 'Manis User',
+                                            'value' => 'Manis',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] == 'Manis') ? 'selected' : '';
+                                            }
+                                        ],
+                                        [
+                                            'text' => 'Untagged',
+                                            'value' => 'Untagged',
+                                            'selected' => function() {
+                                                return (!empty($_GET['sna_company_tagging']) && $_GET['sna_company_tagging'] == 'Untagged') ? 'selected' : '';
+                                            }
                                         ]
-                                    ]); 
-                                ?>
+                                    ],
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][tagging]'
+                                    ]
+                                ]); ?>
                                 <!-- /Tagging Dropdown -->
 
                                 <!-- Submit button -->
-                                <?php 
-                                    echo app\components\widgets\RbacButtonWidget::widget([
-                                        'text' => 'Submit',
-                                        'name' => 'output_type',
-                                        'type' => 'submit',
-                                        'class_names' => ['btn', 'btn-primary', 'btn-flat'],
-                                        'icon' => ['fa', 'fa-refresh'],
-                                        'value' => function() {
-                                            return 'view';
-                                        },
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][submit_button]'
-                                        ],
-                                        'use_container' => true
-                                    ]); 
-                                ?>
+                                <?=
+                                app\components\widgets\RbacButtonWidget::widget([
+                                    'text' => 'Submit',
+                                    'name' => 'output_type',
+                                    'type' => 'submit',
+                                    'class_names' => ['btn', 'btn-primary', 'btn-flat'],
+                                    'icon' => ['fa', 'fa-refresh'],
+                                    'value' => function() {
+                                        return 'view';
+                                    },
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][submit_button]'
+                                    ],
+                                    'use_container' => true
+                                ]); ?>
                                 <!-- /Submit button -->
 
                                 <!-- Export button -->
-                                <?php 
-                                    echo app\components\widgets\RbacButtonWidget::widget([
-                                        'label' => 'Export',
-                                        'text' => 'Export to Excel',
-                                        'name' => 'output_type',
-                                        'type' => 'submit',
-                                        'class_names' => ['btn', 'btn-info', 'btn-flat'],
-                                        'icon' => ['fa', 'fa-file-excel-o'],
-                                        'value' => function() {
-                                            return 'excel';
-                                        },
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][export_button]'
-                                        ],
-                                        'use_container' => true
-                                    ]); 
-                                ?>
+                                <?=
+                                app\components\widgets\RbacButtonWidget::widget([
+                                    'label' => 'Export',
+                                    'text' => 'Export to Excel',
+                                    'name' => 'output_type',
+                                    'type' => 'submit',
+                                    'class_names' => ['btn', 'btn-info', 'btn-flat'],
+                                    'icon' => ['fa', 'fa-file-excel-o'],
+                                    'value' => function() {
+                                        return 'excel';
+                                    },
+                                    'permission' => [
+                                        'module' => 'Snapearn',
+                                        'name' => 'Snapearn[Page_Components][export_button]'
+                                    ],
+                                    'use_container' => true
+                                ]); ?>
                                 <!-- /Export button -->
-                                
                             </div>
                         </div>
                     </form>
@@ -396,7 +383,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                     'value' => function($data) {
                                         return (!empty($data->sna_ops_receipt_number)) ? $data->sna_ops_receipt_number : '<a class=""><span class="not-set">(not set)</span></a>';
                                     },
-                                    'contentOptions'=>['style'=>'max-width: 80px; word-wrap: break-word;']
+                                    'contentOptions' => ['style' => 'max-width: 80px; word-wrap: break-word;']
                                 ],
                                 [
                                     'attribute' => 'sna_receipt_amount',
@@ -444,9 +431,9 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                     'value' => function($data) {
                                         if ($data->sna_company_tagging > 0 && $data->sna_com_id > 0)
                                             return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/ebz_logo.png', ['height' => '16']) . '</center>';
-                                        elseif ($data->sna_company_tagging == 0 && $data->sna_com_id == 0)
+                                        elseif ($data->sna_company_tagging == 0 && $data->sna_com_id > 0)
                                             return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/manis.png', ['height' => '16']) . '</center>';
-                                        else
+                                        elseif ($data->sna_company_tagging == 0 && $data->sna_com_id == 0)
                                             return '<center><i class="fa fa-tags"></i></center>';
                                     }
                                 ],
