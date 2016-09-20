@@ -5,9 +5,10 @@ namespace app\modules\speciality_promo\controllers;
 use Yii;
 use app\models\ComSpecialityPromo;
 use app\models\ComSpecialityPromoSearch;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * TestController implements the CRUD actions for ComSpecialityPromo model.
@@ -63,31 +64,48 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new ComSpecialityPromo();
-
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = 'json';
-            return \yii\widgets\ActiveForm::validate($model);
-        }
-        
         if ($model->load(Yii::$app->request->post())) {
-            $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
-            $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
-            if ($model->save()) {
-                return $this->redirect(['index']);
-            }else{
-                var_dump($model->getErrors());exit;
-                $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
-                $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
+            if ($model->validate()) {
+                $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
+                $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
+                $model->save();
+                return $results = [
+                    'success' => 0, 
+                    'message' => 'success'
+                ];
+            } else {
+                $errors = $model->errors;
+                return $results = [
+                    'error' => 1000, 
+                    'message' => $errors
+                ];
             }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+        } 
+        // if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+        //     Yii::$app->response->format = 'json';
+        //     return \yii\widgets\ActiveForm::validate($model);
+        // }
+        
+        // if ($model->load(Yii::$app->request->post())) {
+        //     $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
+        //     $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
+        //     if ($model->save()) {
+        //         return $this->redirect(['index']);
+        //     }else{
+        //         var_dump($model->getErrors());exit;
+        //         $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
+        //         $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
+        //         return $this->render('create', [
+        //             'model' => $model,
+        //         ]);
+        //     }
+        // } else {
+        //     return $this->render('create', [
+        //         'model' => $model,
+        //     ]);
+        // }
     }
 
     /**
@@ -98,26 +116,25 @@ class DefaultController extends Controller
      */
     public function actionUpdate($id)
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                return $this->redirect(['index']);
-            }else {
-                $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
-                $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
+            if ($model->validate()) {
+                $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
+                $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
+                $model->save();
+                return $results = [
+                    'success' => 0, 
+                    'message' => 'success'
+                ];
+            } else {
+                $errors = $model->errors;
+                return $results = [
+                    'error' => 1000, 
+                    'message' => $errors
+                ];
             }
-            
-        } else {
-            $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
-            $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+        } 
     }
 
     /**

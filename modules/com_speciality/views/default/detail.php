@@ -124,3 +124,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </section>
+<?php
+$this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') .'common/js/activeformvalidation/beforesubmit.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+?>

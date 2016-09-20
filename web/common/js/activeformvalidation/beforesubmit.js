@@ -38,7 +38,11 @@ $('div.modal').on('shown.bs.modal', function(){
 	                    window.location.reload();
 	                });
 	            } else {
-	                var msg = Object.values(data.message)[0];
+	                var msg = [];
+	                	item_msg = Object.values(data.message)[0];
+	                for (var i = item_msg.length - 1; i >= 0; i--) {
+	                	msg = item_msg[i];
+	                }
 	                if(data.error == 1000) {
 	                    swal({
 	                        title: 'System Error',   

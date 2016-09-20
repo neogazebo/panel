@@ -80,7 +80,7 @@ $model->sna_push = true;
                             ]);
                         ?>
                         <?=
-                            $this->render('/default/existing',[
+                            $this->render('/default/add',[
                                 'model' => SnapEarn::findOne($model->sna_id)
                             ]);
                         ?>
