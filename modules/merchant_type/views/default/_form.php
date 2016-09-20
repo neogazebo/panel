@@ -2,16 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\CompanyType */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+
     <?php $form = ActiveForm::begin([
-        'id' => 'promo-speciality',
-        'action' => $model->isNewRecord ? '/type/default/create' : '/type/default/update',
-        'enableAjaxValidation' => true,
-        'enableClientValidation' => true,
+        'id' => $model->isNewRecord ? 'type_speciality' : 'type_speciality-'.$model->com_type_id,
+        'action' => $model->isNewRecord ? '/type/default/create' : '/type/default/update?id='.$model->com_type_id,
+        // 'enableAjaxValidation' => true,
     ]); ?>
     <div class="modal-body">
     <?= $form->field($model, 'com_type_name')->textInput(['maxlength' => true]) ?>

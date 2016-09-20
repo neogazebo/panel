@@ -661,7 +661,7 @@ class DefaultController extends BaseController
         $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
         $model->sna_upload_date = Utc::convert($model->sna_upload_date);
 
-        return $this->render(Yii::$app->permission_helper->setRbacView('form','form_rbac'), [
+        return $this->render('form', [
             'model' => $model,
             'id' => $id
         ]);

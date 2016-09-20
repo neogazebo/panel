@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'delete' => function($url,$model){
                                         return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
                                             [
-                                                'value' => 'delete?id='.$model->spt_promo_id,
+                                                'value' => '/promo/default/delete?id='.$model->spt_promo_id,
                                                 'class' => 'gotohell',
                                                 'data-title' => 'Delete',
                                                 'data-text' => 'Are you sure ?'
@@ -124,3 +124,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </section>
+<?php
+$this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') .'common/js/activeformvalidation/beforesubmit.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+?>

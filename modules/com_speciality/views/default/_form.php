@@ -13,10 +13,8 @@ use yii\widgets\ActiveForm;
 $country = new GlobalHelper();
 ?>
     <?php $form = ActiveForm::begin([
-        'id' => 'promo-speciality',
-        'action' => $model->isNewRecord ? '/speciality/default/create' : '/promo/default/update',
-        'enableAjaxValidation' => true,
-        'enableClientValidation' => true,
+        'id' => $model->isNewRecord ? 'promo-speciality' : 'promo-speciality-'.$model->com_spt_id,
+        'action' => $model->isNewRecord ? '/speciality/default/create' : '/speciality/default/update?id='.$model->com_spt_id,
     ]); ?>
     <div class="modal-body">
 

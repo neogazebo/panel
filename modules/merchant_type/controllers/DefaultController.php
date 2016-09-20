@@ -5,9 +5,10 @@ namespace app\modules\merchant_type\controllers;
 use Yii;
 use app\models\CompanyType;
 use app\models\CompanyTypeSearch;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * DefaultController implements the CRUD actions for CompanyType model.
@@ -63,21 +64,23 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new CompanyType();
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = 'json';
-            return \yii\widgets\ActiveForm::validate($model);
-        }
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                return $this->redirect(['index']);
+            if ($model->validate()) {
+               $model->save();
+               return $results = [
+                    'success' => 0, 
+                    'message' => 'success'
+                ];
+            } else {
+                $errors = $model->errors;
+                return $results = [
+                    'error' => 1000, 
+                    'message' => $errors
+                ];
             }
-            var_dump($model->getErrors());exit;
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+        } 
     }
 
     /**
@@ -88,15 +91,23 @@ class DefaultController extends Controller
      */
     public function actionUpdate($id)
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->com_type_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+               $model->save();
+               return $results = [
+                    'success' => 0, 
+                    'message' => 'success'
+                ];
+            } else {
+                $errors = $model->errors;
+                return $results = [
+                    'error' => 1000, 
+                    'message' => $errors
+                ];
+            }
+        } 
     }
 
     /**

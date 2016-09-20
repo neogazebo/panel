@@ -83,11 +83,6 @@ $model->sna_push = true;
                                 'data-backdrop' => 'static',
                                 ]);
                             ?>
-                            <?=
-                                $this->render('/default/existing',[
-                                    'model' => SnapEarn::findOne($model->sna_id)
-                                ]);
-                            ?>
                         <?php endif; ?>
                     </div>
                     <?php endif; ?>
@@ -258,7 +253,11 @@ $model->sna_push = true;
     </div>
     <?php ActiveForm::end(); ?>
 </section>
-
+<?=
+    $this->render('/default/add',[
+        'model' => SnapEarn::findOne($model->sna_id)
+    ]);
+?>
 <!-- widget to create render modal -->
 <?php
 Modal::begin([

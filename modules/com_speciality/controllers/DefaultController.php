@@ -13,6 +13,7 @@ use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * DeafultController implements the CRUD actions for CompanySpeciality model.
@@ -116,28 +117,23 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new CompanySpeciality();
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = 'json';
-            return \yii\widgets\ActiveForm::validate($model);
-        }
-
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                return $this->redirect(['detail']);
-            }else{
-                var_dump($model->getErrors());exit;
-                $model->com_spt_created_date = date('Y-m-d',$model->com_spt_created_date);
-                $model->com_spt_updated_date = date('Y-m-d',$model->com_spt_updated_date);
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
+            if ($model->validate()) {
+               $model->save();
+               return $results = [
+                    'success' => 0, 
+                    'message' => 'success'
+                ];
+            } else {
+                $errors = $model->errors;
+                return $results = [
+                    'error' => 1000, 
+                    'message' => $errors
+                ];
             }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+        } 
     }
 
     /**
@@ -148,27 +144,23 @@ class DefaultController extends Controller
      */
     public function actionUpdate($id)
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                return $this->redirect(['detail']);
-            }else{
-                var_dump($model->getErrors());exit;
-                $model->com_spt_created_date = date('Y-m-d',$model->com_spt_created_date);
-                $model->com_spt_updated_date = date('Y-m-d',$model->com_spt_updated_date);
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
+            if ($model->validate()) {
+               $model->save();
+               return $results = [
+                    'success' => 0, 
+                    'message' => 'success'
+                ];
+            } else {
+                $errors = $model->errors;
+                return $results = [
+                    'error' => 1000, 
+                    'message' => $errors
+                ];
             }
-            
-        } else {
-            $model->com_spt_created_date = date('Y-m-d',$model->com_spt_created_date);
-            $model->com_spt_updated_date = date('Y-m-d',$model->com_spt_updated_date);
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+        } 
     }
 
     /**

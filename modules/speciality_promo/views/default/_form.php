@@ -16,10 +16,8 @@ foreach ($speciality as $val) {
 
 ?>
     <?php $form = ActiveForm::begin([
-        'id' => 'promo-speciality',
-        'action' => $model->isNewRecord ? '/promo/default/create' : '/promo/default/update',
-        'enableAjaxValidation' => true,
-        'enableClientValidation' => true,
+        'id' => $model->isNewRecord ? 'promo-speciality' : 'promo-speciality-'.$model->spt_promo_id,
+        'action' => $model->isNewRecord ? '/promo/default/create' : '/promo/default/update?id='.$model->spt_promo_id,
     ]); ?>
     <div class="modal-body">
         <?=
@@ -29,7 +27,10 @@ foreach ($speciality as $val) {
         <?= $form->field($model, 'spt_promo_multiple_point')->textInput() ?>
         <div class="col-sm-6" style="padding: 0px 12px 0px 0px;">
             <?=
-            $form->field($model, 'spt_promo_start_date')->widget(DatePicker::classname(),[
+            $form->field($model, 'spt_promo_start_date')->widget(DatePicker::classname(),[ 
+                'options' => [
+                    'id' => 'start_'.$model->spt_promo_id,
+                ],
                 'removeButton' => false,
                 'pluginOptions' => [
                     'autoclose'=>true,
@@ -41,6 +42,9 @@ foreach ($speciality as $val) {
         <div class="col-sm-6" style="padding: 0px 0px 0px 12px;">
             <?=
             $form->field($model, 'spt_promo_end_date')->widget(DatePicker::classname(),[
+                'options' => [
+                    'id' => 'end_'.$model->spt_promo_id,
+                ],
                 'removeButton' => false,
                 'pluginOptions' => [
                     'autoclose'=>true,
