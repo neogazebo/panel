@@ -60,7 +60,7 @@ class DefaultController extends BaseController
             ],
         ]);
 
-        return $this->render(Yii::$app->permission_helper->setRbacView('index','index_rbac'), [
+        return $this->render('index', [
             'dataProvider' => $dataProvider
         ]);
     }

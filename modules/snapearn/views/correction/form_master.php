@@ -70,19 +70,14 @@ $model->sna_push = true;
                 <div class="box-header with-border">
                     <h3 class="box-title">Form Approval</h3>
                     <div class="pull-right btn-merchant">
-                        <?php if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][add_new_merchant_correction]')) : ?>
-                            <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['default/new-merchant?id=' . $model->sna_id.'&to=correction']), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
-                        <?php endif; ?>
-
-                        <?php if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][add_existing_merchant_correction]')) : ?>
-                            <?= Html::a('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['#'], [
-                                'class' => 'btn btn-flat btn-warning btn-xs',
-                                'data-toggle' => 'modal', 
-                                'data-target' => '#find_existing',
-                                'data-backdrop' => 'static',
-                                ]);
-                            ?>
-                        <?php endif; ?>
+                        <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['default/new-merchant?id=' . $model->sna_id.'&to=correction']), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
+                         <?= Html::a('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['#'], [
+                            'class' => 'btn btn-flat btn-warning btn-xs',
+                            'data-toggle' => 'modal', 
+                            'data-target' => '#find_existing',
+                            'data-backdrop' => 'static',
+                            ]);
+                        ?>
                     </div>
                 </div>
                 <div class="box-body">
@@ -104,20 +99,16 @@ $model->sna_push = true;
                         <?php if (!empty($model->merchant)) : ?>
                         <li class="">
                             <a href="#"><b>Merchant Point</b>
-
-                                <?php if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][add_point_button_correction]')) : ?>
-                                    <!--start-->
-                                    <?php if ($model->merchant->com_point < 1000) :?>
-                                        <!--this validation if add point to merchant is only specific user-->
-                                        <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
-                                        <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id.'&type=2', 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
-                                        <?php // else: ?>
-                                        <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
-                                        <?php // endif; ?>
-                                    <?php endif; ?>
-                                    <!--end--> 
+                                <!--start-->
+                                <?php if ($model->merchant->com_point < 1000) :?>
+                                    <!--this validation if add point to merchant is only specific user-->
+                                    <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
+                                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id.'&type=2', 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
+                                    <?php // else: ?>
+                                    <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
+                                    <?php // endif; ?>
                                 <?php endif; ?>
-
+                                <!--end--> 
                                 <span class="pull-right text-light-blue">
                                     <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
                                 </span>
@@ -141,13 +132,7 @@ $model->sna_push = true;
                         <li></li>
                     </ul>
                     <form role="form">
-                        <?= 
-                            $form->field($model, 'sna_status')->dropDownList($model->statuscorrection, [
-                                'class' => 'form-control status',
-                                'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][status_correction]') ? false : true
-                            ]) 
-                        ?>
-
+                        <?= $form->field($model, 'sna_status')->dropDownList($model->statuscorrection, ['class' => 'form-control status']) ?>
                         <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
                         <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
                         <div class="point-form">
@@ -166,8 +151,7 @@ $model->sna_push = true;
                                         'pluginOptions' => [
                                             'format' => 'yyyy-mm-dd',
                                             'endDate' => '+1d',
-                                        ],
-                                        'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][transaction_time_correction]') ? false : true,
+                                        ]
                                     ]);
                                     ?>
                                 </div>
@@ -184,87 +168,23 @@ $model->sna_push = true;
                                             'buttonOptions' => [
                                                 'class' => 'btn btn-info'
                                             ]
-                                        ],
-                                        'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][transaction_time_correction]') ? false : true,
+                                        ]
                                     ]);
                                     ?>
                                 </div>
                             </div>
-
-                            <?= 
-                                $form->field($model, 'sna_ops_receipt_number')->textInput([
-                                    'class' => 'form-control sna_status',
-                                    'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][ops_number_correction]') ? false : true,
-                                ])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.'); 
-                            ?>
-                            
-                            <?= 
-                                $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname([
-                                    'class' => 'form-control sna_amount',
-                                    'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][amount_correction]') ? false : true,
-                                ]));
-                            ?>
-                            
-                            <?= 
-                                $form->field($model, 'sna_point')->textInput([
-                                    'class' => 'form-control sna_point', 
-                                    'readonly' => true,
-                                    'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][point_correction]') ? false : true,
-                                ]); 
-                            ?>
-
+                            <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status'])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.') ?>
+                            <?= $form->field($model, 'sna_ops_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
+                            <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                         </div>
                         <div class="reject-form">
-                            <?= 
-                                $form->field($model, 'sna_sem_id')->dropDownList($model->email, [
-                                    'id' => 'email', 
-                                    'class' => 'form-control',
-                                    'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][reject_remark_correction]') ? false : true,
-                                ]); 
-                            ?>
+                            <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control']) ?>
                         </div>
-
-                        <?php if(Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][push_notification_correction]')): ?>
-                            <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
-                        <?php endif; ?>
-                        
+                        <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
                         <div class="box-footer clearfix">
                             <div class="button-right pull-right">
-                                <?php 
-                                    echo app\components\widgets\RbacButtonWidget::widget([
-                                        'text' => 'Save',
-                                        'type' => 'submit',
-                                        'class_names' => ['btn', 'btn-primary', 'submit-button'],
-                                        'icon' => ['fa', 'fa-check'],
-                                        'value' => function() {
-                                            return;
-                                        },
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][save_button_correction]'
-                                        ],
-                                        'use_container' => false
-                                    ]); 
-                                ?>
-
-                                <?php 
-                                    echo app\components\widgets\RbacButtonWidget::widget([
-                                        'text' => 'Save &amp; Next',
-                                        'name' => 'save-next',
-                                        'type' => 'submit',
-                                        'class_names' => ['btn', 'btn-success', 'saveNext'],
-                                        'icon' => ['fa', 'fa-arrow-right'],
-                                        'value' => function() {
-                                            return;
-                                        },
-                                        'permission' => [
-                                            'module' => 'Snapearn',
-                                            'name' => 'Snapearn[Page_Components][save_next_button_correction]'
-                                        ],
-                                        'use_container' => false
-                                    ]); 
-                                ?>
-                                
+                                <button type="submit" class="btn-primary btn submit-button"><i class="fa fa-check"></i> Save</button>
+                                <button class="btn btn-success saveNext" type="submit" name="save-next"><i class="fa fa-arrow-right"></i> Save &amp; Next</button>
                                 <input id="saveNext" type="hidden" name="saveNext" value="">
                             </div>
                             <div class="button-left pull-left">

@@ -37,9 +37,7 @@ $this->registerCss($customCss);
                     <div class="pull-left form-inline">
                         <div class="form-group">
                             <label>Configuration</label><br>
-                            <?php if(Yii::$app->permission_helper->processPermissions('Logwork', 'Logwork[Page_Components][point_working_hours]')) : ?>
-                                <?= Html::a('<i class="fa fa-wrench"></i> &nbsp; Working Hour Point', ['/logwork/point'], ['class' => 'btn btn-flat btn-danger']) ?>
-                            <?php endif; ?>
+                            <?= Html::a('<i class="fa fa-wrench"></i> &nbsp; Working Hour Point', ['/logwork/point'], ['class' => 'btn btn-flat btn-danger']) ?>
                         </div>
                     </div>
                     <form role="form" class="form-inline" method="get" action="/logwork">
