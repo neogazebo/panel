@@ -31,11 +31,13 @@ $this->title = 'Detail Working Hours';
                 <li><a href="#">Total Add Existing Merchant : <span class="pull-right badge bg-yellow"><?= $total->total_addexisting ?></span></a></li>
             </ul>
         </div>
+
+        <!-- Request EKo - APT-53 Hide Total Point
         <div class="col-sm-3">
             <ul class="nav nav-stacked">
                 <li><a href="#">Total Point : <span class="pull-right badge bg-aqua"><?= $total->total_point ?></span></a></li>
             </ul>
-        </div>
+        </div> -->
     </div>
 </section>
 
