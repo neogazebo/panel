@@ -184,7 +184,7 @@ $model->sna_push = true;
                         <?php endif; ?>
 
                         <?php if(Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][amount_update]')): ?>
-                            <?= $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
+                            <?= $form->field($model, 'sna_ops_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
                         <?php endif; ?>
 
                         <?php if(Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][point_update]')): ?>

@@ -193,13 +193,13 @@ $model->sna_push = true;
 
                             <?= 
                                 $form->field($model, 'sna_ops_receipt_number')->textInput([
-                                    'class' => 'form-control sna_status',
+                                    'class' => 'form-control sna_amount',
                                     'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][ops_number_correction]') ? false : true,
                                 ])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.'); 
                             ?>
                             
                             <?= 
-                                $form->field($model, 'sna_receipt_amount')->widget(MaskMoney::classname([
+                                $form->field($model, 'sna_ops_receipt_amount')->widget(MaskMoney::classname([
                                     'class' => 'form-control sna_amount',
                                     'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][amount_correction]') ? false : true,
                                 ]));
