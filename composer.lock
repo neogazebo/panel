@@ -379,18 +379,6 @@
         },
         {
             "name": "kartik-v/yii2-dialog",
-<<<<<<< HEAD
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kartik-v/yii2-dialog.git",
-                "reference": "c0f83291c050fb05a1dc66a90ad6151de2d1e982"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-dialog/zipball/c0f83291c050fb05a1dc66a90ad6151de2d1e982",
-                "reference": "c0f83291c050fb05a1dc66a90ad6151de2d1e982",
-=======
             "version": "v1.0.1",
             "source": {
                 "type": "git",
@@ -401,7 +389,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/kartik-v/yii2-dialog/zipball/4aaf8918c6dbd90218b6ad9036b1aae211480716",
                 "reference": "4aaf8918c6dbd90218b6ad9036b1aae211480716",
->>>>>>> master
                 "shasum": ""
             },
             "require": {
@@ -440,11 +427,7 @@
                 "modal",
                 "yii2"
             ],
-<<<<<<< HEAD
-            "time": "2016-02-22 10:58:46"
-=======
             "time": "2016-09-13 18:15:26"
->>>>>>> master
         },
         {
             "name": "kartik-v/yii2-export",
