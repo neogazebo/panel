@@ -42,9 +42,17 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $this->andWhere('tbl_account.acc_cty_id = :country', [':country' => $sna_cty]);
         }
 
-        if (!empty($_GET['sna_member'])) {
-            $sna_member = $_GET['sna_member'];
-            $this->andWhere(['=', 'sna_acc_id', $sna_member]);
+        
+        $like_name = Yii::$app->request->get('sna_member');
+        if ($like_name) {
+            $get_member = Account::find()->select('acc_id')
+                    ->andWhere(['LIKE','acc_screen_name',$like_name])
+                    ->asArray()->all();
+            $acc_id = [];
+            foreach ($get_member as $key) {
+                $acc_id[] = (int)$key['acc_id'];
+            }
+            $this->andWhere(['sna_acc_id' => $acc_id]);
         }
 
         if (!empty($_GET['sna_receipt'])) {
@@ -108,6 +116,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         }
         
         $this->orderBy('sna_id DESC');
+        // echo $this->createCommand()->sql;exit;
         return $this;
     }
 
