@@ -149,35 +149,46 @@ $model->sna_push = true;
                     ?>
 
                     <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
-                    <div class="point-form">
-                        <?php if(Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][transaction_time_update]')): ?>
+                        <div class="point-form">
                             <label>Transaction Time</label>
-                            <?=
-                            kartik\widgets\DatePicker::widget([
-                                'name' => 'd1',
-                                'type' => kartik\widgets\DatePicker::TYPE_COMPONENT_PREPEND,
-                                'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: Y-m-d'),
-                                'pluginOptions' => [
-                                    'format' => 'yyyy-MMM-dd'
-                                ]
-                            ]);
-                            ?>
-                            <?=
-                            kartik\widgets\TimePicker::widget([
-                                'name' => 't1',
-                                'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: H:i:s'),
-                                'pluginOptions' => [
-                                    'showSeconds' => true,
-                                    'showMeridian' => false,
-                                ],
-                                'addonOptions' => [
-                                    'buttonOptions' => [
-                                        'class' => 'btn btn-info'
-                                    ]
-                                ]
-                            ]);
-                            ?>
-                        <?php endif; ?>
+                            <div class="row form-group">
+                                <div class="col-sm-6" style="padding-right: 0px">
+                                    <?=
+                                    kartik\widgets\DatePicker::widget([
+                                        'name' => 'd1',
+                                        'options' => [
+                                            'class' => 'sna_transaction',
+                                        ],
+                                        'removeButton' => false,
+                                        'type' => kartik\widgets\DatePicker::TYPE_COMPONENT_APPEND,
+                                        'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: Y-m-d'),
+                                        'pluginOptions' => [
+                                            'format' => 'yyyy-mm-dd',
+                                            'endDate' => '+1d',
+                                        ],
+                                        'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][transaction_time_correction]') ? false : true,
+                                    ]);
+                                    ?>
+                                </div>
+                                <div class="col-sm-6" style="padding-left: 0px">
+                                    <?=
+                                    kartik\widgets\TimePicker::widget([
+                                        'name' => 't1',
+                                        'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: H:i:s'),
+                                        'pluginOptions' => [
+                                            'showSeconds' => true,
+                                            'showMeridian' => false,
+                                        ],
+                                        'addonOptions' => [
+                                            'buttonOptions' => [
+                                                'class' => 'btn btn-info'
+                                            ]
+                                        ],
+                                        'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][transaction_time_correction]') ? false : true,
+                                    ]);
+                                    ?>
+                                </div>
+                            </div>
 
                         <?php if(Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][ops_number_update]')): ?>
                             <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status'])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.') ?>
