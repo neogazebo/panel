@@ -8,7 +8,6 @@ use yii\helpers\Html;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Company Specialities';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="content-header ">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -21,15 +20,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border"></div><!-- /.box-header -->
                 <div class="box-body">
                 <p>
-                <?= Html::a('Create Speciality', ['#'], [
-                    'class' => 'btn btn-success',
-                    'data-toggle' => 'modal', 
-                    'data-target' => '#create-speciality',
-                    'data-backdrop' => 'static',
+                <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['/speciality'], ['class' => 'btn btn-warning']) ?>
+                <?= Html::a('<i class="fa fa-plus-square"></i> Create Speciality', ['#'], [
+                        'class' => 'btn btn-success pull-right',
+                        'data-toggle' => 'modal', 
+                        'data-target' => '#create-speciality',
+                        'data-backdrop' => 'static',
                     ]);
                 ?>
                 <?=
-                    $this->render('create',[
+                    $this->render('create', [
                         'model' => new CompanySpeciality()
                     ]);
                 ?>
@@ -118,12 +118,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ],
                     ],
+                    'tableOptions' => ['class' => 'table table-striped table-hover']
                 ]); ?>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 <?php
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') .'common/js/activeformvalidation/beforesubmit.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 ?>

@@ -20,7 +20,8 @@ $this->registerJsFile(Yii::$app->homeUrl . 'pages/MerchantSpeciality.js', ['depe
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
-                <div class="box-header with-border"></div>
+                <div class="box-header with-border">
+                </div>
                 <form id="add-merchant-child">
                     <div class="box-body">
                         <div id="searchList" class="col-sm-6">
@@ -48,7 +49,7 @@ $this->registerJsFile(Yii::$app->homeUrl . 'pages/MerchantSpeciality.js', ['depe
                         <div class="clearfix"></div>    
                     </div>
                     <div class="box-footer">
-                        <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['index'], ['class' => 'btn btn-warning']) ?>
+                        <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['detail'], ['class' => 'btn btn-warning']) ?>
                         <?= Html::submitButton('<i class="fa fa-check"></i> Save', ['class' => 'btn btn-primary pull-right']) ?>
                     </div>
                 </form>

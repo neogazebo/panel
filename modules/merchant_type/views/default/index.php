@@ -9,7 +9,6 @@ use yii\helpers\Html;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Company Types';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="content-header ">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -19,24 +18,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
-                <div class="box-header with-border"></div><!-- /.box-header -->
-                <div class="box-body">
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-                <p>
-                    <?= Html::a('Create Company Type', ['#'], [
-                            'class' => 'btn btn-success',
+                <div class="box-header with-border">
+                    <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['/speciality'], ['class' => 'btn btn-warning']) ?>
+                    <?= Html::a('<i class="fa fa-plus-square"></i> Create Company Type', ['#'], [
+                            'class' => 'btn btn-success pull-right',
                             'data-toggle' => 'modal', 
                             'data-target' => '#create-type',
                             'data-backdrop' => 'static',
-                            ]);
-                        ?>
-                        <?=
-                            $this->render('create',[
-                                'model' => new CompanyType()
-                            ]);
-                        ?>
-                </p>
+                        ]);
+                    ?>
+                    <?=
+                        $this->render('create', [
+                            'model' => new CompanyType()
+                        ]);
+                    ?>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     // 'filterModel' => $searchModel,
@@ -69,7 +67,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'com_type_created_date',
                         // 'com_type_updated_date',
                         // 'com_type_deleted_date',
-
                         [   
                             'header' => 'Action',
                             'class' => 'yii\grid\ActionColumn',
@@ -90,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $html;
                                 },
                             'delete' => function($url,$model){
-                                return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
+                                return Html::a('<i class="fa fa-times-circle-o"></i>', ['#'],
                                     [
                                         'value' => 'delete?id='.$model->com_type_id,
                                         'class' => 'gotohell',
@@ -101,12 +98,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ],
                     ],
+                    'tableOptions' => ['class' => 'table table-striped table-hover']
                 ]); ?>
                </div>
             </div>
         </div>
     </div>
 </section>
+
 <?php
-$this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') .'common/js/activeformvalidation/beforesubmit.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
+$this->registerJsFile(Yii::$app->homeUrl .'common/js/activeformvalidation/beforesubmit.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 ?>

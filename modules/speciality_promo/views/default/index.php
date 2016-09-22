@@ -12,7 +12,6 @@ use yii\helpers\Url;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Speciality Promo';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="content-header ">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -22,23 +21,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
-                <div class="box-header with-border"></div><!-- /.box-header -->
-                <div class="box-body">
-                    <p>
-                        <?= Html::a('Back', ['/speciality'], ['class' => 'btn btn-primary']) ?>
-                        <?= Html::a('Create Promo', ['#'], [
-                            'class' => 'btn btn-success',
+                <div class="box-header with-border">
+                    <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['/speciality'], ['class' => 'btn btn-warning']) ?>
+                    <?= Html::a('<i class="fa fa-plus-square"></i> Create Promo', ['#'], [
+                            'class' => 'btn btn-success pull-right',
                             'data-toggle' => 'modal', 
                             'data-target' => '#create-promo',
                             'data-backdrop' => 'static',
-                            ]);
-                        ?>
-                        <?=
-                            $this->render('create',[
-                                'model' => new ComSpecialityPromo()
-                            ]);
-                        ?>
-                    </p>
+                        ]);
+                    ?>
+                    <?=
+                        $this->render('create',[
+                            'model' => new ComSpecialityPromo()
+                        ]);
+                    ?>
+                </div><!-- /.box-header -->
+                <div class="box-body">
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         // 'filterModel' => $searchModel,
@@ -118,12 +116,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ],
                         ],
+                        'tableOptions' => ['class' => 'table table-striped table-hover']
                     ]); ?>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 <?php
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') .'common/js/activeformvalidation/beforesubmit.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 ?>
