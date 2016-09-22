@@ -164,13 +164,13 @@ $this->registerCss($customCss);
                                         return Yii::$app->formatter->asPercent($data['rejected_rate']);
                                     }
                                 ],
-                                [
-                                    'label' => 'Total Point',
-                                    'format' => 'html',
-                                    'value' => function($data) {
-                                        return Yii::$app->formatter->asDecimal($data['total_point'], 0);
-                                    }
-                                ],
+                                // Request EKo - APT-53 Hide Total Point [
+                                  //  'label' => 'Total Point',
+                                  //  'format' => 'html',
+                                  // 'value' => function($data) {
+                                  //      return Yii::$app->formatter->asDecimal($data['total_point'], 0);
+                                  //  }
+                                //],
                                 [
                                     'label' => 'Total Work Time',
                                     'format' => 'html',
