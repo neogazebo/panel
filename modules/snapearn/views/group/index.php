@@ -49,7 +49,8 @@ $this->title = 'Snap & Earn Group';
                                     'attribute' => 'spg_updated_date',
                                     'format' => 'html',
                                     'value' => function($data) {
-                                        return Yii::$app->formatter->asDatetime($data->spg_updated_date, "php:d M Y");
+                                        if (!empty($data->spg_updated_date))
+                                            return Yii::$app->formatter->asDatetime($data->spg_updated_date, "php:d M Y");
                                     }
                                 ],
                                 [
