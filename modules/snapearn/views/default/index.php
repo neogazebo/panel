@@ -172,6 +172,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                         'name' => 'Snapearn[Page_Components][member_field]'
                                     ]
                                 ]); ?>
+
                                 <!-- /Member field -->
                             </div>
                         </div>

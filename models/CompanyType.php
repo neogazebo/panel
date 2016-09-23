@@ -35,9 +35,9 @@ class CompanyType extends ActiveRecord
     public function rules()
     {
         return [
-            [['com_type_name', 'com_type_multiple_point', 'com_type_max_point'], 'required'],
+            [['com_type_name', 'com_type_max_point','com_type_multiple_point'], 'required'],
             [['com_type_name'],'unique'],
-            [['com_type_multiple_point', 'com_type_max_point', 'com_type_created_by', 'com_type_created_date', 'com_type_updated_date', 'com_type_deleted_date'], 'integer'],
+            [['com_type_max_point', 'com_type_created_by', 'com_type_created_date', 'com_type_updated_date', 'com_type_deleted_date'], 'integer'],
             [['com_type_name'], 'string', 'max' => 50],
         ];
     }

@@ -951,44 +951,6 @@ class DefaultController extends BaseController
         
         $parent_id = \app\models\CompanyCategory::findOne($id)->com_parent_category_id;
         return $parent_id;
-        
-//        $cats = [
-//            1 => [1, 7, 8, 9, 10, 58, 122, 125],
-//            2 => [24, 121],
-//            3 => [4, 23, 34, 36, 37],
-//            4 => [13, 16, 43, 59, 120],
-//            5 => [18, 38, 61],
-//            6 => [15, 20, 41, 62, 63, 64, 119],
-//            7 => [3, 14, 25, 26, 27, 31, 32, 33],
-//            8 => [5, 39, 50, 60],
-//            9 => [6, 12, 17, 19, 21],
-//            10 => [28, 30],
-//            11 => [35, 42],
-//            12 => [2, 11, 22, 44, 123, 124, 126]
-//        ];
-//        foreach ($cats as $key => $val) {
-//            $check = in_array($id,$val);
-//            if ($check) {
-//                return $key;
-//            }
-//        }
-//        return null;
-        // dari bias
-        // $maps = array(
-        //     array(1, 7, 8, 9, 10, 58, 122),
-        //     array(24, 121),
-        //     array(4, 23, 34, 36, 37),
-        //     array(13, 16, 43, 59, 120),
-        //     array(18, 38, 61),
-        //     array(15, 20, 41, 62, 63, 64, 119),
-        //     array(3, 14, 25, 26, 27, 31, 32, 33),
-        //     array(5, 39, 50, 60),
-        //     array(6, 12, 17, 19, 21),
-        //     array(28, 30),
-        //     array(35, 42),
-        //     array(2, 11, 22, 44, 123),
-        // );
-
     }
 
     public function actionTest()

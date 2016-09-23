@@ -1,12 +1,16 @@
 $('div.modal').on('shown.bs.modal', function(){
 	var form_id = $(this).find('form').attr('id');
-	$('body #'+form_id).on('beforeSubmit', function(event, jqXHR, settings) {
+	$('.close').on('click',function(){
+		document.getElementById(form_id).reset();
+	});
+	$('body #'+form_id).on('beforeSubmit', function(event) {
+		// stop multiple submit using this
+		event.stopImmediatePropagation();
 		event.preventDefault();
 	    var form = $(this);
 	    if(form.find('.has-error').length) {
 	        return false;
 	    }
-
 	    $.ajax({
 	        url: form.attr('action'),
 	        type: 'post',
@@ -58,3 +62,6 @@ $('div.modal').on('shown.bs.modal', function(){
 	    return false;
 	});
 });
+function formReset() {
+	$('.modal').modal('hide');
+}

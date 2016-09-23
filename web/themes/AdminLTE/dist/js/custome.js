@@ -97,7 +97,8 @@ $(function() {
 		});
 	});
 
-	$('.gotohell').on('click',function() {
+	$('.gotohell').on('click',function(e) {
+		e.preventDefault();
 		var Url = $(this).attr('value');
 			element = $(this).closest('tr');
 			confirm = $(this).data('text');
@@ -195,8 +196,13 @@ $(function() {
 	// $(".select2").select2();
 
 	//Date range picker
+	var start = moment();
+	var end = moment();
     $('#the_daterange').daterangepicker(
 		{
+
+	      	startDate: start,
+	      	endDate: end,
 			separator : ' to ',
 			format: 'YYYY-MM-DD',
 	      	ranges: {
@@ -206,9 +212,7 @@ $(function() {
 	            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
 	            'This Month': [moment().startOf('month'), moment().endOf('month')],
 	            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-	      	},
-	      	startDate: moment().subtract(29, 'days'),
-	      	endDate: moment()
+	      	}
         },
 	    function (start, end) {
 	      $('#reportrange span').html(start.format('YYYY D, MMMM') + ' to ' + end.format('YYYY D, MMMM'));

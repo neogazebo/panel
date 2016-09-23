@@ -103,9 +103,9 @@ class ComSpecialityPromo extends ActiveRecord
 
     public function checkEndDate($data)
     {
-        $start_date = $this->spt_promo_end_date;
+        $end_date = $this->spt_promo_end_date;
         $start_date = $this->spt_promo_start_date;
-        if ($start_date < $start_date) {
+        if ($end_date < $start_date) {
             $this->addError($data, Yii::t('app', "End date must greater than by Start date"));
         }
     }

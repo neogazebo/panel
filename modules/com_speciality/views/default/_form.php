@@ -28,7 +28,7 @@ $country = new GlobalHelper();
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
-        <?= Html::button('<i class="fa fa-times"></i> Back', ['class' => 'btn btn-default pull-left','data-dismiss' => 'modal']) ?>
+        <?= Html::resetButton('<i class="fa fa-times"></i> Back', ['class' => 'btn btn-default pull-left','onclick' => 'formReset()']) ?>
         <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-check"></i> Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success pull-right' : 'btn btn-primary pull-right']) ?>
     </div>
 <?php ActiveForm::end(); ?>
