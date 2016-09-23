@@ -96,10 +96,8 @@ class DefaultController extends BaseController
 
     public function actionNewMerchant($id, $to = null)
     {
-        if(Yii::$app->permission_helper->checkRbac())
-        {
-            if (!Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Pages][new_merchant]'))
-            {
+        if(Yii::$app->permission_helper->checkRbac()) {
+            if (!Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Pages][new_merchant]')) {
                 throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
             }
         }
@@ -177,6 +175,7 @@ class DefaultController extends BaseController
                         $snapearn->sna_com_id = $com_id;
                         $snapearn->sna_cat_id = $this->getCategoryId($cat_id);
                         $snapearn->sna_com_name = $company->com_name;
+                        $snapearn->sna_flag_tagging = 1;
                         
                         if ($to == 'correction') {
                             $params = [
@@ -219,7 +218,7 @@ class DefaultController extends BaseController
                                 $ses['wrk_type'] = WorkingTime::ADD_MERCHANT_TYPE;
                                 $ses['wrk_rjct_number'] = $type;
                                 $ses['wrk_point'] = $this->getPoint($type)->spo_point;
-                                $wrk_new_merchant = array_merge($wrk_ses,$ses);
+                                $wrk_new_merchant = array_merge($wrk_ses, $ses);
                                 $this->setSession('wrk_ses_'.$id, $wrk_new_merchant);
                                 $this->saveWorking($id);
                             }
@@ -252,6 +251,7 @@ class DefaultController extends BaseController
                 throw $e;
             }
         }
+
         return $this->render('new', [
             'company' => $company,
             'suggest' => $suggest
@@ -274,6 +274,7 @@ class DefaultController extends BaseController
                 $cat_id = $this->getCategoryId($company->com_subcategory_id);
                 $model->sna_cat_id = $cat_id;
                 $model->sna_com_name = $company->com_name;
+                $model->sna_flag_tagging = 1;
                 $wrk_ses = $this->getSession('wrk_ses_'.$id);
                 if (!empty($wrk_ses)) {
                     $type = WorkingTime::ADD_EXISTING_TYPE;
@@ -309,7 +310,6 @@ class DefaultController extends BaseController
                 ];
         }
     }
-
 
     public function actionToUpdate($id)
     {
@@ -383,7 +383,8 @@ class DefaultController extends BaseController
 
                 $model->sna_review_date = Utc::getNow();
                 $model->sna_review_by = Yii::$app->user->id;
-                $model->sna_company_tagging = 1;
+                if ($model->sna_flag_tagging == 1)
+                    $model->sna_company_tagging = 1;
 
                 // limited transaction point per-user per-merchant per-day
                 if ($model->sna_transaction_time != 0) {
@@ -396,9 +397,9 @@ class DefaultController extends BaseController
                         $model->sna_sem_id = SnapEarnRemark::FORCE_REJECTED_MAX_PER_DAY;
                     }
                 }
+
                 // if approved action
                 if ($model->sna_status == 1) {
-
                     // get limited point per country
                     $config = SnapEarnRule::find()->where(['ser_country' => $model->member->country->cty_currency_name_iso3])->one();
 

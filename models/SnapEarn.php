@@ -259,7 +259,6 @@ class SnapEarn extends \yii\db\ActiveRecord
         return $this->hasOne(AdminUser::className(), ['id' => 'sna_review_by']);
     }
 
-
     // public function getCustomer()
     // {
     //     return $this->hasOne(CustomerMaster::className(), ['cus_id' => 'sna_cus_id']);
@@ -290,7 +289,8 @@ class SnapEarn extends \yii\db\ActiveRecord
             'sna_com_name' => 'Merchant Name',
             'sna_transaction_time' => 'Transaction Time',
             'sna_push' => 'Yes',
-            'sna_company_tagging' => 'Tagging'
+            'sna_company_tagging' => 'Tagging',
+            'sna_flag_tagging' => 'Flag Tagging'
         ];
     }
 
