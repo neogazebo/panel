@@ -31,15 +31,6 @@ $dataProvider->sort->attributes['userCreated.username'] = [
                         <div class="col-sm-12">
                             <div class="row">
                                 <div class="form-group">
-                                    <label>Date range</label><br>
-                                    <div class="input-group">
-                                        <div class="input-group-addon" for="reservation">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                        <input type="text" name="com_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['com_daterange'])) ? $_GET['com_daterange'] : '' ?>">
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label>Operator</label>
                                     <?php
                                         $ops = (!empty($_GET['operator'])) ? $_GET['operator'] : 'Operator';
@@ -103,16 +94,25 @@ $dataProvider->sort->attributes['userCreated.username'] = [
                                         ]);
                                     ?>
                                 </div>
-                            </div>
-                            <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
-                            <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
-                            <div class="form-group">
-                                <label>&nbsp;</label><br>
-                                <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
-                            </div>
-                            <div class="form-group">
-                                <label>Export</label><br>
-                                <button name="output_type" value="excel" type="submit" class="btn btn-info btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                                <div class="form-group">
+                                    <label>Date range</label><br>
+                                    <div class="input-group">
+                                        <div class="input-group-addon" for="reservation">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" name="com_daterange" class="form-control pull-right" id="the_daterange" value="<?= (!empty($_GET['com_daterange'])) ? $_GET['com_daterange'] : '' ?>">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="ops_name" id="ops_name" value="<?= (!empty($_GET['ops_name'])) ? $_GET['ops_name'] : '' ?>">
+                                <input type="hidden" name="com_name" id="com_name" value="<?= (!empty($_GET['com_name'])) ? $_GET['com_name'] : '' ?>">
+                                <div class="form-group">
+                                    <label>&nbsp;</label><br>
+                                    <button name="output_type" value="view" type="submit" class="btn btn-primary btn-flat"><i class="fa fa-refresh"></i> Submit</button>
+                                </div>
+                                <div class="form-group">
+                                    <label>Export</label><br>
+                                    <button name="output_type" value="excel" type="submit" class="btn btn-info btn-flat"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                                </div>
                             </div>
                         </div>
                     </form>
