@@ -47,7 +47,7 @@ class AuthItem extends ActiveRecord
             [['description', 'data'], 'string'],
             [['name', 'rule_name'], 'string', 'max' => 64],
             [['name'],'unique'],
-            [['name'],'validWord'],
+            //[['name'],'validWord'],
             [['rule_name'], 'exist', 'skipOnError' => true, 'targetClass' => AuthRule::className(), 'targetAttribute' => ['rule_name' => 'name']],
         ];
     }
