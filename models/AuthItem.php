@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use app\models\AuthRule;
 use yii\base\NotSupportedException;
+use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
@@ -61,6 +62,16 @@ class AuthItem extends ActiveRecord
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
                 ],
+            ],
+            'userctreated' => [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_by'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['created_by'],
+                ],
+                'value' => function($event){
+                    return Yii::$app->user->id;
+                }
             ],
         ];
     }
