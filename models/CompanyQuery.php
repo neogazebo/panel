@@ -245,12 +245,10 @@ class CompanyQuery extends \yii\db\ActiveQuery
 
     public function changeSpecialityMerchant($new_speciality_id,$changes)
     {
-        var_dump($new_speciality_id);exit;
         foreach($changes as $com_id) {
             $company = Company::findOne($com_id);
             $company->com_speciality = $new_speciality_id;
-            var_dump($company->save(false));
-
+            $company->save(false);
             $activities = [
                 'Company',
                 'Company '.$company->com_name.' has been set to '.$new_speciality_id,

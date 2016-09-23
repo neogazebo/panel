@@ -205,7 +205,6 @@ $(document).ready(function() {
 
         if(op == 'edit') {
             var com_name_edited = $(this).find('.com_name_temp').val();
-
             swal({
                 title: "Are you sure?",   
                 text: "You are about to update <strong>" + com_name_edited + "</strong>",
@@ -215,7 +214,7 @@ $(document).ready(function() {
                 confirmButtonColor: "#DD6B55",   
                 confirmButtonText: "Yes",   
                 cancelButtonText: "Cancel",   
-                closeOnConfirm: true,   
+                closeOnConfirm: false,   
                 closeOnCancel: true 
             },
             function(isConfirm) {
@@ -329,21 +328,25 @@ $(document).ready(function() {
 
                     if(data.error == 2000 || data.error == 3000) {
                         swal({
-                            title: "Are you sure?",   
+                            title: "Are you sure?",  
+                            html: true,    
                             text: data.message,
-                            html: true,   
                             type: "warning",   
-                            showCancelButton: true,   
-                            confirmButtonColor: "#DD6B55",   
-                            confirmButtonText: "Yes",   
-                            cancelButtonText: "Cancel",   
-                            closeOnConfirm: true,   
-                            closeOnCancel: true 
+                            showCancelButton: true,
+                            closeOnCancel: true
                         }, 
                         function(isConfirm) {   
                             if(isConfirm) {
                                 op_confirm(com_speciality, children);
                             } else {
+                                $('.box').waitMe({
+                                    effect : 'stretch',
+                                    text : 'Refreshing...',
+                                    bg : 'rgba(255,255,255,0.7)',
+                                    color : '#000',
+                                    sizeW : '',
+                                    sizeH : ''
+                                });
                                 window.location.reload();
                             }
                         });

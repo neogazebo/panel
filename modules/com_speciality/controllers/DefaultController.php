@@ -44,7 +44,6 @@ class DefaultController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => CompanySpeciality::find()->with('promo','type'),
         ]);
-
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
@@ -104,8 +103,6 @@ class DefaultController extends Controller
 
     public function actionSetSpeciality()
     {               
-        // $test = Yii::$app->request->post('children');
-        // var_dump(json_decode($test));exit;
         $processor = new MerchantSetSpeciality();
         return $processor->process();
     }
@@ -119,8 +116,8 @@ class DefaultController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new CompanySpeciality();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->validate()) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            if ($model->validate() && $this->enableCsrfValidation = true) {
                $model->save();
                return $results = [
                     'success' => 0, 

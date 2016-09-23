@@ -27,6 +27,20 @@ class DefaultController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'corsFilter' => [
+                'class' => \yii\filters\Cors::className(),
+                'cors' => [],
+                'actions' => [
+                    'incoming' => [
+                        'Origin' => ['*'],
+                        'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                        'Access-Control-Request-Headers' => ['*'],
+                        'Access-Control-Allow-Credentials' => null,
+                        'Access-Control-Max-Age' => 86400,
+                        'Access-Control-Expose-Headers' => [],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -66,7 +80,7 @@ class DefaultController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new ComSpecialityPromo();
-        if ($model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                 $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
                 $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
@@ -83,29 +97,6 @@ class DefaultController extends Controller
                 ];
             }
         } 
-        // if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-        //     Yii::$app->response->format = 'json';
-        //     return \yii\widgets\ActiveForm::validate($model);
-        // }
-        
-        // if ($model->load(Yii::$app->request->post())) {
-        //     $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
-        //     $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
-        //     if ($model->save()) {
-        //         return $this->redirect(['index']);
-        //     }else{
-        //         var_dump($model->getErrors());exit;
-        //         $model->spt_promo_start_date = date('Y-m-d',$model->spt_promo_start_date);
-        //         $model->spt_promo_end_date = date('Y-m-d',$model->spt_promo_end_date);
-        //         return $this->render('create', [
-        //             'model' => $model,
-        //         ]);
-        //     }
-        // } else {
-        //     return $this->render('create', [
-        //         'model' => $model,
-        //     ]);
-        // }
     }
 
     /**

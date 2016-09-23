@@ -97,7 +97,8 @@ $(function() {
 		});
 	});
 
-	$('.gotohell').on('click',function() {
+	$('.gotohell').on('click',function(e) {
+		e.preventDefault();
 		var Url = $(this).attr('value');
 			element = $(this).closest('tr');
 			confirm = $(this).data('text');

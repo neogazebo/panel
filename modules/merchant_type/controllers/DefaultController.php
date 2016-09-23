@@ -66,7 +66,7 @@ class DefaultController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new CompanyType();
-        if ($model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                $model->save();
                return $results = [

@@ -56,7 +56,7 @@ foreach ($speciality as $val) {
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
-        <?= Html::button('<i class="fa fa-times"></i> Back', ['class' => 'btn btn-default pull-left','data-dismiss' => 'modal']) ?>
+        <?= Html::resetButton('<i class="fa fa-times"></i> Back', ['class' => 'btn btn-default pull-left','onclick' => 'formReset()']) ?>
         <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-check"></i> Create' : 'i.fa.fa-check Update', ['class' => $model->isNewRecord ? 'btn btn-success pull-right' : 'btn btn-primary pull-right']) ?>
     </div>
 
