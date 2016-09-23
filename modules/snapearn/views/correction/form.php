@@ -162,7 +162,7 @@ $model->sna_push = true;
                                         ],
                                         'removeButton' => false,
                                         'type' => kartik\widgets\DatePicker::TYPE_COMPONENT_APPEND,
-                                        'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: Y-m-d'),
+                                        'value' => Yii::$app->formatter->asDatetime($model->sna_transaction_time, 'php: Y-m-d'),
                                         'pluginOptions' => [
                                             'format' => 'yyyy-mm-dd',
                                             'endDate' => '+1d',
@@ -175,7 +175,7 @@ $model->sna_push = true;
                                     <?=
                                     kartik\widgets\TimePicker::widget([
                                         'name' => 't1',
-                                        'value' => Yii::$app->formatter->asDatetime($model->sna_upload_date, 'php: H:i:s'),
+                                        'value' => Yii::$app->formatter->asDatetime($model->sna_transaction_time, 'php: H:i:s'),
                                         'pluginOptions' => [
                                             'showSeconds' => true,
                                             'showMeridian' => false,
