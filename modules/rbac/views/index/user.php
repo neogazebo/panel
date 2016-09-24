@@ -54,7 +54,7 @@ $dataProvider->sort->attributes['user.username'] = [
                                     'buttons' => [
                                         'revoke' => function($url, $model) {
                                             return Html::button('<i class="fa fa-times-circle-o"></i>', 
-                                                ['value' => 'revoke?role='.$model->item_name.'&&userId='.$model->user->id.'&&name='.$model->user->username,'class' => 'deleteBtn'
+                                                ['value' => 'revoke?role='.urlencode($model->item_name).'&&userId='.$model->user->id.'&&name='.$model->user->username,'class' => 'deleteBtn'
                                                 ]);
                                         }
                                     ]
