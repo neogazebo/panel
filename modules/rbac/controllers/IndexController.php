@@ -301,7 +301,7 @@ class IndexController extends BaseController
             $this->activities($r->name, $role, 'Multi Assign', ' assigned to [' . rtrim($assigned, ', ') . '] and revoked [' . rtrim($revoked, ', ') . ']');
 
             $this->setMessage('save', 'success', 'Update assigned user successfully');
-            return $this->redirect(['user?name=' . $role]);
+            return $this->redirect(['user?name=' . urldecode($role)]);
         }
 
         return $this->render('multi-assign',[
@@ -319,7 +319,7 @@ class IndexController extends BaseController
         if ($auth->revoke($r, $userId)) {
             $this->activities($name, $role, 'Revoke');
             $this->setMessage('save', 'success', 'User '.$name.' success revoked from this role');
-            return $this->redirect(['user?name='.$role]);
+            return $this->redirect(['user?name='.urlencode($role)]);
         }
     }
 
