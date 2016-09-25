@@ -87,9 +87,9 @@ $this->title = 'Company Types';
                                     return $html;
                                 },
                             'delete' => function($url,$model){
-                                return Html::a('<i class="fa fa-times-circle-o"></i>', ['#'],
+                                    return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
                                     [
-                                        'value' => 'delete?id='.$model->com_type_id,
+                                        'value' => 'delete?id='.$model->com_spt_id,
                                         'class' => 'gotohell',
                                         'data-title' => 'Delete',
                                         'data-text' => 'Are you sure ?'
