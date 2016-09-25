@@ -362,7 +362,8 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                 ],
                                 [
                                     'label' => 'Member',
-                                    'visible' => $visible,
+                                    //'visible' => $visible,
+                                    'visible' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_field]') ? true : false,
                                     'format' => 'html',
                                     'attribute' => 'sna_acc_id',
                                     'value' => function($data) {
@@ -371,7 +372,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                 ],
                                 [
                                     'label' => 'Member Email',
-                                    'visible' => $visible,
+                                    'visible' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_email]') ? true : false,
                                     'format' => 'html',
                                     'value' => function($data) {
                                         return (!empty($data->member)) ? $data->member->acc_facebook_email : '<a class=""><span class="not-set">(not set)</span></a>';
@@ -379,7 +380,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                 ],
                                 [
                                     'label' => 'Receipt Number',
-                                    'visible' => $visible,
+                                    'visible' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][receipt_number]') ? true : false,
                                     'format' => 'html',
                                     'value' => function($data) {
                                         return (!empty($data->sna_ops_receipt_number)) ? $data->sna_ops_receipt_number : '<a class=""><span class="not-set">(not set)</span></a>';
