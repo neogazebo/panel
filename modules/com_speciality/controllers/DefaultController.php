@@ -168,9 +168,24 @@ class DefaultController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = CompanySpeciality::find($id)->with('type','country')->one();
+        $merchant_name = $model->type->com_type_name.' ('.$model->country->cty_name.') ';
+        $find_merchant = Company::find()->where('com_speciality = :id',[
+                ':id' => $id
+            ])->groupBy('com_id')->limit(1)->one();
+        if(!empty($find_merchant)){
+            return $results = [
+                    'error' => 1000, 
+                    'message' => 'There is merchant on this speciality'
+                ];
+        }else{
+            $model->delete();
+            return $results = [
+                    'success' => 0, 
+                    'message' => 'success'
+                ];
+        }
     }
 
     /**

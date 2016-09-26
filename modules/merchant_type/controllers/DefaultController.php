@@ -118,9 +118,19 @@ class DefaultController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = $this->findModel($id);
+        if ($model->delete()) {
+            return $results = [
+                    'success' => 0, 
+                    'message' => 'Success'
+                ];
+        }else{
+            return $results = [
+                    'error' => 1000, 
+                    'message' => $model->error
+                ];
+        }
     }
 
     /**
