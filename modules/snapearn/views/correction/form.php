@@ -52,7 +52,7 @@ $model->sna_push = true;
                                     Detail Receipt
                                 </a>
                             </span>
-                            <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
+                            <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s')  ?></span>
                         </div>
                     <?php endif; ?>
                     <div class="box-tools"></div>
