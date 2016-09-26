@@ -46,7 +46,8 @@ class GlobalHelper extends Component
             'Sunday' => 'Sunday',
             'Monday' => 'Monday',
             'Tuesday' => 'Tuesday',
-            'Wednesday' => 'Wednesday'
+            'Wednesday' => 'Wednesday',
+            'Thursday' => 'Thursday'
         ];
         return $weekdays;
     }

@@ -112,21 +112,29 @@ $(function() {
 			closeOnConfirm: false,
 			showLoaderOnConfirm: true,
 		}, function() {
-			$.post(Url, function(results) {
-				// data = JSON.parse(results);
-				// if (data.status = 'success') {
-					// element.remove();
-					// location.reload();
-					// swal.close();
-					// message = "Delete " + name + " role successed!";
-					// customAlert(data.status,message);
-					// element.remove();
-				// } else {
-					// swal.close();
-					// element.remove();
-					// message = "Delete " + name + " role failed!";
-					// customAlert('error', message);
-				// }
+			$.post(Url, function(data) {
+				if(!data.error) {
+	                $('.modal').modal('hide');
+	                swal({
+	                    title: 'Success',   
+	                    timer: 1000,
+	                    text: 'Data is successfully saved',
+	                    type: "success",
+	                    showConfirmButton: false
+	                },
+	                function() {   
+	                    window.location.reload();
+	                });
+	            } else {
+	                if(data.error == 1000) {
+	                    swal({
+	                        title: 'System Error',   
+	                        html: true,
+	                        text: data.message,
+	                        type: "error",
+	                    });
+	                }
+	            }
 			})
 		});
 	});
