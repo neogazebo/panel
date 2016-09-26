@@ -63,9 +63,9 @@ $this->title = 'Active Speciality';
                             'format' => 'html',
                             'value' => function($data) {
                                 if (!empty($data->promo->spt_promo_multiple_point)) {
-                                    return $data->promo->spt_promo_multiple_point;
+                                    return floatval($data->promo->spt_promo_multiple_point);
                                 } else {
-                                    return (!empty($data->com_spt_multiple_point)) ? $data->com_spt_multiple_point : $data->type->com_type_multiple_point;
+                                    return (!empty($data->com_spt_multiple_point)) ? floatval($data->com_spt_multiple_point) : floatval($data->type->com_type_multiple_point);
                                 }
                             }
                         ],

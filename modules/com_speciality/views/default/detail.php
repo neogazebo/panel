@@ -51,9 +51,9 @@ $this->title = 'Company Specialities';
                             'format' => 'html',
                             'value' => function($data){
                                 if (!isset($data->com_spt_multiple_point)) {
-                                    return $data->type->com_type_multiple_point;
+                                    return floatval($data->type->com_type_multiple_point);
                                 } else {
-                                    return $data->com_spt_multiple_point;
+                                    return floatval($data->com_spt_multiple_point);
                                 }
                             }
                         ],
@@ -61,7 +61,7 @@ $this->title = 'Company Specialities';
                             'attribute' => 'com_spt_max_point',
                             'format' => 'html',
                             'value' => function($data){
-                                if (!isset($data->com_spt_multiple_point)) {
+                                if (!isset($data->com_spt_max_point)) {
                                     return $data->type->com_type_max_point;
                                 } else {
                                     return $data->com_spt_max_point;

@@ -68,6 +68,9 @@ $this->title = 'Speciality Promo';
                             [
                                 'label' => 'Point',
                                 'attribute' => 'spt_promo_multiple_point',
+                                'value' => function($data){
+                                    return floatval($data->spt_promo_multiple_point);
+                                }
                             ],
                             [
                                 'label' => 'PIC',

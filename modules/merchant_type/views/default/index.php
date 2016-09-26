@@ -49,7 +49,7 @@ $this->title = 'Company Types';
                         [
                             'attribute' => 'com_type_multiple_point',
                             'value' => function($data){
-                                return $data->com_type_multiple_point;
+                                return floatval($data->com_type_multiple_point);
                             }
                         ],
                         [
