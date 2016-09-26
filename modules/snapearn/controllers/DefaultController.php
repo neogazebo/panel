@@ -176,6 +176,7 @@ class DefaultController extends BaseController
                         $snapearn->sna_cat_id = $this->getCategoryId($cat_id);
                         $snapearn->sna_com_name = $company->com_name;
                         $snapearn->sna_flag_tagging = 1;
+                        $snapearn->sna_company_tagging = 1;
                         
                         if ($to == 'correction') {
                             $params = [
@@ -275,6 +276,7 @@ class DefaultController extends BaseController
                 $model->sna_cat_id = $cat_id;
                 $model->sna_com_name = $company->com_name;
                 $model->sna_flag_tagging = 1;
+                $model->sna_company_tagging = 1;
                 $wrk_ses = $this->getSession('wrk_ses_'.$id);
                 if (!empty($wrk_ses)) {
                     $type = WorkingTime::ADD_EXISTING_TYPE;
@@ -420,10 +422,10 @@ class DefaultController extends BaseController
                     // config
                     $day = $point_config['day_promo'];
                     $trans_day = date('l', $model->sna_transaction_time);
-                    if($day == $trans_day){
+                    if($day == $trans_day) {
                         $model->sna_point *= $point_config['point'];
                         $limitPoint = $point_config['max_point'];
-                    }else{
+                    } else {
                         $model->sna_point *= $point_config['point'];
                         $limitPoint = $point_config['max_point'];
                     }

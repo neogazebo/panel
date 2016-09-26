@@ -362,8 +362,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                 ],
                                 [
                                     'label' => 'Member',
-                                    //'visible' => $visible,
-                                    'visible' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_field]') ? true : false,
+                                    'visible' => $visible,
                                     'format' => 'html',
                                     'attribute' => 'sna_acc_id',
                                     'value' => function($data) {
@@ -372,7 +371,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                 ],
                                 [
                                     'label' => 'Member Email',
-                                    'visible' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_email]') ? true : false,
+                                    'visible' => $visible,
                                     'format' => 'html',
                                     'value' => function($data) {
                                         return (!empty($data->member)) ? $data->member->acc_facebook_email : '<a class=""><span class="not-set">(not set)</span></a>';
@@ -380,7 +379,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                 ],
                                 [
                                     'label' => 'Receipt Number',
-                                    'visible' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][receipt_number]') ? true : false,
+                                    'visible' => $visible,
                                     'format' => 'html',
                                     'value' => function($data) {
                                         return (!empty($data->sna_ops_receipt_number)) ? $data->sna_ops_receipt_number : '<a class=""><span class="not-set">(not set)</span></a>';
@@ -431,11 +430,11 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                     'attribute' => 'sna_company_tagging',
                                     'format' => 'raw',
                                     'value' => function($data) {
-                                        if (($data->sna_company_tagging > 0 && $data->sna_com_id > 0) || $data->sna_flag_tagging == 1)
+                                        if ($data->sna_company_tagging > 0 && $data->sna_com_id > 0)
                                             return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/ebz_logo.png', ['height' => '16']) . '</center>';
                                         elseif ($data->sna_company_tagging == 0 && $data->sna_com_id > 0)
                                             return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/manis.png', ['height' => '16']) . '</center>';
-                                        elseif ($data->sna_company_tagging == 0 && $data->sna_com_id == 0)
+                                        else
                                             return '<center><i class="fa fa-tags"></i></center>';
                                     }
                                 ],
