@@ -389,8 +389,8 @@ class CorrectionController extends BaseController
             $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
         }
 
-        $model->sna_transaction_time = Utc::convert($model->sna_transaction_time);
-        $model->sna_upload_date = Utc::convert($model->sna_upload_date);
+        $model->sna_transaction_time = $model->sna_transaction_time;
+        $model->sna_upload_date = $model->sna_upload_date;
         if (!empty($ses_com)) {
             $model->sna_com_id = $ses_com['sna_com_id'];
         }

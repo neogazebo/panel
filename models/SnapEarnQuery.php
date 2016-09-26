@@ -114,7 +114,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $tagging = '';
             switch ($sna_company_tagging) {
                 case 'Ebizu':
-                    $tagging = 'sna_company_tagging > 0 AND sna_com_id > 0';
+                    $tagging = '(sna_company_tagging > 0 AND sna_com_id > 0) OR sna_flag_tagging = 1';
                     break;
                 case 'Manis':
                     $tagging = 'sna_company_tagging = 0 AND sna_com_id > 0';

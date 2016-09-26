@@ -419,7 +419,7 @@ class DefaultController extends BaseController
                     // }
                     // config
                     $day = $point_config['day_promo'];
-                    $trans_day = date('l',$model->sna_transaction_time);
+                    $trans_day = date('l', $model->sna_transaction_time);
                     if($day == $trans_day){
                         $model->sna_point *= $point_config['point'];
                         $limitPoint = $point_config['max_point'];
