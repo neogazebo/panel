@@ -205,7 +205,8 @@ $model->sna_push = true;
                     
                     <div class="reject-form">
                         <?php if(Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][reject_remark_update]')): ?>
-                            <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control']) ?>
+                            <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control', 
+                        'prompt' => 'Please Choose the Reason']) ?>
                         <?php endif; ?>
                     </div>
 
