@@ -52,7 +52,7 @@ $model->sna_push = true;
                                     Detail Receipt
                                 </a>
                             </span>
-                            <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s')  ?></span>
+                            <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
                         </div>
                     <?php endif; ?>
                     <div class="box-tools"></div>
@@ -272,71 +272,6 @@ $model->sna_push = true;
                             </div>
                         </div>
                     </form>
-                        <!--end--> 
-                        <span class="pull-right text-light-blue">
-                          <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
-                        </span>
-                      </a>
-                    </li>
-                    <?php endif; ?>
-                    <?php if (empty($model->merchant)) : ?>
-                    <li>
-                      <a href="#"><b><?= (empty($model->sna_address)) ? 'Suggestion Location' : 'Location' ?></b>
-                        <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
-                      </a>
-                    </li>
-                  <?php endif; ?>
-                      <li></li>
-                  </ul>
-                  <form role="form">
-                    <?= $form->field($model, 'sna_status')->dropDownList($model->statuscorrection, ['class' => 'form-control status']) ?>
-                    <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
-                    <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
-                    <div class="point-form">
-                      <?=
-                           $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
-                               'options' => [
-                                   'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s')
-                               ],
-                               'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
-                               'pluginOptions' => [
-                                   'autoclose'=>true,
-                                   'format' => 'yyyy-mm-dd hh:i:ss',
-                                   'endDate' => date('Y-m-d h:i:s')
-                               ]
-                           ]);
-                      ?>
-                    <!-- <div class="form-group field-snapearn-sna_transaction_time sna_status">
-                      <label class="control-label" >Transaction Time</label>
-                          <div class="">
-                              <div class="form-control" readonly="true"><?php // Yii::$app->formatter->asDateTime($model->sna_transaction_time,'php: Y-m-d H:i:s') ?></div>
-                              <div>
-                                  <div class="help-block"></div>
-                              </div>
-                          </div>
-                      </div>-->
-                      
-                      <?php //$form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
-                      <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status'])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.') ?>
-                      <?= $form->field($model, 'sna_ops_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
-                      <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
-                  </div>
-                  <div class="reject-form">
-                      <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control', 
-                      'prompt' => 'Please Choose the Reason']) ?>
-                  </div>
-                  <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
-                    <div class="box-footer clearfix">
-                      <div class="button-right pull-right">
-                          <button type="submit" class="btn-primary btn submit-button"><i class="fa fa-check"></i> Save</button>
-                          <button class="btn btn-success saveNext" type="submit" name="save-next"><i class="fa fa-arrow-right"></i> Save &amp; Next</button>
-                          <input id="saveNext" type="hidden" name="saveNext" value="">
-                      </div>
-                      <div class="button-left pull-left">
-                          <?= Html::a('<i class="fa fa-times"></i> Cancel', [Url::previous()], ['class' => 'btn btn-default']) ?>
-                      </div>
-                    </div>
-                  </form>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
         </div>
