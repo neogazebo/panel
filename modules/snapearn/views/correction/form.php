@@ -156,7 +156,8 @@ $model->sna_push = true;
                       <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
                   </div>
                   <div class="reject-form">
-                      <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control']) ?>
+                      <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control', 
+                      'prompt' => 'Please Choose the Reason']) ?>
                   </div>
                   <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
                     <div class="box-footer clearfix">
