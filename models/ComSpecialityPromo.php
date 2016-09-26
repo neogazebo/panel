@@ -38,7 +38,7 @@ class ComSpecialityPromo extends ActiveRecord
             [['spt_promo_com_spt_id', 'spt_promo_description', 'spt_promo_multiple_point', 'spt_promo_start_date', 'spt_promo_end_date'], 'required'],
             [['spt_promo_start_date'],'checkDate'],
             [['spt_promo_end_date'],'checkEndDate'],
-            [['spt_promo_com_spt_id', 'spt_promo_multiple_point', 'spt_promo_created_by', 'spt_promo_created_date','spt_promo_max_point'], 'integer'],
+            [['spt_promo_com_spt_id', 'spt_promo_created_by', 'spt_promo_created_date','spt_promo_max_point'], 'integer'],
             [['end_date'],'safe'],
             [['spt_promo_description','spt_promo_day_promo'], 'string', 'max' => 255],
         ];

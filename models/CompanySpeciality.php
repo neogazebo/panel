@@ -35,7 +35,7 @@ class CompanySpeciality extends \yii\db\ActiveRecord
     {
         return [
             [['com_spt_type_id', 'com_spt_cty_id', 'com_spt_max_point' ,'com_spt_multiple_point'], 'required'],
-            [['com_spt_multiple_point', 'com_spt_created_by', 'com_spt_created_date', 'com_spt_updated_date'], 'integer']
+            [['com_spt_created_by', 'com_spt_created_date', 'com_spt_updated_date'], 'integer']
         ];
     }
 

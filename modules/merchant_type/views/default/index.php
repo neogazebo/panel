@@ -49,7 +49,7 @@ $this->title = 'Company Types';
                         [
                             'attribute' => 'com_type_multiple_point',
                             'value' => function($data){
-                                return $data->com_type_multiple_point;
+                                return floatval($data->com_type_multiple_point);
                             }
                         ],
                         [
@@ -87,9 +87,9 @@ $this->title = 'Company Types';
                                     return $html;
                                 },
                             'delete' => function($url,$model){
-                                return Html::a('<i class="fa fa-times-circle-o"></i>', ['#'],
+                                    return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
                                     [
-                                        'value' => 'delete?id='.$model->com_type_id,
+                                        'value' => '/type/default/delete?id='.$model->com_type_id,
                                         'class' => 'gotohell',
                                         'data-title' => 'Delete',
                                         'data-text' => 'Are you sure ?'

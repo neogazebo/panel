@@ -78,10 +78,10 @@ $this->title = 'Role List';
                                     'template' => '<span class="pull-right actionColumn">{user} {view} {update} <!--{delete}--></span>',
                                     'buttons' => [
                                         'user' => function($url, $model) {
-                                            return Html::a('<i class="fa fa-group"></i>', ['user?name=' . $model->name,]);
+                                            return Html::a('<i class="fa fa-group"></i>', ['user?name=' . urlencode($model->name)]);
                                         },
                                         'view' => function($url, $model) {
-                                            return Html::a('<i class="fa fa-search"></i>', ['detail?name=' . $model->name]);
+                                            return Html::a('<i class="fa fa-search"></i>', ['detail?name=' . urlencode($model->name)]);
                                         },
                                         'update' => function($url, $model) {
                                             return Html::button('<i class="fa fa-pencil-square-o"></i>', ['value' => Url::to(['update?name='.$model->name]), 'class' => 'modalButton']);

@@ -23,8 +23,8 @@ $dataProvider->sort->attributes['user.username'] = [
                 <div class="box-header with-border">
                     <?= Html::a('<i class="fa fa-chevron-left"></i> Back', ['cancel'], ['class' => 'btn btn-flat btn-success btn-sm']) ?>
                     <div class="pull-right">
-                        <?= Html::button('<i class="fa fa-plus-square"></i> Assign User', ['type' => 'button','value' => Url::to(['assign?role=' .$name]), 'class' => 'modalButton btn btn-flat btn-warning btn-sm']); ?> 
-                        <?= Html::a('<i class="fa fa-plus-square"></i> Multi Assign', ['multi-assign?role='.$name], ['class' => 'btn btn-flat btn-success btn-sm']) ?>
+                        <?= Html::button('<i class="fa fa-plus-square"></i> Assign User', ['type' => 'button','value' => Url::to(['assign?role=' . urlencode($name)]), 'class' => 'modalButton btn btn-flat btn-warning btn-sm']); ?> 
+                        <?= Html::a('<i class="fa fa-plus-square"></i> Multi Assign', ['multi-assign?role='.urlencode($name)], ['class' => 'btn btn-flat btn-success btn-sm']) ?>
                     </div>
                 </div>
                 <div class="box-body">
@@ -54,7 +54,7 @@ $dataProvider->sort->attributes['user.username'] = [
                                     'buttons' => [
                                         'revoke' => function($url, $model) {
                                             return Html::button('<i class="fa fa-times-circle-o"></i>', 
-                                                ['value' => 'revoke?role='.$model->item_name.'&&userId='.$model->user->id.'&&name='.$model->user->username,'class' => 'deleteBtn'
+                                                ['value' => 'revoke?role='.urlencode($model->item_name).'&&userId='.$model->user->id.'&&name='.$model->user->username,'class' => 'deleteBtn'
                                                 ]);
                                         }
                                     ]

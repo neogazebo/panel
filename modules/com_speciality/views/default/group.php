@@ -6,7 +6,7 @@ use yii\web\View;
 use yii\bootstrap\modal;
 use yii\helpers\Url;
 
-$this->title = '"' . $title . '" Merchants List';
+$this->title = $title;
 $this->registerCssFile(Yii::$app->homeUrl . 'common/js/plugins/waitme/waitMe.css');
 $this->registerJsFile(Yii::$app->homeUrl . 'common/js/plugins/waitme/waitMe.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'common/js/plugins/tablesorter/dist/js/jquery.tablesorter.min.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
@@ -38,8 +38,10 @@ $this->registerJsFile(Yii::$app->homeUrl . 'pages/MerchantSpeciality.js', ['depe
                             <h2></h2>
                             <button type="button" id="search_merchant_rightAll" class="btn btn-default btn-block"><i class="fa fa-backward"></i></button>
                             <button type="button" id="search_merchant_rightSelected" class="btn btn-default btn-block"><i class="fa fa-chevron-left"></i></button>
-                            <button type="button" id="search_merchant_leftSelected" class="btn btn-default btn-block"><i class="fa fa-chevron-right"></i></button>
-                            <button type="button" id="search_merchant_leftAll" class="btn btn-default btn-block"><i class="fa fa-forward"></i></button>
+                            <!-- <button type="button" id="search_merchant_leftSelected" class="btn btn-default btn-block"><i class="fa fa-chevron-right"></i></button>
+                            <button type="button" id="search_merchant_leftAll" class="btn btn-default btn-block"><i class="fa fa-forward"></i></button> -->
+
+                        <div class="clearfix"></div>
                         </div>
                         <div id="searchSelected" class="col-sm-5">
                             <h2>Merchants List</h2>
