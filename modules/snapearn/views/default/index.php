@@ -431,7 +431,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                     'attribute' => 'sna_company_tagging',
                                     'format' => 'raw',
                                     'value' => function($data) {
-                                        if ($data->sna_company_tagging > 0 && $data->sna_com_id > 0)
+                                        if (($data->sna_company_tagging > 0 && $data->sna_com_id > 0) || $data->sna_flag_tagging == 1)
                                             return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/ebz_logo.png', ['height' => '16']) . '</center>';
                                         elseif ($data->sna_company_tagging == 0 && $data->sna_com_id > 0)
                                             return '<center>' . Html::img('@web/themes/AdminLTE/dist/img/manis.png', ['height' => '16']) . '</center>';

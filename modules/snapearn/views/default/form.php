@@ -132,7 +132,7 @@ $model->sna_push = true;
                         </li>
                         <?php endif; ?>
 
-                        <?php if ($model->sna_company_tagging > 0 && $model->sna_com_id > 0): ?>
+                        <?php if (($model->sna_company_tagging > 0 && $model->sna_com_id > 0) || $model->sna_flag_tagging == 1): ?>
                         <li><a href="#"><b>Tagged by <?= Html::img('@web/themes/AdminLTE/dist/img/ebz_logo.png', ['height' => 16]) ?> </b><span class="pull-right text-light-blue"><?= !empty($model->sna_review_by) ? $model->review->username : '' ?></span></a></li>
                         <?php elseif ($model->sna_company_tagging == 0 && $model->sna_com_id > 0): ?>
                         <li><a href="#"><b>Tagged by <?= Html::img('@web/themes/AdminLTE/dist/img/manis.png', ['height' => 16]) ?> </b><span class="pull-right text-light-blue"></span></a></li>
