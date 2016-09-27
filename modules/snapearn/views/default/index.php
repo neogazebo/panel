@@ -45,6 +45,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                     <form class="form-inline" role="form" method="get" action="/snapearn">
                         <div class="col-sm-12">
                             <div class="row">
+                                <?php if ($visible) : ?>
                                 <div class="form-group">
                                 <label>Country</label>
                                 <select name="sna_cty" class="form-control select2" style="width: 100%;">
@@ -53,6 +54,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                       <option value="MY" <?= (!empty($_GET['sna_cty']) && $_GET['sna_cty'] == 'MY') ? 'selected' : '' ?>>Malaysia</option>
                                 </select>
                                 </div>
+                                <?php endif; ?>
                                 <div class="form-group">
                                 <label>Receipt Status</label>
                                 <select name="sna_status" class="form-control select2" style="width: 100%;">
