@@ -36,15 +36,30 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
     public function findCustome()
     {
         $dt = new DateRangeCarbon();
+        $superuser = Yii::$app->user->identity->superuser == 1;
         $this->innerJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
-        if (!empty($_GET['sna_cty'])) {
-            $sna_cty = $_GET['sna_cty'];
+        if($superuser){
+            if (!empty($_GET['sna_cty'])) {
+                $sna_cty = $_GET['sna_cty'];
+                $this->andWhere('tbl_account.acc_cty_id = :country', [':country' => $sna_cty]);
+            }
+        }else{
+            $country = Yii::$app->user->identity->country;
+            $sna_cty = ($country == 'MYR') ? 'MY' : 'ID';
             $this->andWhere('tbl_account.acc_cty_id = :country', [':country' => $sna_cty]);
         }
 
-        if (!empty($_GET['sna_member'])) {
-            $sna_member = $_GET['sna_member'];
-            $this->andWhere(['=', 'sna_acc_id', $sna_member]);
+        
+        $like_name = Yii::$app->request->get('sna_member');
+        if ($like_name) {
+            $get_member = Account::find()->select('acc_id')
+                    ->andWhere(['LIKE','acc_screen_name',$like_name])
+                    ->asArray()->all();
+            $acc_id = [];
+            foreach ($get_member as $key) {
+                $acc_id[] = (int)$key['acc_id'];
+            }
+            $this->andWhere(['sna_acc_id' => $acc_id]);
         }
 
         if (!empty($_GET['sna_receipt'])) {
@@ -108,6 +123,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         }
         
         $this->orderBy('sna_id DESC');
+        // echo $this->createCommand()->sql;exit;
         return $this;
     }
 

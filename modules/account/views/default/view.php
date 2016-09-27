@@ -95,7 +95,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Acco
             <div class="nav-tabs-custom box-primary">
                 <ul class="nav nav-tabs">
                     <li class="pull-right"><a aria-expanded="false" href="#activity" data-toggle="tab">Activity</a></li>
-                    <li class="pull-left"><p class="navbar-btn"><a href="/account/default" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back</a></p></li>
+                    <li class="pull-left"><p class="navbar-btn"><a href="<?= Yii::$app->urlManager->createUrl('account') ?>" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back</a></p></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="activity">
