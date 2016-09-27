@@ -219,6 +219,7 @@ $model->sna_push = true;
                                 $form->field($model, 'sna_sem_id')->dropDownList($model->email, [
                                     'id' => 'email', 
                                     'class' => 'form-control',
+                                    'prompt' => 'Please Choose the Reason',
                                     'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][reject_remark_correction]') ? false : true,
                                 ]); 
                             ?>
