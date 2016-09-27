@@ -80,6 +80,7 @@ class DefaultController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new ComSpecialityPromo();
+        $model->scenario = 'created';
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                 $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
@@ -109,6 +110,7 @@ class DefaultController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
+        $model->scenario = 'update';
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                 $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
