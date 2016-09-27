@@ -133,16 +133,13 @@ class ComSpecialityPromo extends ActiveRecord
             ->orderBy('spt_promo_id')->asArray()->all();
         var_dump($active_promo);exit;
         foreach ($active_promo as $key) {
-            $this->addError($data, Yii::t('app', "Some promo already exist"));
-            print_r($key);exit;
-            // if ($key['spt_promo_id'] < $promoId) 
-            //     if ($start_date <= $key['spt_promo_end_date']) {
-            //         $this->addError($data, Yii::t('app', "Some promo already exist"));
-            // }elseif($key['spt_promo_id'] > $promoId) {
-            //     if ($end_date >= $key['spt_promo_start_date']) 
-            //         $this->addError($data, Yii::t('app', "Some promo already exist"));
-            // }
-            
+            if ($key['spt_promo_id'] < $promoId) 
+                if ($start_date <= $key['spt_promo_end_date']) {
+                    $this->addError($data, Yii::t('app', "Some promo already exist"));
+            }elseif($key['spt_promo_id'] > $promoId) {
+                if ($end_date >= $key['spt_promo_start_date']) 
+                    $this->addError($data, Yii::t('app', "Some promo already exist"));
+            }
         }
     }
 
