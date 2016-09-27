@@ -60,7 +60,8 @@ class Company extends EbizuActiveRecord
             [['com_email'], 'unique'],
             [['com_name'], 'required', 'on' => ['new-hq','update-hq'], 'message' => 'HQ Name is required'],
             [['com_id'], 'required', 'on' => ['delete-hq'], 'message' => 'HQ ID is required'],
-            [['com_name','com_subcategory_id','com_currency'], 'required'],
+            [['com_name','com_subcategory_id'], 'required'],
+            [['com_currency'], 'required', 'except' => ['new-hq','update-hq']],
             [['com_email'], 'email'],
             [['com_email'], 'required', 'except' => ['new-hq','update-hq']],
             [['com_business_name'], 'required', 'on' => 'signup'],
@@ -168,7 +169,7 @@ class Company extends EbizuActiveRecord
             }, 'whenClient' => "function (attribute, value) {
                 return $('#company-com_in_mall').val() == 1;
             }"],
-            [['com_city'], 'required', 'when' => function($model) {
+            [['com_city'], 'required', 'except' => ['new-hq','update-hq'], 'when' => function($model) {
                 return $this ->com_in_mall == 0;
             }, 'whenClient' => "function (attribute, value) {
                 return $('#company-com_in_mall').val() == 0;
