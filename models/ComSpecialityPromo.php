@@ -37,7 +37,7 @@ class ComSpecialityPromo extends ActiveRecord
         return [
             [['spt_promo_com_spt_id', 'spt_promo_description', 'spt_promo_multiple_point', 'spt_promo_start_date', 'spt_promo_end_date'], 'required'],
             [['spt_promo_start_date'],'checkDate','on' => 'created'],
-            [['spt_promo_end_date'],'checkEndDate','on' => 'created'],
+            [['spt_promo_end_date'],'checkEndDate'],
             [['spt_promo_com_spt_id', 'spt_promo_created_by', 'spt_promo_created_date','spt_promo_max_point'], 'integer'],
             [['end_date'],'safe'],
             [['spt_promo_start_date', 'spt_promo_end_date'],'updateScenario', 'on' => 'update'],
@@ -124,17 +124,16 @@ class ComSpecialityPromo extends ActiveRecord
     public function updateScenario($data)
     {
         $promoId = $this->spt_promo_id;
-        $end_date = $this->spt_promo_end_date;
-        $start_date = $this->spt_promo_start_date;
+        $end_date = strtotime($this->spt_promo_end_date);
+        $start_date = strtotime($this->spt_promo_start_date);
         $spt_id = $this->spt_promo_com_spt_id;
         $active_promo = self::find()
             ->where('spt_promo_com_spt_id = :spt_id',[':spt_id' => $spt_id])
             ->andWhere('spt_promo_id != :id',[':id' => $promoId])
             ->orderBy('spt_promo_id')->asArray()->all();
-        var_dump($active_promo);exit;
         foreach ($active_promo as $key) {
-            if ($key['spt_promo_id'] < $promoId) 
-                if ($start_date <= $key['spt_promo_end_date']) {
+            if ($key['spt_promo_id'] < $promoId){
+                if ($start_date <= $key['spt_promo_end_date'])
                     $this->addError($data, Yii::t('app', "Some promo already exist"));
             }elseif($key['spt_promo_id'] > $promoId) {
                 if ($end_date >= $key['spt_promo_start_date']) 

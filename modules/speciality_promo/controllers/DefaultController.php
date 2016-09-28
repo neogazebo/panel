@@ -115,7 +115,7 @@ class DefaultController extends Controller
             if ($model->validate()) {
                 $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
                 $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
-                $model->save();
+                $model->save(false);
                 return $results = [
                     'success' => 0, 
                     'message' => 'success'
