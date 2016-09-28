@@ -280,6 +280,17 @@ $model->sna_push = true;
     <?php ActiveForm::end(); ?>
 </section>
 
+<!-- widget to create render modal -->
+<?php
+    Modal::begin([
+        'header' => '</button><h4 class="modal-title"></h4>',
+        'id' => 'modal',
+        'size' => 'modal-md',
+    ]);
+?>
+<div id="modalContent"></div>
+<?php Modal::end(); ?>
+
 <?=
     $this->render('/default/add',[
         'model' => SnapEarn::findOne($model->sna_id)
