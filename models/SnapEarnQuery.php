@@ -263,7 +263,6 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             }
         }
         
-        $this->orderBy('sna_id DESC');
         // echo $this->createCommand()->sql;exit;
         return $this;
     }
