@@ -60,18 +60,6 @@ class DefaultController extends Controller
         ]);   
     }
 
-    /**
-     * Displays a single CompanySpeciality model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
     public function actionGroup($id)
     {
         $type = CompanySpeciality::find()->with('type','country')->where('com_spt_id = :id',[

@@ -410,9 +410,10 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                 [
                                     'label' => 'Date Review',
                                     'attribute' => 'sna_review_date',
+                                    'format' => ['date', 'php:d-m-Y H:i:s'],
                                     'value' => function($data) {
                                         if (!empty($data->sna_review_date)) {
-                                            return Yii::$app->formatter->asDateTime(Utc::convert($data->sna_review_date));
+                                            return Yii::$app->formatter->asDateTime(\app\components\helpers\Utc::convert($data->sna_review_date));
                                         }
                                         
                                     }
