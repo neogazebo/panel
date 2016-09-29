@@ -4,6 +4,7 @@ namespace app\modules\com_speciality\controllers;
 
 use Yii;
 use app\controllers\BaseController;
+use app\models\ComSpecialityPromo;
 use app\models\Company;
 use app\models\CompanySpeciality;
 use app\models\Country;
@@ -178,6 +179,17 @@ class DefaultController extends BaseController
         $find_merchant = Company::find()->where('com_speciality = :id',[
                 ':id' => $id
             ])->groupBy('com_id')->limit(1)->one();
+        $check_promo = ComSpecialityPromo::find()->where('spt_promo_com_spt_id = :spt_id',[
+                ':spt_id' => $id
+            ])->all();
+
+        if ($check_promo) {
+            return $results = [
+                    'error' => 1000, 
+                    'message' => 'There is promo on this speciality'
+                ];
+        }
+
         if(!empty($find_merchant)){
             return $results = [
                     'error' => 1000, 
