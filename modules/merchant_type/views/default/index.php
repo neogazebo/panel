@@ -70,7 +70,7 @@ $this->title = 'Company Types';
                         [   
                             'header' => 'Action',
                             'class' => 'yii\grid\ActionColumn',
-                            'template' => '{update}{delete}',
+                            'template' => '{update} <!-- {delete}-->',
                             'buttons' => [
                                 'update' => function($url,$model){
                                     $html = Html::a('<i class="fa fa-pencil-square-o"></i>',['#'],
@@ -86,15 +86,15 @@ $this->title = 'Company Types';
                                         ]);
                                     return $html;
                                 },
-                            'delete' => function($url,$model){
-                                    return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
-                                    [
-                                        'value' => '/type/default/delete?id='.$model->com_type_id,
-                                        'class' => 'gotohell',
-                                        'data-title' => 'Delete',
-                                        'data-text' => 'Are you sure ?'
-                                    ]);
-                                },
+                            // 'delete' => function($url,$model){
+                            //         return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
+                            //         [
+                            //             'value' => '/type/default/delete?id='.$model->com_type_id,
+                            //             'class' => 'gotohell',
+                            //             'data-title' => 'Delete',
+                            //             'data-text' => 'Are you sure ?'
+                            //         ]);
+                            //     },
                             ]
                         ],
                     ],
