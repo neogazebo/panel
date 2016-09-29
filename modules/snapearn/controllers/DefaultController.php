@@ -443,7 +443,7 @@ class DefaultController extends BaseController
                         $model->sna_point = $limitPoint;
                     }
                     $model->sna_sem_id = '';
-
+                    $model->sna_point = floor($model->sna_point);
                     // add user for customer company
                     // check sna_cus_id
 

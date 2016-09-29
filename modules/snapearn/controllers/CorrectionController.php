@@ -122,7 +122,7 @@ class CorrectionController extends BaseController
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
                 // get promo configuration
                 $point_config = $speciality->getActivePoint($id,$model->sna_transaction_time);
-                $model->sna_point = floor($model->sna_ops_receipt_amount);
+                // $model->sna_point = floor($model->sna_ops_receipt_amount);
 
                 $model->sna_review_date = Utc::getNow();
                 $model->sna_review_by = Yii::$app->user->id;
@@ -205,6 +205,7 @@ class CorrectionController extends BaseController
                     if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
                     }
+                    $model->sna_point = floor($model->sna_point);
                     
                     $paramsPoint = [
                         'current_point' => $current_point,

@@ -51,7 +51,7 @@ class SnapEarnRuleQuery extends ActiveQuery
                 if($point > $point_cap)
                     return $point_cap;
             }
-            return $point;
+            return floor($point);
         } else {
             return "empty-b";
         }

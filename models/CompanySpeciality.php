@@ -108,7 +108,7 @@ class CompanySpeciality extends \yii\db\ActiveRecord
                 'spt_promo_com_spt_id' => 'com_spt_id'
                 ])
                 ->where('spt_promo_start_date <= :today')
-                ->andWhere('spt_promo_end_date >= :today',[
+                ->andWhere('spt_promo_end_date > :today',[
                     ':today' => $today
                 ]);
     }
