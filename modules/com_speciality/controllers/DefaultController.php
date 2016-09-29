@@ -105,6 +105,7 @@ class DefaultController extends BaseController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new CompanySpeciality();
+        $model->scenario = 'created';
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             if ($model->validate() && $this->enableCsrfValidation = true) {
                $model->save();
