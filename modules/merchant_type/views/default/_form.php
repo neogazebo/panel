@@ -15,7 +15,7 @@ use yii\widgets\Pjax;
 
     <div class="modal-body">
         <?= $form->field($model, 'com_type_name')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($model, 'com_type_multiple_point')->textInput() ?>
+        <?= $form->field($model, 'com_type_multiple_point')->textInput(['value' => floatval($model->com_type_multiple_point)]) ?>
         <?= $form->field($model, 'com_type_max_point')->textInput() ?>
     </div>
     <div class="clearfix"></div>

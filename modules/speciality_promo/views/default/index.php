@@ -96,7 +96,7 @@ $this->title = 'Speciality Promo';
                             [
                                 'header' => 'Action',
                                 'class' => 'yii\grid\ActionColumn',
-                                'template' => '{update} <!-- {delete} -->',
+                                'template' => '{update} {delete}',
                                 'buttons' => [
                                     'update' => function($url,$model){
                                         $visible = ($model->spt_promo_end_date < time()) ? 'hide' : '';
@@ -108,15 +108,16 @@ $this->title = 'Speciality Promo';
                                             ]);
                                         return $html;
                                     },
-                                    // 'delete' => function($url,$model){
-                                    //     return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
-                                    //         [
-                                    //             'value' => '/promo/default/delete?id='.$model->spt_promo_id,
-                                    //             'class' => 'gotohell',
-                                    //             'data-title' => 'Delete',
-                                    //             'data-text' => 'Are you sure ?'
-                                    //         ]);
-                                    // },
+                                    'delete' => function($url,$model){
+                                        $visible = (strtotime($model->spt_promo_start_date) <= time()) ? 'hide' : '';
+                                        return Html::a('<i class="fa fa-times-circle-o"></i>',['#'],
+                                            [
+                                                'value' => '/promo/default/delete?id='.$model->spt_promo_id,
+                                                'class' => 'gotohell '.$visible,
+                                                'data-title' => 'Delete',
+                                                'data-text' => 'Are you sure ?'
+                                            ]);
+                                    },
                                 ]
                             ],
                         ],

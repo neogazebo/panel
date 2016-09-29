@@ -101,62 +101,6 @@ class BaseController extends Controller
     {
         return date_default_timezone_set('UTC');
     }
-
-//    public function checkingWrk($param)
-//    {
-//        $model = WorkingTime::find()->findWorkExist($param)->one();
-//        return $model;
-//    }
-//
-//    public function startWorking($user,$param,$point_type,$point)
-//    {
-//        $this->centralTimeZone();
-//        // checking existing worktime with this user and param id
-//    	$model = WorkingTime::find()->findWorkExist($param,$point_type)->one();
-//        // if there is no exists worktime create this one
-//        if (empty($model)) {
-//            $model = new WorkingTime();
-//            $model->wrk_by = $user;
-//            $model->wrk_param_id = $param;
-//            $model->wrk_point = $point;
-//            $model->wrk_point_type = $point_type;
-//            $model->wrk_start = microtime(true);
-//            if ($model->save(false)) {
-//                return $model->wrk_id;
-//            }
-//        }elseif (empty($model->wrk_end)) {
-//            $model->wrk_by = $user;
-//            $model->wrk_param_id = $param;
-//            $model->wrk_point = $point;
-//            $model->wrk_start = microtime(true);
-//            if ($model->save(false)) {
-//                return $model->wrk_id;
-//            }
-//        }
-//        return $model->wrk_id;
-//    }
-//
-//    public function addWorkPoint($param,$point)
-//    {
-//        $this->centralTimeZone();
-//        $model = WorkingTime::find()->findWorkExist($param)->one();
-//        if (!empty($model)) {
-//            $model->wrk_point = $model->wrk_point + $point;
-//            $model->save(false);
-//        }
-//    }
-//
-//    public function endWorking($id,$type,$desc,$sem_id = 0)
-//    {
-//        $this->centralTimeZone();
-//    	$model = WorkingTime::findOne($id);
-//        $model->wrk_type = (int)$type;
-//    	$model->wrk_description = $desc;
-//    	$model->wrk_end = microtime(true);
-//        $model->wrk_time = ($model->wrk_end - $model->wrk_start);
-//        $model->wrk_rjct_number = $sem_id;
-//    	$model->save(false);
-//    }
     
     public function workingTime()
     {

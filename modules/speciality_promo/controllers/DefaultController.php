@@ -3,6 +3,7 @@
 namespace app\modules\speciality_promo\controllers;
 
 use Yii;
+use app\controllers\BaseController;
 use app\models\ComSpecialityPromo;
 use app\models\ComSpecialityPromoSearch;
 use yii\filters\VerbFilter;
@@ -13,7 +14,7 @@ use yii\web\Response;
 /**
  * TestController implements the CRUD actions for ComSpecialityPromo model.
  */
-class DefaultController extends Controller
+class DefaultController extends BaseController
 {
     /**
      * @inheritdoc
@@ -86,6 +87,13 @@ class DefaultController extends Controller
                 $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
                 $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
                 $model->save();
+                $activities = [
+                    'Create Speciality Promo', 
+                    'Create Merchant Speciality Promo cty_id = '.$model->spt_promo_cty_id.' spt_id ='.$model->spt_promo_com_spt_id,
+                    ComSpecialityPromo::className(), 
+                    $model->spt_promo_id
+                ];
+                $this->saveLog($activities);
                 return $results = [
                     'success' => 0, 
                     'message' => 'success'
@@ -116,6 +124,13 @@ class DefaultController extends Controller
                 $model->spt_promo_start_date = strtotime($model->spt_promo_start_date);
                 $model->spt_promo_end_date = strtotime($model->spt_promo_end_date);
                 $model->save(false);
+                $activities = [
+                    'Update Speciality Promo', 
+                    'Update Merchant Speciality Promo cty_id = '.$model->spt_promo_cty_id.' spt_id ='.$model->spt_promo_com_spt_id,
+                    ComSpecialityPromo::className(), 
+                    $model->spt_promo_id
+                ];
+                $this->saveLog($activities);
                 return $results = [
                     'success' => 0, 
                     'message' => 'success'
@@ -140,7 +155,17 @@ class DefaultController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
+        $model->spt_promo_id = $model->spt_promo_id;
+        $model->spt_promo_cty_id = $model->spt_promo_cty_id;
+        $model->spt_promo_com_spt_id = $model->spt_promo_com_spt_id;
         if ($model->delete()) {
+            $activities = [
+                'Delete Speciality Promo', 
+                'Delete Merchant Speciality Promo cty_id = '.$model->spt_promo_cty_id.' spt_id ='.$model->spt_promo_com_spt_id,
+                ComSpecialityPromo::className(), 
+                $model->spt_promo_id
+            ];
+            $this->saveLog($activities);
             return $results = [
                     'success' => 0, 
                     'message' => 'Success'

@@ -3,6 +3,7 @@
 namespace app\modules\merchant_type\controllers;
 
 use Yii;
+use app\controllers\BaseController;
 use app\models\CompanyType;
 use app\models\CompanyTypeSearch;
 use yii\filters\VerbFilter;
@@ -13,7 +14,7 @@ use yii\web\Response;
 /**
  * DefaultController implements the CRUD actions for CompanyType model.
  */
-class DefaultController extends Controller
+class DefaultController extends BaseController
 {
     /**
      * @inheritdoc
@@ -57,6 +58,13 @@ class DefaultController extends Controller
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                $model->save();
+               $activities = [
+                    'Create Speciality type', 
+                    'Create Merchant Speciality type = '.$model->com_type_name,
+                    CompanyType::className(), 
+                    $model->com_type_id
+                ];
+                $this->saveLog($activities);
                return $results = [
                     'success' => 0, 
                     'message' => 'success'
@@ -84,6 +92,13 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                $model->save();
+               $activities = [
+                    'Update Speciality type', 
+                    'Update Merchant Speciality type = '.$model->com_type_name,
+                    CompanyType::className(), 
+                    $model->com_type_id
+                ];
+                $this->saveLog($activities);
                return $results = [
                     'success' => 0, 
                     'message' => 'success'
@@ -108,7 +123,15 @@ class DefaultController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
+        $model->com_type_name = $model->com_type_name;
         if ($model->delete()) {
+           $activities = [
+                'Delete Speciality type', 
+                'Delete Merchant Speciality type = '.$model->com_type_name,
+                CompanyType::className(), 
+                $model->com_type_id
+            ];
+            $this->saveLog($activities);
             return $results = [
                     'success' => 0, 
                     'message' => 'Success'

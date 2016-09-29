@@ -3,6 +3,7 @@
 namespace app\modules\com_speciality\controllers;
 
 use Yii;
+use app\controllers\BaseController;
 use app\models\Company;
 use app\models\CompanySpeciality;
 use app\models\Country;
@@ -18,7 +19,7 @@ use yii\web\Response;
 /**
  * DeafultController implements the CRUD actions for CompanySpeciality model.
  */
-class DefaultController extends Controller
+class DefaultController extends BaseController
 {
     /**
      * @inheritdoc
@@ -107,6 +108,13 @@ class DefaultController extends Controller
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             if ($model->validate() && $this->enableCsrfValidation = true) {
                $model->save();
+               $activities = [
+                    'Create Speciality PerCountry', 
+                    'Create Merchant Speciality PerCountry cty_id = '.$model->com_spt_cty_id.' type_id ='.$model->com_spt_type_id,
+                    CompanySpeciality::className(), 
+                    $model->com_spt_id
+                ];
+                $this->saveLog($activities);
                return $results = [
                     'success' => 0, 
                     'message' => 'success'
@@ -134,6 +142,13 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                $model->save();
+               $activities = [
+                    'Update Speciality PerCountry', 
+                    'Update Merchant Speciality PerCountry cty_id = '.$model->com_spt_cty_id.' type_id ='.$model->com_spt_type_id,
+                    CompanySpeciality::className(), 
+                    $model->com_spt_id
+                ];
+                $this->saveLog($activities);
                return $results = [
                     'success' => 0, 
                     'message' => 'success'
@@ -168,7 +183,17 @@ class DefaultController extends Controller
                     'message' => 'There is merchant on this speciality'
                 ];
         }else{
+            $model->com_spt_id = $model->com_spt_id;
+            $model->com_spt_cty_id = $model->com_spt_cty_id;
+            $model->com_spt_type_id = $model->com_spt_type_id;
             $model->delete();
+               $activities = [
+                    'Delete Speciality PerCountry', 
+                    'Delete Merchant Speciality PerCountry cty_id = '.$model->com_spt_cty_id.' type_id ='.$model->com_spt_type_id,
+                    CompanySpeciality::className(), 
+                    $model->com_spt_id
+                ];
+                $this->saveLog($activities);
             return $results = [
                     'success' => 0, 
                     'message' => 'success'
