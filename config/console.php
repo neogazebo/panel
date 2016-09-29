@@ -29,6 +29,9 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'sqs_client' => [
+            'class' => 'app\components\extensions\aws\sqs\SqsClient',
+        ]
     ],
     'params' => $params,
 ];

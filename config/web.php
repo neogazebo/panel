@@ -154,6 +154,9 @@ $config = [
         // ],
         'array_helper' => [
             'class' => 'app\components\helpers\ArrayHelper',
+        ],
+        'sqs_client' => [
+            'class' => 'app\components\extensions\aws\sqs\SqsClient',
         ]
     ],
     'params' => $params,

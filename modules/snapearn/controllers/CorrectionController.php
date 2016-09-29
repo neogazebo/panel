@@ -32,6 +32,8 @@ use yii\web\HttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Session;
 
+use app\components\behaviors\SneSqsSenderBehavior;
+
 /**
 *
 */
@@ -73,6 +75,7 @@ class CorrectionController extends BaseController
 	public function actionCorrection($id)
 	{
         $model = $this->findModel($id);
+
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status == 0 ) {
             return $this->redirect(['default/to-update','id'=> $id]);
@@ -81,7 +84,11 @@ class CorrectionController extends BaseController
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         }
 
-    	$model = $this->findModel($id);
+        $model->attachBehavior('send_sqs_message', [
+            'class' => SneSqsSenderBehavior::className(),
+            'sne_model' => $model,
+        ]);
+
     	$model->scenario = 'correction';
        
         // get com id from session

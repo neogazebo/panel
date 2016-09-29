@@ -22,7 +22,8 @@
         "kartik-v/yii2-grid": "^3.1",
         "kartik-v/yii2-money": "^1.2",
         "kartik-v/yii2-export": "^1.2",
-        "yiisoft/yii2-jui": "^2.0"
+        "yiisoft/yii2-jui": "^2.0",
+        "aws/aws-sdk-php": "^3.19"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
@@ -33,7 +34,6 @@
         "kartik-v/yii2-mpdf": "*",
         "fedemotta/yii2-cronjob": "*",
         "hguenot/yii2-gsftp": "*",
-        "aws/aws-sdk-php": "2.*",
         "linslin/yii2-curl": "*"
     },
     "config": {

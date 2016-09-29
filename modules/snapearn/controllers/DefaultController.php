@@ -36,6 +36,9 @@ use app\models\SnapearnPoint;
 use yii\web\HttpException;
 use yii\web\ForbiddenHttpException;
 
+use app\components\behaviors\SneSqsSenderBehavior;
+
+
 /**
  * Default controller for the `snapearn` module
  */
@@ -342,6 +345,11 @@ class DefaultController extends BaseController
     public function actionUpdate($id)
     {
     	$model = $this->findModel($id);
+
+        $model->attachBehavior('send_sqs_message', [
+            'class' => SneSqsSenderBehavior::className(),
+            'sne_model' => $model,
+        ]);
         
         $get_sesssion = $this->getSession('wrk_ses_'.$id);
         if ($get_sesssion == '') {
