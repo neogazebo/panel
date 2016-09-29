@@ -20,6 +20,9 @@ foreach ($speciality as $val) {
         'id' => $model->isNewRecord ? 'promo-speciality' : 'promo-speciality-'.$model->spt_promo_id,
         'action' => $model->isNewRecord ? '/promo/default/create' : '/promo/default/update?id='.$model->spt_promo_id,
     ]); ?>
+    <?php
+        $point = (floatval($model->spt_promo_multiple_point) == 0) ? '' : floatval($model->spt_promo_multiple_point);
+    ?>
     <div class="modal-body">
         <?= $form->field($model, 'spt_promo_com_spt_id')->dropDownList($get_type, ['prompt' => 'Choose...'])->label('Company Speciality'); ?>
         <?= $form->field($model, 'spt_promo_description')->textInput(['maxlength' => true]) ?>
