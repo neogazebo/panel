@@ -27,7 +27,10 @@ foreach ($speciality as $val) {
         <?= $form->field($model, 'spt_promo_com_spt_id')->dropDownList($get_type, ['prompt' => 'Choose...'])->label('Company Speciality'); ?>
         <?= $form->field($model, 'spt_promo_description')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'spt_promo_day_promo')->dropDownList(GlobalHelper::Weekdays(), ['prompt' => 'Special Day...'])->label('Promo Day') ?>
-        <?= $form->field($model, 'spt_promo_multiple_point')->textInput(['value' => floatval($model->spt_promo_multiple_point)]) ?>
+        <?= $form->field($model, 'spt_promo_multiple_point')->textInput([
+            'value' => $point,
+            'placeholder' => 'ex : 1.5'
+            ]) ?>
         <div class="col-sm-6" style="padding: 0px 12px 0px 0px;">
             <?=
             $form->field($model, 'spt_promo_start_date')->widget(DatePicker::classname(),[ 

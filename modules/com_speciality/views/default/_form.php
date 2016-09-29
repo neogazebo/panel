@@ -25,7 +25,10 @@ $country = new GlobalHelper();
 
     	<?= $form->field($model, 'com_spt_cty_id')->dropDownList(ArrayHelper::map(Country::find()->all(), 'cty_id', 'cty_name'), ['prompt'=>'Choose...'])->label('Select Country...'); ?>
 
-        <?= $form->field($model, 'com_spt_multiple_point')->textInput(['value' => $point]) ?>
+        <?= $form->field($model, 'com_spt_multiple_point')->textInput([
+            'value' => $point,
+            'placeholder' => 'ex : 1.5'
+            ]) ?>
         <?= $form->field($model, 'com_spt_max_point')->textInput() ?>
 
     </div>
