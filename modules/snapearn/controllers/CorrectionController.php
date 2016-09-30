@@ -87,6 +87,7 @@ class CorrectionController extends BaseController
         $model->attachBehavior('send_sqs_message', [
             'class' => SneSqsSenderBehavior::className(),
             'sne_model' => $model,
+            'origin' => 'correction'
         ]);
 
     	$model->scenario = 'correction';

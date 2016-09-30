@@ -349,6 +349,7 @@ class DefaultController extends BaseController
         $model->attachBehavior('send_sqs_message', [
             'class' => SneSqsSenderBehavior::className(),
             'sne_model' => $model,
+            'origin' => 'default'
         ]);
         
         $get_sesssion = $this->getSession('wrk_ses_'.$id);
