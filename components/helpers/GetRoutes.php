@@ -18,6 +18,7 @@ class GetRoutes
 {
 	public function generatePermission()
     {
+        echo Yii::$app->user->id;exit;
         $routes = $this->searchRoute('all');
         $insert = 0;
         foreach ($routes as $route => $status) {
