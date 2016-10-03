@@ -39,11 +39,11 @@
                 'com_id' => $sne_model->sna_com_id,
                 'firstname' => $this->processName($sne_model->member->acc_screen_name, 'first_name'),
                 'lastname' => $this->processName($sne_model->member->acc_screen_name, 'last_name'),
-                'gender' => $sne_model->member->acc_gender,
+                'gender' => (string) $sne_model->member->acc_gender,
                 'birthdate' => $sne_model->member->acc_birthdate,
                 'location' => $sne_model->member->acc_address,
                 'datetime' => $sne_model->member->acc_tmz_id,
-                'device' => $account_device ? $account_device->dvc_id : '',
+                'device' => $account_device ? (string) $account_device->dvc_id : '',
                 'phone_number' => $sne_model->member->acc_msisdn,
                 'email' => $sne_model->member->acc_facebook_email,
                 'photo' => $sne_model->member->acc_photo,
@@ -72,6 +72,9 @@
             }
 
             $new_data_imploded = implode(', ', $new_data);
+
+            //var_dump($new_data_imploded);
+            //die;
 
             Yii::$app->sqs_client->sendQueueMessage(Yii::$app->params['RETAILER_SQS_URL'], $new_data_imploded);
         }
