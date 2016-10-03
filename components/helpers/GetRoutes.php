@@ -29,7 +29,7 @@ class GetRoutes
                 $permissions->description = $alias;
                 if($auth->add($permissions)){
                     $model = AuthItem::findOne($route);
-                    $model->created_by = Yii::$app->user->identity->id;
+                    $model->created_by = Yii::$app->user->id;
                     if($model->save()){
                         $insert++;
                     }
