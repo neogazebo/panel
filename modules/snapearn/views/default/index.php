@@ -470,7 +470,7 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                             $superuser = Yii::$app->user->identity->superuser;
                                             if ($model->sna_status == 0) {
                                                 return Html::a('<i class="fa fa-pencil-square-o"></i>', ['to-update', 'id' => $model->sna_id]);
-                                            } elseif($model->sna_status != 0 && $superuser == 1) {
+                                            } elseif( $model->sna_status != 0 && Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][correction_button]') ) {
                                                 return Html::a('<i class="fa fa-pencil-square-o btn-correction"></i>', ['correction/to-correction','id' => $model->sna_id]);
                                             }
                                         },
