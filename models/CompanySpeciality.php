@@ -35,6 +35,7 @@ class CompanySpeciality extends \yii\db\ActiveRecord
     {
         return [
             [['com_spt_type_id', 'com_spt_cty_id', 'com_spt_max_point' ,'com_spt_multiple_point'], 'required'],
+            [['com_spt_type_id'],'checkType','on' => 'created'],
             [['com_spt_created_by', 'com_spt_created_date', 'com_spt_updated_date'], 'integer']
         ];
     }
@@ -79,6 +80,22 @@ class CompanySpeciality extends \yii\db\ActiveRecord
             ];
     }
 
+    public function checkType($data)
+    {
+        $type = $this->com_spt_type_id;
+        $country = $this->com_spt_cty_id;
+        $model = self::find()
+            ->select('com_spt_type_id')
+            ->where('com_spt_type_id = :type AND com_spt_cty_id = :cty',[
+                    ':type' => $type,
+                    ':cty' => $country
+                ])
+            ->all();
+        if ($model) {
+            $this->addError($data, Yii::t('app', "This Company Speciality Already exist"));
+        }
+    }
+
     public function getPic()
     {
         return $this->hasOne(User::className(),['id' => 'com_spt_created_by']);
@@ -91,7 +108,7 @@ class CompanySpeciality extends \yii\db\ActiveRecord
                 'spt_promo_com_spt_id' => 'com_spt_id'
                 ])
                 ->where('spt_promo_start_date <= :today')
-                ->andWhere('spt_promo_end_date >= :today',[
+                ->andWhere('spt_promo_end_date > :today',[
                     ':today' => $today
                 ]);
     }

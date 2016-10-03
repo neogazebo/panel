@@ -109,11 +109,13 @@ use app\components\filters\AccessFilters;
             <i class="fa fa-angle-left pull-right"></i>
         </a>
         <ul class="treeview-menu">
+            <?php if (AccessFilters::getMenu('snapearn/group')) : ?>
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('snapearn/group/index') ?>">
                     <i class="fa fa-circle-o"></i> Snap &amp; Earn Group
                 </a>
             </li>
+            <?php endif ?>
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('users/index') ?>">
                     <i class="fa fa-circle-o"></i> User
@@ -124,11 +126,13 @@ use app\components\filters\AccessFilters;
                     <i class="fa fa-circle-o"></i> Role
                 </a>
             </li>
+            <?php if (AccessFilters::getMenu('rbac/permission')) : ?>
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('rbac/permission') ?>">
                     <i class="fa fa-circle-o"></i> Module Permissions
                 </a>
             </li>
+            <?php endif; ?>
         </ul>
     </li>
     <?php endif; ?>

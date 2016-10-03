@@ -16,13 +16,19 @@ $country = new GlobalHelper();
         'id' => $model->isNewRecord ? 'promo-speciality' : 'promo-speciality-'.$model->com_spt_id,
         'action' => $model->isNewRecord ? '/speciality/default/create' : '/speciality/default/update?id='.$model->com_spt_id,
     ]); ?>
+    <?php
+        $point = (floatval($model->com_spt_multiple_point) == 0) ? '' : floatval($model->com_spt_multiple_point);
+    ?>
     <div class="modal-body">
 
         <?= $form->field($model, 'com_spt_type_id')->dropDownList(ArrayHelper::map(CompanyType::find()->all(), 'com_type_id', 'com_type_name'), ['prompt'=>'Choose...'])->label('Company Speciality'); ?>
 
     	<?= $form->field($model, 'com_spt_cty_id')->dropDownList(ArrayHelper::map(Country::find()->all(), 'cty_id', 'cty_name'), ['prompt'=>'Choose...'])->label('Select Country...'); ?>
 
-        <?= $form->field($model, 'com_spt_multiple_point')->textInput() ?>
+        <?= $form->field($model, 'com_spt_multiple_point')->textInput([
+            'value' => $point,
+            'placeholder' => 'ex : 1.5'
+            ]) ?>
         <?= $form->field($model, 'com_spt_max_point')->textInput() ?>
 
     </div>
