@@ -100,7 +100,7 @@ class CorrectionController extends BaseController
         if ($model->sna_status == 0 && $superuser != 1) {
             $this->checkSession($id);
             return $this->redirect(['default/to-update','id'=> $id]);
-        } elseif ($model->sna_status != 0 && $superuser != 1) {
+        } elseif ($model->sna_status != 0 && !Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][correction_button]')) {
             $this->checkSession($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         }
