@@ -128,7 +128,7 @@ class IndexController extends BaseController
                 'name' => $role
             ];
             $this->setMessage('save', 'success', 'Edit item child successfully');
-            return $this->redirect(['detail?name=' . $role]);
+            return $this->redirect(['detail?name=' . urlencode($role)]);
         }
     }
 
