@@ -73,8 +73,8 @@
 
             $new_data_imploded = implode(', ', $new_data);
 
-            var_dump($new_data_imploded);
-            die;
+            //var_dump($new_data_imploded);
+            //die;
 
             Yii::$app->sqs_client->sendQueueMessage(Yii::$app->params['RETAILER_SQS_URL'], $new_data_imploded);
         }
