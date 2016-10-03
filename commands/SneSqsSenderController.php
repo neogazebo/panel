@@ -33,22 +33,22 @@
             $account_device = $sne_model->member->activeDevice();
 
             $data = [
-                'id' => $sne_model->sna_id,
-                'cus_id' => $sne_model->member->acc_id,
+                'cus_id' => $sne_model->sna_cus_id,
                 'mem_id' => $sne_model->member->acc_mem_id,
                 'com_id' => $sne_model->sna_com_id,
                 'firstname' => $this->processName($sne_model->member->acc_screen_name, 'first_name'),
                 'lastname' => $this->processName($sne_model->member->acc_screen_name, 'last_name'),
-                'gender' => (string) $sne_model->member->acc_gender,
+                'gender' => $this->processGender($sne_model->member->acc_gender),
                 'birthdate' => $sne_model->member->acc_birthdate,
                 'location' => $sne_model->member->acc_address,
                 'datetime' => $sne_model->member->acc_tmz_id,
-                'device' => $account_device ? (string) $account_device->dvc_id : '',
+                'device' => $account_device ? $this->processDevicePlatform($account_device->dvc_platform) : '',
                 'phone_number' => $sne_model->member->acc_msisdn,
                 'email' => $sne_model->member->acc_facebook_email,
                 'photo' => $sne_model->member->acc_photo,
                 'cty_id' => $sne_model->member->acc_cty_id,
                 'type' => 'sne',
+                'snapearn_id' => $this->sna_id,
                 'snapearn_status' => $sne_model->sna_status,
                 'snapearn_receipt_amount' => $sne_model->sna_ops_receipt_amount,
                 'snapearn_point' => $sne_model->sna_point,
@@ -63,7 +63,7 @@
                 'voucher_customer_spent' => '',
                 'voucher_total_amount' => '',
                 'voucher_transaction_time' => '',
-                'created' => $sne_model->sna_upload_date,
+                'created' => ''
             ];
 
             foreach($data as $key => $value)
@@ -73,8 +73,8 @@
 
             $new_data_imploded = implode(', ', $new_data);
 
-            //var_dump($new_data_imploded);
-            //die;
+            var_dump($new_data_imploded);
+            die;
 
             Yii::$app->sqs_client->sendQueueMessage(Yii::$app->params['RETAILER_SQS_URL'], $new_data_imploded);
         }
@@ -106,5 +106,41 @@
             }
 
             return $name;
+        }
+
+        private function processGender($gender)
+        {
+            switch ($gender) 
+            {
+                case '1':
+                    return 'male';
+                    break;
+
+                case '2':
+                    return 'female';
+                    break;
+                
+                default:
+                    return 'male';
+                    break;
+            }
+        }
+
+        private function processDevicePlatform($platform)
+        {
+            switch ($platform) 
+            {
+                case '1':
+                    return 'android';
+                    break;
+
+                case '2':
+                    return 'ios';
+                    break;
+                
+                default:
+                    return 'android';
+                    break;
+            }
         }
     }
