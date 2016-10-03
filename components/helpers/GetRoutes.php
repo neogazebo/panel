@@ -27,7 +27,7 @@ class GetRoutes
                 $alias = substr($route, $pos + 1, 100);
                 $permissions = $auth->createPermission($route);
                 $permissions->description = $alias;
-                $permissions->created_by = Yii::$app->user->id;
+                // $permissions->created_by = Yii::$app->user->id;
                 $auth->add($permissions);
                 // if($auth->add($permissions)){
                 //     $model = AuthItem::findOne($route);
