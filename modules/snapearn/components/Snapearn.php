@@ -172,12 +172,20 @@ class Snapearn extends BaseModuleComponents
                     'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Page_Components][member]")
                 ],
                 [
-                    'Name' => 'actions',
+                    'Name' => 'update_button',
                     'Type' => 'page_components',
                     'Sub_Type' => 'table_column',
                     'Description' => 'Snapearn Table (List Page)',
                     'Origin' => 'List Page',
-                    'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Page_Components][actions]")
+                    'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Page_Components][update_button]")
+                ],
+                [
+                    'Name' => 'correction_button',
+                    'Type' => 'page_components',
+                    'Sub_Type' => 'table_column',
+                    'Description' => 'Snapearn Table (List Page)',
+                    'Origin' => 'List Page',
+                    'Permission' => AuthItem::find()->getPermissions($this->name, "Snapearn[Page_Components][correction_button]")
                 ],
                 // End List Table
 
