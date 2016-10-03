@@ -36,6 +36,20 @@ use Yii;
  * @property integer $created_date
  * @property integer $updated_date
  * @property integer $mer_reviewed
+ * @property string $unifi_id
+ * @property integer $bussines_type_food
+ * @property integer $bussines_type_fashion
+ * @property integer $bussines_type_entertainment
+ * @property integer $bussines_type_tech_gadget
+ * @property integer $bussines_type_event
+ * @property integer $bussines_type_home_living
+ * @property integer $bussines_type_health_beauty
+ * @property integer $bussines_type_travel
+ * @property integer $bussines_type_shopping
+ * @property integer $bussines_type_sport
+ * @property integer $bussines_type_film_music
+ * @property integer $bussines_type_business
+ * @property integer $participation_acknowledge
  */
 class MerchantSignup extends EbizuActiveRecord
 {
@@ -59,8 +73,8 @@ class MerchantSignup extends EbizuActiveRecord
             // [['mer_login_email'], 'validateEmail'],
             [['mer_website'], 'url'],
             [['mer_bussiness_description', 'mer_address'], 'string'],
-            [['mer_bussines_type_retail', 'mer_bussines_type_service', 'mer_bussines_type_franchise', 'mer_bussines_type_pro_services', 'mer_office_phone', 'mer_office_fax', 'mer_multichain', 'mer_preferr_comm_mail', 'mer_preferr_comm_email', 'mer_preferr_comm_mobile_phone', 'mer_applicant_acknowledge', 'created_date', 'updated_date', 'mer_reviewed'], 'integer'],
-            [['mer_bussines_name', 'mer_company_name', 'mer_website', 'mer_login_email', 'mer_pic_name', 'mer_contact_phone', 'mer_contact_mobile', 'mer_contact_email'], 'string', 'max' => 255],
+            [['mer_bussines_type_retail', 'mer_bussines_type_service', 'mer_bussines_type_franchise', 'mer_bussines_type_pro_services', 'mer_office_phone', 'mer_office_fax', 'mer_multichain', 'mer_preferr_comm_mail', 'mer_preferr_comm_email', 'mer_preferr_comm_mobile_phone', 'mer_applicant_acknowledge', 'created_date', 'updated_date', 'mer_reviewed', 'mer_bussines_type_food', 'mer_bussines_type_fashion', 'mer_bussines_type_entertainment', 'mer_bussines_type_tech_gadget', 'mer_bussines_type_event', 'mer_bussines_type_home_living', 'mer_bussines_type_health_beauty', 'mer_bussines_type_travel', 'mer_bussines_type_shopping', 'mer_bussines_type_sport', 'mer_bussines_type_film_music', 'mer_bussines_type_business', 'mer_participation_acknowledge'], 'integer'],
+            [['mer_bussines_name', 'mer_company_name', 'mer_website', 'mer_login_email', 'mer_pic_name', 'mer_contact_phone', 'mer_contact_mobile', 'mer_contact_email', 'mer_unifi_id'], 'string', 'max' => 255],
             [['mer_post_code'], 'string', 'max' => 10],
             [['mer_multichain_file'], 'file', 'extensions' => 'xls, xlsx, csv'],
             [['mer_bussines_name', 'mer_company_name', 'mer_login_email'], 'safe', 'on' => 'review']
@@ -101,6 +115,20 @@ class MerchantSignup extends EbizuActiveRecord
             'created_date' => 'Created At',
             'updated_date' => 'Updated At',
             'mer_reviewed' => 'Reviewed',
+            'mer_unifi_id' => 'Unifi ID',
+            'mer_bussines_type_food' => 'Food',
+            'mer_bussines_type_fashion' => 'Fashion',
+            'mer_bussines_type_entertainment' => 'Entertainment',
+            'mer_bussines_type_tech_gadget' => 'Tech & Gadgets',
+            'mer_bussines_type_event' => 'Events',
+            'mer_bussines_type_home_living' => 'Home & Living',
+            'mer_bussines_type_health_beauty' => 'Health & Beauty',
+            'mer_bussines_type_travel' => 'Travel',
+            'mer_bussines_type_shopping' => 'Shopping',
+            'mer_bussines_type_sport' => 'Sports',
+            'mer_bussines_type_film_music' => 'Film & Music',
+            'mer_bussines_type_business' => 'Business',
+            'mer_participation_acknowledge' => 'Participation Acknowledgement',
         ];
     }
 
@@ -109,7 +137,7 @@ class MerchantSignup extends EbizuActiveRecord
             'timestamp' => [
                 'class' => 'yii\behaviors\TimestampBehavior',
                 'attributes' => [
-                    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => ['created_date', 'updated_date'],                    
+                    \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => ['created_date', 'updated_date'],
                     \yii\db\ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_date'],
                 ],
             ]
@@ -123,7 +151,7 @@ class MerchantSignup extends EbizuActiveRecord
             $this->addError($attribute, 'Email Already Exist!');
         }
     }
-    
+
     public function getFile()
     {
         if (!empty($this->mer_multichain_file))
