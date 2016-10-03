@@ -18,7 +18,6 @@ class GetRoutes
 {
 	public function generatePermission()
     {
-        echo Yii::$app->user->id;exit;
         $routes = $this->searchRoute('all');
         $insert = 0;
         foreach ($routes as $route => $status) {
@@ -31,7 +30,7 @@ class GetRoutes
                 if($auth->add($permissions)){
                     $model = AuthItem::findOne($route);
                     $model->created_by = Yii::$app->user->id;
-                    if($model->save()){
+                    if($model->save(false)){
                         $insert++;
                     }
                 }
