@@ -387,10 +387,11 @@ $this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/Snap
                                     'contentOptions' => ['style' => 'max-width: 80px; word-wrap: break-word;']
                                 ],
                                 [
-                                    'attribute' => 'sna_receipt_amount',
-                                    'format' => ['decimal', 2],
+                                    'attribute' => 'sna_ops_receipt_amount',
+                                    'format' => 'html',
                                     'value' => function($data) {
-                                        return $data->sna_receipt_amount;
+                                        $amount = Yii::$app->formatter->asDecimal($data->sna_ops_receipt_amount,2);
+                                        return (floatval($amount) != 0) ? $amount : '<a class=""><span class="not-set">(not set)</span></a>';
                                     }
                                 ],
                                 [
