@@ -101,7 +101,7 @@ $config = [
             'class' => 'yii\swiftmailer\Mailer',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'constructArgs' => ['smtp.getmanis.com', 25]
+                'constructArgs' => ['smtp.getmanis.com', 25],
                 'plugins' => [
                     [
                         'class' => 'Swift_Plugins_ThrottlerPlugin',
