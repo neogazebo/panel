@@ -8,8 +8,6 @@
     use yii\base\Behavior;
 
     use app\models\SnapEarn;
-    
-    use app\components\extensions\aws\SqsClient;
 
     class SneSqsSenderBehavior extends Behavior
     {
@@ -31,11 +29,11 @@
             $send_sqs_message = false;
             $com_is_premium = ($this->sne_model->business->com_premium == 1 && $this->sne_model->business->com_speciality == 2);
 
-            if( ($this->origin == 'default') && ($this->sne_model->sna_status == 1) ) //&& ($com_is_premium) )
+            if( ($this->origin == 'default') && ($this->sne_model->sna_status == 1) && ($com_is_premium) )
             {
                 $send_sqs_message = true;
             }
-            else if( ($this->origin == 'correction') && ($this->sne_model->sna_status == 1 || $this->sne_model->sna_status == 2) ) //&& ($com_is_premium) )
+            else if( ($this->origin == 'correction') && ($this->sne_model->sna_status == 1 || $this->sne_model->sna_status == 2) && ($com_is_premium) )
             {
                 $send_sqs_message = true;
             }
