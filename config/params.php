@@ -44,5 +44,6 @@ return [
     'AWS_REGION' => 'ap-northeast-1',
     'AWS_ACCESS_KEY_ID' => "AKIAJIL3GSRJLGYBLEJQ",
     'AWS_SECRET_ACCESS_KEY' => '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',
-    'RETAILER_SQS_URL' => 'https://sqs.ap-northeast-1.amazonaws.com/586061393339/Retailer-Merchant'
+    'RETAILER_SQS_URL' => 'https://sqs.ap-northeast-1.amazonaws.com/586061393339/Retailer-User-Transaction',
+    //'RETAILER_SQS_URL' => 'https://sqs.ap-northeast-1.amazonaws.com/586061393339/Retailer-Merchant'   
 ];
