@@ -18,6 +18,26 @@ $arr_bis_type = [];
 ($model->mer_bussines_type_franchise) ? $arr_bis_type[] = 'Franchise' : '';
 ($model->mer_bussines_type_pro_services) ? $arr_bis_type[] = 'Professional Services' : '';
 
+$types = [
+    'food' => 'Food',
+    'fashion' => 'Fashion',
+    'entertainment' => 'Entertainment',
+    'tech_gadget' => 'Tech & Gadgets',
+    'event' => 'Events',
+    'home_living' => 'Home & Living',
+    'health_beauty' => 'Health & Beauty',
+    'travel' => 'Travel',
+    'shopping' => 'Shopping',
+    'sport' => 'Sports',
+    'film_music' => 'Film & Music',
+    'business' => 'Business',
+];
+
+foreach ($types as $key => $type) {
+    $obj_name = "mer_bussines_type_{$key}";
+    ($model->$obj_name) ? $arr_bis_type[] = $type : '';
+}
+
 /*'mer_multichain',
 'mer_multichain_file:ntext',*/
 
@@ -39,13 +59,13 @@ $multichain = ($model->mer_multichain) ? '<a href="'.Yii::$app->params['awsUrl']
         <div class="col-md-12 col-xs-12">
             <div class="box box-primary">
                 <div class="box-body">
-                    
+
     <!-- <h1><?= Html::encode($this->title) ?></h1> -->
 
     <p>
-        <?php 
+        <?php
             //echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
-            
+
             /*
             echo Html::a('Delete', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
@@ -53,7 +73,7 @@ $multichain = ($model->mer_multichain) ? '<a href="'.Yii::$app->params['awsUrl']
                     'confirm' => 'Are you sure you want to delete this item?',
                     'method' => 'post',
                 ],
-            ]); 
+            ]);
             */
         ?>
 
@@ -81,6 +101,7 @@ $multichain = ($model->mer_multichain) ? '<a href="'.Yii::$app->params['awsUrl']
                                     'format' => 'html',
                                     'value' => $multichain
                                 ],
+                                'mer_unifi_id',
                                 'mer_login_email:email',
                                 'mer_pic_name',
                                 'mer_contact_phone',
@@ -93,7 +114,7 @@ $multichain = ($model->mer_multichain) ? '<a href="'.Yii::$app->params['awsUrl']
                             ],
                         ]) ?>
 
-                    
+
                 </div>
 
             </div>
