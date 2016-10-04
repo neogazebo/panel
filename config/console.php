@@ -7,6 +7,7 @@ $params = array_merge(
     require(__DIR__ . '/params-local.php')
 );
 $db = require(__DIR__ . '/db.php');
+$db2 = require(__DIR__ . '/db2.php');
 
 $config = [
     'id' => 'basic-console',
@@ -25,7 +26,12 @@ $config = [
                 ],
             ],
         ],
+        'AdminMail' => [
+            'class' => 'app\components\extensions\AdminMail',
+            'template' => '//mail/template/template',
+        ],
         'db' => $db,
+        'db2' => $db2,
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],

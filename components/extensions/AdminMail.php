@@ -4,6 +4,7 @@ namespace app\components\extensions;
 use Yii;
 use yii\base\Component;
 use app\models\Mail;
+use app\models\Voucher;
 use HTML2PDF;
 
 class AdminMail extends Component
@@ -77,6 +78,14 @@ class TBackend extends TMail
         $this->template = '//mail/template/template-pos';
         $this->subject = Mail::SUBJECT_EMPLOYEE_REGISTER;
         $this->body = Mail::BODY_EMPLOYEE_REGISTER;
+        return $this;
+    }
+
+    public function stockVoucher($subject)
+    {
+        $this->template = '//mail/template/template';
+        $this->subject = $subject;
+        $this->body = Mail::BODY_STOCK_LEFT;
         return $this;
     }
 
