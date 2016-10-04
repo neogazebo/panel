@@ -27,7 +27,8 @@
             $yiipath = Yii::getAlias('@app/yii');
 
             $send_sqs_message = false;
-            $com_is_premium = ($this->sne_model->business->com_premium == 1 && $this->sne_model->business->com_speciality == 2);
+            //$com_is_premium = ($this->sne_model->business->com_premium == 1 && $this->sne_model->business->com_speciality == 2);
+            $com_is_premium = true;
 
             if( ($this->origin == 'default') && ($this->sne_model->sna_status == 1) && ($com_is_premium) )
             {
