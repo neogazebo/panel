@@ -3,7 +3,7 @@
 namespace app\modules\system\processors\merchant_hq;
 
 use Yii;
-use app\modules\system\processors\bases\BaseProcessor;
+use app\modules\bases\BaseProcessor;
 use app\models\Company;
 
 class MerchantHqChildrenSaveProcessor extends BaseProcessor
@@ -46,7 +46,7 @@ class MerchantHqChildrenSaveProcessor extends BaseProcessor
                         return $this->json_helper->jsonOutput(self::CHILDREN_OP_CONFIRMATION_CODE, 'error', 'You are about to empty the data');
                     }
 
-                    Company::find()->saveMerchantChildren($parent_id, $merchant_children_id);
+                    Company::find()->saveMerchantChildren($parent_id, $merchant_children_id, true);
                     $transaction->commit();
                     return $this->json_helper->jsonOutput(0, 'success', null);
                 }

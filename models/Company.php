@@ -59,7 +59,9 @@ class Company extends EbizuActiveRecord
             [['com_par_id', 'com_email'], 'safe', 'on' => 'snapEarnUpdate'],
             [['com_email'], 'unique'],
             [['com_name'], 'required', 'on' => ['new-hq','update-hq'], 'message' => 'HQ Name is required'],
-            [['com_name','com_subcategory_id','com_currency'], 'required'],
+            [['com_id'], 'required', 'on' => ['delete-hq'], 'message' => 'HQ ID is required'],
+            [['com_name','com_subcategory_id'], 'required'],
+            [['com_currency'], 'required', 'except' => ['new-hq','update-hq']],
             [['com_email'], 'email'],
             [['com_email'], 'required', 'except' => ['new-hq','update-hq']],
             [['com_business_name'], 'required', 'on' => 'signup'],
@@ -167,7 +169,7 @@ class Company extends EbizuActiveRecord
             }, 'whenClient' => "function (attribute, value) {
                 return $('#company-com_in_mall').val() == 1;
             }"],
-            [['com_city'], 'required', 'when' => function($model) {
+            [['com_city'], 'required', 'except' => ['new-hq','update-hq'], 'when' => function($model) {
                 return $this ->com_in_mall == 0;
             }, 'whenClient' => "function (attribute, value) {
                 return $('#company-com_in_mall').val() == 0;
@@ -200,10 +202,10 @@ class Company extends EbizuActiveRecord
             'com_description' => 'Description',
             'com_category_id' => 'Category',
             'com_subcategory_id' => 'Category',
-            'com_country_id' => 'Country',
-            'com_region_id' => 'Region',
-            'com_city_id' => 'City',
-            'com_city' => 'Location',
+            'com_country_id' => 'Country ID',
+            'com_region_id' => 'Region ID',
+            'com_city_id' => 'City ID',
+            'com_city' => 'City',
             'com_address' => 'Address',
             'com_postcode' => 'POS Code',
             'com_phone' => 'Phone',
@@ -245,7 +247,7 @@ class Company extends EbizuActiveRecord
             'com_close_sunday' => 'Close Sunday',
             'com_created_date' => 'Created On',
             'com_created_by' => 'Created By',
-            'com_edited_date' => 'Edited Date',
+            'com_edited_date' => 'Edited On',
             'com_edited_by' => 'Edited By',
             'com_keywords' => 'Keywords',
             'com_membership_id' => 'Membership',
@@ -1012,10 +1014,10 @@ class Company extends EbizuActiveRecord
     public function getTag($id)
     {
         return Tag::find()->select('tag_id, tag_name')
-        ->innerJoin('tbl_company_tag b', 'b.cot_tag_id = tag_id')
-        ->leftJoin('tbl_company c', 'c.com_id = b.cot_com_id')
-        ->where(['c.com_id' => $id])
-        ->all();
+            ->innerJoin('tbl_company_tag b', 'b.cot_tag_id = tag_id')
+            ->leftJoin('tbl_company c', 'c.com_id = b.cot_com_id')
+            ->where(['c.com_id' => $id])
+            ->all();
     }
 
     public function getCategory()
@@ -1026,6 +1028,16 @@ class Company extends EbizuActiveRecord
     public static function find()
     {
         return new CompanyQuery(get_called_class());
+    }
+
+    public function getUserCreated()
+    {
+        return $this->hasOne(AdminUser::className(), ['id' => 'com_created_by']);
+    }
+
+    public function getUserEdited()
+    {
+        return $this->hasOne(AdminUser::className(), ['id' => 'com_edited_by']);
     }
 
 }

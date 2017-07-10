@@ -1,72 +1,32 @@
-<?php
+
+ <?php
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
-use yii\web\JsExpression;
 use yii\helpers\Url;
-use kartik\widgets\Typeahead;
-use kartik\widgets\TypeaheadBasic;
 use app\models\Company;
-use yii\widgets\Pjax;
-
-
-Pjax::begin();
-
-$form = ActiveForm::begin([
-    'id' => 'create-form',
-    'options' => [
-        'class' => 'form-group',
-        'data-pjax' => true
-        ],
-    'enableClientValidation'=>true,
-    'enableAjaxValidation' => true,
-    'fieldConfig' => [
-        'template' => "{label}\n<div class=\"col-lg-8\">{input}\n<div>{error}</div></div>",
-        'labelOptions' => ['class' => 'col-lg-3 control-label'],
-    ]
-]);
+$this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.min.css');
+$this->registerCssFile($this->theme->baseUrl.'/plugins/jQueryUI/jquery-ui.theme.min.css');
+$this->registerJs("var search_mechant_url = '" . Url::to(['default/list-merchant-non-hq']) . "';", \yii\web\View::POS_BEGIN);
 
 ?>
-<div class="modal-body">
-	<?=
-        Typeahead::widget([
-            'name' => 'merchant',
-            'options' => ['placeholder' => 'Filter as you type ...'],
-            'useHandleBars' => false,
-            'scrollable' => true,
-            'pluginOptions' => [
-                'highlight'=>true,
-                'minLength' => 3
-            ],
-            'pluginEvents' => [
-                "typeahead:select" => "function(ev, suggestion) { $('#com_id').val(suggestion.id); }",
-            ],
-            'dataset' => [
-                [
-                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                    'display' => 'value',
-                    'remote' => [
-                        'url' => Url::to(['list-temp']) . '?q=%QUERY',
-                        'wildcard' => '%QUERY'
-                    ],
-                    'limit' => 20
-                ]
-            ]
-        ]);
-    ?>
-    <input id="com_id" type="hidden" name="com_id" value="">
-    <?= $form->field($model, 'sna_id')->hiddenInput()->label('') ?>
-</div>
-<div class="modal-footer">
-    <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>
-    <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => 'pull-right btn btn-info pull-right']) ?>
-</div>
-
-<?php ActiveForm::end(); ?>
+        <form id="existing_merchant_form" action="/snapearn/default/ajax-existing?id=<?= $model->sna_id ?>" method="post">
+        <div class="modal-body">
+            <div class="form-group">
+                <input type="text" id="com_name_search" name="com_name" class="form-control" value="" width="200px" placeholder="Enter merchant name" />
+                <input type="hidden" name="url" value="<?= Url::current() ?>">
+                <input type="hidden" id="com_id" name="sna_com_id" value="">
+                <input type="hidden" name="_csrf" value="<?php echo Yii::$app->request->getCsrfToken(); ?>">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <?= Html::resetButton('<i class="fa fa-times"></i> Cancel', ['class' => 'pull-left btn btn-warning', 'data-dismiss' => 'modal']) ?>
+            <?= Html::submitButton('<i class="fa fa-check"></i> Submit', ['class' => ' btn btn-info']) ?>
+        </div>
+       </form>
 <?php
-    Pjax::end();
+$this->registerJsFile(Yii::$app->urlManager->createAbsoluteUrl('') . 'pages/SnapEarnManager.js', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
 $this->registerJs("
-    $('.modal-title').text('Existing Merchant');
     function stopRKey(evt) {
         var evt = (evt) ? evt : ((event) ? event : null);
         var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);

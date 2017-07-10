@@ -3,33 +3,34 @@
 namespace app\modules\snapearn\controllers;
 
 use Yii;
-use yii\web\NotFoundHttpException;
-use yii\helpers\Url;
-use linslin\yii2\curl;
-use app\controllers\BaseController;
-use app\components\helpers\Utc;
 use app\components\helpers\General;
+use app\components\helpers\SnapearnPointSpeciality;
+use app\components\helpers\Utc;
+use app\controllers\BaseController;
 use app\models\Account;
-use app\models\City;
-use app\models\Mall;
-use app\models\SnapEarn;
-use app\models\SnapEarnRule;
-use app\models\Company;
 use app\models\Activity;
-use app\models\LoyaltyPointHistory;
-use app\models\MerchantUser;
+use app\models\AuditReport;
+use app\models\City;
+use app\models\Company;
 use app\models\CompanySuggestion;
-use app\models\SnapEarnPointDetail;
 use app\models\FeatureSubscription;
 use app\models\FeatureSubscriptionCompany;
-use app\models\AuditReport;
+use app\models\LoyaltyPointHistory;
+use app\models\Mall;
+use app\models\MerchantUser;
 use app\models\Module;
 use app\models\ModuleInstalled;
+use app\models\SnapEarn;
+use app\models\SnapEarnPointDetail;
+use app\models\SnapEarnRule;
+use app\models\SnapearnPoint;
 use app\models\SystemMessage;
 use app\models\WorkingTime;
-use app\models\SnapearnPoint;
-use yii\web\HttpException;
+use linslin\yii2\curl;
+use yii\helpers\Url;
 use yii\web\ForbiddenHttpException;
+use yii\web\HttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Session;
 
 use app\components\behaviors\SneSqsSenderBehavior;
@@ -74,12 +75,13 @@ class CorrectionController extends BaseController
 
 	public function actionCorrection($id)
 	{
+        $speciality = new SnapearnPointSpeciality;
         $model = $this->findModel($id);
 
         $superuser = Yii::$app->user->identity->superuser;
         if ($model->sna_status == 0 ) {
             return $this->redirect(['default/to-update','id'=> $id]);
-        }elseif ($model->sna_status != 0 && $superuser != 1) {
+        }elseif ($model->sna_status != 0 && !Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][correction_button]')) {
             $this->checkSession($id);
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
         }
@@ -100,7 +102,17 @@ class CorrectionController extends BaseController
         if ($old == '' || $get_sesssion == '') {
             return $this->redirect(['to-correction','id'=> $id]);
         }
-                       
+
+        // validation superuser
+        $superuser = Yii::$app->user->identity->superuser;
+        if ($model->sna_status == 0 && $superuser != 1) {
+            $this->checkSession($id);
+            return $this->redirect(['default/to-update','id'=> $id]);
+        } elseif ($model->sna_status != 0 && !Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][correction_button]')) {
+            $this->checkSession($id);
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this page.'));
+        }
+                  
         // get old point
         $ctr = $model->member->acc_cty_id;
 
@@ -112,19 +124,23 @@ class CorrectionController extends BaseController
 
         // get post request form
         if ($model->load(Yii::$app->request->post())) {
+            $model->sna_transaction_time = $_POST['d1'] . ' ' . $_POST['t1'];
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->sna_transaction_time = Utc::getTime($model->sna_transaction_time);
-                $model->sna_point = floor($model->sna_ops_receipt_amount);
+                // get promo configuration
+                $point_config = $speciality->getActivePoint($id,$model->sna_transaction_time);
+                // $model->sna_point = floor($model->sna_ops_receipt_amount);
 
                 $model->sna_review_date = Utc::getNow();
                 $model->sna_review_by = Yii::$app->user->id;
+                $model->sna_company_tagging = 1;
 
 				// start process rollback
                 // configuration to get real point user before reviews
                 $mp = Company::find()->getCurrentPoint($model->sna_com_id);
                 $up = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
-                if($up !== 0) {
+                if ($up !== 0) {
                     $cp = $up['lph_total_point'];
                 } else {
                     $cp = 0;
@@ -158,7 +174,6 @@ class CorrectionController extends BaseController
 
                 // if approved action
                 if ($model->sna_status == 1) {
-                    
                     // get current point merchant
                     $merchant_point = Company::find()->getCurrentPoint($model->sna_com_id);
                     $point_history = LoyaltyPointHistory::find()->getCurrentPoint($model->sna_acc_id);
@@ -176,18 +191,29 @@ class CorrectionController extends BaseController
                     }
 
                     // optional point for premium or default merchant
-                    if(!empty($config) && !empty($model->business)) {
-                        if($model->business->com_premium == 1) {
-                            $model->sna_point *= 2;
-                            $limitPoint = $config->ser_premium;
-                        } else {
-                            $limitPoint = $config->ser_point_cap;
-                        }
+                    // if(!empty($config) && !empty($model->business)) {
+                    //     if($model->business->com_premium == 1) {
+                    //         $model->sna_point *= 2;
+                    //         $limitPoint = $config->ser_premium;
+                    //     } else {
+                    //         $limitPoint = $config->ser_point_cap;
+                    //     }
+                    // }
+                   // config
+                    $day = $point_config['day_promo'];
+                    $trans_day = date('l',$model->sna_transaction_time);
+                    if($day == $trans_day){
+                        $model->sna_point *= $point_config['point'];
+                        $limitPoint = $point_config['max_point'];
+                    }else{
+                        $model->sna_point *= $point_config['point'];
+                        $limitPoint = $point_config['max_point'];
                     }
 
                     if ($model->sna_point > $limitPoint) {
                         $model->sna_point = $limitPoint;
                     }
+                    $model->sna_point = floor($model->sna_point);
                     
                     $paramsPoint = [
                         'current_point' => $current_point,
@@ -318,14 +344,11 @@ class CorrectionController extends BaseController
                 // execution save to snapearn
                 $snap_type = '';
                 if ($model->save()) {
-                    
                     // webhook for manis v3
                     // https://apixv3.ebizu.com/v1/admin/after/approval?data={"acc_id":1,"sna_id":1,"sna_status":1}
                     $curl = new curl\Curl();
                     $curl->get(Yii::$app->params['WEBHOOK_MANIS_API'].'?data={"acc_id":' . intval($model->sna_acc_id) . ',"sna_id":' . intval($model->sna_id) . ',"sna_status":' . intval($model->sna_status) . '}');
                     
-                    // $audit = AuditReport::setAuditReport('update snapearn (' . $snap_type . ') : ' . $model->member->acc_facebook_email.' upload on '.Yii::$app->formatter->asDate($model->sna_upload_date), Yii::$app->user->id, SnapEarn::className(), $model->sna_id)->save();
-
                     $activities = [
                         'Snap Earn',
                         'Snapearn ' . ($model->sna_status == 1 ? 'APPROVED' : 'REJECTED') . ' in ' . $model->member->acc_facebook_email . ' on ' . $model->business->com_name . ' at ' . date('d M Y H:i:s', $model->sna_transaction_time),
@@ -371,13 +394,12 @@ class CorrectionController extends BaseController
             } else {
                 return $this->redirect(['/snapearn']);
             }
-            
         } else {
             $this->setMessage('save', 'error', General::extractErrorModel($model->getErrors()));
         }
 
-        $model->sna_transaction_time = Utc::convert($model->sna_upload_date);
-        $model->sna_upload_date = Utc::convert($model->sna_upload_date);
+        $model->sna_transaction_time = $model->sna_transaction_time;
+        $model->sna_upload_date = $model->sna_upload_date;
         if (!empty($ses_com)) {
             $model->sna_com_id = $ses_com['sna_com_id'];
         }
@@ -391,32 +413,8 @@ class CorrectionController extends BaseController
     public function actionAjaxSnapearnPoint()
     {
         if (Yii::$app->request->isAjax) {
-            $id = Yii::$app->request->post('id');
-            $amount = Yii::$app->request->post('amount');
-            $com_id = Yii::$app->request->post('com_id');
-            $business = Company::findOne($com_id);
-            $se = $this->findModel($id);
-
-            $config = SnapEarnRule::find()->where(['ser_country' => $se->member->country->cty_currency_name_iso3])->one();
-
-            $point = $amount;
-
-            if ($config->ser_point_provision > 0 ) {
-                $point = (int) ($amount / $config->ser_point_provision);
-            }
-
-            if(!empty($config) && !empty($business)) {
-                if($business->com_premium == 1) {
-                    $point *= 2;
-                    $point_cap = $config->ser_premium;
-                } else {
-                    $point_cap = $config->ser_point_cap;
-                }
-
-                if($point > $point_cap)
-                    return $point_cap;
-            }
-            return $point;
+            $model = SnapEarnRule::find()->getPointSnapEarnRule();
+            return $model;
         }
     }
 

@@ -27,13 +27,15 @@ class GetRoutes
                 $alias = substr($route, $pos + 1, 100);
                 $permissions = $auth->createPermission($route);
                 $permissions->description = $alias;
-                if($auth->add($permissions)){
-                    $model = AuthItem::findOne($route);
-                    $model->created_by = Yii::$app->user->identity->id;
-                    if($model->save()){
-                        $insert++;
-                    }
-                }
+                // $permissions->created_by = Yii::$app->user->id;
+                $auth->add($permissions);
+                // if($auth->add($permissions)){
+                //     $model = AuthItem::findOne($route);
+                //     $model->created_by = Yii::$app->user->id;
+                //     if($model->save(false)){
+                //         $insert++;
+                //     }
+                // }
             }
         }
         $result = [

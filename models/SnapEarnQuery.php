@@ -35,6 +35,10 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
 
     public function findCustome()
     {
+        if(Yii::$app->permission_helper->checkRbac()) {
+            return $this->findCostumeWithRbac();
+        }
+
         $dt = new DateRangeCarbon();
         $superuser = Yii::$app->user->identity->superuser == 1;
         $this->innerJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
@@ -62,13 +66,19 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
             $this->andWhere(['sna_acc_id' => $acc_id]);
         }
 
+        if (!empty($_GET['member_email'])) {
+            $member_email = $_GET['member_email'];
+            $this->andWhere('tbl_account.acc_facebook_email = :member_email', [':member_email' => $member_email]);
+        }
+
         if (!empty($_GET['sna_receipt'])) {
             $sna_receipt = $_GET['sna_receipt'];
             $this->andWhere(['LIKE', 'sna_ops_receipt_number', $sna_receipt]);
         }
+
         if (!empty($_GET['sna_status'])) {
             $sna_status = $_GET['sna_status'];
-            switch ($_GET['sna_status']) {
+            switch ($sna_status) {
                 case 'NEW':
                     $sna_status = 0;
                     break;
@@ -102,27 +112,157 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
         // operator filter
         if (!empty($_GET['ops_name'])) {
             $operatorId = $_GET['ops_name'];
-            $this->andWhere("sna_review_by = :ops",[':ops' => $operatorId]);
+            $this->andWhere("sna_review_by = :ops", [':ops' => $operatorId]);
+        }
+
+        if (!empty($_GET['sna_company_tagging'])) {
+            $sna_company_tagging = $_GET['sna_company_tagging'];
+            $tagging = '';
+            switch ($sna_company_tagging) {
+                case 'Ebizu':
+                    $tagging = 'sna_company_tagging > 0 AND sna_com_id > 0';
+                    break;
+                case 'Manis':
+                    $tagging = 'sna_company_tagging = 0 AND sna_com_id > 0';
+                    break;
+                case 'Untagged':
+                    $tagging = 'sna_company_tagging = 0 AND sna_com_id = 0';
+                    break;
+            }
+            $this->andWhere($tagging);
         }
         
         // merchant filter
         if (!empty($_GET['com_name'])) {
             $merchantId = $_GET['com_name'];
-
             $company_is_hq = Company::find()->checkCompanyIsParent($merchantId);
-
-            if($company_is_hq)
-            {
+            if($company_is_hq) {
                 $children = array_map('intval', Company::find()->getChildMerchantsId($merchantId));
                 $this->andWhere(['sna_com_id' => $children]);
-            }
-            else
-            {
+            } else {
                 $this->andWhere("sna_com_id = :com",[':com' => $merchantId]);
             }
         }
+        return $this;
+    }
+
+    public function findCostumeWithRbac()
+    {
+        $dt = new DateRangeCarbon();
         
-        $this->orderBy('sna_id DESC');
+        $this->innerJoin('tbl_account', 'tbl_account.acc_id = tbl_snapearn.sna_acc_id');
+
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][country]')) {
+            if (!empty($_GET['sna_cty'])) {
+                $sna_cty = $_GET['sna_cty'];
+                $this->andWhere('tbl_account.acc_cty_id = :country', [':country' => $sna_cty]);
+            }
+        }
+        
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_field]')) {
+            $like_name = Yii::$app->request->get('sna_member');
+            if($like_name){
+                $get_member = Account::find()->select('acc_id')
+                        ->andWhere(['LIKE','acc_screen_name',$like_name])
+                        ->asArray()->all();
+                $acc_id = [];
+                foreach ($get_member as $key) {
+                    $acc_id[] = (int)$key['acc_id'];
+                }
+                $this->andWhere(['sna_acc_id' => $acc_id]);
+            }
+        }
+        
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][member_email]')) {
+            if (!empty($_GET['member_email'])) {
+                $member_email = $_GET['member_email'];
+                $this->andWhere('tbl_account.acc_facebook_email = :member_email', [':member_email' => $member_email]);
+            }
+        }
+        
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][receipt_number]')) {
+            if (!empty($_GET['sna_receipt'])) {
+                $sna_receipt = $_GET['sna_receipt'];
+                $this->andWhere(['LIKE', 'sna_ops_receipt_number', $sna_receipt]);
+            }
+        }
+        
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][receipt_status]')) {
+            if (!empty($_GET['sna_status'])) {
+                $sna_status = $_GET['sna_status'];
+
+                switch ($_GET['sna_status']) 
+                {
+                    case 'NEW':
+                        $sna_status = 0;
+                        break;
+                    case 'APP':
+                        $sna_status = 1;
+                        break;
+                    case 'REJ':
+                        $sna_status = 2;
+                        break;
+                }
+
+                $this->andWhere('sna_status = :status', [':status' => $sna_status]);
+            }
+        }
+        
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][date_range]')) {
+            if (!empty($_GET['sna_daterange'])) {
+                $sna_daterange = explode(' to ', ($_GET['sna_daterange']));
+                $first = "(select sna_id from tbl_snapearn where sna_upload_date >= UNIX_TIMESTAMP('$sna_daterange[0] 00:00:00') limit 1)";
+                $second = "(select sna_id from tbl_snapearn where sna_upload_date <= UNIX_TIMESTAMP('$sna_daterange[1] 23:59:59') order by sna_id desc limit 1)";
+                $this->andWhere("sna_id BETWEEN $first AND $second");
+            } else {
+                $sna_daterange = explode(' to ', ($dt->getDay()));
+                $first = "(select sna_id from tbl_snapearn where sna_upload_date >= UNIX_TIMESTAMP('$sna_daterange[0]') limit 1)";
+                $second = "(select sna_id from tbl_snapearn where sna_upload_date <= UNIX_TIMESTAMP('$sna_daterange[1]') order by sna_id desc limit 1)";
+                $this->andWhere("sna_id BETWEEN $first AND $second");
+            }
+        }
+        
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][operator]')) {
+            if (!empty($_GET['ops_name'])) {
+                $operatorId = $_GET['ops_name'];
+                $this->andWhere("sna_review_by = :ops", [':ops' => $operatorId]);
+            }
+        }
+        
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][tagging]')) {
+            if (!empty($_GET['sna_company_tagging'])) {
+                $sna_company_tagging = $_GET['sna_company_tagging'];
+                $tagging = '';
+                switch ($sna_company_tagging) {
+                    case 'Ebizu':
+                        $tagging = 'sna_company_tagging > 0 AND sna_com_id > 0';
+                        break;
+                    case 'Manis':
+                        $tagging = 'sna_company_tagging = 0 AND sna_com_id > 0';
+                        break;
+                    case 'Untagged':
+                        $tagging = 'sna_company_tagging = 0 AND sna_com_id = 0';
+                        break;
+                }
+                $this->andWhere($tagging);
+            }
+        }
+
+        if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][merchant_field]')) {
+            if (!empty($_GET['com_name'])) {
+                $merchantId = $_GET['com_name'];
+
+                $company_is_hq = Company::find()->checkCompanyIsParent($merchantId);
+                
+                if($company_is_hq) {
+                    $children = array_map('intval', Company::find()->getChildMerchantsId($merchantId));
+                    $this->andWhere(['sna_com_id' => $children]);
+                } else {
+                    $this->andWhere("sna_com_id = :com",[':com' => $merchantId]);
+                }
+            }
+        }
+        
         // echo $this->createCommand()->sql;exit;
         return $this;
     }
@@ -393,30 +533,38 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                 'relation_name' => 'acc_screen_name'
             ], 
             'C' => [
+                'name' => 'Member Email',
+                'width' => 30,
+                'height' => 5,
+                'db_column' => 'member',
+                'have_relations' => true,
+                'relation_name' => 'acc_facebook_email'
+            ], 
+            'D' => [
                 'name' => 'Ops Receipt Number',
                 'width' => 30,
                 'height' => 5,
                 'db_column' => 'sna_ops_receipt_number',
             ], 
-            'D' => [
+            'E' => [
                 'name' => 'Receipt Date',
                 'width' => 30,
                 'height' => 5,
                 'db_column' => 'sna_receipt_date',
             ],
-            'E' => [
+            'F' => [
                 'name' => 'Receipt Amount',
                 'width' => 30,
                 'height' => 5,
                 'db_column' => 'sna_receipt_amount',
             ],
-            'F' => [
+            'G' => [
                 'name' => 'Point',
                 'width' => 30,
                 'height' => 5,
                 'db_column' => 'sna_point',
             ],
-            'G' => [
+            'H' => [
                 'name' => 'Upload Date',
                 'width' => 30,
                 'height' => 5,
@@ -425,7 +573,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                     return Yii::$app->formatter->asDateTime(Utc::convert($data));
                 }
             ],
-            'H' => [
+            'I' => [
                 'name' => 'Review Date',
                 'width' => 30,
                 'height' => 5,
@@ -434,7 +582,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                     return Yii::$app->formatter->asDateTime(Utc::convert($data));
                 }
             ],
-            'I' => [
+            'J' => [
                 'name' => 'Operator',
                 'width' => 30,
                 'height' => 5,
@@ -442,7 +590,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                 'have_relations' => true,
                 'relation_name' => 'username'
             ],
-            'J' => [
+            'K' => [
                 'name' => 'Status',
                 'width' => 30,
                 'height' => 5,
@@ -462,7 +610,7 @@ class SnapEarnQuery extends \yii\db\ActiveQuery
                     }
                 }
             ],
-            'K' => [
+            'L' => [
                 'name' => 'Description',
                 'width' => 30,
                 'height' => 5,

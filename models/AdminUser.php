@@ -108,7 +108,7 @@ class AdminUser extends ActiveRecord implements IdentityInterface
     {
         return [
             'id' => 'ID',
-            'username' => 'Username',
+            'username' => 'Operator',
             'auth_key' => 'Auth Key',
             'password_hash' => 'Password',
             'password_reset_token' => 'Reset Token',

@@ -47,6 +47,8 @@ class Mail
     CONST SUBJECT_ACTIVAION_MASTER = 'Youre registered to Ebizu Admin Centre';
     CONST BODY_ACTIVAION_MASTER = '//mail/content/activation';
     CONST BODY_SNAPEARN_REJECTED = '//mail/content/snapearn-rejected';
+    CONST SUBJECT_STOCK_LEFT = 'VOUCHER STOCK LEFT';
+    CONST BODY_STOCK_LEFT = '//mail/content/voucher-stock-left';
 
     // RHB
     CONST SUBJECT_REGISTER_RHB_INVOICE = 'RECEIPT RHB SUBSCRIPTION';

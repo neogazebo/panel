@@ -28,13 +28,25 @@ use app\components\filters\AccessFilters;
     <li class="treeview">
         <a href="#">
             <i class="fa fa-th-list"></i>
-            <span>Merchant Signup</span>
+            <span>Merchant</span>
             <i class="fa fa-angle-left pull-right"></i>
         </a>
         <ul class="treeview-menu">
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('merchant-signup') ?>">
                     <i class="fa fa-circle-o"></i> List
+                </a>
+            </li>
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('speciality') ?>">
+                    <i class="fa fa-circle-o"></i> Merchant Speciality Promo
+                <a href="<?= Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
+                    <i class="fa fa-circle-o"></i> Merchant HQ
+                </a>
+            </li>
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('merchant-signup/inquiry') ?>">
+                    <i class="fa fa-circle-o"></i> Inquiry
                 </a>
             </li>
         </ul>
@@ -97,11 +109,13 @@ use app\components\filters\AccessFilters;
             <i class="fa fa-angle-left pull-right"></i>
         </a>
         <ul class="treeview-menu">
+            <?php if (AccessFilters::getMenu('snapearn/group')) : ?>
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('snapearn/group/index') ?>">
                     <i class="fa fa-circle-o"></i> Snap &amp; Earn Group
                 </a>
             </li>
+            <?php endif ?>
             <li>
                 <a href="<?= Yii::$app->urlManager->createUrl('users/index') ?>">
                     <i class="fa fa-circle-o"></i> User
@@ -112,11 +126,19 @@ use app\components\filters\AccessFilters;
                     <i class="fa fa-circle-o"></i> Role
                 </a>
             </li>
+            <?php if (AccessFilters::getMenu('rbac/permission')) : ?>
+            <li>
+                <a href="<?= Yii::$app->urlManager->createUrl('rbac/permission') ?>">
+                    <i class="fa fa-circle-o"></i> Module Permissions
+                </a>
+            </li>
+            <?php endif; ?>
         </ul>
     </li>
     <?php endif; ?>
     
     <?php if (AccessFilters::getMenu('system')) : ?>
+    <!--
     <li class="treeview">
         <a href="#">
             <i class="fa fa-university"></i>
@@ -125,12 +147,13 @@ use app\components\filters\AccessFilters;
         </a>
         <ul class="treeview-menu">
             <li>
-                <a href="<?= Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
+                <a href="<?php // Yii::$app->urlManager->createUrl('system/merchant-hq') ?>">
                     <i class="fa fa-circle-o"></i> Merchant HQ
                 </a>
             </li>
             
         </ul>
     </li>
+    -->
     <?php endif; ?>
 </ul>

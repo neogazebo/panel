@@ -50,6 +50,15 @@ $config = [
         'system' => [
             'class' => 'app\modules\system\System',
         ],
+        'speciality' => [
+            'class' => 'app\modules\com_speciality\Module',
+        ],
+        'promo' => [
+            'class' => 'app\modules\speciality_promo\Module',
+        ],
+        'type' => [
+            'class' => 'app\modules\merchant_type\Module',
+        ],
     ],
     'components' => [
         'request' => [
@@ -90,10 +99,17 @@ $config = [
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'constructArgs' => ['smtp.getmanis.com', 25],
+                'plugins' => [
+                    [
+                        'class' => 'Swift_Plugins_ThrottlerPlugin',
+                        'constructArgs' => [20],
+                    ],
+                ],
+            ],
+            // 'useFileTransport' => true,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -157,6 +173,11 @@ $config = [
         ],
         'sqs_client' => [
             'class' => 'app\components\extensions\aws\sqs\SqsClient',
+        'mod_component_helper' => [
+            'class' => 'app\components\helpers\ModuleComponentsHelper',
+        ],
+        'permission_helper' => [
+            'class' => 'app\components\helpers\PermissionHelper',
         ]
     ],
     'params' => $params,

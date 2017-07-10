@@ -65,7 +65,7 @@ class Logging extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'log_usr_id']);
     }
 
-    public function saveLog($activities)
+    public static function saveLog($activities)
     {
         $model = new Logging;
         $model->log_usr_id = Yii::$app->user->id;

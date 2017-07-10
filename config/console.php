@@ -26,6 +26,10 @@ $config = [
                 ],
             ],
         ],
+        'AdminMail' => [
+            'class' => 'app\components\extensions\AdminMail',
+            'template' => '//mail/template/template',
+        ],
         'db' => $db,
         'db2' => $db2,
         'authManager' => [

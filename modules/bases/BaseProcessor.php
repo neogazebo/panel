@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\system\processors\bases;
+namespace app\modules\bases;
 
 use Yii;
 use yii\web\Response;

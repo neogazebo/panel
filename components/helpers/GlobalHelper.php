@@ -33,6 +33,25 @@ class GlobalHelper extends Component
         return $file->generateCSV($data, $filename);
     }
 
+/**
+* Author : ilham Fauzi
+* Mail   : ilham@ebizu.com
+*/
+
+    public static function Weekdays()
+    {
+        $weekdays = [
+            'Friday' => 'Friday',
+            'Saturday' => 'Saturday',
+            'Sunday' => 'Sunday',
+            'Monday' => 'Monday',
+            'Tuesday' => 'Tuesday',
+            'Wednesday' => 'Wednesday',
+            'Thursday' => 'Thursday'
+        ];
+        return $weekdays;
+    }
+    
     public function getCurrency()
     {
         $model = Country::find()->asArray()->all();
@@ -113,5 +132,6 @@ class GFile {
         }
 
         return false;
-    }    
+    } 
 }
+   

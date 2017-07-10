@@ -9,7 +9,7 @@ use app\components\helpers\Utc;
 use kartik\widgets\DateTimePicker;
 use kartik\money\MaskMoney;
 
-$this->title = "Update Snap & Earn";
+$this->title = 'Edit Snap & Earn';
 $model->sna_push = true;
 ?>
 <section class="content-header">
@@ -17,10 +17,10 @@ $model->sna_push = true;
 </section>
 
 <section class="content">
-<?php
+    <?php
     $form = ActiveForm::begin([
         'id'=>'snapearn-form',
-        // 'options' => ['class' => 'form-horizontal'],
+// 'options' => ['class' => 'form-horizontal'],
         'enableClientValidation'=>true,
         'enableAjaxValidation'=>true,
         'fieldConfig' => [
@@ -28,152 +28,254 @@ $model->sna_push = true;
             'labelOptions' => ['class' => 'control-label'],
         ],
     ]);
-?>
+    ?>
     <div class="row">
-      <div class="col-md-6">
-        <!-- Box Comment -->
-        <div class="box box-widget">
-          <div class="box-header with-border">
-            <?php if (Yii::$app->user->identity->level == 1) : ?>
-            <div class="user-block">
-              <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'] . $model->member->acc_photo : $this->theme->baseUrl . '/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
-              <span class="username">
-                  <a href="<?= Yii::$app->homeUrl ?>account/default/view?id=<?= $model->member->acc_id ?>" target="_blank">
-                      <?= (!empty($model->member)) ? $model->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>' ?>
-                  </a>
-              </span>
-              <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
-            </div>
-            <?php else : ?>
-              <div class="user-block">
-               <img class="img-circle" src="<?= $this->theme->baseUrl . '/dist/img/manis.png'?>" alt="manis receipt">
-              <span class="username">
-                <a href="#">
-                  Detail Receipt
-                </a>
-                </span>
-                <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
-              </div>
-            <?php endif; ?>
-            <div class="box-tools">
-            </div>
-          </div>
-          <div style="display: block;" class="box-body">
-              <div id="sna_image" class="img-responsive pad magic-zoom"></div>
-          </div>
-          <div style="display: block;" class="box-footer no-padding">
-
-          </div>
-        </div>
-      </div>
-
-
-    <div class="col-md-6">
-              <!-- general form elements disabled -->
-              <div class="box box-widget">
+        <div class="col-md-6">
+            <!-- Box Comment -->
+            <div class="box box-widget">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Form Approval</h3>
-                  <div class="pull-right btn-merchant">
-                    <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['default/new-merchant?id=' . $model->sna_id.'&to=correction']), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
-                    <?= Html::button('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['type' => 'button','value' => Url::to(['default/ajax-existing?id=' . $model->sna_id.'&to=correction']), 'class' => 'modalButton btn btn-flat btn-warning btn-xs']); ?>
-                  </div>
+                    <?php if (Yii::$app->user->identity->level == 1) : ?>
+                        <div class="user-block">
+                            <img class="img-circle" src="<?= (!empty($model->member->acc_photo)) ? Yii::$app->params['memberUrl'] . $model->member->acc_photo : $this->theme->baseUrl . '/dist/img/manis.png'?>" alt="<?= $model->member->acc_screen_name ?>">
+                            <span class="username">
+                                <a href="<?= Yii::$app->homeUrl ?>account/default/view?id=<?= $model->member->acc_id ?>" target="_blank">
+                                    <?= (!empty($model->member)) ? $model->member->acc_screen_name : '<a class=""><span class="not-set">(not set)</span></a>' ?>
+                                </a>
+                            </span>
+                            <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
+                        </div>
+                    <?php else : ?>
+                        <div class="user-block">
+                            <img class="img-circle" src="<?= $this->theme->baseUrl . '/dist/img/manis.png'?>" alt="manis receipt">
+                            <span class="username">
+                                <a href="#">
+                                    Detail Receipt
+                                </a>
+                            </span>
+                            <span class="description text-green">Receipt Upload : <?= Yii::$app->formatter->asDateTime($model->sna_upload_date, 'php:d M Y H:i:s') ?></span>
+                        </div>
+                    <?php endif; ?>
+                    <div class="box-tools"></div>
+                </div>
+                <div style="display: block;" class="box-body">
+                    <div id="sna_image" class="img-responsive pad magic-zoom"></div>
+                </div>
+                <div style="display: block;" class="box-footer no-padding"></div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <!-- general form elements disabled -->
+            <div class="box box-widget">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Form Approval</h3>
+                    <div class="pull-right btn-merchant">
+                        <?php if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][add_new_merchant_correction]')) : ?>
+                            <?= Html::a('<i class="fa fa-plus-square"></i> Add New Merchant', Url::to(['default/new-merchant?id=' . $model->sna_id.'&to=correction']), $options = ['class' => 'btn btn-flat btn-primary btn-xs','target' => '_blank']) ?>
+                        <?php endif; ?>
+
+                        <?php if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][add_existing_merchant_correction]')) : ?>
+                            <?= Html::a('<i class="fa fa-plus-square"></i> Add Existing Merchant', ['#'], [
+                                'class' => 'btn btn-flat btn-warning btn-xs',
+                                'data-toggle' => 'modal', 
+                                'data-target' => '#find_existing',
+                                'data-backdrop' => 'static',
+                                ]);
+                            ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="box-body">
-                  <ul class="nav nav-stacked update">
-                    <?php if(Yii::$app->user->identity->superuser == 1): ?>
-                      <li>
-                        <a href="#"><b>Operator </b>
-                          <span class="pull-right text-light-blue"><?= (!empty($model->sna_review_by)) ? $model->review->username : '<a class=""><span class="not-set">(not set)</span></a>' ?>
-                          </span>
-                        </a>
-                      </li>
-                      <li class="">
-                        <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
-                      </li>
-                    <?php endif; ?>
-                    <li class="">
-                      <a href="#"><b><?= (empty($model->merchant)) ? 'Suggestion Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
-                    </li>
-                    <?php if (!empty($model->merchant)) : ?>
-                    <li class="">
-                      <a href="#"><b>Merchant Point</b>
-                        <!--start-->
-                        <?php if ($model->merchant->com_point < 1000) :?>
-                          <!--this validation if add point to merchant is only specific user-->
-                          <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
-                            <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id.'&type=2', 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
-                          <?php // else: ?>
-                            <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
-                          <?php // endif; ?>
+                    <ul class="nav nav-stacked update">
+                        <?php if(Yii::$app->user->identity->superuser == 1): ?>
+                            <li>
+                                <a href="#"><b>Operator </b>
+                                    <span class="pull-right text-light-blue"><?= (!empty($model->sna_review_by)) ? !empty($model->review) ? $model->review->username : '<a class=""><span class="not-set">(not set)</span></a>' : '' ?>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="#"><b>Facebook Email </b> <span class="pull-right text-light-blue"><?= (!empty($model->member)) ? $model->member->acc_facebook_email : ' - ' ?></span></a>
+                        </li>
                         <?php endif; ?>
-                        <!--end--> 
-                        <span class="pull-right text-light-blue">
-                          <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
-                        </span>
-                      </a>
-                    </li>
-                    <?php endif; ?>
-                    <?php if (empty($model->merchant)) : ?>
-                    <li>
-                      <a href="#"><b><?= (empty($model->sna_address)) ? 'Suggestion Location' : 'Location' ?></b>
-                        <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
-                      </a>
-                    </li>
-                  <?php endif; ?>
-                      <li></li>
-                  </ul>
-                  <form role="form">
-                    <?= $form->field($model, 'sna_status')->dropDownList($model->statuscorrection, ['class' => 'form-control status']) ?>
-                    <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
-                    <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
-                    <div class="point-form">
-                      <?=
-                           $form->field($model, 'sna_transaction_time')->widget(DateTimePicker::classname(), [
-                               'options' => [
-                                   'value' => Yii::$app->formatter->asDateTime($model->sna_upload_date,'php: Y-m-d H:i:s')
-                               ],
-                               'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
-                               'pluginOptions' => [
-                                   'autoclose'=>true,
-                                   'format' => 'yyyy-mm-dd hh:i:ss',
-                                   'endDate' => date('Y-m-d h:i:s')
-                               ]
-                           ]);
-                      ?>
-                    <!-- <div class="form-group field-snapearn-sna_transaction_time sna_status">
-                      <label class="control-label" >Transaction Time</label>
-                          <div class="">
-                              <div class="form-control" readonly="true"><?php // Yii::$app->formatter->asDateTime($model->sna_transaction_time,'php: Y-m-d H:i:s') ?></div>
-                              <div>
-                                  <div class="help-block"></div>
-                              </div>
-                          </div>
-                      </div>-->
-                      
-                      <?php //$form->field($model, 'sna_receipt_number')->textInput(['class' => 'form-control sna_status']) ?>
-                      <?= $form->field($model, 'sna_ops_receipt_number')->textInput(['class' => 'form-control sna_status'])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.') ?>
-                      <?= $form->field($model, 'sna_ops_receipt_amount')->widget(MaskMoney::classname(['class' => 'form-control sna_amount']))?>
-                      <?= $form->field($model, 'sna_point')->textInput(['class' => 'form-control sna_point', 'readonly' => true]) ?>
-                  </div>
-                  <div class="reject-form">
-                      <?= $form->field($model, 'sna_sem_id')->dropDownList($model->email, ['id' => 'email', 'class' => 'form-control', 
-                      'prompt' => 'Please Choose the Reason']) ?>
-                  </div>
-                  <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
-                    <div class="box-footer clearfix">
-                      <div class="button-right pull-right">
-                          <button type="submit" class="btn-primary btn submit-button"><i class="fa fa-check"></i> Save</button>
-                          <button class="btn btn-success saveNext" type="submit" name="save-next"><i class="fa fa-arrow-right"></i> Save &amp; Next</button>
-                          <input id="saveNext" type="hidden" name="saveNext" value="">
-                      </div>
-                      <div class="button-left pull-left">
-                          <?= Html::a('<i class="fa fa-times"></i> Cancel', [Url::previous()], ['class' => 'btn btn-default']) ?>
-                      </div>
-                    </div>
-                  </form>
+                        <li class="">
+                            <a href="#"><b><?= (empty($model->merchant)) ? 'Suggestion Merchant' : 'Merchant' ?></b> <span class="pull-right text-light-blue"><?= (empty($model->merchant)) ? (empty($model->newSuggestion)) ? '' : $model->newSuggestion->cos_name : $model->merchant->com_name ?></span></a>
+                        </li>
+                        <?php if (!empty($model->merchant)) : ?>
+                        <li class="">
+                            <a href="#"><b>Merchant Point</b>
+
+                                <?php if (Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][add_point_button_correction]')) : ?>
+                                    <!--start-->
+                                    <?php if ($model->merchant->com_point < 1000) :?>
+                                        <!--this validation if add point to merchant is only specific user-->
+                                        <?php // if (Yii::$app->user->identity->level == 1 || Yii::$app->user->identity->superuser == 1) : ?>
+                                        <?= Html::button('<i class="fa fa-plus-square"></i> Add Point', ['type' => 'button','value' => Url::to(['default/short-point?id=' . $model->sna_com_id]).'&&sna_id='.$model->sna_id.'&type=2', 'class' => 'modalButton btn btn-flat btn-warning btn-xs add-point']); ?>
+                                        <?php // else: ?>
+                                        <!--<span class="label label-warning add-point">Point is less than 500!</span>-->
+                                        <?php // endif; ?>
+                                    <?php endif; ?>
+                                    <!--end--> 
+                                <?php endif; ?>
+
+                                <span class="pull-right text-light-blue">
+                                    <?= (!empty($model->merchant)) ? $model->merchant->com_point : '' ?>
+                                </span>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+                        <?php if (empty($model->merchant)) : ?>
+                        <li>
+                            <a href="#"><b><?= (empty($model->sna_address)) ? 'Suggestion Location' : 'Location' ?></b>
+                                <span class="pull-right text-light-blue"><?= (empty($model->sna_address)) ? $model->newSuggestion->cos_location : $model->sna_address ?></span>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+
+                        <?php if (($model->sna_company_tagging > 0 && $model->sna_com_id > 0) || $model->sna_flag_tagging == 1): ?>
+                        <li><a href="#"><b>Tagged by <?= Html::img('@web/themes/AdminLTE/dist/img/ebz_logo.png', ['height' => 16]) ?> </b><span class="pull-right text-light-blue"><?= !empty($model->sna_review_by) ? $model->review->username : '' ?></span></a></li>
+                        <?php elseif ($model->sna_company_tagging == 0 && $model->sna_com_id > 0): ?>
+                        <li><a href="#"><b>Tagged by <?= Html::img('@web/themes/AdminLTE/dist/img/manis.png', ['height' => 16]) ?> </b></a></li>
+                        <?php endif ?>
+
+                        <li></li>
+                    </ul>
+                    <form role="form">
+                        <?= 
+                            $form->field($model, 'sna_status')->dropDownList($model->statuscorrection, [
+                                'class' => 'form-control status',
+                                'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][status_correction]') ? false : true
+                            ]) 
+                        ?>
+
+                        <?= Html::activeHiddenInput($model, 'sna_acc_id') ?>
+                        <?= Html::activeHiddenInput($model, 'sna_com_id') ?>
+                        <div class="point-form">
+                            <label>Transaction Time</label>
+                            <div class="row form-group">
+                                <div class="col-sm-6" style="padding-right: 0px">
+                                    <?=
+                                    kartik\widgets\DatePicker::widget([
+                                        'name' => 'd1',
+                                        'options' => [
+                                            'class' => 'sna_transaction',
+                                        ],
+                                        'removeButton' => false,
+                                        'type' => kartik\widgets\DatePicker::TYPE_COMPONENT_APPEND,
+                                        'value' => Yii::$app->formatter->asDatetime($model->sna_transaction_time, 'php: Y-m-d'),
+                                        'pluginOptions' => [
+                                            'format' => 'yyyy-mm-dd',
+                                            'endDate' => '+1d',
+                                        ],
+                                        'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][transaction_time_correction]') ? false : true,
+                                    ]);
+                                    ?>
+                                </div>
+                                <div class="col-sm-6" style="padding-left: 0px">
+                                    <?=
+                                    kartik\widgets\TimePicker::widget([
+                                        'name' => 't1',
+                                        'value' => Yii::$app->formatter->asDatetime($model->sna_transaction_time, 'php: H:i:s'),
+                                        'pluginOptions' => [
+                                            'showSeconds' => true,
+                                            'showMeridian' => false,
+                                        ],
+                                        'addonOptions' => [
+                                            'buttonOptions' => [
+                                                'class' => 'btn btn-info'
+                                            ]
+                                        ],
+                                        'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][transaction_time_correction]') ? false : true,
+                                    ]);
+                                    ?>
+                                </div>
+                            </div>
+
+                            <?= 
+                                $form->field($model, 'sna_ops_receipt_number')->textInput([
+                                    'class' => 'form-control sna_amount',
+                                    'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][ops_number_correction]') ? false : true,
+                                ])->label('Receipt No. / Invoice No. / Bill No. / Doc. No. / Transaction No.'); 
+                            ?>
+                            
+                            <?= 
+                                $form->field($model, 'sna_ops_receipt_amount')->widget(MaskMoney::classname([
+                                    'class' => 'form-control sna_amount',
+                                    'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][amount_correction]') ? false : true,
+                                ]));
+                            ?>
+                            
+                            <?= 
+                                $form->field($model, 'sna_point')->textInput([
+                                    'class' => 'form-control sna_point', 
+                                    'readonly' => true,
+                                    'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][point_correction]') ? false : true,
+                                ]); 
+                            ?>
+
+                        </div>
+                        <div class="reject-form">
+                            <?= 
+                                $form->field($model, 'sna_sem_id')->dropDownList($model->email, [
+                                    'id' => 'email', 
+                                    'class' => 'form-control',
+                                    'prompt' => 'Please Choose the Reason',
+                                    'disabled' => Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][reject_remark_correction]') ? false : true,
+                                ]); 
+                            ?>
+                        </div>
+
+                        <?php if(Yii::$app->permission_helper->processPermissions('Snapearn', 'Snapearn[Page_Components][push_notification_correction]')): ?>
+                            <?= $form->field($model, 'sna_push')->checkBox(['style' => 'margin-top: 10px;'], false)->label('Push Notification?') ?>
+                        <?php endif; ?>
+                        
+                        <div class="box-footer clearfix">
+                            <div class="button-right pull-right">
+                                <?php 
+                                    echo app\components\widgets\RbacButtonWidget::widget([
+                                        'text' => 'Save',
+                                        'type' => 'submit',
+                                        'class_names' => ['btn', 'btn-primary', 'submit-button'],
+                                        'icon' => ['fa', 'fa-check'],
+                                        'value' => function() {
+                                            return;
+                                        },
+                                        'permission' => [
+                                            'module' => 'Snapearn',
+                                            'name' => 'Snapearn[Page_Components][save_button_correction]'
+                                        ],
+                                        'use_container' => false
+                                    ]); 
+                                ?>
+
+                                <?php 
+                                    echo app\components\widgets\RbacButtonWidget::widget([
+                                        'text' => 'Save &amp; Next',
+                                        'name' => 'save-next',
+                                        'type' => 'submit',
+                                        'class_names' => ['btn', 'btn-success', 'saveNext'],
+                                        'icon' => ['fa', 'fa-arrow-right'],
+                                        'value' => function() {
+                                            return;
+                                        },
+                                        'permission' => [
+                                            'module' => 'Snapearn',
+                                            'name' => 'Snapearn[Page_Components][save_next_button_correction]'
+                                        ],
+                                        'use_container' => false
+                                    ]); 
+                                ?>
+                                
+                                <input id="saveNext" type="hidden" name="saveNext" value="">
+                            </div>
+                            <div class="button-left pull-left">
+                                <?= Html::a('<i class="fa fa-times"></i> Cancel', [Url::previous()], ['class' => 'btn btn-default']) ?>
+                            </div>
+                        </div>
+                    </form>
                 </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div>
+            </div><!-- /.box -->
+        </div>
     </div>
     <?php ActiveForm::end(); ?>
 </section>
@@ -189,52 +291,64 @@ $model->sna_push = true;
 <div id="modalContent"></div>
 <?php Modal::end(); ?>
 
+<?=
+    $this->render('/default/add',[
+        'model' => SnapEarn::findOne($model->sna_id)
+    ]);
+?>
 <?php
 $this->registerCss("
-    #sna_image {
-        position: relative;
-        top: 0;
-        left: 0;
-        transition: width 0.3s ease,height 0.3s ease,left 0.3s ease,top 0.3s ease;
-        -webkit-transition: width 0.3s ease,height 0.3s ease,left 0.3s ease,top 0.3s ease;
-        -o-transition: width 0.3s ease,height 0.3s ease,left 0.3s ease,top 0.3s ease;
-        -moz-transition: width 0.3s ease,height 0.3s ease,left 0.3s ease,top 0.3s ease;
-        z-index: 999;
-    }
-    .magic-zoom {
-        position: relative;
-        width: 100%;
-        height: 480px;
-        overflow: hidden;
-        border: 1px solid #ddd;
-        background-color: #ECF0F5;
-    }
-    .iviewer_common {
-        position: absolute;
-        bottom: 10px;
-        border: 1px solid #999;
-        height: 28px;
-        z-index: 5000;
-    }
-    .nav-stacked {
-        padding: 0px 0px 10px 0px;
-    }
-    .nav-stacked > li > a {
-        border-radius: 0;
-        border-top: 0;
-        border-left: 0px solid transparent;
-        color: #444;
-    }
-    .nav.update > li > a {
-        position: relative;
-        display: block;
-        padding: 10px 0px;
-    }
-    .form-div {
-        padding-top: 10px;
-    }
-    .point-form { display: none; }
-    .reject-form { display: none; }
+ul.ui-autocomplete {
+    z-index: 1100;
+}
+#sna_image {
+    position: relative;
+    top: 0;
+    left: 0;
+    transition: width 0.3s ease,height 0.3s ease,left 0.3s ease,top 0.3s ease;
+    -webkit-transition: width 0.3s ease,height 0.3s ease,left 0.3s ease,top 0.3s ease;
+    -o-transition: width 0.3s ease,height 0.3s ease,left 0.3s ease,top 0.3s ease;
+    -moz-transition: width 0.3s ease,height 0.3s ease,left 0.3s ease,top 0.3s ease;
+    z-index: 999;
+}
+.magic-zoom {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    background-color: #ECF0F5;
+}
+.iviewer_common {
+    position: absolute;
+    bottom: 10px;
+    border: 1px solid #999;
+    height: 28px;
+    z-index: 5000;
+}
+.nav-stacked {
+    padding: 0px 0px 10px 0px;
+}
+.nav-stacked > li > a {
+    border-radius: 0;
+    border-top: 0;
+    border-left: 0px solid transparent;
+    color: #444;
+}
+.nav.update > li > a {
+    position: relative;
+    display: block;
+    padding: 10px 0px;
+}
+.form-div {
+    padding-top: 10px;
+}
+.point-form { display: none; }
+.reject-form { display: none; }
+.bootstrap-timepicker input {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
 ");
 
 $this->registerCssFile($this->theme->baseUrl . '/plugins/perfect-zoom/jquery.iviewer.css', ['depends' => app\themes\AdminLTE\assets\AppAsset::className()]);
@@ -243,19 +357,19 @@ $this->registerJsFile($this->theme->baseUrl . '/plugins/perfect-zoom/jquery.ivie
 $imageSource = Yii::$app->params['businessUrl'] . 'receipt/' . $model->sna_receipt_image;
 $this->registerJs("
     var id = '" . $model->sna_id . "',
-        com_id = '" . $model->sna_com_id . "';
+    com_id = '" . $model->sna_com_id . "';
 
     $('#sna_image').iviewer({
         src: '".$imageSource."'
     });
 
-$('#snapearn-sna_transaction_time').attr('autofocus');
+    $('#snapearn-sna_transaction_time').attr('autofocus');
     $('#snapearn-sna_status').change(function() {
 
         $('.field-snapearn-sna_ops_receipt_amount').removeClass('has-error');
         $('.btn-merchant').css({
-          'border':'0px',
-          'padding':'0px'
+            'border':'0px',
+            'padding':'0px'
         });
         $('.field-snapearn-sna_ops_receipt_amount').find('.help-block').text('');
 
@@ -265,8 +379,8 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
             if (com_id == 0) {
                 $('.field-snapearn-sna_ops_receipt_amount').addClass('has-error');
                 $('.btn-merchant').css({
-                  'border':'1px solid #DD4F3E',
-                  'padding':'2px'
+                    'border':'1px solid #DD4F3E',
+                    'padding':'2px'
                 });
                 $('.field-snapearn-sna_ops_receipt_amount').find('.help-block').text('Please create merchant first! Thanks.');
             }
@@ -283,17 +397,22 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
         }
     }).trigger('change');
 
-    $('#snapearn-sna_ops_receipt_amount').change(function() {
+    $('#snapearn-sna_ops_receipt_amount, .sna_transaction').change(function() {
         pointConvert();
     });
 
     function pointConvert() {
         var amount = Math.floor($('#snapearn-sna_ops_receipt_amount').val());
-        // $('#snapearn-sna_point').val(point);
+            transaction_time = $('.sna_transaction').val();
         $.ajax({
             type: 'POST',
             url: baseUrl + 'snapearn/default/ajax-snapearn-point',
-            data: { id: id, com_id: com_id, amount: amount },
+            data: { 
+                id: id, 
+                com_id: com_id, 
+                amount: amount,
+                transaction_time: transaction_time
+             },
             dataType: 'json',
             success: function(result) {
                 $('#snapearn-sna_point').val(result);
@@ -313,5 +432,5 @@ $('#snapearn-sna_transaction_time').attr('autofocus');
     $('.exs_m').on('click',function() {
         $('.modal-dialog').switchClass( 'modal-lg','modal-md');
     });
-", yii\web\View::POS_END, 'snapearn-form');
+    ", yii\web\View::POS_END, 'snapearn-form');
 ?>

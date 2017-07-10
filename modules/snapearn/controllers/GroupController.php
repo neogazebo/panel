@@ -9,6 +9,7 @@ use app\models\SnapearnGroup;
 use app\models\SnapearnGroupDetail;
 use app\models\User;
 use app\controllers\BaseController;
+use app\components\helpers\Utc;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
@@ -59,8 +60,11 @@ class GroupController extends BaseController
     public function actionCreate()
     {
         $model = new SnapearnGroup;
+        $model->setScenario('create');
+
         if ($model->load(Yii::$app->request->post())) {
         	$model->spg_created_by = Yii::$app->user->id;
+            $model->spg_created_date = Utc::getNow();
             if ($model->save()) {
                 $this->activities($model->spg_id, 'Create', $model->spg_name);
                 $this->setMessage('save', 'success', 'Group has been successfully created!');
@@ -76,8 +80,11 @@ class GroupController extends BaseController
     public function actionUpdate($id)
     {
         $model = SnapearnGroup::findOne($id);
+        $model->setScenario('update');
+
         if ($model->load(Yii::$app->request->post())) {
         	$model->spg_updated_by = Yii::$app->user->id;
+            $model->spg_updated_date = Utc::getNow();
             if ($model->save()) {
                 $this->activities($model->spg_id, 'Edit', $model->spg_name);
                 $this->setMessage('save', 'success', 'Group has been successfully updated!');
@@ -132,6 +139,16 @@ class GroupController extends BaseController
                 $this->setMessage('save', 'warning', 'No operators saved!');
             }
             return $this->redirect(['user-list?id=' . $spg_id]);
+        }
+    }
+
+    public function actionDelete($id)
+    {
+        $model = SnapearnGroup::findOne($id);
+        if ($model->delete()) {
+            $this->setMessage('save', 'success', 'That group successfully delete!');
+            $this->activities($model->spg_id, 'Delete', $model->spg_name);
+            return $this->redirect(['index']);
         }
     }
 }

@@ -48,7 +48,7 @@ $(function() {
 			  closeOnConfirm: false,
 			  showLoaderOnConfirm: true,
 		}, function() {
-			$.get(Url,function(results) {
+			$.get(Url, function(results) {
 				// data = JSON.parse(results);
 				// if (data.status = 'success') {
 				// 	dom.load(reload);
@@ -60,10 +60,11 @@ $(function() {
 		});
 	});
 
-	$('.deleteBtn').on('click',function() {
-		var Url = $(this).attr('value');
-			name = Url.match(/\w+$/)[0];
+	$('.deleteBtn').on('click', function() {
+		var Url = $(this).attr('value'),
+			name = Url.match(/\w+$/)[0],
 			element = $(this).closest('tr');
+
 		swal({
 			title: "Delete " + name + " role",
 			text: "Are you sure want to delete this?",
@@ -73,21 +74,67 @@ $(function() {
 			closeOnConfirm: false,
 			showLoaderOnConfirm: true,
 		}, function() {
-			$.get(Url, function(results) {
-				// data = JSON.parse(results);
-				// if (data.status = 'success') {
-					// element.remove();
-					// location.reload();
-					// swal.close();
-					// message = "Delete " + name + " role successed!";
-					// customAlert(data.status,message);
-					// element.remove();
-				// } else {
-					// swal.close();
-					// element.remove();
-					// message = "Delete " + name + " role failed!";
-					// customAlert('error', message);
-				// }
+			$.get(Url, function(results) {})
+		});
+	});
+
+	$('.deleteThis').on('click', function() {
+		var Url = $(this).attr('value'),
+			name = Url.match(/\w+$/)[0],
+			element = $(this).closest('tr'),
+			title = $(this).attr('data-title');
+
+		swal({
+			title: title,
+			text: "Are you sure want to delete this?",
+			type: "info",
+			showCancelButton: true,
+			closeOnCancel: true,
+			closeOnConfirm: false,
+			showLoaderOnConfirm: true,
+		}, function() {
+			$.get(Url, function(results) {})
+		});
+	});
+
+	$('.gotohell').on('click',function(e) {
+		e.preventDefault();
+		var Url = $(this).attr('value');
+			element = $(this).closest('tr');
+			confirm = $(this).data('text');
+			title = $(this).data('title');
+		swal({
+			title: title,
+			text: confirm,
+			type: "info",
+			showCancelButton: true,
+			closeOnCancel: true,
+			closeOnConfirm: false,
+			showLoaderOnConfirm: true,
+		}, function() {
+			$.post(Url, function(data) {
+				if(!data.error) {
+	                $('.modal').modal('hide');
+	                swal({
+	                    title: 'Success',   
+	                    timer: 1000,
+	                    text: 'Data is successfully saved',
+	                    type: "success",
+	                    showConfirmButton: false
+	                },
+	                function() {   
+	                    window.location.reload();
+	                });
+	            } else {
+	                if(data.error == 1000) {
+	                    swal({
+	                        title: 'System Error',   
+	                        html: true,
+	                        text: data.message,
+	                        type: "error",
+	                    });
+	                }
+	            }
 			})
 		});
 	});
@@ -293,3 +340,57 @@ function blocked(user,urlVal,text,param){
         }
     });
 }
+
+
+
+$('#existing_merchant_form').on('submit',function(e){
+	e.preventDefault();
+	var form_data = new FormData(this);
+		_url = $(this).attr('action');
+		$.ajax({
+			type : 'POST',
+			url: _url,
+			data: form_data,
+	        processData: false,
+	        contentType: false,
+	        beforeSend: function() {
+	            $('.modal-dialog').waitMe({
+	                effect : 'stretch',
+	                text : 'Saving...',
+	                bg : 'rgba(255,255,255,0.7)',
+	                color : '#000',
+	                sizeW : '',
+	                sizeH : ''
+	            });
+	        },
+	        complete: function() {
+	            $('.modal-dialog').waitMe('hide');
+	        },
+	        success: function(data) {
+	            if(!data.error) {
+	                $('#existing_merchant_form').modal('hide');
+
+	                swal({
+	                    title: 'Success',   
+	                    html: true,
+	                    text: 'Data is successfully saved',
+	                    type: "success",
+	                },
+	                function() {   
+	                    window.location.reload();
+	                });
+	            } else {
+	                var msg = '';
+
+	                if(data.error == 1000) {
+	                    swal({
+	                        title: 'System Error',   
+	                        html: true,
+	                        text: data.message,
+	                        type: "error",
+	                    });
+	                }
+	            }
+	        }
+	    });
+});
