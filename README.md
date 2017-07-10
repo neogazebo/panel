@@ -1,7 +1,7 @@
-EBIZU BACKEND SERVICE
+ADMIN PANEL 
 ============================
 
-This application is used for all ebizu services 
+This application is used for all backend office services 
 
 YII VERSION
 ------------
